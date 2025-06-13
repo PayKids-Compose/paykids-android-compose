@@ -16,7 +16,7 @@ data class User(
 object DummyUser {
     fun getUser(): User =
             User(
-                id = "bosshee23",
+                id = "bomml12",
                 username = "mingyu",
                 nickname = "개발꿈나무",
                 email = "mingyuson@example.com",
