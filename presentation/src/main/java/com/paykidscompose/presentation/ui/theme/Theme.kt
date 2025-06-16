@@ -33,7 +33,7 @@ fun PayKidsComposeTheme(
 ) {
     MaterialTheme(
         colorScheme = LightColorScheme,
-        typography = Typography,
+        typography = typography,
         content = content
     )
 }
