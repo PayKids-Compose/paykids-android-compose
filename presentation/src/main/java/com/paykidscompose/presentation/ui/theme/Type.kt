@@ -15,7 +15,7 @@ val NanumSquareRegular = FontFamily(Font(R.font.nanumsquare_regular, FontWeight.
 val NanumSquareLight = FontFamily(Font(R.font.nanumsquare_light, FontWeight.Light))
 
 // Typography 정의
-val Typography = Typography(
+val typography = Typography(
     // heading3 → titleLarge (보통 22sp)
     titleLarge = TextStyle(
         fontFamily = NanumSquareExtraBold,
