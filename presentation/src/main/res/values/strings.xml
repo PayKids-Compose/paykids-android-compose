@@ -1,4 +1,6 @@
 <resources>
+    <string name="app_name">PayKidsCompose</string>"
+
     <!-- 로그인 화면 -->
     <string name="text_kakao_login">카카오 계정으로 시작해보세요!</string>
     <string name="text_kakao_login_btn">카카오로 로그인</string>
