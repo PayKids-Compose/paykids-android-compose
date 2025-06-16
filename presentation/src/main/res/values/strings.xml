@@ -1,3 +1,121 @@
 <resources>
-    <string name="app_name">PayKidsCompose</string>
+    <!-- 로그인 화면 -->
+    <string name="text_kakao_login">카카오 계정으로 시작해보세요!</string>
+    <string name="text_kakao_login_btn">카카오로 로그인</string>
+
+    <!-- 닉네임 설정 화면 -->
+    <string name="text_set_nickname">닉네임을 입력해주세요</string>
+    <string name="hint_set_nickname">닉네임을 입력해주세요</string>
+    <string name="text_validate_nickname">멋진 닉네임이네요!</string>
+    <string name="text_confirm_nickname">결정하기</string>
+    <string name="text_nickname_condition">* 한글, 영어 최대 8자 이내 작성, 공백 입력 불가능</string>
+
+    <!-- 홈 화면 -->
+    <string name="text_tooltip_start">시작하기</string>
+
+    <!-- 퀴즈 진입 화면 -->
+    <string name="text_btn_study">학습하기</string>
+    <string name="text_btn_quiz">퀴즈 풀기</string>
+    <string name="text_btn_review">오답노트 풀기</string>
+
+    <!-- 퀴즈 풀기 화면 -->
+    <string name="text_correct_answer">정답이에요!</string>
+    <string name="text_wrong_answer">오답이에요..</string>
+    <string name="hint_input_answer">정답 입력하기...</string>
+    <string name="text_confirm_answer">결정하기</string>
+
+    <!-- 퀴즈 클리어 화면 -->
+    <string name="text_box_all_clear">스테이지 클리어!\n놀라워요! 모든 문제를 다 맞혔어요!</string>
+    <string name="text_box_first_clear">스테이지 클리어!\n축하해요! 틀린 문제도 복습해봐요!</string>
+    <string name="text_box_failed">클리어 실패..\n괜찮아요! 다시 도전해 볼까요?</string>
+    <string name="text_box_incorrect_answer_note_clear">스테이지 클리어!\n축하해요!</string>
+    <string name="text_box_review">복습을 완료했어요!</string>
+    <string name="text_box_error">Error</string>
+
+    <!-- 학습하기 화면 -->
+    <string name="text_study_title">학습하기</string>
+    <string name="hint_chat">내용을 입력하세요</string>
+    <string name="text_chatgpt">ChatGPT</string>
+
+    <!-- 마이 페이지 -->
+    <string name="content_description_profile">프로필 이미지</string>
+    <string name="hint_change_nickname">변경할 닉네임</string>
+    <string name="text_my_page">마이 페이지</string>
+    <string name="text_my_info">내 정보</string>
+    <string name="text_modify_my_info">수정하기</string>
+    <string name="text_policy">개인정보처리방침</string>
+    <string name="text_app_version">앱 버전</string>
+    <string name="text_logout">로그아웃</string>
+    <string name="text_withdrawal">회원 탈퇴</string>
+    <string name="text_nickname">별명</string>
+    <string name="text_email">이메일</string>
+    <string name="text_confirm">확인</string>
+    <string name="text_change">변경</string>
+    <string name="text_require_consent">* 필수 동의 내용</string>
+    <string name="text_terms_of_use">서비스 이용약관</string>
+    <string name="text_license">오픈 라이선스</string>
+
+    <!-- 바텀 내비게이션 메뉴 -->
+    <string name="text_quest">퀘스트</string>
+    <string name="text_diary_menu">용돈일기</string>
+    <string name="text_home_menu">홈</string>
+    <string name="text_mypage_menu">마이</string>
+
+    <!-- 퀴즈 오답 노트 다이얼로그 -->
+    <string name="dialog_incorrect_nothing">틀린 문제가 없어요!\n퀴즈를 풀어보아요</string>
+    <string name="dialog_all_correct">모든 문제를 맞혔어요!\n복습을 해볼까요?</string>
+    <string name="dialog_enter_quiz">퀴즈 풀기</string>
+    <string name="dialog_exit">닫기</string>
+
+    <!-- 퀴즈 페이지 나가기 다이얼로그 -->
+    <string name="dialog_check_exit">조금만 더 풀면 좋을 텐데..\n정말 퀴즈 풀이를 그만둘까요?</string>
+    <string name="dialog_continue">계속하기</string>
+    <string name="dialog_exit2">나가기</string>
+
+    <!-- 마이페이지 다이얼로그 -->
+    <string name="dialog_signout_title">로그아웃할까요?</string>
+    <string name="dialog_signout_message">나중에 다시 로그인하려면 본인인증부터 시작해야 해요</string>
+    <string name="dialog_signout_confirm">로그아웃</string>
+    <string name="dialog_withdraw_title">회원 탈퇴하시겠습니까?</string>
+    <string name="dialog_withdraw_message">회원 탈퇴하면 모든 정보가 다 사라져요</string>
+    <string name="dialog_withdraw_confirm">회원 탈퇴</string>
+    <string name="dialog_cancel">취소</string>
+
+    <!-- 용돈 일기 페이지 -->
+    <string name="text_month_total_consume">%s원 사용 중</string>
+    <string name="text_month_most_consume">%d월 달 %s에서 소비를 많이 했어요</string>
+    <string name="text_consuming">소비 중</string>
+    <string name="text_detail_consume">상세 소비내역</string>
+    <string name="text_week_sunday">일</string>
+    <string name="text_week_monday">월</string>
+    <string name="text_week_tuesday">화</string>
+    <string name="text_week_wednesday">수</string>
+    <string name="text_week_thursday">목</string>
+    <string name="text_week_friday">금</string>
+    <string name="text_week_saturday">토</string>
+
+    <!-- 용돈 기입 다이얼로그 -->
+    <string name="dialog_add_title">용돈 기입하기</string>
+    <string name="dialog_switch_consum">소비</string>
+    <string name="dialog_switch_income">수입</string>
+    <string name="dialog_text_date">날짜</string>
+    <string name="dialog_text_add_amount">금액 입력하기</string>
+    <string name="dialog_text_memo">메모</string>
+    <string name="dialog_text_category">카테고리 선택하기</string>
+    <string name="dialog_hint_add_amount">금액을 입력하세요</string>
+    <string name="dialog_hint_memo">메모를 입력하세요</string>
+    <string name="dialog_text_submit">완료</string>
+
+    <!-- 소비 상세 내역 페이지 -->
+    <string name="text_delete_category">카테고리 삭제</string>
+    <string name="text_add_category">+ 추가하기</string>
+
+    <!-- 퀘스트 페이지 -->
+    <string name="text_tab_quest">퀘스트</string>
+    <string name="text_tab_achievement">업적</string>
+
+    <!-- 업적 페이지 -->
+    <string name="text_no_badge1">아직 얻은 뱃지가 없어요!</string>
+    <string name="text_no_badge2">일일 퀘스트를 완료하고 뱃지를 획득해 보세요</string>
+
 </resources>
