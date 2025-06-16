@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.paykidscompose.app.ui.theme.PayKidsComposeTheme
-import com.paykidscompose.presentation.screen.ScaffoldContainer
+import com.paykidscompose.presentation.screens.ScaffoldContainer
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
