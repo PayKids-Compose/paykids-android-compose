@@ -7,7 +7,7 @@ data class User(
     val id:	String,
     val username: String,
     val nickname: String,
-    val email: String,
+    val email: String = "kkks@naver.com",
     @DrawableRes
     val profileImageURL: Int = -1,
     val stageStatus: Int = 1
