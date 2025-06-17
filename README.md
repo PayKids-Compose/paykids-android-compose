@@ -1,1 +1,1 @@
-# paykids-android-compose
+# Paykids - 금융 퀴즈
