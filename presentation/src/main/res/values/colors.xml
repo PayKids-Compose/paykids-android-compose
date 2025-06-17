@@ -7,4 +7,26 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="transparent">#00000000</color>
+
+    <color name="blue1">#237FFF</color>
+    <color name="blue2">#3AA6FF</color>
+    <color name="blue3">#52CEFF</color>
+
+    <color name="red">#FF4655</color>
+
+    <color name="gray1">#696B6E</color>
+    <color name="gray2">#B2B4B6</color>
+    <color name="gray3">#D6DADB</color>
+    <color name="gray4">#EFF1F2</color>
+    <color name="gray5">#F1F8FF</color>
+    <color name="gray6">#C1DEFB</color>
+    <color name="gray7">#9ABFF4</color>
+    <color name="gray8">#7796BA</color>
+    <color name="title_color">#222222</color>
+
+    <!-- 네비게이션 전용 색상 -->
+    <color name="bottom_nav_selected">@color/blue1</color>
+    <color name="bottom_nav_unselected">@color/gray6</color>
 </resources>

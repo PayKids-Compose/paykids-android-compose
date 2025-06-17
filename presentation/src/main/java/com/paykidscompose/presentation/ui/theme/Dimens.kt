@@ -7,6 +7,7 @@ object Dimens {
     val Dp8 = 8.dp
     val Dp12 = 12.dp
     val Dp24 = 24.dp
+    val Dp32 = 32.dp
     val Dp52 = 52.dp
     val Dp200 = 200.dp
 
