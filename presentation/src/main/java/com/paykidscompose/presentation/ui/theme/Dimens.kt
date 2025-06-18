@@ -1,7 +1,6 @@
 package com.paykidscompose.presentation.ui.theme
 
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 
 // 공통

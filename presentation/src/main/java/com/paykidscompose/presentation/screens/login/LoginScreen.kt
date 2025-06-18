@@ -27,7 +27,7 @@ import com.paykidscompose.presentation.ui.theme.PayKidsComposeTheme
 import com.paykidscompose.presentation.ui.theme.StartAndEndPadding
 
 @Composable
-fun LoginScreen(nickname: String, onKakaoClick: (User) -> Unit) {
+fun LoginScreen(onKakaoClick: () -> Unit) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -64,8 +64,7 @@ fun LoginScreen(nickname: String, onKakaoClick: (User) -> Unit) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable(onClick = {
-                            val user = DummyUser.createDummyUser(nickname)
-                            onKakaoClick(user)
+                            onKakaoClick()
                         }),
                     contentScale = ContentScale.FillWidth
                 )
@@ -103,6 +102,6 @@ fun LoginScreen(nickname: String, onKakaoClick: (User) -> Unit) {
 @Composable
 fun LoginScreenPreview() {
     PayKidsComposeTheme {
-        LoginScreen("", {})
+        LoginScreen({})
     }
 }

@@ -6,8 +6,8 @@ import com.paykidscompose.presentation.R
 data class User(
     val id: String,
     val username: String,
-    val nickname: String,
-    val email: String = "kkks@naver.com",
+    var nickname: String,
+    var email: String = "kkks@naver.com",
     @DrawableRes
     val profileImageURL: Int =  R.drawable.img_default_profile,
     val stageStatus: Int = 1
@@ -15,7 +15,7 @@ data class User(
 
 object DummyUser {
 
-    val userList = mutableListOf<User>()
+    private val userList = mutableListOf<User>()
     var id = 1
 
     fun getUser(id: String): User? {
@@ -31,14 +31,24 @@ object DummyUser {
         }
     }
 
-    fun createDummyUser(nickname: String): User {
+    fun updateUser(id: String, nickname: String, email: String) {
+        userList.find{ it.id == id}?.let {
+            it.nickname = nickname
+            it.email = email
+        }
+    }
+
+    fun createDummyUser() {
         val user = User(
             id = "dummy_${id++}",
             username = "kakaoUser${(1000..9999).random()}",
-            nickname = nickname,
+            nickname = "",
             email = "user${(1000..9999).random()}@kakao.com"
         )
         setUser(user)
-        return user
+    }
+
+    fun getUsers(): List<User> {
+        return userList
     }
 }

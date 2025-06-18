@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.paykidscompose.presentation.R
+import com.paykidscompose.presentation.dummy.DummyUser
 import com.paykidscompose.presentation.ui.components.DecisionButton
 import com.paykidscompose.presentation.ui.components.InfoText
 import com.paykidscompose.presentation.ui.components.TitleText
@@ -27,10 +26,7 @@ import com.paykidscompose.presentation.ui.components.UnderlineInputField
 import com.paykidscompose.presentation.ui.theme.Blue2
 import com.paykidscompose.presentation.ui.theme.DeterminationButtonPadding
 import com.paykidscompose.presentation.ui.theme.FieldAndInfoSpacer
-import com.paykidscompose.presentation.ui.theme.Gray2
 import com.paykidscompose.presentation.ui.theme.Gray5
-import com.paykidscompose.presentation.ui.theme.NicknameFieldTextStyle
-import com.paykidscompose.presentation.ui.theme.NicknameScreenFieldBoxHeight
 import com.paykidscompose.presentation.ui.theme.NicknameScreenTopPadding
 import com.paykidscompose.presentation.ui.theme.PayKidsComposeTheme
 import com.paykidscompose.presentation.ui.theme.StartAndEndPadding
@@ -45,6 +41,8 @@ fun NicknameScreen(
     val onNicknameChange = { value: String ->
         nickname = value
     }
+    val user = DummyUser.getUsers().first()
+
 
     Column(
         modifier = Modifier
@@ -70,7 +68,11 @@ fun NicknameScreen(
         ) {
             DecisionButton(
                 stringResource(R.string.text_confirm_nickname),
-                onClick = onConfirmClick,
+                onClick = {
+                    user.nickname = nickname
+                    DummyUser.setUser(user)
+                    onConfirmClick()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
             )
@@ -83,7 +85,12 @@ fun NicknameInput(nickname: String, onNicknameChange: (String) -> Unit) {
 
     Spacer(modifier = Modifier.height(TitleAndFieldSpacer))
 
-    UnderlineInputField(nickname, onNicknameChange, Modifier.fillMaxWidth())
+    UnderlineInputField(
+        nickname,
+        onNicknameChange,
+        hint = stringResource(R.string.hint_set_nickname),
+        modifier = Modifier.fillMaxWidth()
+    )
 
     Spacer(modifier = Modifier.height(FieldAndInfoSpacer))
 
