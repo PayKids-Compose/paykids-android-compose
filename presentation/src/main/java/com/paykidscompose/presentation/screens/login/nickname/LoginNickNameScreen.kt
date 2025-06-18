@@ -29,6 +29,7 @@ import com.paykidscompose.presentation.ui.theme.Blue2
 import com.paykidscompose.presentation.ui.theme.Dimens.Dp12
 import com.paykidscompose.presentation.ui.theme.Dimens.Dp200
 import com.paykidscompose.presentation.ui.theme.Dimens.Dp24
+import com.paykidscompose.presentation.ui.theme.Dimens.Dp32
 import com.paykidscompose.presentation.ui.theme.Dimens.Dp52
 import com.paykidscompose.presentation.ui.theme.Dimens.Dp8
 import com.paykidscompose.presentation.ui.theme.Gray5
@@ -50,7 +51,7 @@ fun NicknameScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Gray5)
-            .padding(Dp24)
+            .padding(Dp24).padding(bottom = Dp32)
 
     ) {
         Spacer(modifier = Modifier.weight(0.4f))
@@ -72,9 +73,7 @@ fun NicknameScreen(
                 .fillMaxWidth()
                 .height(Dp52)
                 .clip(RoundedCornerShape(Dp24))
-                .padding(bottom = Dp12)
         )
-
     }
 }
 
@@ -88,11 +87,13 @@ fun NicknameInput(nickname: String, onNicknameChange: (String) -> Unit) {
 
     Spacer(modifier = Modifier.height(Dp8))
 
-    Text(
-        text = stringResource(R.string.text_validate_nickname),
-        style = typography.labelSmall,
-        color = Blue2
-    )
+    if(nickname.isNotEmpty()) {
+        Text(
+            text = stringResource(R.string.text_validate_nickname),
+            style = typography.bodySmall,
+            color = Blue2
+        )
+    }
 }
 
 @Preview
