@@ -22,6 +22,7 @@ val Gray8 = Color(0xFF7796BA)
 val Black = Color(0xFF191919)
 val White = Color(0xFFFFFFFF)
 val TitleColor = Color(0xFF222222) // 닉네임을 입력해주세요 색상이 이거임.
+val Yellow = Color(0xFFFAE100)
 
 // 네비게이션 전용 색상
 val BottomNavSelected = Blue1
