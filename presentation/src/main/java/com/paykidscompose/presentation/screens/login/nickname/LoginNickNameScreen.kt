@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,27 +17,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.ui.components.DefaultButton
-import com.paykidscompose.presentation.ui.components.InputField
+import com.paykidscompose.presentation.ui.components.DecisionButton
+import com.paykidscompose.presentation.ui.components.InfoText
 import com.paykidscompose.presentation.ui.components.TitleText
+import com.paykidscompose.presentation.ui.components.UnderlineInputField
 import com.paykidscompose.presentation.ui.theme.Blue2
-import com.paykidscompose.presentation.ui.theme.Dimens.Dp12
-import com.paykidscompose.presentation.ui.theme.Dimens.Dp200
-import com.paykidscompose.presentation.ui.theme.Dimens.Dp24
-import com.paykidscompose.presentation.ui.theme.Dimens.Dp32
-import com.paykidscompose.presentation.ui.theme.Dimens.Dp52
-import com.paykidscompose.presentation.ui.theme.Dimens.Dp8
+import com.paykidscompose.presentation.ui.theme.DeterminationButtonPadding
+import com.paykidscompose.presentation.ui.theme.FieldAndInfoSpacer
+import com.paykidscompose.presentation.ui.theme.Gray2
 import com.paykidscompose.presentation.ui.theme.Gray5
+import com.paykidscompose.presentation.ui.theme.NicknameFieldTextStyle
+import com.paykidscompose.presentation.ui.theme.NicknameScreenFieldBoxHeight
+import com.paykidscompose.presentation.ui.theme.NicknameScreenTopPadding
 import com.paykidscompose.presentation.ui.theme.PayKidsComposeTheme
-import com.paykidscompose.presentation.ui.theme.typography
+import com.paykidscompose.presentation.ui.theme.StartAndEndPadding
+import com.paykidscompose.presentation.ui.theme.TitleAndFieldSpacer
 
 // 스플래시 이후 로그인 화면입니다.
-
 @Composable
 fun NicknameScreen(
     onConfirmClick: () -> Unit
@@ -51,49 +50,47 @@ fun NicknameScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Gray5)
-            .padding(Dp24).padding(bottom = Dp32)
-
+            .padding(
+                start = StartAndEndPadding,
+                end = StartAndEndPadding,
+                top = NicknameScreenTopPadding,
+                bottom = DeterminationButtonPadding
+            )
     ) {
-        Spacer(modifier = Modifier.weight(0.4f))
-
         TitleText(
             stringResource(R.string.text_set_nickname),
             Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(Dp24))
-
         NicknameInput(nickname, onNicknameChange)
 
-        Spacer(modifier = Modifier.weight(1f))
-
-        DefaultButton(
-            stringResource(R.string.text_confirm_nickname),
-            onConfirmClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(Dp52)
-                .clip(RoundedCornerShape(Dp24))
-        )
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            DecisionButton(
+                stringResource(R.string.text_confirm_nickname),
+                onClick = onConfirmClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+        }
     }
 }
 
 @Composable
 fun NicknameInput(nickname: String, onNicknameChange: (String) -> Unit) {
-    InputField(
-        nickname,
-        onNicknameChange,
-        Modifier.fillMaxWidth(),
-        hint = stringResource(R.string.hint_set_nickname)
-    )
 
-    Spacer(modifier = Modifier.height(Dp8))
+    Spacer(modifier = Modifier.height(TitleAndFieldSpacer))
 
-    if(nickname.isNotEmpty()) {
-        Text(
+    UnderlineInputField(nickname, onNicknameChange, Modifier.fillMaxWidth())
+
+    Spacer(modifier = Modifier.height(FieldAndInfoSpacer))
+
+    if (nickname.isNotEmpty()) {
+        InfoText(
             text = stringResource(R.string.text_validate_nickname),
-            style = typography.bodySmall,
-            color = Blue2
+            textColor = Blue2
         )
     }
 }
