@@ -13,22 +13,24 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.ui.theme.Blue1
-import com.paykidscompose.presentation.ui.theme.Dimens.Dp200
 import com.paykidscompose.presentation.ui.theme.PayKidsComposeTheme
+import com.paykidscompose.presentation.ui.theme.SplashLogo
 import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(
     onTimeOut: () -> Unit
-){
+) {
 
     Box(
-        modifier = Modifier.fillMaxSize().background(Blue1),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Blue1),
         contentAlignment = Alignment.Center
     ) {
         Image(
             painter = painterResource(R.drawable.paykids_logo_white),
-            modifier = Modifier.size(Dp200),
+            modifier = Modifier.size(SplashLogo),
             contentDescription = null
         )
     }
@@ -41,9 +43,9 @@ fun SplashScreen(
 
 @Preview
 @Composable
-fun SplashPreview(){
+fun SplashPreview() {
     PayKidsComposeTheme {
-        SplashScreen{
+        SplashScreen {
 
         }
     }

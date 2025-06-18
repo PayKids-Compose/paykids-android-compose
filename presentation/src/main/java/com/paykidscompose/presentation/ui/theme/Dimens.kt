@@ -3,14 +3,25 @@ package com.paykidscompose.presentation.ui.theme
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-object Dimens {
-    val Dp8 = 8.dp
-    val Dp12 = 12.dp
-    val Dp24 = 24.dp
-    val Dp32 = 32.dp
-    val Dp52 = 52.dp
-    val Dp200 = 200.dp
 
+// 공통
+val StartAndEndPadding = 20.dp
+val DeterminationButtonCorner = 60.dp
+val BottomButtonPadding = 57.dp
+val DeterminationButtonPadding = 60.dp
+val DeterminationButtonTextStartAndEndPadding = 17.dp
+val DeterminationButtonTextTopAndBottom = 13.dp
+val DeterminationButtonWidth = 320.dp
+val DeterminationButtonHeight = 50.dp
 
-    val Sp12 = 12.sp
-}
+// 스플래시 화면
+val SplashLogo = 174.dp
+
+// 로그인 화면
+val LoginKakaoTextBottomPadding = 11.dp
+
+// 로그인 닉네임 입력 화면
+val NicknameScreenTopPadding = 196.dp
+val TitleAndFieldSpacer = 38.dp
+val FieldAndInfoSpacer = 7.dp
+val NicknameScreenFieldBoxHeight = 1.dp
