@@ -57,7 +57,8 @@ fun NicknameScreen(
         Spacer(modifier = Modifier.weight(0.4f))
 
         TitleText(
-            stringResource(R.string.text_set_nickname)
+            stringResource(R.string.text_set_nickname),
+            Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(Dp24))
@@ -82,6 +83,7 @@ fun NicknameInput(nickname: String, onNicknameChange: (String) -> Unit) {
     InputField(
         nickname,
         onNicknameChange,
+        Modifier.fillMaxWidth(),
         hint = stringResource(R.string.hint_set_nickname)
     )
 
