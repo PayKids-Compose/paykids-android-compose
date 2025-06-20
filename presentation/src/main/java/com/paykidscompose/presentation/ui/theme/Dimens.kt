@@ -39,3 +39,4 @@ val StageDescriptionCardHeight = 80.dp
 val StageDescriptionCardTextHorizontalPadding = 16.dp
 val StageDescriptionCardTextVerticalPadding = 20.dp
 val StageDescriptionCardTextSpacer = 7.dp
+val StageDescriptionCardShadowElevation = 8.dp
