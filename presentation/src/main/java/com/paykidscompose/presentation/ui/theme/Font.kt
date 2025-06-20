@@ -41,3 +41,18 @@ val DeterminationTextStyle = TextStyle(
     fontSize = 20.sp,
     lineHeight = 23.sp
 )
+
+val StageCardNumberTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 12.sp,
+    lineHeight = 14.sp,
+    color = Blue1
+)
+
+val StageCardTitleTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 18.sp,
+    lineHeight = 20.sp
+)
