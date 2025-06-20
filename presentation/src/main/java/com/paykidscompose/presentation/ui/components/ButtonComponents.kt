@@ -30,15 +30,14 @@ fun DecisionButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = Modifier
+        modifier = modifier
             .padding(
                 start = DeterminationButtonTextStartAndEndPadding,
                 end = DeterminationButtonTextStartAndEndPadding,
                 top = DeterminationButtonTextTopAndBottom,
                 bottom = DeterminationButtonTextTopAndBottom
             )
-            .clip(RoundedCornerShape(DeterminationButtonCorner))
-            .then(modifier),
+            .clip(RoundedCornerShape(DeterminationButtonCorner)),
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
             containerColor = backgroundColor,

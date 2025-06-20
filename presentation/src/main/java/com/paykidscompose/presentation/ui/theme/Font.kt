@@ -14,13 +14,16 @@ val NanumSquare = FontFamily(
     Font(R.font.nanumsquare_light, FontWeight.Light)
 )
 
+// 작게 나오는 텍스트
 val InfoTextStyle = TextStyle(
     fontFamily = NanumSquare,
-    fontWeight = FontWeight.ExtraBold,
+    fontWeight = FontWeight.Bold,
     fontSize = 12.sp,
     lineHeight = 14.sp
 )
 
+
+// 닉네임 스크린
 val NicknameTitleTextStyle = TextStyle(
     fontFamily = NanumSquare,
     fontWeight = FontWeight.ExtraBold,
@@ -35,9 +38,33 @@ val NicknameFieldTextStyle = TextStyle(
     lineHeight = 20.sp
 )
 
+// 결정하기 버튼
 val DeterminationTextStyle = TextStyle(
     fontFamily = NanumSquare,
     fontWeight = FontWeight.ExtraBold,
     fontSize = 20.sp,
     lineHeight = 23.sp
+)
+
+
+// 마이페이지 스크린
+val MyPageAppBarTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 18.sp,
+    lineHeight = 20.sp
+)
+
+val MyPageNicknameTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 22.sp,
+    lineHeight = 25.sp
+)
+
+val MyPageCardTitleTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 16.sp,
+    lineHeight = 18.sp
 )

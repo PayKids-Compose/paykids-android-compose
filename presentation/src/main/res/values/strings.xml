@@ -53,6 +53,7 @@
     <string name="text_email">이메일</string>
     <string name="text_confirm">확인</string>
     <string name="text_change">변경</string>
+    <string name="text_terms_policy_title">약관 및 정책</string>
     <string name="text_require_consent">* 필수 동의 내용</string>
     <string name="text_terms_of_use">서비스 이용약관</string>
     <string name="text_license">오픈 라이선스</string>

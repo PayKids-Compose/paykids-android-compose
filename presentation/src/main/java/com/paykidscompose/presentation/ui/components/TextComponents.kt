@@ -1,8 +1,6 @@
 package com.paykidscompose.presentation.ui.components
 
-import android.R.attr.text
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,14 +8,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.paykidscompose.presentation.ui.theme.Black
 import com.paykidscompose.presentation.ui.theme.FieldAndInfoSpacer
 import com.paykidscompose.presentation.ui.theme.Gray2
 import com.paykidscompose.presentation.ui.theme.InfoTextStyle
@@ -25,7 +21,6 @@ import com.paykidscompose.presentation.ui.theme.NicknameFieldTextStyle
 import com.paykidscompose.presentation.ui.theme.NicknameScreenFieldBoxHeight
 import com.paykidscompose.presentation.ui.theme.NicknameTitleTextStyle
 import com.paykidscompose.presentation.ui.theme.TitleColor
-import com.paykidscompose.presentation.ui.theme.Transparent
 import com.paykidscompose.presentation.ui.theme.White
 
 @Composable
@@ -33,13 +28,15 @@ fun TitleText(
     text: String,
     modifier: Modifier = Modifier,
     color: Color = TitleColor,
-    style: TextStyle = NicknameTitleTextStyle
+    style: TextStyle = NicknameTitleTextStyle,
+    textAlign: TextAlign? = null
 ) {
     Text(
         text,
         modifier = modifier,
         style = style,
-        color = color
+        color = color,
+        textAlign = textAlign
     )
 }
 
@@ -75,7 +72,7 @@ fun UnderlineInputField(
         singleLine = true,
         decorationBox = { innerTextField ->
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = modifier
             ) {
                 Box(
                     modifier = Modifier.fillMaxWidth()
