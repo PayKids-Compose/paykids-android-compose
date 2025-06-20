@@ -2,14 +2,6 @@ package com.paykidscompose.presentation.ui.theme
 
 import androidx.compose.ui.unit.dp
 
-    // HomeScreen
-    val StageTopPadding = 163.dp
-    val StageVerticalSpace = 38.dp
-    val StageHorizontalPadding = 32.dp
-    val StageCircleSize = 90.dp
-    val StageCircleBorderWidth = 6.dp
-    val StageIconSize = 55.dp
-
 // 공통
 val StartAndEndPadding = 20.dp
 val DeterminationButtonCorner = 60.dp
@@ -31,3 +23,19 @@ val NicknameScreenTopPadding = 196.dp
 val TitleAndFieldSpacer = 38.dp
 val FieldAndInfoSpacer = 7.dp
 val NicknameScreenFieldBoxHeight = 1.dp
+
+// HomeScreen
+val StageTopPadding = 163.dp
+val StageVerticalSpace = 38.dp
+val StageHorizontalPadding = 32.dp
+val StageCircleSize = 90.dp
+val StageCircleBorderWidth = 6.dp
+val StageIconSize = 55.dp
+
+val StageDescriptionCardRound = 10.dp
+val StageDescriptionCardHorizontalPadding = 20.dp
+val StageDescriptionCardVerticalPadding = 23.dp
+val StageDescriptionCardHeight = 80.dp
+val StageDescriptionCardTextHorizontalPadding = 16.dp
+val StageDescriptionCardTextVerticalPadding = 20.dp
+val StageDescriptionCardTextSpacer = 7.dp
