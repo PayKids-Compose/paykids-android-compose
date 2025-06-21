@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.ui.components.AppTopBar
 import com.paykidscompose.presentation.ui.components.CardItem
@@ -22,6 +21,11 @@ import com.paykidscompose.presentation.ui.theme.Gray5
 import com.paykidscompose.presentation.ui.theme.Gray8
 import com.paykidscompose.presentation.ui.theme.TermsPolicyCardItemTitleTextStyle
 import com.paykidscompose.presentation.ui.theme.TermsPolicyInfoTitleTextStyle
+import com.paykidscompose.presentation.ui.theme.TermsScreenCardHeightSize
+import com.paykidscompose.presentation.ui.theme.TermsScreenCardShapeTopBottom
+import com.paykidscompose.presentation.ui.theme.TermsScreenSpacer16
+import com.paykidscompose.presentation.ui.theme.TermsScreenStartEndPadding
+import com.paykidscompose.presentation.ui.theme.TermsScreenTopPadding
 
 @Composable
 fun TermsPolicyScreen(
@@ -42,9 +46,9 @@ fun TermsPolicyScreen(
                 .fillMaxSize()
                 .background(color = Gray5)
                 .padding(
-                    top = 36.dp,
-                    start = 20.dp,
-                    end = 20.dp
+                    top = TermsScreenTopPadding,
+                    start = TermsScreenStartEndPadding,
+                    end = TermsScreenStartEndPadding
                 )
         ) {
             Text(
@@ -52,29 +56,29 @@ fun TermsPolicyScreen(
                 style = TermsPolicyInfoTitleTextStyle.copy(color = Gray8)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(TermsScreenSpacer16))
 
             CustomCard(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(180.dp),
-                shapeTop = 10.dp,
-                shapeBottom = 10.dp
+                    .height(TermsScreenCardHeightSize),
+                shapeTop = TermsScreenCardShapeTopBottom,
+                shapeBottom = TermsScreenCardShapeTopBottom
             ) {
                 CardItem(
-                    "서비스 이용약관",
+                    stringResource(R.string.text_terms_of_use),
                     {},
                     titleTextStyle = TermsPolicyCardItemTitleTextStyle,
                     iconEnable = true
                 )
                 CardItem(
-                    "약관 및 정책",
+                    stringResource(R.string.text_terms_policy_title),
                     {},
                     titleTextStyle = TermsPolicyCardItemTitleTextStyle,
                     iconEnable = true
                 )
                 CardItem(
-                    "오픈 라이선스",
+                    stringResource(R.string.text_license),
                     {},
                     titleTextStyle = TermsPolicyCardItemTitleTextStyle,
                     iconEnable = true

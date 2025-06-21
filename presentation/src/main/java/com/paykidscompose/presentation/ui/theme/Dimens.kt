@@ -61,6 +61,13 @@ val MyInfoScreenButtonShape = 10.dp
 val MyInfoScreenButtonHorizontalPadding= 16.dp
 val MyInfoScreenButtonVerticalPadding = 7.dp
 
+// 약관 및 정책 화면
+val TermsScreenTopPadding = 36.dp
+val TermsScreenStartEndPadding = 20.dp
+val TermsScreenSpacer16 = 16.dp
+val TermsScreenCardHeightSize = 180.dp
+val TermsScreenCardShapeTopBottom = 10.dp
+
 // 커스텀 카드
 val CustomCardShadow = 16.dp
 val CustomCardSizeWidth = 320.dp
