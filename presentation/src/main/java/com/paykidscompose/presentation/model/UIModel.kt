@@ -1,3 +1,3 @@
 package com.paykidscompose.presentation.model
 
-open class UIModel
+abstract class UIModel

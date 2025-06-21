@@ -64,6 +64,7 @@ fun LoginScreen(onKakaoClick: () -> Unit = {}) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable(onClick = {
+                            DummyUser.createDummyUser()
                             onKakaoClick()
                         }),
                     contentScale = ContentScale.FillWidth

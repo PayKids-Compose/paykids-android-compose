@@ -12,7 +12,13 @@ import androidx.compose.runtime.setValue
 import com.paykidscompose.app.ui.theme.PayKidsComposeTheme
 import com.paykidscompose.presentation.screens.login.LoginScreen
 import com.paykidscompose.presentation.screens.login.nickname.NicknameScreen
+import com.paykidscompose.presentation.screens.mypage.MyPageScreen
+import com.paykidscompose.presentation.screens.mypage.info.MyInfoScreen
 import com.paykidscompose.presentation.screens.splash.SplashScreen
+
+enum class Screen{
+    SPLASH, LOGIN, NICKNAME, MYPAGE, MYINFO
+}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,11 +26,17 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PayKidsComposeTheme {
-                    Surface {
-                        var showSplashScreen by remember { mutableStateOf(true) }
-                        if (showSplashScreen) SplashScreen { showSplashScreen = false }
-                        else NicknameScreen{ }
+                Surface {
+                    var currentScreen by remember { mutableStateOf(Screen.SPLASH)}
+
+                    when (currentScreen) {
+                        Screen.SPLASH -> SplashScreen { currentScreen = Screen.LOGIN }
+                        Screen.LOGIN -> LoginScreen { currentScreen = Screen.NICKNAME }
+                        Screen.NICKNAME -> NicknameScreen { currentScreen = Screen.MYPAGE }
+                        Screen.MYPAGE -> MyPageScreen(onClickMyInfo = { currentScreen = Screen.MYINFO})
+                        Screen.MYINFO -> MyInfoScreen()
                     }
+                }
             }
         }
     }
