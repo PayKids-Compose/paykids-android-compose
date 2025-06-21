@@ -14,8 +14,8 @@
 
     <!-- 홈 화면 -->
     <string name="text_tooltip_start">시작하기</string>
-    <string name="text_stage_number">스테이지 1</string>
-    <string name="text_stage_title">돈이란 무엇일까요?</string>
+    <string name="text_stage_number">스테이지 %1$d</string>
+    <string name="text_stage_title">스테이지 정보 없음</string>
 
     <!-- 퀴즈 진입 화면 -->
     <string name="text_btn_study">학습하기</string>
