@@ -8,7 +8,7 @@ val DeterminationButtonCorner = 60.dp
 val BottomButtonPadding = 57.dp
 val DeterminationButtonPadding = 60.dp
 val DeterminationButtonTextStartAndEndPadding = 17.dp
-val DeterminationButtonTextTopAndBottom = 13.dp
+val DeterminationButtonTextTopAndBottom = 14.dp
 val DeterminationButtonWidth = 320.dp
 val DeterminationButtonHeight = 50.dp
 
@@ -46,6 +46,16 @@ val StageTooltipImageHeight = 80.dp
 val StageTooltipTextOffsetY = 8.dp
 const val StageTooltipOffsetX = 86
 const val StageTooltipOffsetY = 100
+
+// 퀴즈 진입 화면
+val QuizEntryScreenTopPadding = 230.dp
+val QuizEntryScreenBottomPadding = 248.dp
+val StageNumberCardRound = 100.dp
+val StageNumberCardHorizontalPadding = 10.dp
+val StageNumberCardVerticalPadding = 6.dp
+val QuizEntryScreenSpacer1 = 18.dp
+val QuizEntryScreenSpacer2 = 50.dp
+val QuizEntryButtonSpacer = 10.dp
 
 // 마이페이지 기본 화면
 val MyPageDefaultScreenStartEndPadding = 20.dp
