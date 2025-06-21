@@ -41,5 +41,8 @@ val StageDescriptionCardTextVerticalPadding = 20.dp
 val StageDescriptionCardTextSpacer = 7.dp
 val StageDescriptionCardShadowElevation = 8.dp
 
+val StageTooltipImageWidth = 156.dp
+val StageTooltipImageHeight = 80.dp
+val StageTooltipTextOffsetY = 8.dp
 const val StageTooltipOffsetX = 86
 const val StageTooltipOffsetY = 100
