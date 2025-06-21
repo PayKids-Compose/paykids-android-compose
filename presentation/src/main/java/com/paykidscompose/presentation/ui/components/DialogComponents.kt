@@ -26,6 +26,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.ui.components.util.PopupType
 import com.paykidscompose.presentation.ui.theme.Black
+import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.Gray1
 import com.paykidscompose.presentation.ui.theme.Gray6
 import com.paykidscompose.presentation.ui.theme.PopupDialogButtonShape
@@ -46,10 +47,10 @@ import com.paykidscompose.presentation.ui.theme.White
 @Composable
 fun PopupDialog(
     title: String,
-    description: String,
     popupType: PopupType,
     onCancelClick: () -> Unit,
-    onConfirmClick: () -> Unit
+    onConfirmClick: () -> Unit,
+    description: String = "",
 ) {
     Dialog(
         onDismissRequest = { onCancelClick() },
@@ -81,12 +82,14 @@ fun PopupDialog(
                     style = PopupDialogTitleTextStyle.copy(color = Black)
                 )
 
-                Spacer(modifier = Modifier.height(PopupDialogSpacer8))
+                if (description != "") {
+                    Spacer(modifier = Modifier.height(PopupDialogSpacer8))
 
-                Text(
-                    text = description,
-                    style = PopupDialogTitleInfoTextStyle.copy(color = Gray1)
-                )
+                    Text(
+                        text = description,
+                        style = PopupDialogTitleInfoTextStyle.copy(color = Gray1)
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(PopupDialogSpacer20))
 
@@ -179,6 +182,50 @@ fun PopupDialog(
                             }
                         }
                     }
+
+                    PopupType.INCORRECT_ANSWER_NOTE_ERROR -> {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(IntrinsicSize.Min)
+                        ) {
+                            Button(
+                                onClick = onCancelClick,
+                                shape = RoundedCornerShape(PopupDialogButtonShape),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight(),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Blue1, // 버튼 배경색상
+                                    contentColor = White, // 버튼 텍스트 색상
+                                )
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.dialog_enter_quiz),
+                                    style = PopupDialogButtonTextStyle
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.width(PopupDialogSpacer6))
+
+                            Button(
+                                onClick = onConfirmClick,
+                                shape = RoundedCornerShape(PopupDialogButtonShape),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight(),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Gray6, // 버튼 배경색상
+                                    contentColor = Black, // 버튼 텍스트 색상
+                                )
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.dialog_exit),
+                                    style = PopupDialogButtonTextStyle
+                                )
+                            }
+                        }
+                    }
                 }
 
             }
@@ -189,5 +236,11 @@ fun PopupDialog(
 @Preview
 @Composable
 fun PopupDialogPreview() {
-    PopupDialog("회원 탈퇴하시겠습니까?", "이것은 테스트 팝업입니다.", PopupType.LOGOUT, {}, {})
+    PopupDialog("회원 탈퇴하시겠습니까?", PopupType.LOGOUT, {}, {}, "이것은 테스트 팝업입니다.")
+}
+
+@Preview
+@Composable
+fun PopupDialogPreview2() {
+    PopupDialog(stringResource(R.string.dialog_incorrect_nothing), PopupType.INCORRECT_ANSWER_NOTE_ERROR, {}, {}, "")
 }
