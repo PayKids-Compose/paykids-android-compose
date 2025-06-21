@@ -97,3 +97,17 @@ val MyInfoCardUserDeleteTextStyle = TextStyle(
     fontSize = 14.sp,
     lineHeight = 26.sp
 )
+
+// 약관 및 정책 스크린
+val TermsPolicyInfoTitleTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 14.sp,
+    lineHeight = 16.sp
+)
+val TermsPolicyCardItemTitleTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 16.sp,
+    lineHeight = 18.sp
+)
