@@ -9,6 +9,7 @@ val BottomButtonPadding = 57.dp
 val DeterminationButtonPadding = 60.dp
 val DeterminationButtonTextStartAndEndPadding = 17.dp
 val DeterminationButtonTextTopAndBottom = 14.dp
+val DeterminationButtonTextTopAndBottom2 = 15.dp
 val DeterminationButtonWidth = 320.dp
 val DeterminationButtonHeight = 50.dp
 
