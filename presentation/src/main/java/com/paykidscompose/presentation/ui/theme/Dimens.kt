@@ -100,3 +100,13 @@ val CustomCardBackgroundShape= 10.dp
 val OutlineBorder = 1.dp
 val OutlineShape = 10.dp
 val OutlineHeight = 40.dp
+
+// 팝업 다이얼로그
+val PopupDialogCardShape = 20.dp
+val PopupDialogCardColumnSize = 320.dp
+val PopupDialogCardStartEndPadding = 23.dp
+val PopupDialogCardTopBottomPadding = 28.dp
+val PopupDialogSpacer6 = 6.dp
+val PopupDialogSpacer8 = 8.dp
+val PopupDialogSpacer20 = 20.dp
+val PopupDialogButtonShape = 10.dp

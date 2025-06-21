@@ -2,6 +2,7 @@ package com.paykidscompose.presentation.screens.mypage
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,18 +14,26 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.DummyUser
+import com.paykidscompose.presentation.model.MyPageUIModel
 import com.paykidscompose.presentation.ui.components.AppTopBar
 import com.paykidscompose.presentation.ui.components.CardItem
 import com.paykidscompose.presentation.ui.components.CustomCard
+import com.paykidscompose.presentation.ui.components.PopupDialog
 import com.paykidscompose.presentation.ui.components.TitleText
+import com.paykidscompose.presentation.ui.components.util.PopupType
 import com.paykidscompose.presentation.ui.theme.CustomCardSizeHeight
 import com.paykidscompose.presentation.ui.theme.Gray5
 import com.paykidscompose.presentation.ui.theme.Gray6
@@ -42,10 +51,29 @@ import com.paykidscompose.presentation.ui.theme.Red
 fun MyPageScreen(
     onClickMyInfo: () -> Unit = {},
     onClickTerms: () -> Unit = {},
-    onClickAppVersion: () -> Unit = {},
-    onClickLogout: () -> Unit = {}
+    onClickAppVersion: () -> Unit = {}
 ) {
     val user = DummyUser.getUsers().first()
+
+    val uiModel = MyPageUIModel(user.nickname, user.profileImageURL)
+
+    var showPopupDialog by remember { mutableStateOf(false) }
+
+    val onPopupDialog = {
+        showPopupDialog = !showPopupDialog
+    }
+
+    if(showPopupDialog) {
+        PopupDialog(
+            title = stringResource(R.string.dialog_signout_title),
+            description = stringResource(R.string.dialog_signout_message),
+            onCancelClick = { showPopupDialog = false },
+            onConfirmClick = {
+                showPopupDialog = false
+            },
+            popupType = PopupType.LOGOUT
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -66,7 +94,7 @@ fun MyPageScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(user.profileImageURL),
+                painter = painterResource(uiModel.image),
                 contentDescription = null,
                 modifier = Modifier
                     .size(MyPageDefaultScreenImageSize)
@@ -76,7 +104,7 @@ fun MyPageScreen(
             Spacer(Modifier.height(MyPageDefaultScreenSpacer20))
 
             TitleText(
-                user.nickname,
+                uiModel.nickname,
                 color = MyPageAppBarTitleTextColor,
                 style = MyPageNicknameTextStyle
             )
@@ -94,19 +122,19 @@ fun MyPageScreen(
                     iconEnable = true,
                     onItemClick = onClickMyInfo
                 )
-                HorizontalDivider(color = Gray6)
+                Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(color = Gray6))
                 CardItem(
                     stringResource(R.string.text_terms_policy_title),
                     iconEnable = true,
                     onItemClick = onClickTerms
                 )
-                HorizontalDivider(color = Gray6)
+                Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(color = Gray6)) // Divider는 버그 있는 거 같아서 Box로 대체함.
                 CardItem(stringResource(R.string.text_app_version), onClickAppVersion)
-                HorizontalDivider(color = Gray6)
+                Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(color = Gray6))
                 CardItem(
                     stringResource(R.string.text_logout),
                     textColor = Red,
-                    onItemClick = onClickLogout
+                    onItemClick = onPopupDialog
                 )
             }
         }

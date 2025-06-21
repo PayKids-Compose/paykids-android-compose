@@ -15,7 +15,7 @@ data class User(
 
 object DummyUser {
 
-    private val userList = mutableListOf<User>()
+    private val userList = mutableListOf<User>(User("TestMingyu", "Mingyu", "민규당", "test@naver.com"))
     var id = 1
 
     fun getUser(id: String): User? {
@@ -28,13 +28,6 @@ object DummyUser {
             userList[index] = user
         } else {
             userList.add(user)
-        }
-    }
-
-    fun updateUser(id: String, nickname: String, email: String) {
-        userList.find{ it.id == id}?.let {
-            it.nickname = nickname
-            it.email = email
         }
     }
 

@@ -43,7 +43,6 @@ fun NicknameScreen(
     }
     val user = DummyUser.getUsers().first()
 
-
     Column(
         modifier = Modifier
             .fillMaxSize()
