@@ -40,3 +40,6 @@ val StageDescriptionCardTextHorizontalPadding = 16.dp
 val StageDescriptionCardTextVerticalPadding = 20.dp
 val StageDescriptionCardTextSpacer = 7.dp
 val StageDescriptionCardShadowElevation = 8.dp
+
+const val StageTooltipOffsetX = 86
+const val StageTooltipOffsetY = 100
