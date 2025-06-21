@@ -1,7 +1,5 @@
 package com.paykidscompose.presentation.screens.quiz
 
-import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,12 +20,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import coil3.compose.AsyncImage
 import com.paykidscompose.presentation.R
+import com.paykidscompose.presentation.dummy.getStageTitle
 import com.paykidscompose.presentation.ui.components.DecisionButton
-import com.paykidscompose.presentation.ui.theme.Blue2
+import com.paykidscompose.presentation.ui.components.PopupDialog
+import com.paykidscompose.presentation.ui.components.util.PopupType
+import com.paykidscompose.presentation.ui.theme.Blue1
+import com.paykidscompose.presentation.ui.theme.DeterminationButtonTextTopAndBottom2
 import com.paykidscompose.presentation.ui.theme.DeterminationTextStyle2
 import com.paykidscompose.presentation.ui.theme.Gray5
 import com.paykidscompose.presentation.ui.theme.QuizEntryButtonSpacer
@@ -47,20 +49,26 @@ import com.paykidscompose.presentation.ui.theme.White
 @Composable
 fun QuizEntryScreen() {
     var showDialog by remember { mutableStateOf(false) }
-
-    BackHandler { showDialog = true }
+    var stageNumber by remember { mutableStateOf(3) } // 임시 하드코딩
+    var stageTitle by remember { mutableStateOf(getStageTitle(stageNumber)) }
 
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         if (showDialog) {
-
+            PopupDialog(
+                title = stringResource(R.string.dialog_incorrect_nothing),
+                popupType = PopupType.INCORRECT_ANSWER_NOTE_ERROR,
+                onCancelClick = { showDialog = false },
+                onConfirmClick = { showDialog = false },
+                description = ""
+            )
         }
 
-        Image(
-            modifier = Modifier.fillMaxSize(),
-            painter = painterResource(id = R.drawable.bg_quiz_enter),
+        AsyncImage(
+            model = R.drawable.bg_quiz_enter,
             contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
 
@@ -81,15 +89,15 @@ fun QuizEntryScreen() {
                     modifier = Modifier.padding(horizontal = StageNumberCardHorizontalPadding, vertical = StageNumberCardVerticalPadding),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "스테이지 3", style = StageNumberCardTextStyle)
+                    Text(text = stringResource(R.string.text_stage_number, stageNumber), style = StageNumberCardTextStyle)
                 }
             }
             Spacer(modifier = Modifier.height(QuizEntryScreenSpacer1))
 
-            Text(text = "화폐의 단위에 대해 알아보아요", style = StageTooltipTextStyle, color = White)
+            Text(text = stageTitle, style = StageTooltipTextStyle, color = White)
             Spacer(modifier = Modifier.height(QuizEntryScreenSpacer2))
 
-            DecisionButton(
+            DecisionButton( // 학습하기
                 text = stringResource(R.string.text_btn_study),
                 onClick = {
 
@@ -97,31 +105,34 @@ fun QuizEntryScreen() {
                 modifier = Modifier
                     .fillMaxWidth(),
                 backgroundColor = White,
-                contentColor = Blue2,
+                contentColor = Blue1,
+                contentPadding = DeterminationButtonTextTopAndBottom2,
                 textStyle = DeterminationTextStyle2
             )
             Spacer(modifier = Modifier.height(QuizEntryButtonSpacer))
-            DecisionButton(
+            DecisionButton( // 퀴즈 풀기
                 text = stringResource(R.string.text_btn_quiz),
                 onClick = {
 
                 },
                 modifier = Modifier
                     .fillMaxWidth(),
-                backgroundColor = Blue2,
+                backgroundColor = Blue1,
                 contentColor = White,
+                contentPadding = DeterminationButtonTextTopAndBottom2,
                 textStyle = DeterminationTextStyle2
             )
             Spacer(modifier = Modifier.height(QuizEntryButtonSpacer))
-            DecisionButton(
+            DecisionButton( // 오답노트 풀기
                 text = stringResource(R.string.text_btn_review),
                 onClick = {
-
+                    showDialog = true
                 },
                 modifier = Modifier
                     .fillMaxWidth(),
                 backgroundColor = White,
-                contentColor = Blue2,
+                contentColor = Blue1,
+                contentPadding = DeterminationButtonTextTopAndBottom2,
                 textStyle = DeterminationTextStyle2
             )
         }
