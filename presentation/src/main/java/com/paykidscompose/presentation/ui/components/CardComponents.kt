@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.paykidscompose.presentation.ui.theme.CustomCardBackgroundShape
+import androidx.compose.ui.unit.Dp
 import com.paykidscompose.presentation.ui.theme.CustomCardShadow
 import com.paykidscompose.presentation.ui.theme.CustomCardSizeHeight
 import com.paykidscompose.presentation.ui.theme.CustomCardSizeWidth
@@ -23,18 +23,29 @@ import com.paykidscompose.presentation.ui.theme.White
 fun CustomCard(
     modifier: Modifier = Modifier,
     shadowColor: Color = MyPageCardShadowColor,
+    shapeTop: Dp = CustomCardShadow,
+    shapeBottom: Dp = CustomCardShadow,
     content: @Composable ColumnScope.() -> Unit
 ) {
+    val shape = RoundedCornerShape(
+        topStart = shapeTop,
+        topEnd = shapeTop,
+        bottomStart = shapeBottom,
+        bottomEnd = shapeBottom
+    )
+
     Box(
         modifier = modifier
             .shadow(
                 elevation = CustomCardShadow,
-                shape = RoundedCornerShape(CustomCardShadow),
+                shape = shape,
                 ambientColor = shadowColor,
                 spotColor = shadowColor
             )
             .size(CustomCardSizeWidth, CustomCardSizeHeight)
-            .background(White, shape = RoundedCornerShape(CustomCardBackgroundShape))
+            .background(
+                White, shape = shape
+            )
     ) {
         Column(content = content)
     }

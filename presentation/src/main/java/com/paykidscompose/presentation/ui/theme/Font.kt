@@ -68,3 +68,32 @@ val MyPageCardTitleTextStyle = TextStyle(
     fontSize = 16.sp,
     lineHeight = 18.sp
 )
+
+// 내 정보 스크린
+val MyInfoCardTitleTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 18.sp,
+    lineHeight = 20.sp
+)
+
+val MyInfoCardNicknameTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 16.sp,
+    lineHeight = 18.sp
+)
+
+val MyInfoCardNicknameButtonTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 14.sp,
+    lineHeight = 26.sp
+)
+
+val MyInfoCardUserDeleteTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 14.sp,
+    lineHeight = 26.sp
+)
