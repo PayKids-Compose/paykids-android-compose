@@ -54,14 +54,14 @@ val StageCardNumberTextStyle = TextStyle(
     lineHeight = 14.sp,
     color = Blue1
 )
-val StageCardTitleTextStyle = TextStyle(
 
 val StageTooltipTextStyle = TextStyle(
     fontFamily = NanumSquare,
     fontWeight = FontWeight.ExtraBold,
     fontSize = 22.sp,
-    lineHeight = 25.sp  
-  
+    lineHeight = 25.sp
+)
+
 // 마이페이지 스크린
 val MyPageAppBarTextStyle = TextStyle(
     fontFamily = NanumSquare,
@@ -128,19 +128,19 @@ val TermsPolicyCardItemTitleTextStyle = TextStyle(
 )
 
 // 팝업 다이얼로그
-val PopupDialogTitleTextStyle =  TextStyle(
+val PopupDialogTitleTextStyle = TextStyle(
     fontFamily = NanumSquare,
     fontWeight = FontWeight.ExtraBold,
     fontSize = 16.sp,
     lineHeight = 18.sp
 )
-val PopupDialogTitleInfoTextStyle =  TextStyle(
+val PopupDialogTitleInfoTextStyle = TextStyle(
     fontFamily = NanumSquare,
     fontWeight = FontWeight.Bold,
     fontSize = 12.sp,
     lineHeight = 26.sp
 )
-val PopupDialogButtonTextStyle =  TextStyle(
+val PopupDialogButtonTextStyle = TextStyle(
     fontFamily = NanumSquare,
     fontWeight = FontWeight.ExtraBold,
     fontSize = 14.sp,
