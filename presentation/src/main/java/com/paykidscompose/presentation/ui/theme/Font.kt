@@ -111,3 +111,23 @@ val TermsPolicyCardItemTitleTextStyle = TextStyle(
     fontSize = 16.sp,
     lineHeight = 18.sp
 )
+
+// 팝업 다이얼로그
+val PopupDialogTitleTextStyle =  TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 16.sp,
+    lineHeight = 18.sp
+)
+val PopupDialogTitleInfoTextStyle =  TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 12.sp,
+    lineHeight = 26.sp
+)
+val PopupDialogButtonTextStyle =  TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 14.sp,
+    lineHeight = 16.sp
+)

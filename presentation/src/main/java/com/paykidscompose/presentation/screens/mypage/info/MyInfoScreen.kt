@@ -35,10 +35,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.DummyUser
+import com.paykidscompose.presentation.model.MyInfoUIModel
 import com.paykidscompose.presentation.ui.components.AppTopBar
 import com.paykidscompose.presentation.ui.components.CustomCard
 import com.paykidscompose.presentation.ui.components.OutlineInputField
+import com.paykidscompose.presentation.ui.components.PopupDialog
 import com.paykidscompose.presentation.ui.components.TitleText
+import com.paykidscompose.presentation.ui.components.util.PopupType
 import com.paykidscompose.presentation.ui.theme.Black
 import com.paykidscompose.presentation.ui.theme.Blue2
 import com.paykidscompose.presentation.ui.theme.Gray5
@@ -58,7 +61,6 @@ import com.paykidscompose.presentation.ui.theme.MyInfoScreenNicknameStartPadding
 import com.paykidscompose.presentation.ui.theme.MyInfoScreenProfileSize
 import com.paykidscompose.presentation.ui.theme.MyInfoScreenShapeBottom
 import com.paykidscompose.presentation.ui.theme.MyInfoScreenShapeTop
-import com.paykidscompose.presentation.ui.theme.MyInfoScreenSpacer166
 import com.paykidscompose.presentation.ui.theme.MyInfoScreenSpacer20
 import com.paykidscompose.presentation.ui.theme.MyInfoScreenSpacer24
 import com.paykidscompose.presentation.ui.theme.MyInfoScreenSpacer36
@@ -77,15 +79,40 @@ fun MyInfoScreen(
 ) {
     val user = DummyUser.getUsers().first()
 
-    var nickname by remember { mutableStateOf(user.nickname) }
-    var email by remember { mutableStateOf(user.email) }
+    var uiModel by remember {
+        mutableStateOf(
+            MyInfoUIModel(
+                user.nickname,
+                user.email,
+                user.profileImageURL
+            )
+        )
+    }
+
+    var showPopupDialog by remember { mutableStateOf(false) }
 
     val onNickname = { value: String ->
-        nickname = value
+        uiModel = uiModel.copy(nickname = value)
     }
 
     val onEmail = { value: String ->
-        email = value
+        uiModel = uiModel.copy(email = value)
+    }
+
+    val onPopupDialog = {
+        showPopupDialog = !showPopupDialog
+    }
+
+    if (showPopupDialog) {
+        PopupDialog(
+            title = stringResource(R.string.dialog_withdraw_title),
+            description = stringResource(R.string.dialog_withdraw_message),
+            onCancelClick = { showPopupDialog = false },
+            onConfirmClick = {
+                showPopupDialog = false
+            },
+            popupType = PopupType.USER_DELETE
+        )
     }
 
     Scaffold(
@@ -99,11 +126,10 @@ fun MyInfoScreen(
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .padding(innerPadding)
                 .fillMaxSize()
                 .background(color = Gray5)
                 .padding(
-                    top = MyInfoScreenTopPadding
+                    top = innerPadding.calculateTopPadding() + MyInfoScreenTopPadding
                 ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -114,7 +140,7 @@ fun MyInfoScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Image(
-                    painter = painterResource(user.profileImageURL),
+                    painter = painterResource(uiModel.image),
                     contentDescription = null,
                     modifier = Modifier
                         .size(MyInfoScreenProfileSize)
@@ -133,7 +159,7 @@ fun MyInfoScreen(
             Spacer(modifier = Modifier.height(MyInfoScreenSpacer20))
 
             TitleText(
-                nickname,
+                uiModel.nickname,
                 color = MyPageAppBarTitleTextColor,
                 style = MyPageNicknameTextStyle
             )
@@ -146,10 +172,10 @@ fun MyInfoScreen(
                 shapeBottom = MyInfoScreenShapeBottom
             ) {
                 MyInfoEdit(
-                    nickname,
-                    email,
+                    uiModel,
                     onNickname,
-                    onEmail
+                    onEmail,
+                    onPopupDialog
                 )
             }
         }
@@ -158,10 +184,10 @@ fun MyInfoScreen(
 
 @Composable
 fun MyInfoEdit(
-    nickname: String,
-    email: String,
+    uiModel: MyInfoUIModel,
     onNickname: (String) -> Unit,
     onEmail: (String) -> Unit,
+    onPopupDialog: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -182,17 +208,17 @@ fun MyInfoEdit(
 
         Spacer(modifier = Modifier.height(MyInfoScreenSpacer36))
 
-        NicknameEdit(nickname, onNickname)
+        NicknameEdit(uiModel, onNickname)
 
         Spacer(modifier = Modifier.height(MyInfoScreenSpacer20))
 
-        EmailEdit(email, onEmail)
+        EmailEdit(uiModel, onEmail)
 
-        Spacer(modifier = Modifier.height(MyInfoScreenSpacer166))
+        Spacer(modifier = Modifier.weight(1f))
 
         Text(
             stringResource(R.string.text_withdrawal),
-            modifier = Modifier.clickable(onClick = {}),
+            modifier = Modifier.clickable(onClick = onPopupDialog),
             style = MyInfoCardUserDeleteTextStyle,
             color = Red
         )
@@ -201,7 +227,7 @@ fun MyInfoEdit(
 
 @Composable
 fun NicknameEdit(
-    nickname: String,
+    uiModel: MyInfoUIModel,
     onNickname: (String) -> Unit
 ) {
     Row(
@@ -217,7 +243,7 @@ fun NicknameEdit(
         Spacer(modifier = Modifier.width(MyInfoScreenSpacer38))
 
         OutlineInputField(
-            nickname,
+            uiModel.nickname,
             onNickname,
             hint = stringResource(R.string.text_nickname_hint),
             modifier = Modifier.weight(1f),
@@ -249,7 +275,7 @@ fun NicknameEdit(
 
 @Composable
 fun EmailEdit(
-    email: String,
+    uiModel: MyInfoUIModel,
     onEmail: (String) -> Unit
 ) {
     Row(
@@ -265,7 +291,7 @@ fun EmailEdit(
         Spacer(modifier = Modifier.width(MyInfoScreenSpacer24))
 
         OutlineInputField(
-            email,
+            uiModel.email,
             onEmail,
             hint = stringResource(R.string.text_email_hint),
             startPadding = MyInfoScreenEmailStartPadding
