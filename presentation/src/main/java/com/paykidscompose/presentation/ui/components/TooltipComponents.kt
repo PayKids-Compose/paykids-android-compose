@@ -16,9 +16,11 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.ui.theme.Blue1
+import com.paykidscompose.presentation.ui.theme.StageTooltipImageHeight
+import com.paykidscompose.presentation.ui.theme.StageTooltipImageWidth
+import com.paykidscompose.presentation.ui.theme.StageTooltipTextOffsetY
 import com.paykidscompose.presentation.ui.theme.StageTooltipTextStyle
 
 @Preview
@@ -38,7 +40,7 @@ fun ImageTooltip(
             ) { onClickDismiss() },
     ) {
         Image(
-            modifier = Modifier.size(156.dp, 80.dp),
+            modifier = Modifier.size(StageTooltipImageWidth, StageTooltipImageHeight),
             painter = imageRes,
             contentDescription = null,
         )
@@ -49,7 +51,7 @@ fun ImageTooltip(
             style = StageTooltipTextStyle,
             modifier = Modifier
                 .align(Alignment.Center)
-                .offset(y = 8.dp)
+                .offset(y = StageTooltipTextOffsetY)
         )
     }
 }
