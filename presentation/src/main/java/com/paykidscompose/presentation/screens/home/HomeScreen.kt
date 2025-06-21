@@ -4,9 +4,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,31 +17,57 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.IntOffset
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.ui.theme.Dimens
+import com.paykidscompose.presentation.dummy.getStageTitle
+import com.paykidscompose.presentation.ui.components.ImageTooltip
+import com.paykidscompose.presentation.ui.theme.Blue1
+import com.paykidscompose.presentation.ui.theme.StageCardNumberTextStyle
+import com.paykidscompose.presentation.ui.theme.StageCardTitleTextStyle
+import com.paykidscompose.presentation.ui.theme.StageCircleBorderWidth
+import com.paykidscompose.presentation.ui.theme.StageCircleSize
+import com.paykidscompose.presentation.ui.theme.StageDescriptionCardHeight
+import com.paykidscompose.presentation.ui.theme.StageDescriptionCardHorizontalPadding
+import com.paykidscompose.presentation.ui.theme.StageDescriptionCardRound
+import com.paykidscompose.presentation.ui.theme.StageDescriptionCardShadowElevation
+import com.paykidscompose.presentation.ui.theme.StageDescriptionCardTextHorizontalPadding
+import com.paykidscompose.presentation.ui.theme.StageDescriptionCardTextSpacer
+import com.paykidscompose.presentation.ui.theme.StageDescriptionCardTextVerticalPadding
+import com.paykidscompose.presentation.ui.theme.StageDescriptionCardVerticalPadding
+import com.paykidscompose.presentation.ui.theme.StageHorizontalPadding
+import com.paykidscompose.presentation.ui.theme.StageIconSize
+import com.paykidscompose.presentation.ui.theme.StageTooltipOffsetX
+import com.paykidscompose.presentation.ui.theme.StageTooltipOffsetY
+import com.paykidscompose.presentation.ui.theme.StageTopPadding
+import com.paykidscompose.presentation.ui.theme.StageVerticalSpace
 import com.paykidscompose.presentation.ui.theme.White
 import com.paykidscompose.presentation.ui.util.getStageVisuals
 
@@ -56,17 +85,24 @@ val stageImageSet = listOf(
 @Composable
 fun HomeScreen() {
     val scrollState = rememberLazyListState()
+
     val density = LocalDensity.current
-    val itemHeightDp = Dimens.StageCircleSize + Dimens.StageVerticalSpace
+    val itemHeightDp = StageCircleSize + StageVerticalSpace
     val itemHeightPx = with(density) { itemHeightDp.toPx() }
+
     val backgroundOffset by remember {
         derivedStateOf {
             val totalOffsetPx = scrollState.firstVisibleItemIndex * itemHeightPx +
                     scrollState.firstVisibleItemScrollOffset
-            with(density) { -(totalOffsetPx * 0.6f).toDp() } // 60%만 따라가게 하면 더 자연스럽게
+            with(density) { -(totalOffsetPx * 0.6f).toDp() }
         }
     }
     val context = LocalContext.current
+
+    val tooltipOffset = remember { mutableStateOf<Offset?>(null) }
+
+    val lastClearedStageIndex = 6 // 클리어 스테이지 인덱스
+    val selectedStageIndex = remember { mutableIntStateOf(lastClearedStageIndex) }
 
     Box(
         modifier = Modifier
@@ -81,34 +117,50 @@ fun HomeScreen() {
             filterQuality = FilterQuality.High,
             contentScale = ContentScale.FillWidth,
             clipToBounds = false,
+            alignment = Alignment.TopStart,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(800.dp) // 필요에 따라
-//                .offset(x = 0.dp, y = lineHeight.value),
                 .offset(y = backgroundOffset)
         )
 
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(top = Dimens.StageTopPadding),
+                .fillMaxSize(),
             state = scrollState,
-            verticalArrangement = Arrangement.spacedBy(Dimens.StageVerticalSpace),
-            contentPadding = PaddingValues(horizontal = Dimens.StageHorizontalPadding)
+            verticalArrangement = Arrangement.spacedBy(StageVerticalSpace),
+            contentPadding = PaddingValues(horizontal = StageHorizontalPadding)
         ) {
             items(totalStageCount) { index ->
-                val (imageRes, borderColor) = getStageVisuals(index, unlockedStageCount, stageImageSet)
+                if (index == 0) {
+                    Spacer(modifier = Modifier.height(StageTopPadding))
+                }
+
+                val (imageRes, borderColor) = getStageVisuals(
+                    index,
+                    unlockedStageCount,
+                    stageImageSet
+                )
+                val itemOffset = remember { mutableStateOf(Offset(0f, 0f)) }
 
                 Box(
                     modifier = Modifier
-                        .size(Dimens.StageCircleSize)
+                        .size(StageCircleSize)
                         .background(color = White, shape = CircleShape)
                         .border(
-                            width = Dimens.StageCircleBorderWidth,
+                            width = StageCircleBorderWidth,
                             color = borderColor,
                             shape = CircleShape
                         )
-                        .clickable {
+                        .onGloballyPositioned { coordinates ->
+                            itemOffset.value = coordinates.positionInWindow()
+                        }
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) {
+                            selectedStageIndex.intValue = index
+                            tooltipOffset.value = Offset(itemOffset.value.x, itemOffset.value.y)
+
                             if (index < unlockedStageCount) {
 
                             } else {
@@ -119,68 +171,86 @@ fun HomeScreen() {
                 ) {
                     Image(
                         painter = painterResource(id = imageRes),
-                        contentDescription = null,
-                        modifier = Modifier.size(Dimens.StageIconSize)
+                        contentDescription = null, // ripple 제거
+                        modifier = Modifier.size(StageIconSize)
                     )
                 }
             }
         }
 
-    }
-}
-
-@Composable
-fun rememberCurrentOffset(state: LazyListState): androidx.compose.runtime.State<Int> {
-    val position = remember { derivedStateOf { state.firstVisibleItemIndex } }
-    val itemOffset = remember { derivedStateOf { state.firstVisibleItemScrollOffset } }
-    val lastPosition = rememberPrevious(position.value)
-    val lastItemOffset = rememberPrevious(itemOffset.value)
-    val currentOffset = remember { mutableStateOf(0) }
-
-    LaunchedEffect(position.value, itemOffset.value) {
-        if (lastPosition == null || position.value == 0) {
-            currentOffset.value = itemOffset.value
-        } else if (lastPosition == position.value) {
-            currentOffset.value += (itemOffset.value - (lastItemOffset ?: 0))
-        } else if (lastPosition > position.value) {
-            currentOffset.value -= (lastItemOffset ?: 0)
-        } else { // lastPosition.value < position.value
-            currentOffset.value += itemOffset.value
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = StageDescriptionCardHorizontalPadding,
+                    vertical = StageDescriptionCardVerticalPadding
+                )
+                .height(StageDescriptionCardHeight)
+                .shadow(
+                    elevation = StageDescriptionCardShadowElevation,
+                    shape = RoundedCornerShape(StageDescriptionCardRound),
+                    ambientColor = Blue1,
+                    spotColor = Blue1
+                ),
+            shape = RoundedCornerShape(StageDescriptionCardRound),
+            colors = CardDefaults.cardColors(
+                containerColor = White
+            )
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(
+                        horizontal = StageDescriptionCardTextHorizontalPadding,
+                        vertical = StageDescriptionCardTextVerticalPadding
+                    )
+            ) {
+                Text(
+                    text = selectedStageIndex.intValue.let {
+                        stringResource(R.string.text_stage_number, it + 1)
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    style = StageCardNumberTextStyle
+                )
+                Spacer(modifier = Modifier.height(StageDescriptionCardTextSpacer))
+                Text(
+                    text = selectedStageIndex.intValue?.let { getStageTitle(it) } ?: stringResource(R.string.text_stage_title),
+                    modifier = Modifier.fillMaxWidth(),
+                    style = StageCardTitleTextStyle
+                )
+            }
         }
-    }
 
-    return currentOffset
-}
-
-
-@Composable
-fun <T> rememberPrevious(
-    current: T,
-    shouldUpdate: (prev: T?, curr: T) -> Boolean = { a: T?, b: T -> a != b },
-): T? {
-    val ref = rememberRef<T>()
-
-    // launched after render, so the current render will have the old value anyway
-    SideEffect {
-        if (shouldUpdate(ref.value, current)) {
-            ref.value = current
+        // 화면을 클릭하면 툴팁 닫힘
+        if (tooltipOffset.value != null) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable(
+                        onClick = {
+                            tooltipOffset.value = null
+                        },
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    )
+            )
         }
-    }
 
-    return ref.value
-}
-
-@Composable
-fun <T> rememberRef(): MutableState<T?> {
-    // for some reason it always recreated the value with vararg keys,
-    // leaving out the keys as a parameter for remember for now
-    return remember() {
-        object : MutableState<T?> {
-            override var value: T? = null
-
-            override fun component1(): T? = value
-
-            override fun component2(): (T?) -> Unit = { value = it }
+        // 툴팁 표시
+        tooltipOffset.value?.let { offset ->
+            ImageTooltip(
+                tooltipText = stringResource(R.string.text_tooltip_start),
+                modifier = Modifier
+                    .clickable {
+                        tooltipOffset.value = null
+                    }
+                    .offset {
+                        IntOffset(
+                            offset.x.toInt() - StageTooltipOffsetX,
+                            offset.y.toInt() - StageTooltipOffsetY
+                        )
+                    }
+            )
         }
     }
 }
