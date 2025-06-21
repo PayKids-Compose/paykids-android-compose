@@ -55,6 +55,14 @@ val StageCardNumberTextStyle = TextStyle(
     color = Blue1
 )
 
+val StageCardTitleTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 18.sp,
+    lineHeight = 20.sp,
+    color = Black
+)
+
 val StageTooltipTextStyle = TextStyle(
     fontFamily = NanumSquare,
     fontWeight = FontWeight.ExtraBold,
