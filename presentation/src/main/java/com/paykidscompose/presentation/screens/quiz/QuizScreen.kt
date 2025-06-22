@@ -1,5 +1,6 @@
 package com.paykidscompose.presentation.screens.quiz
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,6 +18,10 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,11 +31,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.model.QuizType
 import com.paykidscompose.presentation.ui.components.AppTopBar
+import com.paykidscompose.presentation.ui.components.PopupDialog
+import com.paykidscompose.presentation.ui.components.util.PopupType
 import com.paykidscompose.presentation.ui.theme.Black
 import com.paykidscompose.presentation.ui.theme.CardShadowElevation
 import com.paykidscompose.presentation.ui.theme.Gray3
@@ -42,6 +48,8 @@ import com.paykidscompose.presentation.ui.theme.ImageQuizCardSize
 import com.paykidscompose.presentation.ui.theme.ImageQuizCardSpaceBetween
 import com.paykidscompose.presentation.ui.theme.ImageQuizCardTextSpacer
 import com.paykidscompose.presentation.ui.theme.QuizAnswerTextStyle
+import com.paykidscompose.presentation.ui.theme.QuizAppBarShadowColor
+import com.paykidscompose.presentation.ui.theme.QuizAppBarShadowElevation
 import com.paykidscompose.presentation.ui.theme.QuizAppBarTextStyle
 import com.paykidscompose.presentation.ui.theme.QuizQuestionTextSpacer
 import com.paykidscompose.presentation.ui.theme.QuizQuestionTextStyle
@@ -50,7 +58,6 @@ import com.paykidscompose.presentation.ui.theme.StartAndEndPadding
 @Preview(showBackground = true)
 @Composable
 fun QuizScreen(
-    onBackClick: () -> Unit = {},
     quizType: QuizType = QuizType.IMAGE,
     quizNumber: Int = 2,
     totalQuizCount: Int = 7,
@@ -64,14 +71,32 @@ fun QuizScreen(
     answer: String = "A",
     onChoiceClick: (Int) -> Unit = {}
 ) {
+    var showDialog by remember { mutableStateOf(false) }
+
+    BackHandler(enabled = true) {
+        showDialog = true
+    }
+
+    if (showDialog) {
+        PopupDialog(
+            title = stringResource(R.string.dialog_check_exit),
+            popupType = PopupType.QUIZ_EXIT,
+            onCancelClick = { showDialog = false },
+            onConfirmClick = { showDialog = false },
+            description = ""
+        )
+    }
+
     Scaffold(
         topBar = {
             AppTopBar(
                 title = stringResource(R.string.text_quiz_number, quizNumber, totalQuizCount),
                 titleStyle = QuizAppBarTextStyle,
                 showBackButton = true,
-                onBackClick = onBackClick,
-                iconTint = Black
+                onBackClick = { showDialog = true },
+                iconTint = Black,
+                shadowColor = QuizAppBarShadowColor,
+                shadowElevation = QuizAppBarShadowElevation
             )
         }) { innerPadding ->
         Box(
