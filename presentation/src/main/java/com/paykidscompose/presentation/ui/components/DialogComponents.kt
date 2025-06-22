@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -79,7 +80,8 @@ fun PopupDialog(
             ) {
                 Text(
                     text = title,
-                    style = PopupDialogTitleTextStyle.copy(color = Black)
+                    style = PopupDialogTitleTextStyle.copy(color = Black),
+                    textAlign = TextAlign.Center
                 )
 
                 if (description != "") {
@@ -190,7 +192,7 @@ fun PopupDialog(
                                 .height(IntrinsicSize.Min)
                         ) {
                             Button(
-                                onClick = onCancelClick,
+                                onClick = onConfirmClick,
                                 shape = RoundedCornerShape(PopupDialogButtonShape),
                                 modifier = Modifier
                                     .weight(1f)
@@ -209,7 +211,7 @@ fun PopupDialog(
                             Spacer(modifier = Modifier.width(PopupDialogSpacer6))
 
                             Button(
-                                onClick = onConfirmClick,
+                                onClick = onCancelClick,
                                 shape = RoundedCornerShape(PopupDialogButtonShape),
                                 modifier = Modifier
                                     .weight(1f)
@@ -221,6 +223,50 @@ fun PopupDialog(
                             ) {
                                 Text(
                                     text = stringResource(R.string.dialog_exit),
+                                    style = PopupDialogButtonTextStyle
+                                )
+                            }
+                        }
+                    }
+
+                    PopupType.QUIZ_EXIT -> {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(IntrinsicSize.Min)
+                        ) {
+                            Button(
+                                onClick = onConfirmClick,
+                                shape = RoundedCornerShape(PopupDialogButtonShape),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight(),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Blue1, // 버튼 배경색상
+                                    contentColor = White, // 버튼 텍스트 색상
+                                )
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.dialog_continue),
+                                    style = PopupDialogButtonTextStyle
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.width(PopupDialogSpacer6))
+
+                            Button(
+                                onClick = onCancelClick,
+                                shape = RoundedCornerShape(PopupDialogButtonShape),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight(),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Gray6, // 버튼 배경색상
+                                    contentColor = Black, // 버튼 텍스트 색상
+                                )
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.dialog_exit2),
                                     style = PopupDialogButtonTextStyle
                                 )
                             }
@@ -243,4 +289,10 @@ fun PopupDialogPreview() {
 @Composable
 fun PopupDialogPreview2() {
     PopupDialog(stringResource(R.string.dialog_incorrect_nothing), PopupType.INCORRECT_ANSWER_NOTE_ERROR, {}, {}, "")
+}
+
+@Preview
+@Composable
+fun PopupDialogPreview3() {
+    PopupDialog(stringResource(R.string.dialog_check_exit), PopupType.QUIZ_EXIT, {}, {}, "")
 }
