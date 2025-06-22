@@ -110,3 +110,27 @@ val PopupDialogSpacer6 = 6.dp
 val PopupDialogSpacer8 = 8.dp
 val PopupDialogSpacer20 = 20.dp
 val PopupDialogButtonShape = 10.dp
+
+
+// 용돈일기 화면
+val AllowanceDiaryScreenTopBottomPadding = 20.dp
+val AllowanceDiaryScreenStartEndPadding = 17.dp
+val AllowanceDiaryScreenCardShape = 10.dp
+val AllowanceDiaryScreenSpacer4 = 4.dp
+val AllowanceDiaryScreenSpacer6 = 6.dp
+val AllowanceDiaryScreenSpacer8 = 8.dp
+val AllowanceDiaryScreenSpacer10 = 10.dp
+val AllowanceDiaryScreenSpacer16 = 16.dp
+val AllowanceDiaryScreenSpacer34 = 34.dp
+val AllowanceDiaryScreenSpacer28 = 28.dp
+val AllowanceDiaryScreenExpenseCardHeight = 60.dp
+val AllowanceDiaryScreenExpenseCardStartPadding = 18.dp
+val AllowanceDiaryScreenExpenseCardEndPadding = 23.dp
+val AllowanceDiaryScreenCalendarStartEndTopPadding = 12.dp
+val AllowanceDiaryScreenCalendarBottomPadding = 56.dp
+val AllowanceDiaryScreenHeadIconSize = 22.dp
+val AllowanceDiaryScreenHeadAddIconSize = 15.dp
+val AllowanceDiaryScreenDayClickPadding = 4.dp
+val AllowanceDiaryScreenDayClickSize = 32.dp
+val AllowanceDiaryScreenTransactionStartEndPadding = 18.dp
+val AllowanceDiaryScreenTransactionTopBottomPadding = 18.dp
