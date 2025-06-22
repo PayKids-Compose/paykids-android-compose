@@ -14,6 +14,7 @@ val DeterminationButtonTextTopAndBottom2 = 15.dp
 val DeterminationButtonWidth = 320.dp
 val DeterminationButtonHeight = 50.dp
 val CardShadowElevation = 8.dp
+val TopAppBarShadowElevation = 16.dp
 
 // 스플래시 화면
 val SplashLogo = 174.dp
@@ -68,6 +69,7 @@ val ImageQuizCardImageSize = 120.dp
 val ImageQuizCardImageRound = 10.dp
 val ImageQuizCardTextSpacer = 12.dp
 val ImageQuizCardRowSpacer = 14.dp
+val QuizAppBarShadowElevation = 4.dp
 
 // 마이페이지 기본 화면
 val MyPageDefaultScreenStartEndPadding = 20.dp

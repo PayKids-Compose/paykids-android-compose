@@ -35,3 +35,7 @@ val TitleColor = Color(0xFF222222) // 닉네임을 입력해주세요 색상이 
 // 마이페이지 색상
 val MyPageAppBarTitleTextColor = Color(0xFF000000)
 val MyPageCardShadowColor = Color(0x80CCE4FF)
+val MyPageAppBarShadowColor = Color(0x80CCE4FF)
+
+// 퀴즈 화면 색상
+val QuizAppBarShadowColor = Color(0x80DBDBDB)
