@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.paykidscompose.presentation.R
@@ -20,13 +21,15 @@ import com.paykidscompose.presentation.ui.theme.White
 @Composable
 fun AppTopBar(
     title: String,
+    titleStyle: TextStyle = MyPageAppBarTextStyle,
     showBackButton: Boolean = false,
     onBackClick: (() -> Unit)? = null,
-    painter: Painter = painterResource(R.drawable.ic_left_blue)
+    painter: Painter = painterResource(R.drawable.ic_left_blue),
+    iconTint: Color = Color.Unspecified
 ) {
     CenterAlignedTopAppBar(
         title = {
-            TitleText(title, style = MyPageAppBarTextStyle, textAlign = TextAlign.Center)
+            TitleText(title, style = titleStyle, textAlign = TextAlign.Center)
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = White,
@@ -38,7 +41,7 @@ fun AppTopBar(
                     Icon(
                         painter = painter,
                         contentDescription = null,
-                        tint = Color.Unspecified
+                        tint = iconTint
                     )
                 }
             }
@@ -50,5 +53,5 @@ fun AppTopBar(
 @Composable
 fun AppBar(
 ) {
-    AppTopBar("마이페이지", true, {})
+    AppTopBar("마이페이지",MyPageAppBarTextStyle , true, {})
 }
