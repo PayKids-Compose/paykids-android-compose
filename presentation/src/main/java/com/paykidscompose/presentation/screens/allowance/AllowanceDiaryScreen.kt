@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +25,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,9 +39,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.paykidscompose.presentation.R
+import com.paykidscompose.presentation.dummy.DummyDataManager
+import com.paykidscompose.presentation.model.AllowanceDiaryUIModel
+import com.paykidscompose.presentation.model.AllowanceType
+import com.paykidscompose.presentation.model.toUIModel
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryCalendarDayTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryCalendarIncomeConsumeTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryCalendarWeekTextStyle
@@ -47,6 +55,7 @@ import com.paykidscompose.presentation.ui.theme.AllowanceDiaryDetailConsumeTitle
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryHeadMonthTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryMostConsumeTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryMostConsumeTitleTextStyle
+import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenBottomPadding
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenCalendarBottomPadding
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenCalendarStartEndTopPadding
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenCardShape
@@ -64,7 +73,7 @@ import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenSpacer34
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenSpacer6
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenSpacer8
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenStartEndPadding
-import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenTopBottomPadding
+import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenTopPadding
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenTransactionStartEndPadding
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenTransactionTopBottomPadding
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryTitleExpenseTextStyle
@@ -79,6 +88,9 @@ import com.paykidscompose.presentation.ui.theme.Gray8
 import com.paykidscompose.presentation.ui.theme.MyPageCardShadowColor
 import com.paykidscompose.presentation.ui.theme.Red
 import com.paykidscompose.presentation.ui.theme.White
+import com.paykidscompose.presentation.util.formatAmount
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -88,27 +100,84 @@ import kotlin.math.ceil
 @Composable
 fun AllowanceDiaryScreen(
 ) {
+
+    val dummyDataManager = remember { DummyDataManager() }
+
+
     var currentMonth by remember {
         mutableStateOf(
             LocalDate.now().withDayOfMonth(1)
         )
     } // 현재 달을 저장 day를 항상 1일로 고정
+
+    val dateFormatterDay = remember { DateTimeFormatter.ofPattern("yyyy-MM-dd") }
+    val dateFormatterMonth = remember { DateTimeFormatter.ofPattern("yyyy-MM") }
+
     var selectedDate by remember { mutableStateOf(LocalDate.now()) } // 선택한 날짜, 처음은 현재 날짜
 
-    val dummyData = mapOf(
-        LocalDate.of(2025, 6, 14) to listOf(-1800, -1800, -1800),
-        LocalDate.of(2025, 6, 2) to listOf(+50000, -6000, -10000)
-    )
+    val allAllowanceCharts = remember { dummyDataManager.getAllAllowanceCharts() }
+    val selectedDateString = remember(selectedDate) { selectedDate.format(dateFormatterDay) }
 
-    val selectedData = dummyData[selectedDate] ?: emptyList()
-    val totalIncome = selectedData.filter { it > 0 }.sum()
-    val totalExpense = selectedData.filter { it < 0 }.sum()
-
-    val dailySummary: Map<LocalDate, Pair<Int, Int>> = dummyData.mapValues { (_, list) ->
-        val income = list.filter { it > 0 }.sum()
-        val expense = list.filter { it < 0 }.sum()
-        Pair(income, expense)
+    val selectedUIModels by remember(selectedDateString, allAllowanceCharts) {
+        derivedStateOf {
+            allAllowanceCharts
+                .filter { it.date == selectedDateString }
+                .map { it.toUIModel() }
+        }
     }
+
+    val totalExpense by remember(currentMonth, allAllowanceCharts) {
+        derivedStateOf {
+            val monthPrefix = currentMonth.format(dateFormatterMonth)
+            allAllowanceCharts
+                .filter {
+                    it.allowanceType == AllowanceType.EXPENSE && it.date.startsWith(
+                        monthPrefix
+                    )
+                }
+                .sumOf { it.amount }
+        }
+    }
+
+    // 달력에 보여줄 수입/지출 합계
+    val dailySummary by remember(allAllowanceCharts) {
+        derivedStateOf {
+            allAllowanceCharts
+                .groupBy { LocalDate.parse(it.date) }
+                .mapValues { (_, list) ->
+                    val income =
+                        list.filter { it.allowanceType == AllowanceType.INCOME }.sumOf { it.amount }
+                    val expense = list.filter { it.allowanceType == AllowanceType.EXPENSE }
+                        .sumOf { it.amount }
+                    income to expense
+                }
+        }
+    }
+
+    // 최대 소비 카테고리, 소비 금액 계산
+    var maxExpenseCategoryAndAmount by remember { mutableStateOf<Pair<String, Int>?>(null) }
+
+    LaunchedEffect(currentMonth, allAllowanceCharts) {
+        withContext(Dispatchers.Default) {
+            val monthPrefix = currentMonth.format(dateFormatterMonth)
+            val expenseByCategory = allAllowanceCharts
+                .filter {
+                    it.allowanceType == AllowanceType.EXPENSE && it.date.startsWith(
+                        monthPrefix
+                    )
+                }
+                .groupBy { it.category }
+                .mapValues { entry -> entry.value.sumOf { it.amount } }
+
+            val max = expenseByCategory.maxByOrNull { it.value }
+            withContext(Dispatchers.Main) {
+                maxExpenseCategoryAndAmount = max?.let { it.key to it.value }
+            }
+        }
+    }
+
+    val maxCategory = maxExpenseCategoryAndAmount?.first ?: ""
+    val maxAmount = maxExpenseCategoryAndAmount?.second ?: 0
 
     LazyColumn(
         modifier = Modifier
@@ -117,8 +186,8 @@ fun AllowanceDiaryScreen(
             .padding(
                 start = AllowanceDiaryScreenStartEndPadding,
                 end = AllowanceDiaryScreenStartEndPadding,
-                top = AllowanceDiaryScreenTopBottomPadding,
-                bottom = AllowanceDiaryScreenTopBottomPadding
+                top = AllowanceDiaryScreenTopPadding,
+                bottom = AllowanceDiaryScreenBottomPadding
             ),
     ) {
         item {
@@ -136,7 +205,7 @@ fun AllowanceDiaryScreen(
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    stringResource(R.string.text_month_total_consume, totalExpense),
+                    stringResource(R.string.text_month_total_consume, formatAmount(totalExpense)),
                     style = AllowanceDiaryTitleExpenseTextStyle
                         .copy(color = Black)
                 )
@@ -167,38 +236,48 @@ fun AllowanceDiaryScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
+                        if (maxCategory.isNotEmpty() && maxAmount > 0) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    text = currentMonth.format(DateTimeFormatter.ofPattern("M월 달 ")),
+                                    style = AllowanceDiaryMostConsumeTextStyle.copy(color = Black)
+                                )
+
+                                Text(
+                                    maxCategory,
+                                    style = AllowanceDiaryMostConsumeTextStyle.copy(color = Blue1)
+                                )
+
+                                Text(
+                                    text = stringResource(R.string.text_month_most_consume2),
+                                    style = AllowanceDiaryMostConsumeTextStyle.copy(color = Black)
+                                )
+                            }
+
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    text = formatAmount(maxAmount),
+                                    modifier = Modifier.weight(1f, fill = false),
+                                    maxLines = 1,
+                                    textAlign = TextAlign.End,
+                                    style = AllowanceDiaryMostConsumeTitleTextStyle.copy(color = Black)
+                                )
+
+                                Spacer(modifier = Modifier.width(AllowanceDiaryScreenSpacer8))
+
+                                Text(
+                                    stringResource(R.string.text_consuming),
+                                    modifier = Modifier.wrapContentWidth(),
+                                    style = AllowanceDiaryMostConsumeTextStyle
+                                )
+                            }
+                        } else {
                             Text(
-                                text = currentMonth.format(DateTimeFormatter.ofPattern("M월 달 ")),
-                                style = AllowanceDiaryMostConsumeTextStyle.copy(color = Black)
-                            )
-                            Text(
-                                "편의점",
+                                stringResource(R.string.text_month_no_consume),
                                 style = AllowanceDiaryMostConsumeTextStyle.copy(color = Blue1)
-                            ) // 카테고리 추가 예정
-                            Text(
-                                text = stringResource(R.string.text_month_most_consume2),
-                                style = AllowanceDiaryMostConsumeTextStyle.copy(color = Black)
                             )
                         }
 
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                text = "$totalExpense",
-                                modifier = Modifier.weight(1f, fill = false),
-                                maxLines = 1,
-                                textAlign = TextAlign.End,
-                                style = AllowanceDiaryMostConsumeTitleTextStyle.copy(color = Black)
-                            )
-
-                            Spacer(modifier = Modifier.width(AllowanceDiaryScreenSpacer8))
-
-                            Text(
-                                stringResource(R.string.text_consuming),
-                                modifier = Modifier.wrapContentWidth(),
-                                style = AllowanceDiaryMostConsumeTextStyle
-                            )
-                        }
                     }
                 }
             }
@@ -254,8 +333,8 @@ fun AllowanceDiaryScreen(
             Spacer(Modifier.height(AllowanceDiaryScreenSpacer8))
         }
 
-        items(selectedData) { amount ->
-            TransactionItem(amount)
+        items(selectedUIModels) { item ->
+            TransactionItem(item)
             Spacer(Modifier.height(AllowanceDiaryScreenSpacer8))
         }
     }
@@ -379,7 +458,11 @@ fun CalendarGrid(
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(AllowanceDiaryScreenDayClickPadding)
-                                .clickable { onDateSelected(date) },
+                                .clickable(
+                                    indication = null,
+                                    interactionSource = remember { MutableInteractionSource() }) {
+                                    onDateSelected(date)
+                                },
                             contentAlignment = Alignment.Center
                         ) {
                             Column(
@@ -417,9 +500,9 @@ fun CalendarGrid(
                                     )
                                 }
 
-                                if (expense < 0) {
+                                if (expense > 0) {
                                     Text(
-                                        "$expense",
+                                        "-$expense",
                                         style = AllowanceDiaryCalendarIncomeConsumeTextStyle.copy(
                                             color = Red
                                         ),
@@ -436,7 +519,7 @@ fun CalendarGrid(
 }
 
 @Composable
-fun TransactionItem(amount: Int) {
+fun TransactionItem(item: AllowanceDiaryUIModel) {
 
     Box(
         modifier = Modifier
@@ -460,19 +543,21 @@ fun TransactionItem(amount: Int) {
     ) {
         Column {
             Text(
-                "편의점",
+                item.category,
                 style = AllowanceDiaryMostConsumeTextStyle.copy(color = Blue1)
             ) // 카테고리 추가 예정
             Spacer(Modifier.height(AllowanceDiaryScreenSpacer6))
             Text(
-                "$amount",
+                item.amountFormatted,
                 style = AllowanceDiaryMostConsumeTitleTextStyle.copy(color = Black)
             )
         }
         Text(
-            "불닭볶음면 사먹음 ㅎㅎ",
+            item.memo,
             style = AllowanceDiaryMostConsumeTextStyle.copy(color = Gray1),
-            modifier = Modifier.align(Alignment.CenterEnd)
+            modifier = Modifier.align(Alignment.CenterEnd),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         ) // 메모 추가 예정
     }
 }
