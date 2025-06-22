@@ -236,7 +236,7 @@ fun PopupDialog(
                                 .height(IntrinsicSize.Min)
                         ) {
                             Button(
-                                onClick = onConfirmClick,
+                                onClick = onCancelClick,
                                 shape = RoundedCornerShape(PopupDialogButtonShape),
                                 modifier = Modifier
                                     .weight(1f)
@@ -255,7 +255,7 @@ fun PopupDialog(
                             Spacer(modifier = Modifier.width(PopupDialogSpacer6))
 
                             Button(
-                                onClick = onCancelClick,
+                                onClick = onConfirmClick,
                                 shape = RoundedCornerShape(PopupDialogButtonShape),
                                 modifier = Modifier
                                     .weight(1f)
