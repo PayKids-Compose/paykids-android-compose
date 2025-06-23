@@ -1,7 +1,5 @@
 package com.paykidscompose.presentation.screens.allowance
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -70,6 +68,7 @@ import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenSpacer10
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenSpacer16
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenSpacer28
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenSpacer34
+import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenSpacer4
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenSpacer6
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenSpacer8
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenStartEndPadding
@@ -96,7 +95,6 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.ceil
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AllowanceDiaryScreen(
 ) {
@@ -340,7 +338,6 @@ fun AllowanceDiaryScreen(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HeaderSection(
     month: LocalDate,
@@ -401,7 +398,6 @@ fun HeaderSection(
 
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarGrid(
     dailySummary: Map<LocalDate, Pair<Int, Int>>,
@@ -436,7 +432,7 @@ fun CalendarGrid(
             }
         }
 
-        Spacer(Modifier.height(4.dp))
+        Spacer(Modifier.height(AllowanceDiaryScreenSpacer4))
 
         val rows = ceil((startOffset + daysInMonth) / 7.0).toInt() // 일주일 단위로 배치 행 계산
         repeat(rows) { row ->
@@ -562,7 +558,6 @@ fun TransactionItem(item: AllowanceDiaryUIModel) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun DiaryScreenPreview() {

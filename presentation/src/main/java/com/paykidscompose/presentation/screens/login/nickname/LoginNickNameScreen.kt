@@ -99,7 +99,7 @@ fun NicknameInput(nickname: String, onNicknameChange: (String) -> Unit) {
     }
 }
 
-@Preview
+@Preview(showSystemUi = true)
 @Composable
 fun NicknameScreenPreview() {
     PayKidsComposeTheme {
