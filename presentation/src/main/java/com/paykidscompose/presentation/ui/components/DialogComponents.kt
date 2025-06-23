@@ -1,5 +1,8 @@
 package com.paykidscompose.presentation.ui.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -19,13 +22,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.paykidscompose.presentation.R
+import com.paykidscompose.presentation.model.AllowanceType
 import com.paykidscompose.presentation.ui.components.util.PopupType
+import com.paykidscompose.presentation.ui.theme.AllowanceInputTitleTextStyle
 import com.paykidscompose.presentation.ui.theme.Black
 import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.Gray1
@@ -279,6 +286,94 @@ fun PopupDialog(
     }
 }
 
+@Composable
+fun AllowanceInputDialog(
+    selected: AllowanceType,
+    onSelect: (AllowanceType) -> Unit,
+    onCancelClick: () -> Unit,
+    onConfirmClick: () -> Unit
+) {
+    Dialog(
+        onDismissRequest = { onCancelClick() },
+        properties = DialogProperties(
+            dismissOnBackPress = true,
+            dismissOnClickOutside = true,
+        )
+    ) {
+        Card(
+            shape = RoundedCornerShape(10.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = White
+            )
+        ) {
+            Column(
+                modifier = Modifier
+                    .width(PopupDialogCardColumnSize)
+                    .padding(
+                        start = 20.dp,
+                        end = 20.dp,
+                        top = 25.dp,
+                        bottom = 25.dp
+                    )
+                    .wrapContentHeight(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "용돈기입하기",
+                    style = AllowanceInputTitleTextStyle.copy(color = Black)
+                )
+
+                Spacer(Modifier.height(26.dp))
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(34.dp)
+                        .clip(RoundedCornerShape(100.dp))
+                        .background(color = White)
+                        .border(
+                            width = 1.dp,
+                            color = Gray6,
+                            shape = RoundedCornerShape(100.dp)
+                        )
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .clip(RoundedCornerShape(100.dp))
+                            .background(White)
+                            .border(
+                                width = 1.dp,
+                                color = Gray6,
+                                shape = RoundedCornerShape(100.dp)
+                            )
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .clip(RoundedCornerShape(100.dp))
+                            .background(White)
+                            .border(
+                                width = 1.dp,
+                                color = Gray6,
+                                shape = RoundedCornerShape(100.dp)
+                            )
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun AllowancePopup() {
+    AllowanceInputDialog(AllowanceType.EXPENSE, {}, {}) { }
+}
+
 @Preview
 @Composable
 fun PopupDialogPreview() {
@@ -288,7 +383,12 @@ fun PopupDialogPreview() {
 @Preview
 @Composable
 fun PopupDialogPreview2() {
-    PopupDialog(stringResource(R.string.dialog_incorrect_nothing), "", PopupType.INCORRECT_ANSWER_NOTE_ERROR, {}, {})
+    PopupDialog(
+        stringResource(R.string.dialog_incorrect_nothing),
+        "",
+        PopupType.INCORRECT_ANSWER_NOTE_ERROR,
+        {},
+        {})
 }
 
 @Preview
