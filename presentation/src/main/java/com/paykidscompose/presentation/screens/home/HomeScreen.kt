@@ -69,7 +69,7 @@ import com.paykidscompose.presentation.ui.theme.StageTooltipOffsetY
 import com.paykidscompose.presentation.ui.theme.StageTopPadding
 import com.paykidscompose.presentation.ui.theme.StageVerticalSpace
 import com.paykidscompose.presentation.ui.theme.White
-import com.paykidscompose.presentation.ui.util.getStageVisuals
+import com.paykidscompose.presentation.util.getStageVisuals
 
 private const val totalStageCount = 26
 private const val unlockedStageCount = 7

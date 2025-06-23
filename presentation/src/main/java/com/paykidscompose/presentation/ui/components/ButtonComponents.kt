@@ -2,7 +2,6 @@ package com.paykidscompose.presentation.ui.components
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -14,7 +13,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.paykidscompose.presentation.ui.theme.Blue2
 import com.paykidscompose.presentation.ui.theme.DeterminationButtonCorner
 import com.paykidscompose.presentation.ui.theme.DeterminationButtonTextTopAndBottom
@@ -35,6 +33,7 @@ fun DecisionButton(
     Button(
         onClick = onClick,
         modifier = modifier
+            .fillMaxWidth()
             .clip(RoundedCornerShape(DeterminationButtonCorner)),
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
@@ -52,5 +51,5 @@ fun DecisionButton(
 @Preview
 @Composable
 fun ButtonPreview() {
-    DecisionButton("결정하기", {}, modifier = Modifier.fillMaxWidth())
+    DecisionButton("결정하기", {})
 }

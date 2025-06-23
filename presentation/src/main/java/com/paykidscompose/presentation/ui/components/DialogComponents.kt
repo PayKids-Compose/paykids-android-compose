@@ -48,10 +48,10 @@ import com.paykidscompose.presentation.ui.theme.White
 @Composable
 fun PopupDialog(
     title: String,
+    description: String,
     popupType: PopupType,
     onCancelClick: () -> Unit,
-    onConfirmClick: () -> Unit,
-    description: String = "",
+    onConfirmClick: () -> Unit
 ) {
     Dialog(
         onDismissRequest = { onCancelClick() },
@@ -282,17 +282,17 @@ fun PopupDialog(
 @Preview
 @Composable
 fun PopupDialogPreview() {
-    PopupDialog("회원 탈퇴하시겠습니까?", PopupType.LOGOUT, {}, {}, "이것은 테스트 팝업입니다.")
+    PopupDialog("회원 탈퇴하시겠습니까?", "이것은 테스트 팝업입니다.", PopupType.LOGOUT, {}, {})
 }
 
 @Preview
 @Composable
 fun PopupDialogPreview2() {
-    PopupDialog(stringResource(R.string.dialog_incorrect_nothing), PopupType.INCORRECT_ANSWER_NOTE_ERROR, {}, {}, "")
+    PopupDialog(stringResource(R.string.dialog_incorrect_nothing), "", PopupType.INCORRECT_ANSWER_NOTE_ERROR, {}, {})
 }
 
 @Preview
 @Composable
 fun PopupDialogPreview3() {
-    PopupDialog(stringResource(R.string.dialog_check_exit), PopupType.QUIZ_EXIT, {}, {}, "")
+    PopupDialog(stringResource(R.string.dialog_check_exit), "", PopupType.QUIZ_EXIT, {}, {})
 }

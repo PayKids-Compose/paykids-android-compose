@@ -38,4 +38,4 @@ val MyPageCardShadowColor = Color(0x80CCE4FF)
 val MyPageAppBarShadowColor = Color(0x80CCE4FF)
 
 // 퀴즈 화면 색상
-val QuizAppBarShadowColor = Color(0x80DBDBDB)
+val QuizAppBarShadowColor = Color(0x40DBDBDB)

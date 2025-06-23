@@ -1,4 +1,4 @@
-package com.paykidscompose.presentation.ui.util
+package com.paykidscompose.presentation.util
 
 
 import androidx.compose.ui.graphics.Color
