@@ -1,9 +1,7 @@
 package com.paykidscompose.presentation.dummy
 
-enum class AllowanceType{
-    INCOME, // 수입
-    EXPENSE // 소비
-}
+import com.paykidscompose.presentation.model.AllowanceType
+
 
 data class AllowanceChartCategoryDto( // 편의점 -1,800 50%
     val allowanceType: AllowanceType,

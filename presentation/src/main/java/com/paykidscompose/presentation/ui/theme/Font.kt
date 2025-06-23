@@ -22,6 +22,28 @@ val InfoTextStyle = TextStyle(
     lineHeight = 14.sp
 )
 
+// 홈 스크린
+val StageCardNumberTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 12.sp,
+    lineHeight = 14.sp,
+    color = Blue1
+)
+val StageCardTitleTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 18.sp,
+    lineHeight = 20.sp,
+    color = Black
+)
+
+val StageTooltipTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 22.sp,
+    lineHeight = 25.sp
+)
 
 // 닉네임 스크린
 val NicknameTitleTextStyle = TextStyle(
@@ -191,4 +213,62 @@ val PopupDialogButtonTextStyle = TextStyle(
     fontWeight = FontWeight.ExtraBold,
     fontSize = 14.sp,
     lineHeight = 16.sp
+)
+
+// 용돈일기 스크린
+
+val AllowanceDiaryTitleExpenseTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 20.sp,
+    lineHeight = 23.sp
+)
+val AllowanceDiaryMostConsumeTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 11.sp,
+    lineHeight = 12.sp
+)
+val AllowanceDiaryMostConsumeTitleTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 16.sp,
+    lineHeight = 18.sp
+)
+val AllowanceDiaryDetailConsumeTitleTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 18.sp,
+    lineHeight = 20.sp
+)
+val AllowanceDiaryDetailConsumeMonthDayTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 12.sp,
+    lineHeight = 14.sp
+)
+val AllowanceDiaryHeadMonthTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 16.sp,
+    lineHeight = 18.sp
+)
+val AllowanceDiaryCalendarDayTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 16.sp,
+    lineHeight = 26.sp,
+)
+val AllowanceDiaryCalendarIncomeConsumeTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 10.sp,
+    lineHeight = 13.sp
+)
+
+val AllowanceDiaryCalendarWeekTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 14.sp,
+    lineHeight = 26.sp
 )

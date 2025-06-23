@@ -92,6 +92,8 @@ z   <string name="text_quiz_number">%1$d/%2$d</string>">
     <!-- 용돈 일기 페이지 -->
     <string name="text_month_total_consume">%s원 사용 중</string>
     <string name="text_month_most_consume">%d월 달 %s에서 소비를 많이 했어요</string>
+    <string name="text_month_most_consume2">에서 소비를 많이 했어요</string>
+    <string name="text_month_no_consume">이번 달에는 소비 내역이 없습니다.</string>
     <string name="text_consuming">소비 중</string>
     <string name="text_detail_consume">상세 소비내역</string>
     <string name="text_week_sunday">일</string>
