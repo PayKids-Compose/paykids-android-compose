@@ -75,30 +75,6 @@ val DeterminationTextStyle2 = TextStyle(
     lineHeight = 20.sp
 )
 
-// 홈 스크린
-val StageCardNumberTextStyle = TextStyle(
-    fontFamily = NanumSquare,
-    fontWeight = FontWeight.ExtraBold,
-    fontSize = 12.sp,
-    lineHeight = 14.sp,
-    color = Blue1
-)
-
-val StageCardTitleTextStyle = TextStyle(
-    fontFamily = NanumSquare,
-    fontWeight = FontWeight.ExtraBold,
-    fontSize = 18.sp,
-    lineHeight = 20.sp,
-    color = Black
-)
-
-val StageTooltipTextStyle = TextStyle(
-    fontFamily = NanumSquare,
-    fontWeight = FontWeight.ExtraBold,
-    fontSize = 22.sp,
-    lineHeight = 25.sp
-)
-
 // 퀴즈 진입 스크린
 val StageNumberCardTextStyle = TextStyle(
     fontFamily = NanumSquare,
