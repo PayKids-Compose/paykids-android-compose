@@ -37,7 +37,9 @@ import com.paykidscompose.presentation.model.QuizType
 import com.paykidscompose.presentation.ui.components.AppTopBar
 import com.paykidscompose.presentation.ui.components.PopupDialog
 import com.paykidscompose.presentation.ui.components.util.PopupType
+import com.paykidscompose.presentation.ui.state.QuizResultState
 import com.paykidscompose.presentation.ui.theme.Black
+import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.CardShadowElevation
 import com.paykidscompose.presentation.ui.theme.Gray3
 import com.paykidscompose.presentation.ui.theme.ImageQuizCardImageRound
@@ -53,6 +55,7 @@ import com.paykidscompose.presentation.ui.theme.QuizAppBarShadowElevation
 import com.paykidscompose.presentation.ui.theme.QuizAppBarTextStyle
 import com.paykidscompose.presentation.ui.theme.QuizQuestionTextSpacer
 import com.paykidscompose.presentation.ui.theme.QuizQuestionTextStyle
+import com.paykidscompose.presentation.ui.theme.Red
 import com.paykidscompose.presentation.ui.theme.StartAndEndPadding
 
 @Preview(showBackground = true)
@@ -72,6 +75,8 @@ fun QuizScreen(
     onChoiceClick: (Int) -> Unit = {}
 ) {
     var showDialog by remember { mutableStateOf(false) }
+    var selectedIndex by remember { mutableStateOf<Int?>(null) }
+    var isCorrect by remember { mutableStateOf(QuizResultState.DEFAULT) }
 
     BackHandler(enabled = true) {
         showDialog = true
@@ -107,7 +112,11 @@ fun QuizScreen(
                 )
         ) {
             AsyncImage(
-                model = R.drawable.bg_quiz_default,
+                model = when(isCorrect) {
+                    QuizResultState.DEFAULT -> R.drawable.bg_quiz_default
+                    QuizResultState.CORRECT -> R.drawable.bg_quiz_correct
+                    QuizResultState.WRONG -> R.drawable.bg_quiz_wrong
+                },
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
@@ -138,19 +147,35 @@ fun QuizScreen(
                             ImageQuizCardSpaceBetween, Alignment.CenterHorizontally
                         ),
                     ) {
+                        val correctIndex = answer[0] - 'A' // 정답 문자열("A", "B", "C", "D")을 숫자 인덱스(0~3)로 변환
+
                         for (col in 0 until 2) {
                             val index = row * 2 + col
                             val (imageRes, label) = imgChoices.getOrNull(index) ?: continue
 
+                            val isSelected = selectedIndex == index
+                            val isCorrectCard = index == correctIndex
+
+                            val shadowColor = when {
+                                isSelected && isCorrect == QuizResultState.WRONG -> Red
+                                isCorrectCard && isCorrect == QuizResultState.WRONG -> Blue1
+                                isSelected && isCorrect == QuizResultState.CORRECT -> Blue1
+                                else -> Gray3
+                            }
+
                             Card(
                                 modifier = Modifier
                                     .size(ImageQuizCardSize.first, ImageQuizCardSize.second)
-                                    .clickable { onChoiceClick(index) }
+                                    .clickable(enabled = isCorrect == QuizResultState.DEFAULT) {
+                                        selectedIndex = index
+                                        isCorrect = if (index == correctIndex) QuizResultState.CORRECT else QuizResultState.WRONG
+                                        onChoiceClick(index)
+                                    }
                                     .shadow(
                                         elevation = CardShadowElevation,
                                         shape = RoundedCornerShape(ImageQuizCardRound),
-                                        ambientColor = Gray3,
-                                        spotColor = Gray3
+                                        ambientColor = shadowColor,
+                                        spotColor = shadowColor
                                     ),
                                 shape = RoundedCornerShape(ImageQuizCardRound),
                                 colors = CardDefaults.cardColors(containerColor = Color.White)
