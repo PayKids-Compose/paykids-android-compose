@@ -68,6 +68,68 @@ val DeterminationTextStyle = TextStyle(
     lineHeight = 23.sp
 )
 
+val DeterminationTextStyle2 = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 18.sp,
+    lineHeight = 20.sp
+)
+
+// 홈 스크린
+val StageCardNumberTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 12.sp,
+    lineHeight = 14.sp,
+    color = Blue1
+)
+
+val StageCardTitleTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 18.sp,
+    lineHeight = 20.sp,
+    color = Black
+)
+
+val StageTooltipTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 22.sp,
+    lineHeight = 25.sp
+)
+
+// 퀴즈 진입 스크린
+val StageNumberCardTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 14.sp,
+    lineHeight = 16.sp,
+    color = Gray8
+)
+
+// 퀴즈 스크린
+val QuizAppBarTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 16.sp,
+    lineHeight = 18.sp
+)
+
+val QuizQuestionTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 22.sp,
+    lineHeight = 25.sp
+)
+
+val QuizAnswerTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 18.sp,
+    lineHeight = 20.sp
+)
+
 // 마이페이지 스크린
 val MyPageAppBarTextStyle = TextStyle(
     fontFamily = NanumSquare,
@@ -134,19 +196,19 @@ val TermsPolicyCardItemTitleTextStyle = TextStyle(
 )
 
 // 팝업 다이얼로그
-val PopupDialogTitleTextStyle =  TextStyle(
+val PopupDialogTitleTextStyle = TextStyle(
     fontFamily = NanumSquare,
     fontWeight = FontWeight.ExtraBold,
     fontSize = 16.sp,
     lineHeight = 18.sp
 )
-val PopupDialogTitleInfoTextStyle =  TextStyle(
+val PopupDialogTitleInfoTextStyle = TextStyle(
     fontFamily = NanumSquare,
     fontWeight = FontWeight.Bold,
     fontSize = 12.sp,
     lineHeight = 26.sp
 )
-val PopupDialogButtonTextStyle =  TextStyle(
+val PopupDialogButtonTextStyle = TextStyle(
     fontFamily = NanumSquare,
     fontWeight = FontWeight.ExtraBold,
     fontSize = 14.sp,

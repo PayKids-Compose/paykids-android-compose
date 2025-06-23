@@ -50,6 +50,7 @@ import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.getStageTitle
 import com.paykidscompose.presentation.ui.components.ImageTooltip
 import com.paykidscompose.presentation.ui.theme.Blue1
+import com.paykidscompose.presentation.ui.theme.CardShadowElevation
 import com.paykidscompose.presentation.ui.theme.StageCardNumberTextStyle
 import com.paykidscompose.presentation.ui.theme.StageCardTitleTextStyle
 import com.paykidscompose.presentation.ui.theme.StageCircleBorderWidth
@@ -57,7 +58,6 @@ import com.paykidscompose.presentation.ui.theme.StageCircleSize
 import com.paykidscompose.presentation.ui.theme.StageDescriptionCardHeight
 import com.paykidscompose.presentation.ui.theme.StageDescriptionCardHorizontalPadding
 import com.paykidscompose.presentation.ui.theme.StageDescriptionCardRound
-import com.paykidscompose.presentation.ui.theme.StageDescriptionCardShadowElevation
 import com.paykidscompose.presentation.ui.theme.StageDescriptionCardTextHorizontalPadding
 import com.paykidscompose.presentation.ui.theme.StageDescriptionCardTextSpacer
 import com.paykidscompose.presentation.ui.theme.StageDescriptionCardTextVerticalPadding
@@ -69,7 +69,7 @@ import com.paykidscompose.presentation.ui.theme.StageTooltipOffsetY
 import com.paykidscompose.presentation.ui.theme.StageTopPadding
 import com.paykidscompose.presentation.ui.theme.StageVerticalSpace
 import com.paykidscompose.presentation.ui.theme.White
-import com.paykidscompose.presentation.ui.util.getStageVisuals
+import com.paykidscompose.presentation.util.getStageVisuals
 
 private const val totalStageCount = 26
 private const val unlockedStageCount = 7
@@ -187,7 +187,7 @@ fun HomeScreen() {
                 )
                 .height(StageDescriptionCardHeight)
                 .shadow(
-                    elevation = StageDescriptionCardShadowElevation,
+                    elevation = CardShadowElevation,
                     shape = RoundedCornerShape(StageDescriptionCardRound),
                     ambientColor = Blue1,
                     spotColor = Blue1

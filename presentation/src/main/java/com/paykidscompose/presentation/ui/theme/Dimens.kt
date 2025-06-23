@@ -1,5 +1,6 @@
 package com.paykidscompose.presentation.ui.theme
 
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 // 공통
@@ -8,9 +9,12 @@ val DeterminationButtonCorner = 60.dp
 val BottomButtonPadding = 57.dp
 val DeterminationButtonPadding = 60.dp
 val DeterminationButtonTextStartAndEndPadding = 17.dp
-val DeterminationButtonTextTopAndBottom = 13.dp
+val DeterminationButtonTextTopAndBottom = 14.dp
+val DeterminationButtonTextTopAndBottom2 = 15.dp
 val DeterminationButtonWidth = 320.dp
 val DeterminationButtonHeight = 50.dp
+val CardShadowElevation = 8.dp
+val TopAppBarShadowElevation = 16.dp
 
 // 스플래시 화면
 val SplashLogo = 174.dp
@@ -39,13 +43,33 @@ val StageDescriptionCardHeight = 80.dp
 val StageDescriptionCardTextHorizontalPadding = 16.dp
 val StageDescriptionCardTextVerticalPadding = 20.dp
 val StageDescriptionCardTextSpacer = 7.dp
-val StageDescriptionCardShadowElevation = 8.dp
 
 val StageTooltipImageWidth = 156.dp
 val StageTooltipImageHeight = 80.dp
 val StageTooltipTextOffsetY = 8.dp
 const val StageTooltipOffsetX = 86
 const val StageTooltipOffsetY = 100
+
+// 퀴즈 진입 화면
+val QuizEntryScreenTopPadding = 230.dp
+val QuizEntryScreenBottomPadding = 248.dp
+val StageNumberCardRound = 100.dp
+val StageNumberCardHorizontalPadding = 10.dp
+val StageNumberCardVerticalPadding = 6.dp
+val QuizEntryScreenSpacer1 = 18.dp
+val QuizEntryScreenSpacer2 = 50.dp
+val QuizEntryButtonSpacer = 10.dp
+
+// 퀴즈 화면
+val QuizQuestionTextSpacer = 80.dp
+val ImageQuizCardSpaceBetween = 20.dp
+val ImageQuizCardSize = Pair<Dp, Dp>(150.dp, 180.dp)
+val ImageQuizCardRound = 20.dp
+val ImageQuizCardImageSize = 120.dp
+val ImageQuizCardImageRound = 10.dp
+val ImageQuizCardTextSpacer = 12.dp
+val ImageQuizCardRowSpacer = 14.dp
+val QuizAppBarShadowElevation = 4.dp
 
 // 마이페이지 기본 화면
 val MyPageDefaultScreenStartEndPadding = 20.dp

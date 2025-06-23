@@ -71,9 +71,7 @@ fun NicknameScreen(
                     user.nickname = nickname
                     DummyUser.setUser(user)
                     onConfirmClick()
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
+                }
             )
         }
     }

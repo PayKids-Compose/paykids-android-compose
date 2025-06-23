@@ -20,12 +20,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.ui.components.util.PopupType
 import com.paykidscompose.presentation.ui.theme.Black
+import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.Gray1
 import com.paykidscompose.presentation.ui.theme.Gray6
 import com.paykidscompose.presentation.ui.theme.PopupDialogButtonShape
@@ -78,15 +80,18 @@ fun PopupDialog(
             ) {
                 Text(
                     text = title,
-                    style = PopupDialogTitleTextStyle.copy(color = Black)
+                    style = PopupDialogTitleTextStyle.copy(color = Black),
+                    textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier = Modifier.height(PopupDialogSpacer8))
+                if (description != "") {
+                    Spacer(modifier = Modifier.height(PopupDialogSpacer8))
 
-                Text(
-                    text = description,
-                    style = PopupDialogTitleInfoTextStyle.copy(color = Gray1)
-                )
+                    Text(
+                        text = description,
+                        style = PopupDialogTitleInfoTextStyle.copy(color = Gray1)
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(PopupDialogSpacer20))
 
@@ -179,6 +184,94 @@ fun PopupDialog(
                             }
                         }
                     }
+
+                    PopupType.INCORRECT_ANSWER_NOTE_ERROR -> {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(IntrinsicSize.Min)
+                        ) {
+                            Button(
+                                onClick = onConfirmClick,
+                                shape = RoundedCornerShape(PopupDialogButtonShape),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight(),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Blue1, // 버튼 배경색상
+                                    contentColor = White, // 버튼 텍스트 색상
+                                )
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.dialog_enter_quiz),
+                                    style = PopupDialogButtonTextStyle
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.width(PopupDialogSpacer6))
+
+                            Button(
+                                onClick = onCancelClick,
+                                shape = RoundedCornerShape(PopupDialogButtonShape),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight(),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Gray6, // 버튼 배경색상
+                                    contentColor = Black, // 버튼 텍스트 색상
+                                )
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.dialog_exit),
+                                    style = PopupDialogButtonTextStyle
+                                )
+                            }
+                        }
+                    }
+
+                    PopupType.QUIZ_EXIT -> {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(IntrinsicSize.Min)
+                        ) {
+                            Button(
+                                onClick = onCancelClick,
+                                shape = RoundedCornerShape(PopupDialogButtonShape),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight(),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Blue1, // 버튼 배경색상
+                                    contentColor = White, // 버튼 텍스트 색상
+                                )
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.dialog_continue),
+                                    style = PopupDialogButtonTextStyle
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.width(PopupDialogSpacer6))
+
+                            Button(
+                                onClick = onConfirmClick,
+                                shape = RoundedCornerShape(PopupDialogButtonShape),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight(),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Gray6, // 버튼 배경색상
+                                    contentColor = Black, // 버튼 텍스트 색상
+                                )
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.dialog_exit2),
+                                    style = PopupDialogButtonTextStyle
+                                )
+                            }
+                        }
+                    }
                 }
 
             }
@@ -190,4 +283,16 @@ fun PopupDialog(
 @Composable
 fun PopupDialogPreview() {
     PopupDialog("회원 탈퇴하시겠습니까?", "이것은 테스트 팝업입니다.", PopupType.LOGOUT, {}, {})
+}
+
+@Preview
+@Composable
+fun PopupDialogPreview2() {
+    PopupDialog(stringResource(R.string.dialog_incorrect_nothing), "", PopupType.INCORRECT_ANSWER_NOTE_ERROR, {}, {})
+}
+
+@Preview
+@Composable
+fun PopupDialogPreview3() {
+    PopupDialog(stringResource(R.string.dialog_check_exit), "", PopupType.QUIZ_EXIT, {}, {})
 }

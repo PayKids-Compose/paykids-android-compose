@@ -23,6 +23,7 @@
     <string name="text_btn_review">오답노트 풀기</string>
 
     <!-- 퀴즈 풀기 화면 -->
+z   <string name="text_quiz_number">%1$d/%2$d</string>">
     <string name="text_correct_answer">정답이에요!</string>
     <string name="text_wrong_answer">오답이에요..</string>
     <string name="hint_input_answer">정답 입력하기...</string>
@@ -69,7 +70,7 @@
     <string name="text_mypage_menu">마이</string>
 
     <!-- 퀴즈 오답 노트 다이얼로그 -->
-    <string name="dialog_incorrect_nothing">틀린 문제가 없어요!\n퀴즈를 풀어보아요</string>
+    <string name="dialog_incorrect_nothing">틀린 문제가 없어요!\n퀴즈를 풀어보아요.</string>
     <string name="dialog_all_correct">모든 문제를 맞혔어요!\n복습을 해볼까요?</string>
     <string name="dialog_enter_quiz">퀴즈 풀기</string>
     <string name="dialog_exit">닫기</string>
