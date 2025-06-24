@@ -129,7 +129,8 @@ fun CardItem(
 
 @Composable
 fun QuizResultCard(
-    isCorrect: Boolean
+    isCorrect: Boolean,
+    modifier: Modifier = Modifier
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
