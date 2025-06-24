@@ -282,3 +282,35 @@ val AllowanceDiaryCalendarWeekTextStyle = TextStyle(
     fontSize = 14.sp,
     lineHeight = 26.sp
 )
+
+// 용돈일기 지출분석 스크린
+val ExpenseAnalysisDeleteButtonTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 14.sp,
+    lineHeight = 26.sp
+)
+val ExpenseAnalysisItemCategoryTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 14.sp,
+    lineHeight = 26.sp
+)
+val ExpenseAnalysisItemAmountTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 20.sp,
+    lineHeight = 28.sp
+)
+val ExpenseAnalysisItemPercentTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 14.sp,
+    lineHeight = 26.sp
+)
+val ExpenseAnalysisItemAddButtonTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 16.sp,
+    lineHeight = 18.sp
+)
