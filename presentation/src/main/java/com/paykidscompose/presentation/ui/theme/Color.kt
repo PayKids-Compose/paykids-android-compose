@@ -31,6 +31,8 @@ val BottomNavUnselected = Gray6
 // 타이틀 텍스트 색상
 val TitleColor = Color(0xFF222222) // 닉네임을 입력해주세요 색상이 이거임.
 
+// 용돈기입하기 다이얼로그 색상
+val AllowanceInputDialogToggleShadowColor = Color(0xB3E6F6FF)
 
 // 마이페이지 색상
 val MyPageAppBarTitleTextColor = Color(0xFF000000)

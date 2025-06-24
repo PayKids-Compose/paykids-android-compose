@@ -6,7 +6,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.model.AllowanceType
 
 val NanumSquare = FontFamily(
     Font(R.font.nanumsquare_extra_bold, FontWeight.ExtraBold),
@@ -198,6 +197,32 @@ val AllowanceInputTitleTextStyle = TextStyle(
     fontWeight = FontWeight.ExtraBold,
     fontSize = 18.sp,
     lineHeight = 20.sp
+)
+val AllowanceInputToggleTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 14.sp,
+    lineHeight = 14.sp
+)
+val AllowanceInputItemTitleTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 16.sp,
+    lineHeight = 18.sp
+)
+
+val AllowanceInputDateAndConfirmButtonTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 14.sp,
+    lineHeight = 16.sp
+)
+
+val AllowanceInputItemTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 16.sp,
+    lineHeight = 18.sp
 )
 
 // 용돈일기 스크린
