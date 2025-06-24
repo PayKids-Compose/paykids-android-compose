@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -36,6 +37,7 @@ import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.model.QuizType
 import com.paykidscompose.presentation.ui.components.AppTopBar
 import com.paykidscompose.presentation.ui.components.PopupDialog
+import com.paykidscompose.presentation.ui.components.QuizResultCard
 import com.paykidscompose.presentation.ui.components.util.PopupType
 import com.paykidscompose.presentation.ui.state.QuizResultState
 import com.paykidscompose.presentation.ui.theme.Black
@@ -44,9 +46,9 @@ import com.paykidscompose.presentation.ui.theme.CardShadowElevation
 import com.paykidscompose.presentation.ui.theme.Gray3
 import com.paykidscompose.presentation.ui.theme.ImageQuizCardImageRound
 import com.paykidscompose.presentation.ui.theme.ImageQuizCardImageSize
+import com.paykidscompose.presentation.ui.theme.ImageQuizCardRatio
 import com.paykidscompose.presentation.ui.theme.ImageQuizCardRound
 import com.paykidscompose.presentation.ui.theme.ImageQuizCardRowSpacer
-import com.paykidscompose.presentation.ui.theme.ImageQuizCardSize
 import com.paykidscompose.presentation.ui.theme.ImageQuizCardSpaceBetween
 import com.paykidscompose.presentation.ui.theme.ImageQuizCardTextSpacer
 import com.paykidscompose.presentation.ui.theme.QuizAnswerTextStyle
@@ -55,6 +57,7 @@ import com.paykidscompose.presentation.ui.theme.QuizAppBarShadowElevation
 import com.paykidscompose.presentation.ui.theme.QuizAppBarTextStyle
 import com.paykidscompose.presentation.ui.theme.QuizQuestionTextSpacer
 import com.paykidscompose.presentation.ui.theme.QuizQuestionTextStyle
+import com.paykidscompose.presentation.ui.theme.QuizResultCardSpacer
 import com.paykidscompose.presentation.ui.theme.Red
 import com.paykidscompose.presentation.ui.theme.StartAndEndPadding
 
@@ -112,7 +115,7 @@ fun QuizScreen(
                 )
         ) {
             AsyncImage(
-                model = when(isCorrect) {
+                model = when (isCorrect) {
                     QuizResultState.DEFAULT -> R.drawable.bg_quiz_default
                     QuizResultState.CORRECT -> R.drawable.bg_quiz_correct
                     QuizResultState.WRONG -> R.drawable.bg_quiz_wrong
@@ -137,17 +140,25 @@ fun QuizScreen(
                     textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier = Modifier.height(QuizQuestionTextSpacer))
+                // 정답/오답 카드 보여주기
+                if (isCorrect != QuizResultState.DEFAULT) {
+                    Spacer(modifier = Modifier.height(QuizResultCardSpacer))
+                    QuizResultCard(
+                        isCorrect = isCorrect == QuizResultState.CORRECT
+                    )
+                    Spacer(modifier = Modifier.height(QuizResultCardSpacer))
+                } else {
+                    Spacer(modifier = Modifier.height(QuizQuestionTextSpacer))
+                }
 
                 // 2x2 Grid: Row 2개, 각 Row 안에 2개의 선택지
                 for (row in 0 until 2) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(
-                            ImageQuizCardSpaceBetween, Alignment.CenterHorizontally
-                        ),
+                        horizontalArrangement = Arrangement.spacedBy(ImageQuizCardSpaceBetween),
                     ) {
-                        val correctIndex = answer[0] - 'A' // 정답 문자열("A", "B", "C", "D")을 숫자 인덱스(0~3)로 변환
+                        val correctIndex =
+                            answer[0] - 'A' // 정답 문자열("A", "B", "C", "D")을 숫자 인덱스(0~3)로 변환
 
                         for (col in 0 until 2) {
                             val index = row * 2 + col
@@ -165,10 +176,12 @@ fun QuizScreen(
 
                             Card(
                                 modifier = Modifier
-                                    .size(ImageQuizCardSize.first, ImageQuizCardSize.second)
+                                    .weight(1f)
+                                    .aspectRatio(ImageQuizCardRatio)
                                     .clickable(enabled = isCorrect == QuizResultState.DEFAULT) {
                                         selectedIndex = index
-                                        isCorrect = if (index == correctIndex) QuizResultState.CORRECT else QuizResultState.WRONG
+                                        isCorrect =
+                                            if (index == correctIndex) QuizResultState.CORRECT else QuizResultState.WRONG
                                         onChoiceClick(index)
                                     }
                                     .shadow(
