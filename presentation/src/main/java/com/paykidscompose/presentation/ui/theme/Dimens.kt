@@ -74,9 +74,12 @@ val QuizResultCardRound = 10.dp
 val QuizResultCardHorizontalPadding = 15.dp
 val QuizResultCardVerticalPadding = 13.dp
 val QuizResultCardSpacer = 18.dp
-val QuizResultCardSpacer2 = 26.dp
+val QuizResultCardTextChoiceImageSpacer = 26.dp
 val TextChoiceQuizCardTextHorizontalPadding = 16.dp
 val TextChoiceQuizCardTextVerticalPadding = 20.dp
+val TextChoiceQuizImageRound = 5.dp
+val QuizResultCardTextChoiceImageSmallSpacer = 8.dp
+val QuizResultCardTextChoiceImageTopPadding = 18.dp
 
 // 마이페이지 기본 화면
 val MyPageDefaultScreenStartEndPadding = 20.dp
