@@ -63,13 +63,17 @@ val QuizEntryButtonSpacer = 10.dp
 // 퀴즈 화면
 val QuizQuestionTextSpacer = 80.dp
 val ImageQuizCardSpaceBetween = 20.dp
-val ImageQuizCardSize = Pair<Dp, Dp>(150.dp, 180.dp)
+val ImageQuizCardRatio = 150/180f
 val ImageQuizCardRound = 20.dp
 val ImageQuizCardImageSize = 120.dp
 val ImageQuizCardImageRound = 10.dp
 val ImageQuizCardTextSpacer = 12.dp
 val ImageQuizCardRowSpacer = 14.dp
 val QuizAppBarShadowElevation = 4.dp
+val QuizResultCardRound = 10.dp
+val QuizResultCardHorizontalPadding = 15.dp
+val QuizResultCardVerticalPadding = 13.dp
+val QuizResultCardSpacer = 18.dp
 
 // 마이페이지 기본 화면
 val MyPageDefaultScreenStartEndPadding = 20.dp
