@@ -45,6 +45,7 @@ import com.paykidscompose.presentation.dummy.DummyDataManager
 import com.paykidscompose.presentation.model.AllowanceDiaryUIModel
 import com.paykidscompose.presentation.model.AllowanceType
 import com.paykidscompose.presentation.model.toUIModel
+import com.paykidscompose.presentation.ui.components.AllowanceInputDialog
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryCalendarDayTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryCalendarIncomeConsumeTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryCalendarWeekTextStyle
@@ -98,6 +99,10 @@ import kotlin.math.ceil
 @Composable
 fun AllowanceDiaryScreen(
 ) {
+
+    /*
+    용돈일기 추가나 수정에서 데이터 전달 구현은 안했습니다.
+     */
 
     val dummyDataManager = remember { DummyDataManager() }
 
@@ -169,13 +174,26 @@ fun AllowanceDiaryScreen(
 
             val max = expenseByCategory.maxByOrNull { it.value }
             withContext(Dispatchers.Main) {
-                maxExpenseCategoryAndAmount = max?.let { it.key to it.value }
+                maxExpenseCategoryAndAmount = max?.let { it.key to it.value } // 상태를 업데이트 하는거라서 메인 스레드에서 돼야함.
             }
         }
     }
 
     val maxCategory = maxExpenseCategoryAndAmount?.first ?: ""
     val maxAmount = maxExpenseCategoryAndAmount?.second ?: 0
+
+    var showInputDialog by remember { mutableStateOf(false) }
+
+    val onShowDialog = { value: Boolean ->
+        showInputDialog = value
+    }
+
+    if(showInputDialog) {
+        AllowanceInputDialog(
+            onSelect = {},
+            onCancelClick = { showInputDialog = false }
+        ) { showInputDialog = false }
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -194,7 +212,9 @@ fun AllowanceDiaryScreen(
                 month = currentMonth,
                 onPrev = { currentMonth = currentMonth.minusMonths(1) },
                 onNext = { currentMonth = currentMonth.plusMonths(1) },
-                onAddClick = { }
+                onAddClick = {
+                    showInputDialog = true
+                }
             )
 
             Spacer(Modifier.height(AllowanceDiaryScreenSpacer28))
@@ -332,7 +352,7 @@ fun AllowanceDiaryScreen(
         }
 
         items(selectedUIModels) { item ->
-            TransactionItem(item)
+            TransactionItem(item, showInputDialog, onShowDialog)
             Spacer(Modifier.height(AllowanceDiaryScreenSpacer8))
         }
     }
@@ -515,11 +535,16 @@ fun CalendarGrid(
 }
 
 @Composable
-fun TransactionItem(item: AllowanceDiaryUIModel) {
+fun TransactionItem(item: AllowanceDiaryUIModel, showInputDialog: Boolean, onShowDialog: (Boolean)-> Unit) {
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable(
+                onClick = {
+                    onShowDialog(!showInputDialog)
+                }
+            )
             .shadow(
                 elevation = CustomCardShadow,
                 shape = RoundedCornerShape(AllowanceDiaryScreenCardShape),
@@ -541,7 +566,7 @@ fun TransactionItem(item: AllowanceDiaryUIModel) {
             Text(
                 item.category,
                 style = AllowanceDiaryMostConsumeTextStyle.copy(color = Blue1)
-            ) // 카테고리 추가 예정
+            )
             Spacer(Modifier.height(AllowanceDiaryScreenSpacer6))
             Text(
                 item.amountFormatted,
@@ -554,7 +579,7 @@ fun TransactionItem(item: AllowanceDiaryUIModel) {
             modifier = Modifier.align(Alignment.CenterEnd),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
-        ) // 메모 추가 예정
+        )
     }
 }
 
