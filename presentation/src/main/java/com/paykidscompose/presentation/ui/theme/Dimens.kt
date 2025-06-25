@@ -1,7 +1,6 @@
 package com.paykidscompose.presentation.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 // 공통
