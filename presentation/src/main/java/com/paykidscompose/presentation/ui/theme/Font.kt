@@ -314,3 +314,35 @@ val ExpenseAnalysisItemAddButtonTextStyle = TextStyle(
     fontSize = 16.sp,
     lineHeight = 18.sp
 )
+
+// 카테고리 세부내역 스크린
+val CategoryDetailTitleTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 20.sp,
+    lineHeight = 23.sp
+)
+val CategoryDetailItemCategoryTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 11.sp,
+    lineHeight = 12.sp
+)
+val CategoryDetailItemAmountTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 16.sp,
+    lineHeight = 18.sp
+)
+val CategoryDetailItemMemoTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 11.sp,
+    lineHeight = 12.sp
+)
+val CategoryDetailItemAddTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 16.sp,
+    lineHeight = 18.sp
+)
