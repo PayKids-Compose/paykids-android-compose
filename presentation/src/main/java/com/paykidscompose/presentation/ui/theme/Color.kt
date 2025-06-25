@@ -18,9 +18,11 @@ val Gray5 = Color(0xFFF1F8FF)
 val Gray6 = Color(0xFFC1DEFB)
 val Gray7 = Color(0xFF9ABFF4)
 val Gray8 = Color(0xFF7796BA)
+val Gray9 = Color(0xFFE1F2FF)
 
 val Black = Color(0xFF191919)
 val White = Color(0xFFFFFFFF)
+val White2 = Color(0x99FFFFFF)
 val Yellow = Color(0xFFFAE100)
 
 
@@ -31,6 +33,8 @@ val BottomNavUnselected = Gray6
 // 타이틀 텍스트 색상
 val TitleColor = Color(0xFF222222) // 닉네임을 입력해주세요 색상이 이거임.
 
+// 용돈기입하기 다이얼로그 색상
+val AllowanceInputDialogToggleShadowColor = Color(0xB3E6F6FF)
 
 // 마이페이지 색상
 val MyPageAppBarTitleTextColor = Color(0xFF000000)

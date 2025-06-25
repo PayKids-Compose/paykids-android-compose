@@ -70,6 +70,7 @@ import com.paykidscompose.presentation.ui.theme.MyInfoScreenSpacer73
 import com.paykidscompose.presentation.ui.theme.MyInfoScreenTopPadding
 import com.paykidscompose.presentation.ui.theme.MyPageAppBarTitleTextColor
 import com.paykidscompose.presentation.ui.theme.MyPageNicknameTextStyle
+import com.paykidscompose.presentation.ui.theme.OutlineHeight
 import com.paykidscompose.presentation.ui.theme.Red
 import com.paykidscompose.presentation.ui.theme.White
 
@@ -246,7 +247,7 @@ fun NicknameEdit(
             uiModel.nickname,
             onNickname,
             hint = stringResource(R.string.text_nickname_hint),
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.height(OutlineHeight).weight(1f),
             startPadding = MyInfoScreenNicknameStartPadding
         )
 
@@ -293,6 +294,7 @@ fun EmailEdit(
         OutlineInputField(
             uiModel.email,
             onEmail,
+            modifier = Modifier.height(OutlineHeight),
             hint = stringResource(R.string.text_email_hint),
             startPadding = MyInfoScreenEmailStartPadding
         )
