@@ -149,8 +149,7 @@ val PopupDialogButtonShape = 10.dp
 
 
 // 용돈일기 화면
-val AllowanceDiaryScreenTopPadding = 44.dp
-val AllowanceDiaryScreenBottomPadding = 80.dp
+val AllowanceDiaryScreenTopBottomPadding = 20.dp
 val AllowanceDiaryScreenStartEndPadding = 17.dp
 val AllowanceDiaryScreenCardShape = 10.dp
 val AllowanceDiaryScreenSpacer4 = 4.dp

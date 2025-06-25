@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
@@ -29,6 +30,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.paykidscompose.presentation.R
+import com.paykidscompose.presentation.screens.PayKidsScaffold
 import com.paykidscompose.presentation.ui.components.AllowanceInputDialog
 import com.paykidscompose.presentation.ui.theme.Black
 import com.paykidscompose.presentation.ui.theme.Blue1
@@ -73,7 +75,7 @@ fun CategoryDetail(
         DetailTestModel("편의점", 2000, "음료수 사먹음 ㅎㅎ")
     )
 
-    var showDialog by remember { mutableStateOf(false)}
+    var showDialog by remember { mutableStateOf(false) }
 
     val onDialog = { value: Boolean ->
         showDialog = value
@@ -96,7 +98,7 @@ fun CategoryDetailScreen(
     onDialog: (Boolean) -> Unit,
     details: List<DetailTestModel>
 ) {
-    if(showDialog) {
+    if (showDialog) {
         AllowanceInputDialog(
             onSelect = {},
             onCancelClick = {
@@ -108,67 +110,80 @@ fun CategoryDetailScreen(
         )
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Gray5)
-            .padding(
-                start = CategoryDetailScreenStartEndPadding,
-                end = CategoryDetailScreenStartEndPadding,
-                top = CategoryDetailScreenTopPadding
-            )
-    ) {
-        Text(
-            buildAnnotatedString {
-                withStyle(SpanStyle(color = Blue1)) {
-                    append(category)
-                }
-                withStyle(SpanStyle(color = Black)) {
-                    append(
-                        stringResource(R.string.text_category_consume,
-                        formatAmount(amount)))
-                }
-            },
-            style = CategoryDetailTitleTextStyle
-        )
+    PayKidsScaffold(
+        bottomBar = {
 
-        Spacer(Modifier.height(CategoryDetailScreenSpacer24))
-
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth()
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Gray5)
+                .statusBarsPadding()
+                .padding(innerPadding)
+                .padding(
+                    start = CategoryDetailScreenStartEndPadding,
+                    end = CategoryDetailScreenStartEndPadding,
+                    top = CategoryDetailScreenTopPadding
+                )
         ) {
-            items(details) {
-                DetailItem(it, showDialog, onDialog)
-
-                Spacer(Modifier.height(CategoryDetailScreenSpacer8))
-            }
-
-            item {
-                // 나중에 재사용할 수 있게 만들어야 할 거 같습니다.
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(Shape10)
-                        .clickable(
-                            onClick = {
-                                // 추가하기 로직 추가 예정
-                            }
+            Text(
+                buildAnnotatedString {
+                    withStyle(SpanStyle(color = Blue1)) {
+                        append(category)
+                    }
+                    withStyle(SpanStyle(color = Black)) {
+                        append(
+                            stringResource(
+                                R.string.text_category_consume,
+                                formatAmount(amount)
+                            )
                         )
-                        .background(color = White2)
-                        .shadow(
-                            elevation = ShadowElevation16,
-                            shape = Shape10,
-                            ambientColor = MyPageCardShadowColor,
-                            spotColor = MyPageCardShadowColor
+                    }
+                },
+                style = CategoryDetailTitleTextStyle
+            )
+
+            Spacer(Modifier.height(CategoryDetailScreenSpacer24))
+
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(details) {
+                    DetailItem(it, showDialog, onDialog)
+
+                    Spacer(Modifier.height(CategoryDetailScreenSpacer8))
+                }
+
+                item {
+                    // 나중에 재사용할 수 있게 만들어야 할 거 같습니다.
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(Shape10)
+                            .clickable(
+                                onClick = {
+                                    // 추가하기 로직 추가 예정
+                                }
+                            )
+                            .background(color = White2)
+                            .shadow(
+                                elevation = ShadowElevation16,
+                                shape = Shape10,
+                                ambientColor = MyPageCardShadowColor,
+                                spotColor = MyPageCardShadowColor
+                            )
+                            .padding(
+                                top = CategoryDetailScreenItemTopBottomPadding,
+                                bottom = CategoryDetailScreenItemTopBottomPadding
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            stringResource(R.string.text_add_category),
+                            style = CategoryDetailItemAddTextStyle.copy(color = Gray7)
                         )
-                        .padding(top = CategoryDetailScreenItemTopBottomPadding,
-                            bottom = CategoryDetailScreenItemTopBottomPadding),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        stringResource(R.string.text_add_category),
-                        style = CategoryDetailItemAddTextStyle.copy(color = Gray7)
-                    )
+                    }
                 }
             }
         }
@@ -198,10 +213,12 @@ fun DetailItem(
                 ambientColor = MyPageCardShadowColor,
                 spotColor = MyPageCardShadowColor
             )
-            .padding(start = CategoryDetailScreenItemStartEndPadding,
+            .padding(
+                start = CategoryDetailScreenItemStartEndPadding,
                 end = CategoryDetailScreenItemStartEndPadding,
                 top = CategoryDetailScreenItemTopBottomPadding,
-                bottom = CategoryDetailScreenItemTopBottomPadding)
+                bottom = CategoryDetailScreenItemTopBottomPadding
+            )
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),

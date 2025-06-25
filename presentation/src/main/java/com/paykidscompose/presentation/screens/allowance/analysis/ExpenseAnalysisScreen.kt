@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -45,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.AllowanceChartDTO
 import com.paykidscompose.presentation.model.AllowanceType
+import com.paykidscompose.presentation.screens.PayKidsScaffold
 import com.paykidscompose.presentation.ui.components.AllowanceInputDialog
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryHeadMonthTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenCardShape
@@ -74,14 +76,12 @@ import com.paykidscompose.presentation.ui.theme.Gray9
 import com.paykidscompose.presentation.ui.theme.MyPageCardShadowColor
 import com.paykidscompose.presentation.ui.theme.White
 import com.paykidscompose.presentation.ui.theme.White2
-import com.paykidscompose.presentation.util.formatAmount
 import com.paykidscompose.presentation.util.MonthFormatter
+import com.paykidscompose.presentation.util.formatAmount
 import java.time.LocalDate
-import kotlin.collections.filter
 
 @Composable
 fun ExpenseAnalysis(
-    onBackClick: () -> Unit
 ) {
     var currentMonth by remember {
         mutableStateOf(
@@ -135,193 +135,201 @@ fun ExpenseAnalysisScreen(
         )
     )
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Gray5)
-            .padding(start = 17.dp, end = 17.dp, top = 44.dp)
-    ) {
+    PayKidsScaffold(
+        bottomBar = {
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            IconButton(
-                onClick = {
-                    onMonth(month.minusMonths(1))
-                },
-                modifier = Modifier.size(AllowanceDiaryScreenHeadIconSize)
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_left_round),
-                    contentDescription = null,
-                    tint = Color.Unspecified
-                )
-            }
-
-            Text(
-                text = month.format(MonthFormatter), style = AllowanceDiaryHeadMonthTextStyle
-            )
-
-            IconButton(
-                onClick = {
-                    onMonth(month.plusMonths(1))
-                },
-                modifier = Modifier.size(AllowanceDiaryScreenHeadIconSize)
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_right_round),
-                    contentDescription = null,
-                    tint = Color.Unspecified
-                )
-            }
         }
-
-        Spacer(Modifier.height(28.dp))
-
-        Row(
+    ) { innerPadding ->
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(AllowanceInputDialogCardDateRowHeight)
-                .clip(RoundedCornerShape(AllowanceInputDialogShape))
-                .background(color = Gray9)
-                .border(
-                    width = AllowanceInputDialogCardDateBorderWidth,
-                    color = Gray6,
-                    shape = RoundedCornerShape(AllowanceInputDialogShape)
-                )
+                .fillMaxSize()
+                .background(color = Gray5)
+                .statusBarsPadding()
+                .padding(innerPadding)
+                .padding(start = 17.dp, end = 17.dp, top = 20.dp)
         ) {
 
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .weight(1f)
-                    .then(
-                        if (selected == AllowanceType.EXPENSE)
-                            Modifier.shadow(
-                                elevation = AllowanceInputDialogExpenseIncomeBoxElevation,
-                                shape = RoundedCornerShape(AllowanceInputDialogShape),
-                                ambientColor = AllowanceInputDialogToggleShadowColor,
-                                spotColor = AllowanceInputDialogToggleShadowColor
-                            )
-                        else
-                            Modifier
-                    )
-                    .clip(RoundedCornerShape(AllowanceInputDialogShape))
-                    .background(color = if (selected == AllowanceType.EXPENSE) White else Gray9)
-                    .clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {
-                        onSelect(AllowanceType.EXPENSE)
-                    },
-                contentAlignment = Alignment.Center
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(
-                    stringResource(R.string.dialog_switch_consum),
-                    style = AllowanceInputToggleTextStyle.copy(color = if (selected == AllowanceType.EXPENSE) Black else Gray7)
-                )
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .weight(1f)
-                    .then(
-                        if (selected == AllowanceType.INCOME)
-                            Modifier.shadow(
-                                elevation = AllowanceInputDialogExpenseIncomeBoxElevation,
-                                shape = RoundedCornerShape(AllowanceInputDialogShape),
-                                ambientColor = AllowanceInputDialogToggleShadowColor,
-                                spotColor = AllowanceInputDialogToggleShadowColor
-                            )
-                        else
-                            Modifier
-                    )
-                    .clip(RoundedCornerShape(AllowanceInputDialogShape))
-                    .background(color = if (selected == AllowanceType.INCOME) White else Gray9)
-                    .clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {
-                        onSelect(AllowanceType.INCOME)
+                IconButton(
+                    onClick = {
+                        onMonth(month.minusMonths(1))
                     },
-                contentAlignment = Alignment.Center
-            ) {
+                    modifier = Modifier.size(AllowanceDiaryScreenHeadIconSize)
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_left_round),
+                        contentDescription = null,
+                        tint = Color.Unspecified
+                    )
+                }
+
                 Text(
-                    stringResource(R.string.dialog_switch_income),
-                    style = AllowanceInputToggleTextStyle.copy(color = if (selected == AllowanceType.INCOME) Black else Gray7)
+                    text = month.format(MonthFormatter), style = AllowanceDiaryHeadMonthTextStyle
                 )
-            }
-        }
 
-        Spacer(Modifier.height(34.dp))
-
-        Text(
-            stringResource(R.string.text_month_total_consume, formatAmount(150000)),
-            style = AllowanceDiaryTitleExpenseTextStyle
-                .copy(color = Black)
-        )
-
-        Spacer(Modifier.height(12.dp))
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(8.dp))
-                .background(color = White)
-                .border(width = 1.dp, color = Gray6, shape = RoundedCornerShape(8.dp))
-        ) {
-            CategoryProgressBar(data)
-        }
-
-        Spacer(Modifier.height(34.dp))
-
-        Button(
-            onClick = {},
-            shape = RoundedCornerShape(5.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Gray7,
-                contentColor = White
-            ),
-            contentPadding = PaddingValues(horizontal = 8.dp),
-            modifier = Modifier.align(Alignment.End)
-        ) {
-            Text("삭제하기", style = ExpenseAnalysisDeleteButtonTextStyle)
-        }
-
-        Spacer(Modifier.height(12.dp))
-
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            items(data) {
-                AnalysisItem("편의점", -1800, "50%", showInputDialog, onShowDialog)
-                Spacer(Modifier.height(8.dp))
+                IconButton(
+                    onClick = {
+                        onMonth(month.plusMonths(1))
+                    },
+                    modifier = Modifier.size(AllowanceDiaryScreenHeadIconSize)
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_right_round),
+                        contentDescription = null,
+                        tint = Color.Unspecified
+                    )
+                }
             }
 
-            item {
+            Spacer(Modifier.height(28.dp))
 
-                Button(
-                    onClick = {},
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = White2,
-                        contentColor = Gray7
-                    ),
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(AllowanceInputDialogCardDateRowHeight)
+                    .clip(RoundedCornerShape(AllowanceInputDialogShape))
+                    .background(color = Gray9)
+                    .border(
+                        width = AllowanceInputDialogCardDateBorderWidth,
+                        color = Gray6,
+                        shape = RoundedCornerShape(AllowanceInputDialogShape)
+                    )
+            ) {
+
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .shadow(
-                            16.dp,
-                            shape = RoundedCornerShape(10.dp),
-                            ambientColor = MyPageCardShadowColor,
-                            spotColor = MyPageCardShadowColor
-                        ),
-                    contentPadding = PaddingValues(vertical = 14.dp)
+                        .fillMaxHeight()
+                        .weight(1f)
+                        .then(
+                            if (selected == AllowanceType.EXPENSE)
+                                Modifier.shadow(
+                                    elevation = AllowanceInputDialogExpenseIncomeBoxElevation,
+                                    shape = RoundedCornerShape(AllowanceInputDialogShape),
+                                    ambientColor = AllowanceInputDialogToggleShadowColor,
+                                    spotColor = AllowanceInputDialogToggleShadowColor
+                                )
+                            else
+                                Modifier
+                        )
+                        .clip(RoundedCornerShape(AllowanceInputDialogShape))
+                        .background(color = if (selected == AllowanceType.EXPENSE) White else Gray9)
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) {
+                            onSelect(AllowanceType.EXPENSE)
+                        },
+                    contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        "+ 추가하기",
-                        style = ExpenseAnalysisItemAddButtonTextStyle
+                        stringResource(R.string.dialog_switch_consum),
+                        style = AllowanceInputToggleTextStyle.copy(color = if (selected == AllowanceType.EXPENSE) Black else Gray7)
                     )
+                }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(1f)
+                        .then(
+                            if (selected == AllowanceType.INCOME)
+                                Modifier.shadow(
+                                    elevation = AllowanceInputDialogExpenseIncomeBoxElevation,
+                                    shape = RoundedCornerShape(AllowanceInputDialogShape),
+                                    ambientColor = AllowanceInputDialogToggleShadowColor,
+                                    spotColor = AllowanceInputDialogToggleShadowColor
+                                )
+                            else
+                                Modifier
+                        )
+                        .clip(RoundedCornerShape(AllowanceInputDialogShape))
+                        .background(color = if (selected == AllowanceType.INCOME) White else Gray9)
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) {
+                            onSelect(AllowanceType.INCOME)
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        stringResource(R.string.dialog_switch_income),
+                        style = AllowanceInputToggleTextStyle.copy(color = if (selected == AllowanceType.INCOME) Black else Gray7)
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(34.dp))
+
+            Text(
+                stringResource(R.string.text_month_total_consume, formatAmount(150000)),
+                style = AllowanceDiaryTitleExpenseTextStyle
+                    .copy(color = Black)
+            )
+
+            Spacer(Modifier.height(12.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(color = White)
+                    .border(width = 1.dp, color = Gray6, shape = RoundedCornerShape(8.dp))
+            ) {
+                CategoryProgressBar(data)
+            }
+
+            Spacer(Modifier.height(34.dp))
+
+            Button(
+                onClick = {},
+                shape = RoundedCornerShape(5.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Gray7,
+                    contentColor = White
+                ),
+                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
+                modifier = Modifier.align(Alignment.End)
+            ) {
+                Text("삭제하기", style = ExpenseAnalysisDeleteButtonTextStyle)
+            }
+
+            Spacer(Modifier.height(12.dp))
+
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(data) {
+                    AnalysisItem("편의점", -1800, "50%", showInputDialog, onShowDialog)
+                    Spacer(Modifier.height(8.dp))
+                }
+
+                item {
+
+                    Button(
+                        onClick = {},
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = White2,
+                            contentColor = Gray7
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .shadow(
+                                16.dp,
+                                shape = RoundedCornerShape(10.dp),
+                                ambientColor = MyPageCardShadowColor,
+                                spotColor = MyPageCardShadowColor
+                            ),
+                        contentPadding = PaddingValues(vertical = 14.dp)
+                    ) {
+                        Text(
+                            "+ 추가하기",
+                            style = ExpenseAnalysisItemAddButtonTextStyle
+                        )
+                    }
                 }
             }
         }
@@ -473,5 +481,5 @@ private fun calculateCategoryStats(data: List<AllowanceChartDTO>): List<Category
 @Preview
 @Composable
 fun AnalysisScreenPreview() {
-    ExpenseAnalysis { }
+    ExpenseAnalysis()
 }

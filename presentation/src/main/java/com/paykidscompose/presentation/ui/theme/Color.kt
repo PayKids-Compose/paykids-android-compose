@@ -21,6 +21,7 @@ val Gray8 = Color(0xFF7796BA)
 val Gray9 = Color(0xFFE1F2FF)
 
 val Black = Color(0xFF191919)
+val Black2 = Color(0xFF000000)
 val White = Color(0xFFFFFFFF)
 val White2 = Color(0x99FFFFFF)
 val Yellow = Color(0xFFFAE100)
@@ -37,7 +38,6 @@ val TitleColor = Color(0xFF222222) // 닉네임을 입력해주세요 색상이 
 val AllowanceInputDialogToggleShadowColor = Color(0xB3E6F6FF)
 
 // 마이페이지 색상
-val MyPageAppBarTitleTextColor = Color(0xFF000000)
 val MyPageCardShadowColor = Color(0x80CCE4FF)
 val MyPageAppBarShadowColor = Color(0x80CCE4FF)
 

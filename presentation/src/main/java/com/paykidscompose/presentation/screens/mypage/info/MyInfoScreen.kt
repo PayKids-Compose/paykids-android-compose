@@ -19,7 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.DummyUser
 import com.paykidscompose.presentation.model.MyInfoUIModel
+import com.paykidscompose.presentation.screens.PayKidsScaffold
 import com.paykidscompose.presentation.ui.components.AppTopBar
 import com.paykidscompose.presentation.ui.components.CustomCard
 import com.paykidscompose.presentation.ui.components.OutlineInputField
@@ -43,6 +43,8 @@ import com.paykidscompose.presentation.ui.components.PopupDialog
 import com.paykidscompose.presentation.ui.components.TitleText
 import com.paykidscompose.presentation.ui.components.util.PopupType
 import com.paykidscompose.presentation.ui.theme.Black
+import com.paykidscompose.presentation.ui.theme.Black2
+import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.Blue2
 import com.paykidscompose.presentation.ui.theme.Gray5
 import com.paykidscompose.presentation.ui.theme.MyInfoCardNicknameButtonTextStyle
@@ -68,7 +70,6 @@ import com.paykidscompose.presentation.ui.theme.MyInfoScreenSpacer38
 import com.paykidscompose.presentation.ui.theme.MyInfoScreenSpacer4
 import com.paykidscompose.presentation.ui.theme.MyInfoScreenSpacer73
 import com.paykidscompose.presentation.ui.theme.MyInfoScreenTopPadding
-import com.paykidscompose.presentation.ui.theme.MyPageAppBarTitleTextColor
 import com.paykidscompose.presentation.ui.theme.MyPageNicknameTextStyle
 import com.paykidscompose.presentation.ui.theme.OutlineHeight
 import com.paykidscompose.presentation.ui.theme.Red
@@ -116,21 +117,24 @@ fun MyInfoScreen(
         )
     }
 
-    Scaffold(
+    PayKidsScaffold(
         topBar = {
             AppTopBar(
                 title = stringResource(R.string.text_my_page),
                 showBackButton = true,
-                onBackClick = onBackClick
+                onBackClick = onBackClick,
+                titleColor = Black2
             )
         },
+        containerColor = Gray5
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = Gray5)
+                .padding(innerPadding)
                 .padding(
-                    top = innerPadding.calculateTopPadding() + MyInfoScreenTopPadding
+                    top = MyInfoScreenTopPadding
                 ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -161,7 +165,7 @@ fun MyInfoScreen(
 
             TitleText(
                 uiModel.nickname,
-                color = MyPageAppBarTitleTextColor,
+                color = Black2,
                 style = MyPageNicknameTextStyle
             )
 
