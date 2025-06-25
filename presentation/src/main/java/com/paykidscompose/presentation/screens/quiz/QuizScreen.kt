@@ -48,7 +48,7 @@ import com.paykidscompose.presentation.ui.theme.TextChoiceQuizImageRound
 @Preview(showBackground = true)
 @Composable
 fun QuizScreen(
-    quizType: QuizType = QuizType.TEXT_CHOICE_IMAGE,
+    quizType: QuizType = QuizType.SHORT_ANSWER,
     quizNumber: Int = 2,
     totalQuizCount: Int = 7,
     question: String = "10,000원 권 지폐에는\n어떤 인물이 그려져 있을까요?",
@@ -66,11 +66,13 @@ fun QuizScreen(
     ),
     image: Int = R.drawable.img_king_sejong,
     answer: String = "A",
-    onChoiceClick: (Int) -> Unit = {}
+    onChoiceClick: (Int) -> Unit = {},
+    onConfirmAnswer: (Boolean) -> Unit = {}
 ) {
     var showDialog by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableStateOf<Int?>(null) }
     var isCorrect by remember { mutableStateOf(QuizResultState.DEFAULT) }
+    var userInput by remember { mutableStateOf("") }
 
     BackHandler(enabled = true) {
         showDialog = true
@@ -132,7 +134,7 @@ fun QuizScreen(
                 )
 
                 // 정답/오답 결과 카드 보여주기
-                if (quizType != QuizType.TEXT_CHOICE_IMAGE) { // 객관식(이미지) 퀴즈는 이미지 위에 겹쳐서 표시
+                if (quizType != QuizType.TEXT_CHOICE_IMAGE && quizType != QuizType.SHORT_ANSWER_IMAGE) { // 객관식(이미지), 주관식(이미지) 퀴즈는 이미지 위에 겹쳐서 표시
                     if (isCorrect != QuizResultState.DEFAULT) {
                         Spacer(modifier = Modifier.height(QuizResultCardSpacer))
                         QuizResultCard(
@@ -178,7 +180,11 @@ fun QuizScreen(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Spacer(modifier = Modifier.height(QuizResultCardTextChoiceImageSmallSpacer))
+                            Spacer(
+                                modifier = Modifier.height(
+                                    QuizResultCardTextChoiceImageSmallSpacer
+                                )
+                            )
 
                             //Box로 이미지와 정답 카드 겹치기
                             Box(modifier = Modifier.fillMaxWidth()) {
@@ -217,8 +223,65 @@ fun QuizScreen(
                             )
                         }
 
-                    QuizType.SHORT_ANSWER -> TODO()
-                    QuizType.SHORT_ANSWER_IMAGE -> TODO()
+                    QuizType.SHORT_ANSWER ->
+                        ShortAnswerQuizContent(
+                            quizType = quizType,
+                            userInput = userInput,
+                            answer = answer,
+                            onUserInputChange = { userInput = it },
+                            onConfirmAnswer = { isCorrectAnswer ->
+                                isCorrect =
+                                    if (isCorrectAnswer) QuizResultState.CORRECT else QuizResultState.WRONG
+                                onConfirmAnswer(isCorrectAnswer)
+                            }
+                        )
+
+                    QuizType.SHORT_ANSWER_IMAGE ->
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Spacer(
+                                modifier = Modifier.height(
+                                    QuizResultCardTextChoiceImageSmallSpacer
+                                )
+                            )
+
+                            //Box로 이미지와 정답 카드 겹치기
+                            Box(modifier = Modifier.fillMaxWidth()) {
+                                AsyncImage(
+                                    model = image,
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(TextChoiceQuizImageRound))
+                                        .fillMaxWidth()
+                                        .padding(top = QuizResultCardTextChoiceImageTopPadding),
+                                    contentScale = ContentScale.FillWidth,
+                                )
+
+                                if (isCorrect != QuizResultState.DEFAULT) {
+                                    QuizResultCard(
+                                        isCorrect = isCorrect == QuizResultState.CORRECT,
+                                        modifier = Modifier
+                                            .align(Alignment.TopCenter)
+                                    )
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(QuizResultCardTextChoiceImageSpacer))
+
+                            ShortAnswerQuizContent(
+                                quizType = quizType,
+                                userInput = userInput,
+                                answer = answer,
+                                onUserInputChange = { userInput = it },
+                                onConfirmAnswer = { isCorrectAnswer ->
+                                    isCorrect =
+                                        if (isCorrectAnswer) QuizResultState.CORRECT else QuizResultState.WRONG
+                                    onConfirmAnswer(isCorrectAnswer)
+                                }
+                            )
+                        }
                 }
             }
         }
