@@ -121,6 +121,21 @@ val QuizShortAnswerTextStyle = TextStyle(
     lineHeight = 25.sp
 )
 
+// 퀴즈 클리어 스크린
+val QuizClearTitleTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 18.sp,
+    lineHeight = 26.sp
+)
+
+val QuizClearButtonTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 20.sp,
+    lineHeight = 23.sp
+)
+
 // 마이페이지 스크린
 val MyPageAppBarTextStyle = TextStyle(
     fontFamily = NanumSquare,

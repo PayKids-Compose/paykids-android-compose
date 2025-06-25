@@ -83,6 +83,20 @@ val QuizResultCardTextChoiceImageTopPadding = 18.dp
 val ShortAnswerQuizContentSpacer = 220.dp
 val ShortAnswerImageQuizContentSpacer = 122.dp
 
+// 퀴즈 클리어 화면
+val QuizClearScreenColumnTopPadding = 374.dp
+val QuizClearScreenColumnBottomPadding = 57.dp
+val QuizClearDashedCardHeight = 100.dp
+val QuizClearDashedCardElevation = 12.dp
+val QuizClearDashedCardRound = 10.dp
+val QuizClearDashedCardHorizontalPadding = 8.dp
+val QuizClearDashedCardVerticalPadding = 7.dp
+val QuizClearDashedBorderWidth = 1.dp
+val QuizClearDashedBorderRadius = 6.dp
+val QuizClearSpacer = 187.dp
+val QuizClearSmallSpacer = 130.dp
+val QuizClearButtonSpacer = 8.dp
+
 // 마이페이지 기본 화면
 val MyPageDefaultScreenStartEndPadding = 20.dp
 val MyPageDefaultScreenTopPadding = 91.dp
