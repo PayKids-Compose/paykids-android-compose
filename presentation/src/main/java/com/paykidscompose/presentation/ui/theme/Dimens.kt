@@ -1,5 +1,6 @@
 package com.paykidscompose.presentation.ui.theme
 
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -8,13 +9,12 @@ val StartAndEndPadding = 20.dp
 val DeterminationButtonCorner = 60.dp
 val BottomButtonPadding = 57.dp
 val DeterminationButtonPadding = 60.dp
-val DeterminationButtonTextStartAndEndPadding = 17.dp
 val DeterminationButtonTextTopAndBottom = 14.dp
 val DeterminationButtonTextTopAndBottom2 = 15.dp
-val DeterminationButtonWidth = 320.dp
-val DeterminationButtonHeight = 50.dp
 val CardShadowElevation = 8.dp
 val TopAppBarShadowElevation = 16.dp
+val Shape10 = RoundedCornerShape(10.dp)
+val ShadowElevation16 = 16.dp
 
 // 스플래시 화면
 val SplashLogo = 174.dp
@@ -96,7 +96,6 @@ val MyInfoScreenSpacer24 = 24.dp
 val MyInfoScreenSpacer36 = 36.dp
 val MyInfoScreenSpacer38 = 38.dp
 val MyInfoScreenSpacer73 = 73.dp
-val MyInfoScreenSpacer166 = 166.dp
 val MyInfoScreenShapeTop = 20.dp
 val MyInfoScreenShapeBottom = 0.dp
 val MyInfoScreenMyInfoTopBottomPadding= 26.dp
@@ -116,9 +115,7 @@ val TermsScreenCardShapeTopBottom = 10.dp
 
 // 커스텀 카드
 val CustomCardShadow = 16.dp
-val CustomCardSizeWidth = 320.dp
 val CustomCardSizeHeight = 240.dp
-val CustomCardBackgroundShape= 10.dp
 
 // 아웃라인 인풋 필드
 val OutlineBorder = 1.dp
@@ -189,3 +186,12 @@ val AllowanceInputDialogIconWidth = 9.dp
 val AllowanceInputDialogIconHeight = 6.dp
 val AllowanceInputDialogDateItemStartEndPadding = 8.dp
 val AllowanceInputDialogDateItemTopBottomPadding = 4.dp
+
+// 카테고리 상세내역 화면
+val CategoryDetailScreenStartEndPadding = 17.dp
+val CategoryDetailScreenTopPadding = 70.dp
+val CategoryDetailScreenItemTopBottomPadding = 14.dp
+val CategoryDetailScreenItemStartEndPadding = 18.dp
+val CategoryDetailScreenSpacer6 = 6.dp
+val CategoryDetailScreenSpacer8 = 8.dp
+val CategoryDetailScreenSpacer24 = 24.dp

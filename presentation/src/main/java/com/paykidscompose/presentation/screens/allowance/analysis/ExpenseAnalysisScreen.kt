@@ -39,23 +39,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.AllowanceChartDTO
-import com.paykidscompose.presentation.model.AllowanceDiaryUIModel
 import com.paykidscompose.presentation.model.AllowanceType
 import com.paykidscompose.presentation.ui.components.AllowanceInputDialog
-import com.paykidscompose.presentation.ui.components.CustomCard
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryHeadMonthTextStyle
-import com.paykidscompose.presentation.ui.theme.AllowanceDiaryMostConsumeTextStyle
-import com.paykidscompose.presentation.ui.theme.AllowanceDiaryMostConsumeTitleTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenCardShape
-import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenHeadAddIconSize
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenHeadIconSize
-import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenSpacer6
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenTransactionStartEndPadding
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenTransactionTopBottomPadding
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryTitleExpenseTextStyle
@@ -82,10 +75,8 @@ import com.paykidscompose.presentation.ui.theme.MyPageCardShadowColor
 import com.paykidscompose.presentation.ui.theme.White
 import com.paykidscompose.presentation.ui.theme.White2
 import com.paykidscompose.presentation.util.formatAmount
-import com.paykidscompose.presentation.util.monthFormatter
+import com.paykidscompose.presentation.util.MonthFormatter
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 import kotlin.collections.filter
 
 @Composable
@@ -168,7 +159,7 @@ fun ExpenseAnalysisScreen(
             }
 
             Text(
-                text = month.format(monthFormatter), style = AllowanceDiaryHeadMonthTextStyle
+                text = month.format(MonthFormatter), style = AllowanceDiaryHeadMonthTextStyle
             )
 
             IconButton(
@@ -351,7 +342,7 @@ fun AnalysisItem(
             .fillMaxWidth()
             .clickable(
                 onClick = {
-                    onShowDialog(!showInputDialog)
+                    // CategoryDetailScreen으로 이동
                 }
             )
             .shadow(
