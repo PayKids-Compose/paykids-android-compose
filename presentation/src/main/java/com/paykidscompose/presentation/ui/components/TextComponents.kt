@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
@@ -32,6 +33,8 @@ import com.paykidscompose.presentation.ui.theme.NicknameFieldTextStyle
 import com.paykidscompose.presentation.ui.theme.NicknameScreenFieldBoxHeight
 import com.paykidscompose.presentation.ui.theme.NicknameTitleTextStyle
 import com.paykidscompose.presentation.ui.theme.OutlineBorder
+import com.paykidscompose.presentation.ui.theme.OutlineDefaultShadowElevation
+import com.paykidscompose.presentation.ui.theme.OutlineDefaultShadowRound
 import com.paykidscompose.presentation.ui.theme.OutlineShape
 import com.paykidscompose.presentation.ui.theme.TitleColor
 import com.paykidscompose.presentation.ui.theme.White
@@ -128,13 +131,17 @@ fun OutlineInputField(
     style: TextStyle = MyInfoCardNicknameTextStyle.copy(color = Black),
     shape: Shape = RoundedCornerShape(OutlineShape),
     singleLine: Boolean = true,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    shadowElevation: Dp = OutlineDefaultShadowElevation,
+    shadowShape: Shape = RoundedCornerShape(OutlineDefaultShadowRound),
+    shadowColor: Color = Color.Unspecified
 ) {
     BasicTextField(
         value = text,
         onValueChange = onTextChange,
         modifier = Modifier
             .fillMaxWidth()
+            .shadow(elevation = shadowElevation, shape = shadowShape, ambientColor = shadowColor, spotColor = shadowColor)
             .clip(shape)
             .background(color = backgroundColor)
             .border(OutlineBorder, outlineColor, shape)
