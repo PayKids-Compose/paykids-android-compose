@@ -1,6 +1,8 @@
 package com.paykidscompose.presentation.ui.components
 
 import android.R.attr.bottom
+import android.R.attr.singleLine
+import android.R.attr.text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -19,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Gray
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -125,24 +128,27 @@ fun OutlineInputField(
     startPadding: Dp,
     modifier: Modifier = Modifier,
     outlineColor: Color = Gray6,
+    backgroundColor: Color = Color.Unspecified,
     hint: String = "",
     hintColor: Color = Gray7,
-    style: TextStyle = MyInfoCardNicknameTextStyle.copy(color = Black)
-) {
-    val shape = RoundedCornerShape(OutlineShape)
+    textColor: Color = Black,
+    style: TextStyle = MyInfoCardNicknameTextStyle.copy(color = Black),
+    shape: Shape = RoundedCornerShape(OutlineShape),
+    singleLine: Boolean = true
 
+) {
     BasicTextField(
         value = text,
         onValueChange = onTextChange,
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
-            .height(OutlineHeight)
-            .border(OutlineBorder, outlineColor, shape)
             .clip(shape)
+            .background(color = backgroundColor)
+            .border(OutlineBorder, outlineColor, shape)
             .background(Color.Transparent)
-            .padding(start = startPadding),
-        textStyle = style,
-        singleLine = true,
+            .padding(start = startPadding).then(modifier),
+        textStyle = style.copy(color = textColor),
+        singleLine = singleLine,
         decorationBox = { innerTextField ->
             Box(
                 contentAlignment = Alignment.CenterStart,
