@@ -63,13 +63,25 @@ val QuizEntryButtonSpacer = 10.dp
 // 퀴즈 화면
 val QuizQuestionTextSpacer = 80.dp
 val ImageQuizCardSpaceBetween = 20.dp
-val ImageQuizCardSize = Pair<Dp, Dp>(150.dp, 180.dp)
+val ImageQuizCardRatio = 150/180f
 val ImageQuizCardRound = 20.dp
 val ImageQuizCardImageSize = 120.dp
 val ImageQuizCardImageRound = 10.dp
 val ImageQuizCardTextSpacer = 12.dp
 val ImageQuizCardRowSpacer = 14.dp
 val QuizAppBarShadowElevation = 4.dp
+val QuizResultCardRound = 10.dp
+val QuizResultCardHorizontalPadding = 15.dp
+val QuizResultCardVerticalPadding = 13.dp
+val QuizResultCardSpacer = 18.dp
+val QuizResultCardTextChoiceImageSpacer = 26.dp
+val TextChoiceQuizCardTextHorizontalPadding = 16.dp
+val TextChoiceQuizCardTextVerticalPadding = 20.dp
+val TextChoiceQuizImageRound = 5.dp
+val QuizResultCardTextChoiceImageSmallSpacer = 8.dp
+val QuizResultCardTextChoiceImageTopPadding = 18.dp
+val ShortAnswerQuizContentSpacer = 220.dp
+val ShortAnswerImageQuizContentSpacer = 122.dp
 
 // 마이페이지 기본 화면
 val MyPageDefaultScreenStartEndPadding = 20.dp
@@ -121,6 +133,9 @@ val CustomCardSizeHeight = 240.dp
 val OutlineBorder = 1.dp
 val OutlineShape = 10.dp
 val OutlineHeight = 40.dp
+val ShortAnswerQuizOutlineHeight = 86.dp
+val ShortAnswerQuizOutlineStartPadding = 91.dp
+val ShortAnswerQuizOutlineShape = 20.dp
 
 // 팝업 다이얼로그
 val PopupDialogCardShape = 20.dp

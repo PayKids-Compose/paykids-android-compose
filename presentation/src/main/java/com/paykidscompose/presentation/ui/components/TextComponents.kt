@@ -1,14 +1,10 @@
 package com.paykidscompose.presentation.ui.components
 
-import android.R.attr.bottom
-import android.R.attr.singleLine
-import android.R.attr.text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,13 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.paykidscompose.presentation.ui.theme.Black
 import com.paykidscompose.presentation.ui.theme.FieldAndInfoSpacer
 import com.paykidscompose.presentation.ui.theme.Gray2
@@ -38,7 +32,6 @@ import com.paykidscompose.presentation.ui.theme.NicknameFieldTextStyle
 import com.paykidscompose.presentation.ui.theme.NicknameScreenFieldBoxHeight
 import com.paykidscompose.presentation.ui.theme.NicknameTitleTextStyle
 import com.paykidscompose.presentation.ui.theme.OutlineBorder
-import com.paykidscompose.presentation.ui.theme.OutlineHeight
 import com.paykidscompose.presentation.ui.theme.OutlineShape
 import com.paykidscompose.presentation.ui.theme.TitleColor
 import com.paykidscompose.presentation.ui.theme.White
@@ -134,8 +127,8 @@ fun OutlineInputField(
     textColor: Color = Black,
     style: TextStyle = MyInfoCardNicknameTextStyle.copy(color = Black),
     shape: Shape = RoundedCornerShape(OutlineShape),
-    singleLine: Boolean = true
-
+    singleLine: Boolean = true,
+    enabled: Boolean = true
 ) {
     BasicTextField(
         value = text,
@@ -145,10 +138,10 @@ fun OutlineInputField(
             .clip(shape)
             .background(color = backgroundColor)
             .border(OutlineBorder, outlineColor, shape)
-            .background(Color.Transparent)
             .padding(start = startPadding).then(modifier),
         textStyle = style.copy(color = textColor),
         singleLine = singleLine,
+        enabled = enabled,
         decorationBox = { innerTextField ->
             Box(
                 contentAlignment = Alignment.CenterStart,

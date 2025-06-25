@@ -106,6 +106,21 @@ val QuizAnswerTextStyle = TextStyle(
     lineHeight = 20.sp
 )
 
+val QuizResultCardTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 16.sp,
+    lineHeight = 18.sp,
+    color = White
+)
+
+val QuizShortAnswerTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 22.sp,
+    lineHeight = 25.sp
+)
+
 // 마이페이지 스크린
 val MyPageAppBarTextStyle = TextStyle(
     fontFamily = NanumSquare,

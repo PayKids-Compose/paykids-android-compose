@@ -1,20 +1,15 @@
 package com.paykidscompose.presentation.screens.quiz
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,8 +20,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -36,29 +29,26 @@ import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.model.QuizType
 import com.paykidscompose.presentation.ui.components.AppTopBar
 import com.paykidscompose.presentation.ui.components.PopupDialog
+import com.paykidscompose.presentation.ui.components.QuizResultCard
 import com.paykidscompose.presentation.ui.components.util.PopupType
+import com.paykidscompose.presentation.ui.state.QuizResultState
 import com.paykidscompose.presentation.ui.theme.Black
-import com.paykidscompose.presentation.ui.theme.CardShadowElevation
-import com.paykidscompose.presentation.ui.theme.Gray3
-import com.paykidscompose.presentation.ui.theme.ImageQuizCardImageRound
-import com.paykidscompose.presentation.ui.theme.ImageQuizCardImageSize
-import com.paykidscompose.presentation.ui.theme.ImageQuizCardRound
-import com.paykidscompose.presentation.ui.theme.ImageQuizCardRowSpacer
-import com.paykidscompose.presentation.ui.theme.ImageQuizCardSize
-import com.paykidscompose.presentation.ui.theme.ImageQuizCardSpaceBetween
-import com.paykidscompose.presentation.ui.theme.ImageQuizCardTextSpacer
-import com.paykidscompose.presentation.ui.theme.QuizAnswerTextStyle
 import com.paykidscompose.presentation.ui.theme.QuizAppBarShadowColor
 import com.paykidscompose.presentation.ui.theme.QuizAppBarShadowElevation
 import com.paykidscompose.presentation.ui.theme.QuizAppBarTextStyle
 import com.paykidscompose.presentation.ui.theme.QuizQuestionTextSpacer
 import com.paykidscompose.presentation.ui.theme.QuizQuestionTextStyle
+import com.paykidscompose.presentation.ui.theme.QuizResultCardSpacer
+import com.paykidscompose.presentation.ui.theme.QuizResultCardTextChoiceImageSmallSpacer
+import com.paykidscompose.presentation.ui.theme.QuizResultCardTextChoiceImageSpacer
+import com.paykidscompose.presentation.ui.theme.QuizResultCardTextChoiceImageTopPadding
 import com.paykidscompose.presentation.ui.theme.StartAndEndPadding
+import com.paykidscompose.presentation.ui.theme.TextChoiceQuizImageRound
 
 @Preview(showBackground = true)
 @Composable
 fun QuizScreen(
-    quizType: QuizType = QuizType.IMAGE,
+    quizType: QuizType = QuizType.SHORT_ANSWER,
     quizNumber: Int = 2,
     totalQuizCount: Int = 7,
     question: String = "10,000원 권 지폐에는\n어떤 인물이 그려져 있을까요?",
@@ -68,10 +58,21 @@ fun QuizScreen(
         R.drawable.img_quiz_item_default to "퇴계 이황",
         R.drawable.img_quiz_item_default to "이순신"
     ),
+    textChoices: List<String> = listOf(
+        "10,000원 권 지폐에는 조선 시대의 왕이자 한글을 창시한 세종대왕이 그려져 있다.",
+        "10,000원 권 지폐에는 BTS가 그려져 있다.",
+        "로또 되고 싶다♡",
+        "dd"
+    ),
+    image: Int = R.drawable.img_king_sejong,
     answer: String = "A",
-    onChoiceClick: (Int) -> Unit = {}
+    onChoiceClick: (Int) -> Unit = {},
+    onConfirmAnswer: (Boolean) -> Unit = {}
 ) {
     var showDialog by remember { mutableStateOf(false) }
+    var selectedIndex by remember { mutableStateOf<Int?>(null) }
+    var isCorrect by remember { mutableStateOf(QuizResultState.DEFAULT) }
+    var userInput by remember { mutableStateOf("") }
 
     BackHandler(enabled = true) {
         showDialog = true
@@ -107,7 +108,11 @@ fun QuizScreen(
                 )
         ) {
             AsyncImage(
-                model = R.drawable.bg_quiz_default,
+                model = when (isCorrect) {
+                    QuizResultState.DEFAULT -> R.drawable.bg_quiz_default
+                    QuizResultState.CORRECT -> R.drawable.bg_quiz_correct
+                    QuizResultState.WRONG -> R.drawable.bg_quiz_wrong
+                },
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
@@ -128,60 +133,155 @@ fun QuizScreen(
                     textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier = Modifier.height(QuizQuestionTextSpacer))
+                // 정답/오답 결과 카드 보여주기
+                if (quizType != QuizType.TEXT_CHOICE_IMAGE && quizType != QuizType.SHORT_ANSWER_IMAGE) { // 객관식(이미지), 주관식(이미지) 퀴즈는 이미지 위에 겹쳐서 표시
+                    if (isCorrect != QuizResultState.DEFAULT) {
+                        Spacer(modifier = Modifier.height(QuizResultCardSpacer))
+                        QuizResultCard(
+                            isCorrect = isCorrect == QuizResultState.CORRECT
+                        )
+                        Spacer(modifier = Modifier.height(QuizResultCardSpacer))
+                    } else {
+                        Spacer(modifier = Modifier.height(QuizQuestionTextSpacer))
+                    }
+                }
 
-                // 2x2 Grid: Row 2개, 각 Row 안에 2개의 선택지
-                for (row in 0 until 2) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(
-                            ImageQuizCardSpaceBetween, Alignment.CenterHorizontally
-                        ),
-                    ) {
-                        for (col in 0 until 2) {
-                            val index = row * 2 + col
-                            val (imageRes, label) = imgChoices.getOrNull(index) ?: continue
+                when (quizType) {
+                    QuizType.IMAGE ->
+                        ImageQuizContent(
+                            imgChoices = imgChoices,
+                            answer = answer,
+                            selectedIndex = selectedIndex,
+                            isCorrect = isCorrect,
+                            onChoiceClick = { index ->
+                                selectedIndex = index
+                                isCorrect =
+                                    if (index == (answer[0] - 'A')) QuizResultState.CORRECT else QuizResultState.WRONG
+                                onChoiceClick(index)
+                            }
+                        )
 
-                            Card(
-                                modifier = Modifier
-                                    .size(ImageQuizCardSize.first, ImageQuizCardSize.second)
-                                    .clickable { onChoiceClick(index) }
-                                    .shadow(
-                                        elevation = CardShadowElevation,
-                                        shape = RoundedCornerShape(ImageQuizCardRound),
-                                        ambientColor = Gray3,
-                                        spotColor = Gray3
-                                    ),
-                                shape = RoundedCornerShape(ImageQuizCardRound),
-                                colors = CardDefaults.cardColors(containerColor = Color.White)
-                            ) {
-                                Column(
-                                    modifier = Modifier.fillMaxSize(),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.Center
-                                ) {
-                                    AsyncImage(
-                                        model = imageRes,
-                                        contentDescription = label,
+                    QuizType.TEXT_CHOICE ->
+                        TextChoiceQuizContent(
+                            textChoices = textChoices,
+                            answer = answer,
+                            selectedIndex = selectedIndex,
+                            isCorrect = isCorrect,
+                            onChoiceClick = { index ->
+                                selectedIndex = index
+                                isCorrect =
+                                    if (index == (answer[0] - 'A')) QuizResultState.CORRECT else QuizResultState.WRONG
+                                onChoiceClick(index)
+                            }
+                        )
+
+                    QuizType.TEXT_CHOICE_IMAGE ->
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Spacer(
+                                modifier = Modifier.height(
+                                    QuizResultCardTextChoiceImageSmallSpacer
+                                )
+                            )
+
+                            //Box로 이미지와 정답 카드 겹치기
+                            Box(modifier = Modifier.fillMaxWidth()) {
+                                AsyncImage(
+                                    model = image,
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(TextChoiceQuizImageRound))
+                                        .fillMaxWidth()
+                                        .padding(top = QuizResultCardTextChoiceImageTopPadding),
+                                    contentScale = ContentScale.FillWidth,
+                                )
+
+                                if (isCorrect != QuizResultState.DEFAULT) {
+                                    QuizResultCard(
+                                        isCorrect = isCorrect == QuizResultState.CORRECT,
                                         modifier = Modifier
-                                            .size(ImageQuizCardImageSize)
-                                            .clip(RoundedCornerShape(ImageQuizCardImageRound)),
-                                        contentScale = ContentScale.Fit,
-                                    )
-                                    Spacer(modifier = Modifier.height(ImageQuizCardTextSpacer))
-                                    Text(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        text = label,
-                                        color = Black,
-                                        style = QuizAnswerTextStyle,
-                                        textAlign = TextAlign.Center
+                                            .align(Alignment.TopCenter)
                                     )
                                 }
                             }
-                        }
-                    }
 
-                    Spacer(modifier = Modifier.height(ImageQuizCardRowSpacer))
+                            Spacer(modifier = Modifier.height(QuizResultCardTextChoiceImageSpacer))
+
+                            TextChoiceQuizContent(
+                                textChoices = textChoices,
+                                answer = answer,
+                                selectedIndex = selectedIndex,
+                                isCorrect = isCorrect,
+                                onChoiceClick = { index ->
+                                    selectedIndex = index
+                                    isCorrect =
+                                        if (index == (answer[0] - 'A')) QuizResultState.CORRECT else QuizResultState.WRONG
+                                    onChoiceClick(index)
+                                }
+                            )
+                        }
+
+                    QuizType.SHORT_ANSWER ->
+                        ShortAnswerQuizContent(
+                            quizType = quizType,
+                            userInput = userInput,
+                            answer = answer,
+                            onUserInputChange = { userInput = it },
+                            onConfirmAnswer = { isCorrectAnswer ->
+                                isCorrect =
+                                    if (isCorrectAnswer) QuizResultState.CORRECT else QuizResultState.WRONG
+                                onConfirmAnswer(isCorrectAnswer)
+                            }
+                        )
+
+                    QuizType.SHORT_ANSWER_IMAGE ->
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Spacer(
+                                modifier = Modifier.height(
+                                    QuizResultCardTextChoiceImageSmallSpacer
+                                )
+                            )
+
+                            //Box로 이미지와 정답 카드 겹치기
+                            Box(modifier = Modifier.fillMaxWidth()) {
+                                AsyncImage(
+                                    model = image,
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(TextChoiceQuizImageRound))
+                                        .fillMaxWidth()
+                                        .padding(top = QuizResultCardTextChoiceImageTopPadding),
+                                    contentScale = ContentScale.FillWidth,
+                                )
+
+                                if (isCorrect != QuizResultState.DEFAULT) {
+                                    QuizResultCard(
+                                        isCorrect = isCorrect == QuizResultState.CORRECT,
+                                        modifier = Modifier
+                                            .align(Alignment.TopCenter)
+                                    )
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(QuizResultCardTextChoiceImageSpacer))
+
+                            ShortAnswerQuizContent(
+                                quizType = quizType,
+                                userInput = userInput,
+                                answer = answer,
+                                onUserInputChange = { userInput = it },
+                                onConfirmAnswer = { isCorrectAnswer ->
+                                    isCorrect =
+                                        if (isCorrectAnswer) QuizResultState.CORRECT else QuizResultState.WRONG
+                                    onConfirmAnswer(isCorrectAnswer)
+                                }
+                            )
+                        }
                 }
             }
         }
