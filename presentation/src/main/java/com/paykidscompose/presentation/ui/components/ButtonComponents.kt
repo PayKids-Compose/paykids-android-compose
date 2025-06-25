@@ -17,6 +17,7 @@ import com.paykidscompose.presentation.ui.theme.Blue2
 import com.paykidscompose.presentation.ui.theme.DeterminationButtonCorner
 import com.paykidscompose.presentation.ui.theme.DeterminationButtonTextTopAndBottom
 import com.paykidscompose.presentation.ui.theme.DeterminationTextStyle
+import com.paykidscompose.presentation.ui.theme.Gray2
 import com.paykidscompose.presentation.ui.theme.White
 
 @Composable
@@ -26,6 +27,8 @@ fun DecisionButton(
     modifier: Modifier = Modifier,
     backgroundColor: Color = Blue2,
     contentColor: Color = White,
+    disabledBackgroundColor: Color = Gray2,
+    disabledContentColor: Color = White,
     enabled: Boolean = true,
     textStyle: TextStyle = DeterminationTextStyle,
     contentPadding: Dp = DeterminationButtonTextTopAndBottom,
@@ -37,7 +40,10 @@ fun DecisionButton(
             .clip(RoundedCornerShape(DeterminationButtonCorner)),
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
-            containerColor = backgroundColor, contentColor = contentColor
+            containerColor = backgroundColor,
+            contentColor = contentColor,
+            disabledContainerColor = disabledBackgroundColor,
+            disabledContentColor = disabledContentColor
         ),
         contentPadding = PaddingValues(vertical = contentPadding)
     ) {
