@@ -80,6 +80,8 @@ val TextChoiceQuizCardTextVerticalPadding = 20.dp
 val TextChoiceQuizImageRound = 5.dp
 val QuizResultCardTextChoiceImageSmallSpacer = 8.dp
 val QuizResultCardTextChoiceImageTopPadding = 18.dp
+val ShortAnswerQuizContentSpacer = 220.dp
+val ShortAnswerImageQuizContentSpacer = 122.dp
 
 // 마이페이지 기본 화면
 val MyPageDefaultScreenStartEndPadding = 20.dp
@@ -134,6 +136,9 @@ val CustomCardBackgroundShape= 10.dp
 val OutlineBorder = 1.dp
 val OutlineShape = 10.dp
 val OutlineHeight = 40.dp
+val ShortAnswerQuizOutlineHeight = 86.dp
+val ShortAnswerQuizOutlineStartPadding = 91.dp
+val ShortAnswerQuizOutlineShape = 20.dp
 
 // 팝업 다이얼로그
 val PopupDialogCardShape = 20.dp
