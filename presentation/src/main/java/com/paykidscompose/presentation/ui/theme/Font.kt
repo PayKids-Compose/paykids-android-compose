@@ -361,3 +361,10 @@ val CategoryDetailItemAddTextStyle = TextStyle(
     fontSize = 16.sp,
     lineHeight = 18.sp
 )
+// 바텀바 폰트
+val BottomBarTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 9.sp,
+    lineHeight = 13.sp
+)
