@@ -58,7 +58,6 @@ fun ShortAnswerQuizContent(
         shape = RoundedCornerShape(ShortAnswerQuizOutlineShape),
         enabled = !isSubmitted,
         shadowElevation = CardShadowElevation,
-        shadowShape = RoundedCornerShape(OutlineDefaultShadowRound),
         shadowColor = Gray2
     )
 

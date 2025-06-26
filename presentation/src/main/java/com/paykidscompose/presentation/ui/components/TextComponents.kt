@@ -133,7 +133,6 @@ fun OutlineInputField(
     singleLine: Boolean = true,
     enabled: Boolean = true,
     shadowElevation: Dp = OutlineDefaultShadowElevation,
-    shadowShape: Shape = RoundedCornerShape(OutlineDefaultShadowRound),
     shadowColor: Color = Color.Unspecified
 ) {
     BasicTextField(
@@ -141,7 +140,7 @@ fun OutlineInputField(
         onValueChange = onTextChange,
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(elevation = shadowElevation, shape = shadowShape, ambientColor = shadowColor, spotColor = shadowColor)
+            .shadow(elevation = shadowElevation, shape = shape, ambientColor = shadowColor, spotColor = shadowColor)
             .clip(shape)
             .background(color = backgroundColor)
             .border(OutlineBorder, outlineColor, shape)
