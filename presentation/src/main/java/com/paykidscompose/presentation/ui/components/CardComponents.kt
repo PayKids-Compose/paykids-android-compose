@@ -1,5 +1,6 @@
 package com.paykidscompose.presentation.ui.components
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,7 +9,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -20,11 +23,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import com.paykidscompose.presentation.R
@@ -41,12 +50,23 @@ import com.paykidscompose.presentation.ui.theme.MyPageCardShadowColor
 import com.paykidscompose.presentation.ui.theme.MyPageCardTitleTextStyle
 import com.paykidscompose.presentation.ui.theme.MyPageDefaultScreenSpacer8
 import com.paykidscompose.presentation.ui.theme.PayKidsComposeTheme
+import com.paykidscompose.presentation.ui.theme.Purple
+import com.paykidscompose.presentation.ui.theme.Purple2
+import com.paykidscompose.presentation.ui.theme.QuizClearDashedBorderRadius
+import com.paykidscompose.presentation.ui.theme.QuizClearDashedBorderWidth
+import com.paykidscompose.presentation.ui.theme.QuizClearDashedCardElevation
+import com.paykidscompose.presentation.ui.theme.QuizClearDashedCardHeight
+import com.paykidscompose.presentation.ui.theme.QuizClearDashedCardHorizontalPadding
+import com.paykidscompose.presentation.ui.theme.QuizClearDashedCardRound
+import com.paykidscompose.presentation.ui.theme.QuizClearDashedCardVerticalPadding
+import com.paykidscompose.presentation.ui.theme.QuizClearTitleTextStyle
 import com.paykidscompose.presentation.ui.theme.QuizResultCardHorizontalPadding
 import com.paykidscompose.presentation.ui.theme.QuizResultCardRound
 import com.paykidscompose.presentation.ui.theme.QuizResultCardTextStyle
 import com.paykidscompose.presentation.ui.theme.QuizResultCardVerticalPadding
 import com.paykidscompose.presentation.ui.theme.Red
 import com.paykidscompose.presentation.ui.theme.White
+import com.paykidscompose.presentation.ui.theme.White3
 
 @Composable
 fun CustomCard(
@@ -139,20 +159,90 @@ fun QuizResultCard(
     ) {
         Box(
             modifier = Modifier
-                .padding(horizontal = QuizResultCardHorizontalPadding, vertical = QuizResultCardVerticalPadding)
+                .padding(
+                    horizontal = QuizResultCardHorizontalPadding,
+                    vertical = QuizResultCardVerticalPadding
+                )
                 .fillMaxWidth()
         ) {
             Image(
-                painter = if (isCorrect) painterResource(R.drawable.ic_check_white) else painterResource(R.drawable.ic_cancel_white),
+                painter = if (isCorrect) painterResource(R.drawable.ic_check_white) else painterResource(
+                    R.drawable.ic_cancel_white
+                ),
                 contentDescription = null,
                 modifier = Modifier.align(Alignment.CenterStart)
             )
             Text(
-                text = if (isCorrect) stringResource(R.string.text_correct_answer) else stringResource(R.string.text_wrong_answer),
+                text = if (isCorrect) stringResource(R.string.text_correct_answer) else stringResource(
+                    R.string.text_wrong_answer
+                ),
                 style = QuizResultCardTextStyle,
                 modifier = Modifier.align(Alignment.Center)
             )
         }
+    }
+}
+
+@Composable
+fun DashedCard(
+    text: String,
+    modifier: Modifier = Modifier,
+    cardHeight: Dp = QuizClearDashedCardHeight,
+    backgroundColor: Color = White3,
+    shadowElevation: Dp = QuizClearDashedCardElevation,
+    shadowColor: Color = Purple,
+    shape: Dp = QuizClearDashedCardRound,
+    dashedBorderHorizontalPadding: Dp = QuizClearDashedCardHorizontalPadding,
+    dashedBorderVerticalPadding: Dp = QuizClearDashedCardVerticalPadding,
+    dashedBorderColor: Color = Purple2,
+    dashedBorderWidth: Dp = QuizClearDashedBorderWidth,
+    dashedBorderRadius: Dp = QuizClearDashedBorderRadius,
+    textStyle: TextStyle = QuizClearTitleTextStyle,
+    textColor: Color = Black
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(cardHeight)
+            .shadow(
+                elevation = shadowElevation,
+                shape = RoundedCornerShape(shape),
+                ambientColor = shadowColor,
+                spotColor = shadowColor
+            )
+            .clip(RoundedCornerShape(shape))
+            .background(backgroundColor),
+        contentAlignment = Alignment.Center
+    ) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val left = dashedBorderHorizontalPadding.toPx()
+            val top = dashedBorderVerticalPadding.toPx()
+            val right = size.width - dashedBorderHorizontalPadding.toPx()
+            val bottom = size.height - dashedBorderVerticalPadding.toPx()
+            val width = right - left
+            val height = bottom - top
+
+            drawRoundRect(
+                color = dashedBorderColor,
+                topLeft = Offset(left, top),
+                size = androidx.compose.ui.geometry.Size(width, height),
+                style = Stroke(
+                    width = dashedBorderWidth.toPx(),
+                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 6f))
+                ),
+                cornerRadius = CornerRadius(
+                    dashedBorderRadius.toPx(),
+                    dashedBorderRadius.toPx()
+                )
+            )
+        }
+
+        Text(
+            text = text,
+            style = textStyle,
+            color = textColor,
+            textAlign = TextAlign.Center,
+        )
     }
 }
 
@@ -169,5 +259,15 @@ fun CardPreview() {
 fun QuizResultCardPreview() {
     PayKidsComposeTheme {
         QuizResultCard(isCorrect = false)
+    }
+}
+
+@Preview
+@Composable
+fun DashedCardPreview() {
+    PayKidsComposeTheme {
+        DashedCard(
+            text = stringResource(R.string.text_box_all_clear)
+        )
     }
 }

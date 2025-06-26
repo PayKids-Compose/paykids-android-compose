@@ -18,7 +18,9 @@ import com.paykidscompose.presentation.model.QuizType
 import com.paykidscompose.presentation.ui.components.DecisionButton
 import com.paykidscompose.presentation.ui.components.OutlineInputField
 import com.paykidscompose.presentation.ui.theme.Blue2
+import com.paykidscompose.presentation.ui.theme.CardShadowElevation
 import com.paykidscompose.presentation.ui.theme.Gray2
+import com.paykidscompose.presentation.ui.theme.OutlineDefaultShadowRound
 import com.paykidscompose.presentation.ui.theme.PayKidsComposeTheme
 import com.paykidscompose.presentation.ui.theme.QuizShortAnswerTextStyle
 import com.paykidscompose.presentation.ui.theme.ShortAnswerImageQuizContentSpacer
@@ -46,14 +48,17 @@ fun ShortAnswerQuizContent(
             onUserInputChange(it)
         },
         startPadding = ShortAnswerQuizOutlineStartPadding,
-        modifier = Modifier.height(ShortAnswerQuizOutlineHeight),
+        modifier = Modifier
+            .height(ShortAnswerQuizOutlineHeight),
         backgroundColor = White,
         outlineColor = Gray2,
         hint = stringResource(R.string.hint_input_answer),
         hintColor = Gray2,
         style = QuizShortAnswerTextStyle,
         shape = RoundedCornerShape(ShortAnswerQuizOutlineShape),
-        enabled = !isSubmitted
+        enabled = !isSubmitted,
+        shadowElevation = CardShadowElevation,
+        shadowColor = Gray2
     )
 
     Spacer(
