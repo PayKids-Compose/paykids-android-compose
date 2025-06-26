@@ -31,10 +31,13 @@ import com.paykidscompose.presentation.ui.theme.White
 
 
 @Composable
-fun QuizClearScreen() {
+fun QuizClearScreen(
+    clearType: QuizClearType,
+    onExitClick: () -> Unit = {}
+) {
     val isClear = remember { mutableStateOf(QuizClearType.ALL_CLEAR) }
 
-    val config = isClear.value.toConfig()
+    val config = clearType.toConfig()
 
     Box(modifier = Modifier.fillMaxSize()) {
         AsyncImage(
@@ -58,7 +61,9 @@ fun QuizClearScreen() {
 
             DecisionButton(
                 text = stringResource(R.string.dialog_exit2),
-                onClick = {},
+                onClick = {
+                    onExitClick()
+                },
                 backgroundColor = White,
                 textStyle = QuizClearButtonTextStyle.copy(color = Black)
             )
@@ -81,6 +86,6 @@ fun QuizClearScreen() {
 @Composable
 fun QuizClearScreenPreview() {
     PayKidsComposeTheme {
-        QuizClearScreen()
+        QuizClearScreen(QuizClearType.ALL_CLEAR)
     }
 }

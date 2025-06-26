@@ -13,7 +13,7 @@ data class BottomBarItem(
         fun fetchBottomAppBarItems() = listOf(
             BottomBarItem(
                 tabName = "퀘스트",
-                icon = R.drawable.ic_quest,
+                icon = R.drawable.ic_quest_tab,
                 destination = TabNavigationRoute.QuestAchievementsRoute
             ),
             BottomBarItem(

@@ -43,11 +43,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.AllowanceChartDTO
 import com.paykidscompose.presentation.model.AllowanceType
 import com.paykidscompose.presentation.screens.PayKidsScaffold
 import com.paykidscompose.presentation.ui.components.AllowanceInputDialog
+import com.paykidscompose.presentation.ui.components.AppBottomBar
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryHeadMonthTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenCardShape
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenHeadIconSize
@@ -82,6 +85,8 @@ import java.time.LocalDate
 
 @Composable
 fun ExpenseAnalysis(
+    navController: NavHostController,
+    onCategoryCard: () -> Unit = {}
 ) {
     var currentMonth by remember {
         mutableStateOf(
@@ -108,6 +113,8 @@ fun ExpenseAnalysis(
 
 
     ExpenseAnalysisScreen(
+        navController,
+        onCategoryCard,
         currentMonth,
         AllowanceType.EXPENSE,
         showInputDialog,
@@ -119,6 +126,8 @@ fun ExpenseAnalysis(
 
 @Composable
 fun ExpenseAnalysisScreen(
+    navController: NavHostController,
+    onCategoryCard: () -> Unit,
     month: LocalDate,
     selected: AllowanceType,
     showInputDialog: Boolean,
@@ -137,7 +146,9 @@ fun ExpenseAnalysisScreen(
 
     PayKidsScaffold(
         bottomBar = {
-
+            AppBottomBar(
+                navController
+            )
         }
     ) { innerPadding ->
         Column(
@@ -302,7 +313,7 @@ fun ExpenseAnalysisScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(data) {
-                    AnalysisItem("편의점", -1800, "50%", showInputDialog, onShowDialog)
+                    AnalysisItem("편의점", -1800, "50%", onCategoryCard )
                     Spacer(Modifier.height(8.dp))
                 }
 
@@ -341,8 +352,7 @@ fun AnalysisItem(
     category: String,
     amount: Int,
     percent: String,
-    showInputDialog: Boolean,
-    onShowDialog: (Boolean) -> Unit
+    onCategoryCard: () -> Unit
 ) {
 
     Box(
@@ -351,6 +361,7 @@ fun AnalysisItem(
             .clickable(
                 onClick = {
                     // CategoryDetailScreen으로 이동
+                    onCategoryCard()
                 }
             )
             .shadow(
@@ -481,5 +492,5 @@ private fun calculateCategoryStats(data: List<AllowanceChartDTO>): List<Category
 @Preview
 @Composable
 fun AnalysisScreenPreview() {
-    ExpenseAnalysis()
+    ExpenseAnalysis(rememberNavController())
 }

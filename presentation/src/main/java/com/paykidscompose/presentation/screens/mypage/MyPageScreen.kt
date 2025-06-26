@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,10 +23,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.DummyUser
 import com.paykidscompose.presentation.model.MyPageUIModel
 import com.paykidscompose.presentation.screens.PayKidsScaffold
+import com.paykidscompose.presentation.ui.components.AppBottomBar
 import com.paykidscompose.presentation.ui.components.AppTopBar
 import com.paykidscompose.presentation.ui.components.CardItem
 import com.paykidscompose.presentation.ui.components.CustomCard
@@ -49,6 +51,7 @@ import com.paykidscompose.presentation.ui.theme.Red
 
 @Composable
 fun MyPageScreen(
+    navController: NavHostController,
     onClickMyInfo: () -> Unit = {},
     onClickTerms: () -> Unit = {},
     onClickAppVersion: () -> Unit = {}
@@ -63,7 +66,7 @@ fun MyPageScreen(
         showPopupDialog = !showPopupDialog
     }
 
-    if(showPopupDialog) {
+    if (showPopupDialog) {
         PopupDialog(
             title = stringResource(R.string.dialog_signout_title),
             description = stringResource(R.string.dialog_signout_message),
@@ -80,7 +83,9 @@ fun MyPageScreen(
             AppTopBar(stringResource(R.string.text_my_page))
         },
         bottomBar = {
-
+            AppBottomBar(
+                navController
+            )
         }
     ) { innerPadding ->
         Column(
@@ -91,8 +96,7 @@ fun MyPageScreen(
                 .padding(
                     start = MyPageDefaultScreenStartEndPadding,
                     end = MyPageDefaultScreenStartEndPadding,
-                    top = MyPageDefaultScreenTopPadding,
-                    bottom = MyPageDefaultScreenBottomPadding
+                    top = MyPageDefaultScreenTopPadding
                 ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -125,15 +129,26 @@ fun MyPageScreen(
                     iconEnable = true,
                     onItemClick = onClickMyInfo
                 )
-                Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(color = Gray6))
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(color = Gray6))
                 CardItem(
                     stringResource(R.string.text_terms_policy_title),
                     iconEnable = true,
                     onItemClick = onClickTerms
                 )
-                Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(color = Gray6)) // Divider는 버그 있는 거 같아서 Box로 대체함.
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(color = Gray6)
+                ) // Divider는 버그 있는 거 같아서 Box로 대체함.
                 CardItem(stringResource(R.string.text_app_version), onClickAppVersion)
-                Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(color = Gray6))
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(color = Gray6))
                 CardItem(
                     stringResource(R.string.text_logout),
                     textColor = Red,
@@ -147,5 +162,5 @@ fun MyPageScreen(
 @Preview
 @Composable
 fun MyPageScreenPreview() {
-    MyPageScreen()
+    MyPageScreen(rememberNavController())
 }

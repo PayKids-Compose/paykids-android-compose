@@ -29,9 +29,12 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.screens.PayKidsScaffold
 import com.paykidscompose.presentation.ui.components.AllowanceInputDialog
+import com.paykidscompose.presentation.ui.components.AppBottomBar
 import com.paykidscompose.presentation.ui.theme.Black
 import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.CategoryDetailItemAddTextStyle
@@ -64,7 +67,7 @@ data class DetailTestModel(
 
 @Composable
 fun CategoryDetail(
-
+    navController: NavHostController
 ) {
     val category = "편의점" // uimodel로 다 바꿀겁니다. 지금은 정적인 화면 구현 중입니다.
     val amount = 150000
@@ -82,6 +85,7 @@ fun CategoryDetail(
     }
 
     CategoryDetailScreen(
+        navController = navController,
         category = category,
         amount = amount,
         details = details,
@@ -92,6 +96,7 @@ fun CategoryDetail(
 
 @Composable
 fun CategoryDetailScreen(
+    navController: NavHostController,
     category: String,
     amount: Int,
     showDialog: Boolean,
@@ -112,7 +117,9 @@ fun CategoryDetailScreen(
 
     PayKidsScaffold(
         bottomBar = {
-
+            AppBottomBar(
+                navController
+            )
         }
     ) { innerPadding ->
         Column(
@@ -248,5 +255,5 @@ fun DetailItem(
 @Preview
 @Composable
 fun CategoryDetailScreenPreview() {
-    CategoryDetail()
+    CategoryDetail(rememberNavController())
 }

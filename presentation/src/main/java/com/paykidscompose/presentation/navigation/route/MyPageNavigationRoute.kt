@@ -12,3 +12,8 @@ sealed interface MyPageNavigationRoute {
     data object TermsPolicyRoute: MyPageNavigationRoute
 
 }
+
+fun MyPageNavigationRoute.toRoute(): String = when(this) {
+    MyPageNavigationRoute.MyInfoRoute -> "my_info"
+    MyPageNavigationRoute.TermsPolicyRoute -> "terms_policy"
+}

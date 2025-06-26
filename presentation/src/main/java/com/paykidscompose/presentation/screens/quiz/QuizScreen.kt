@@ -24,8 +24,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.paykidscompose.presentation.R
+import com.paykidscompose.presentation.model.QuizClearType
 import com.paykidscompose.presentation.model.QuizType
 import com.paykidscompose.presentation.ui.components.AppTopBar
 import com.paykidscompose.presentation.ui.components.PopupDialog
@@ -48,6 +50,9 @@ import com.paykidscompose.presentation.ui.theme.TextChoiceQuizImageRound
 @Preview(showBackground = true)
 @Composable
 fun QuizScreen(
+    stageNumber: Int = 1,
+    onBackClick: () -> Unit = {},
+    onConfirmClick: (QuizClearType) -> Unit = {},
     quizType: QuizType = QuizType.SHORT_ANSWER,
     quizNumber: Int = 2,
     totalQuizCount: Int = 7,
@@ -82,8 +87,13 @@ fun QuizScreen(
         PopupDialog(
             title = stringResource(R.string.dialog_check_exit),
             popupType = PopupType.QUIZ_EXIT,
-            onCancelClick = { showDialog = false },
-            onConfirmClick = { showDialog = false },
+            onCancelClick = {
+                showDialog = false
+            },
+            onConfirmClick = {
+                showDialog = false
+                onBackClick()
+            },
             description = ""
         )
     }
@@ -233,6 +243,7 @@ fun QuizScreen(
                                 isCorrect =
                                     if (isCorrectAnswer) QuizResultState.CORRECT else QuizResultState.WRONG
                                 onConfirmAnswer(isCorrectAnswer)
+                                onConfirmClick(QuizClearType.ALL_CLEAR)
                             }
                         )
 
