@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,16 +27,17 @@ import androidx.compose.ui.unit.dp
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.DummyUser
 import com.paykidscompose.presentation.model.MyPageUIModel
+import com.paykidscompose.presentation.screens.PayKidsScaffold
 import com.paykidscompose.presentation.ui.components.AppTopBar
 import com.paykidscompose.presentation.ui.components.CardItem
 import com.paykidscompose.presentation.ui.components.CustomCard
 import com.paykidscompose.presentation.ui.components.PopupDialog
 import com.paykidscompose.presentation.ui.components.TitleText
 import com.paykidscompose.presentation.ui.components.util.PopupType
+import com.paykidscompose.presentation.ui.theme.Black2
 import com.paykidscompose.presentation.ui.theme.CustomCardSizeHeight
 import com.paykidscompose.presentation.ui.theme.Gray5
 import com.paykidscompose.presentation.ui.theme.Gray6
-import com.paykidscompose.presentation.ui.theme.MyPageAppBarTitleTextColor
 import com.paykidscompose.presentation.ui.theme.MyPageDefaultScreenBottomPadding
 import com.paykidscompose.presentation.ui.theme.MyPageDefaultScreenImageSize
 import com.paykidscompose.presentation.ui.theme.MyPageDefaultScreenSpacer20
@@ -75,15 +75,18 @@ fun MyPageScreen(
         )
     }
 
-    Scaffold(
+    PayKidsScaffold(
         topBar = {
             AppTopBar(stringResource(R.string.text_my_page))
         },
+        bottomBar = {
+
+        }
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .padding(innerPadding)
                 .fillMaxSize()
+                .padding(innerPadding)
                 .background(color = Gray5)
                 .padding(
                     start = MyPageDefaultScreenStartEndPadding,
@@ -105,7 +108,7 @@ fun MyPageScreen(
 
             TitleText(
                 uiModel.nickname,
-                color = MyPageAppBarTitleTextColor,
+                color = Black2,
                 style = MyPageNicknameTextStyle
             )
 

@@ -11,6 +11,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.paykidscompose.app.ui.theme.PayKidsComposeTheme
 import com.paykidscompose.presentation.screens.allowance.AllowanceDiaryScreen
+import com.paykidscompose.presentation.screens.allowance.analysis.ExpenseAnalysis
+import com.paykidscompose.presentation.screens.allowance.detail.CategoryDetail
 import com.paykidscompose.presentation.screens.login.LoginScreen
 import com.paykidscompose.presentation.screens.login.nickname.NicknameScreen
 import com.paykidscompose.presentation.screens.mypage.MyPageScreen
@@ -27,7 +29,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PayKidsComposeTheme {
-                Surface {
+
                     AllowanceDiaryScreen()
 //                    var currentScreen by remember { mutableStateOf(Screen.SPLASH)}
 //
@@ -38,7 +40,7 @@ class MainActivity : ComponentActivity() {
 //                        Screen.MYPAGE -> MyPageScreen(onClickMyInfo = { currentScreen = Screen.MYINFO})
 //                        Screen.MYINFO -> MyInfoScreen()
 //                    }
-                }
+
             }
         }
     }

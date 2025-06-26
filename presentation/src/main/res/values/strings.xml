@@ -45,7 +45,7 @@ z   <string name="text_quiz_number">%1$d/%2$d</string>">
     <!-- 마이 페이지 -->
     <string name="content_description_profile">프로필 이미지</string>
     <string name="hint_change_nickname">변경할 닉네임</string>
-    <string name="text_my_page">마이 페이지</string>
+    <string name="text_my_page">마이페이지</string>
     <string name="text_my_info">내 정보</string>
     <string name="text_modify_my_info">수정하기</string>
     <string name="text_policy">개인정보처리방침</string>

@@ -16,9 +16,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import com.paykidscompose.presentation.R
+import com.paykidscompose.presentation.ui.theme.Black2
 import com.paykidscompose.presentation.ui.theme.MyPageAppBarShadowColor
 import com.paykidscompose.presentation.ui.theme.MyPageAppBarTextStyle
-import com.paykidscompose.presentation.ui.theme.MyPageAppBarTitleTextColor
 import com.paykidscompose.presentation.ui.theme.TopAppBarShadowElevation
 import com.paykidscompose.presentation.ui.theme.White
 
@@ -27,8 +27,9 @@ import com.paykidscompose.presentation.ui.theme.White
 fun AppTopBar(
     title: String,
     titleStyle: TextStyle = MyPageAppBarTextStyle,
+    titleColor: Color = Black2,
     showBackButton: Boolean = false,
-    onBackClick: (() -> Unit)? = null,
+    onBackClick: () -> Unit = {},
     painter: Painter = painterResource(R.drawable.ic_left_blue),
     iconTint: Color = Color.Unspecified,
     shadowColor: Color = MyPageAppBarShadowColor,
@@ -36,16 +37,24 @@ fun AppTopBar(
 ) {
     CenterAlignedTopAppBar(
         modifier = Modifier
-            .shadow(elevation = shadowElevation, ambientColor = shadowColor, spotColor = shadowColor),
+            .shadow(
+                elevation = shadowElevation,
+                ambientColor = shadowColor,
+                spotColor = shadowColor
+            ),
         title = {
-            TitleText(title, style = titleStyle, textAlign = TextAlign.Center)
+            TitleText(
+                title,
+                color = titleColor,
+                style = titleStyle,
+                textAlign = TextAlign.Center
+            )
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = White,
-            titleContentColor = MyPageAppBarTitleTextColor
+            containerColor = White
         ),
         navigationIcon = {
-            if(showBackButton && onBackClick != null) {
+            if (showBackButton) {
                 IconButton(onClick = onBackClick) {
                     Icon(
                         painter = painter,
@@ -62,5 +71,4 @@ fun AppTopBar(
 @Composable
 fun AppBar(
 ) {
-    AppTopBar("마이페이지",MyPageAppBarTextStyle , true, {})
 }
