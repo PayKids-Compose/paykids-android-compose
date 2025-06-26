@@ -43,6 +43,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.DummyDataManager
 import com.paykidscompose.presentation.model.AllowanceDiaryUIModel
@@ -50,6 +52,7 @@ import com.paykidscompose.presentation.model.AllowanceType
 import com.paykidscompose.presentation.model.toUIModel
 import com.paykidscompose.presentation.screens.PayKidsScaffold
 import com.paykidscompose.presentation.ui.components.AllowanceInputDialog
+import com.paykidscompose.presentation.ui.components.AppBottomBar
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryCalendarDayTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryCalendarIncomeConsumeTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryCalendarWeekTextStyle
@@ -103,6 +106,8 @@ import kotlin.math.ceil
 
 @Composable
 fun AllowanceDiaryScreen(
+    navController: NavHostController,
+    onCategoryExpense: () -> Unit = {},
 ) {
 
     /*
@@ -200,7 +205,9 @@ fun AllowanceDiaryScreen(
 
     PayKidsScaffold(
         bottomBar = {
-
+            AppBottomBar(
+                navController
+            )
         }
     ) { innerPadding ->
         LazyColumn(
@@ -247,6 +254,11 @@ fun AllowanceDiaryScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(AllowanceDiaryScreenExpenseCardHeight)
+                            .clickable(
+                                onClick = {
+                                    onCategoryExpense()
+                                }
+                            )
                             .shadow(
                                 elevation = CustomCardShadow,
                                 shape = RoundedCornerShape(AllowanceDiaryScreenCardShape),
@@ -595,5 +607,5 @@ fun TransactionItem(
 @Preview
 @Composable
 fun DiaryScreenPreview() {
-    AllowanceDiaryScreen()
+    AllowanceDiaryScreen(rememberNavController())
 }

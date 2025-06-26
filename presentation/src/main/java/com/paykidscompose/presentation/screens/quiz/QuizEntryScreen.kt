@@ -44,11 +44,12 @@ import com.paykidscompose.presentation.ui.theme.StageTooltipTextStyle
 import com.paykidscompose.presentation.ui.theme.StartAndEndPadding
 import com.paykidscompose.presentation.ui.theme.White
 
-@Preview(showBackground = true)
 @Composable
-fun QuizEntryScreen() {
+fun QuizEntryScreen(
+    stageNumber: Int,
+    onQuiz: (Int) -> Unit = {}
+) {
     var showDialog by remember { mutableStateOf(false) }
-    var stageNumber by remember { mutableStateOf(3) } // 임시 하드코딩
     var stageTitle by remember { mutableStateOf(getStageTitle(stageNumber)) }
 
     Box(
@@ -110,7 +111,7 @@ fun QuizEntryScreen() {
             DecisionButton( // 퀴즈 풀기
                 text = stringResource(R.string.text_btn_quiz),
                 onClick = {
-
+                    onQuiz(stageNumber)
                 },
                 backgroundColor = Blue1,
                 contentColor = White,
@@ -131,4 +132,10 @@ fun QuizEntryScreen() {
         }
 
     }
+}
+
+@Preview
+@Composable
+fun QuizEntryScreenPreview(){
+    QuizEntryScreen(1)
 }
