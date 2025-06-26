@@ -96,6 +96,36 @@ val QuizClearSpacer = 187.dp
 val QuizClearSmallSpacer = 130.dp
 val QuizClearButtonSpacer = 8.dp
 
+// 학습하기 화면
+val StudyChatColumnContentPadding = 20.dp
+val StudyChatBubbleNicknameSpacer = 4.dp
+val StudyChatBubbleSpacedBy = 24.dp
+val StudyStageNumberBoxRound = 100.dp
+val StudyStageNumberBoxBorderWidth = 1.dp
+val StudyStageNumberBoxHorizontalPadding = 9.dp
+val StudyStageNumberBoxVerticalPadding = 6.dp
+val StudyChatGptBubbleRoundTopStart = 10.dp
+val StudyChatGptBubbleRoundTopEnd = 10.dp
+val StudyChatGptBubbleRoundBottomEnd = 10.dp
+val StudyChatGptBubbleRoundBottomStart = 0.dp
+val StudyChatUserBubbleRoundTopStart = 10.dp
+val StudyChatUserBubbleRoundTopEnd = 10.dp
+val StudyChatUserBubbleRoundBottomEnd = 0.dp
+val StudyChatUserBubbleRoundBottomStart = 10.dp
+val StudyChatUserBubbleBorderWidth = 1.dp
+val StudyChatBubbleHorizontalPadding = 10.dp
+val StudyChatBubbleVerticalPadding = 8.dp
+val StudyChatInputRoundTopStart = 10.dp
+val StudyChatInputRoundTopEnd = 10.dp
+val StudyChatInputRoundBottomEnd = 0.dp
+val StudyChatInputRoundBottomStart = 0.dp
+val StudyChatInputBoxHorizontalPadding = 20.dp
+val StudyChatInputBoxVerticalPadding = 15.dp
+val StudyChatInputFieldHeight = 40.dp
+val StudyChatInputFieldStartPadding = 14.dp
+val StudyChatInputFieldRound = 20.dp
+val StudyChatSendIconSize = 24.dp
+
 // 마이페이지 기본 화면
 val MyPageDefaultScreenStartEndPadding = 20.dp
 val MyPageDefaultScreenTopPadding = 91.dp

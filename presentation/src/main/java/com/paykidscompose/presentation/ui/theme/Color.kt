@@ -49,3 +49,6 @@ val Purple = Color(0xFFB793FC)
 val Purple2 = Color(0xFFC6A8FC)
 val Gray10 = Color(0xFF5C6674)
 val White3 = Color(0xB3FFFFFF)
+
+// 학습하기 화면 색상
+val White4 = Color(0x80FFFFFF)
