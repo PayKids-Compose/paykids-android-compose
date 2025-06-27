@@ -47,7 +47,8 @@ import com.paykidscompose.presentation.ui.theme.White
 @Composable
 fun QuizEntryScreen(
     stageNumber: Int,
-    onQuiz: (Int) -> Unit = {}
+    onQuiz: (Int) -> Unit = {},
+    onStudyClick: () -> Unit = {}
 ) {
     var showDialog by remember { mutableStateOf(false) }
     var stageTitle by remember { mutableStateOf(getStageTitle(stageNumber)) }
@@ -100,7 +101,7 @@ fun QuizEntryScreen(
             DecisionButton( // 학습하기
                 text = stringResource(R.string.text_btn_study),
                 onClick = {
-
+                    onStudyClick()
                 },
                 backgroundColor = White,
                 contentColor = Blue1,

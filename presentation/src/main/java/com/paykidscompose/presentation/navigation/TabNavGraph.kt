@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.paykidscompose.presentation.model.QuizClearType
+import com.paykidscompose.presentation.model.type.QuizClearType
 import com.paykidscompose.presentation.navigation.route.AllowanceDiaryNavigationRoute
 import com.paykidscompose.presentation.navigation.route.MyPageNavigationRoute
 import com.paykidscompose.presentation.navigation.route.QuizNavigationRoute
@@ -22,6 +22,7 @@ import com.paykidscompose.presentation.screens.mypage.terms.TermsPolicyScreen
 import com.paykidscompose.presentation.screens.quiz.QuizClearScreen
 import com.paykidscompose.presentation.screens.quiz.QuizEntryScreen
 import com.paykidscompose.presentation.screens.quiz.QuizScreen
+import com.paykidscompose.presentation.screens.study.Study
 
 @Composable
 fun TabNavGraph(
@@ -55,6 +56,9 @@ fun TabNavGraph(
                 stageNumber = stageNumber,
                 onQuiz = {
                     navController.navigate(QuizNavigationRoute.QuizRoute(stageNumber).toRoute())
+                },
+                onStudyClick = {
+                    navController.navigate(QuizNavigationRoute.StudyRoute.toRoute())
                 }
             )
         }
@@ -101,6 +105,15 @@ fun TabNavGraph(
             )
         }
 
+        composable(
+            QuizNavigationRoute.StudyRoute.toRoute()
+        ) {
+            Study(
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
         composable(
             TabNavigationRoute.MyPageRoute.toRoute()
         ) {
