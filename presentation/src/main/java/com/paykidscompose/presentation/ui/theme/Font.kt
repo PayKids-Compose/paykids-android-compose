@@ -136,6 +136,42 @@ val QuizClearButtonTextStyle = TextStyle(
     lineHeight = 23.sp
 )
 
+// 학습하기 스크린
+val StudyStageNumberBoxTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 14.sp,
+    lineHeight = 16.sp
+)
+
+val StudyChatBubbleTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 12.sp,
+    lineHeight = 14.sp
+)
+
+val StudyAppBarTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 16.sp,
+    lineHeight = 18.sp
+)
+
+val StudyChatNicknameTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 11.sp,
+    lineHeight = 12.sp
+)
+
+val StudyChatInputTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 14.sp,
+    lineHeight = 26.sp
+)
+
 // 마이페이지 스크린
 val MyPageAppBarTextStyle = TextStyle(
     fontFamily = NanumSquare,
