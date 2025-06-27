@@ -18,7 +18,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.DummyUser
-import com.paykidscompose.presentation.dummy.User
 import com.paykidscompose.presentation.ui.components.InfoText
 import com.paykidscompose.presentation.ui.theme.BottomButtonPadding
 import com.paykidscompose.presentation.ui.theme.InfoTextStyle

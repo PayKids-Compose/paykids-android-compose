@@ -1,6 +1,7 @@
 package com.paykidscompose.presentation.model
 
 import com.paykidscompose.presentation.dummy.AllowanceChartDTO
+import com.paykidscompose.presentation.model.type.AllowanceType
 import com.paykidscompose.presentation.util.formatAmount
 
 data class AllowanceDiaryUIModel(
