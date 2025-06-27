@@ -224,16 +224,13 @@ fun HomeScreen(
                         )
                 ) {
                     Text(
-                        text = selectedStageIndex.intValue.let {
-                            stringResource(R.string.text_stage_number, it + 1)
-                        },
+                        text = stringResource(R.string.text_stage_number, selectedStageIndex.intValue + 1),
                         modifier = Modifier.fillMaxWidth(),
                         style = StageCardNumberTextStyle
                     )
                     Spacer(modifier = Modifier.height(StageDescriptionCardTextSpacer))
                     Text(
-                        text = selectedStageIndex.intValue?.let { getStageTitle(it) }
-                            ?: stringResource(R.string.text_stage_title),
+                        text = getStageTitle(selectedStageIndex.intValue),
                         modifier = Modifier.fillMaxWidth(),
                         style = StageCardTitleTextStyle
                     )
