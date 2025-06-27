@@ -115,6 +115,7 @@ val StudyChatUserBubbleRoundBottomStart = 10.dp
 val StudyChatUserBubbleBorderWidth = 1.dp
 val StudyChatBubbleHorizontalPadding = 10.dp
 val StudyChatBubbleVerticalPadding = 8.dp
+val StudyChatInputShadowElevation = 100.dp
 val StudyChatInputRoundTopStart = 10.dp
 val StudyChatInputRoundTopEnd = 10.dp
 val StudyChatInputRoundBottomEnd = 0.dp

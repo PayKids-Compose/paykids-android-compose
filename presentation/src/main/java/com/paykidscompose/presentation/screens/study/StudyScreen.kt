@@ -30,6 +30,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -41,6 +42,7 @@ import com.paykidscompose.presentation.ui.components.AppTopBar
 import com.paykidscompose.presentation.ui.components.OutlineInputField
 import com.paykidscompose.presentation.ui.theme.Black
 import com.paykidscompose.presentation.ui.theme.Blue1
+import com.paykidscompose.presentation.ui.theme.Gray1
 import com.paykidscompose.presentation.ui.theme.Gray5
 import com.paykidscompose.presentation.ui.theme.Gray6
 import com.paykidscompose.presentation.ui.theme.Gray7
@@ -63,6 +65,7 @@ import com.paykidscompose.presentation.ui.theme.StudyChatInputFieldRound
 import com.paykidscompose.presentation.ui.theme.StudyChatInputFieldStartPadding
 import com.paykidscompose.presentation.ui.theme.StudyChatInputRoundTopEnd
 import com.paykidscompose.presentation.ui.theme.StudyChatInputRoundTopStart
+import com.paykidscompose.presentation.ui.theme.StudyChatInputShadowElevation
 import com.paykidscompose.presentation.ui.theme.StudyChatInputTextStyle
 import com.paykidscompose.presentation.ui.theme.StudyChatNicknameTextStyle
 import com.paykidscompose.presentation.ui.theme.StudyChatSendIconSize
@@ -109,7 +112,7 @@ fun Study(
 fun StudyScreen(modifier: Modifier = Modifier) {
     val messages = remember {
         mutableStateListOf(
-            ChatMessage("돈이란 무엇인가요?", isFromGpt = true),
+            ChatMessage("어린이 여러분 돈이란 무엇일까요?\n돈이 뭐냐면 사고 싶은 걸 살 수 있는 거랍니다", isFromGpt = true),
             ChatMessage("우와 그렇구나\n돈 없이는 사고 싶은 걸 가질 수 없나요?", isFromGpt = false),
             ChatMessage("아니요 불가능한 건 없답니다\n바로바로 아무도 모르게 훔치는 방법인데요", isFromGpt = true),
             ChatMessage("아하~", isFromGpt = false),
@@ -223,7 +226,7 @@ fun UserBubble(userNickname: String, text: String) {
     Column(
         modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.End
     ) {
-        Text(text = userNickname, style = StudyChatNicknameTextStyle)
+        Text(text = userNickname, style = StudyChatNicknameTextStyle.copy(color = Gray1))
         Spacer(modifier = Modifier.height(StudyChatBubbleNicknameSpacer))
         Box(
             modifier = Modifier
@@ -258,9 +261,18 @@ fun ChatInput(
     text: String, onTextChanged: (String) -> Unit, onSendClick: () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(
+                elevation = StudyChatInputShadowElevation,
+                shape = RoundedCornerShape(
+                    StudyChatInputRoundTopStart, StudyChatInputRoundTopEnd
+                )
+            ),
+        shape = RoundedCornerShape(
             StudyChatInputRoundTopStart, StudyChatInputRoundTopEnd
-        ), colors = CardDefaults.cardColors(containerColor = White4)
+        ),
+        colors = CardDefaults.cardColors(containerColor = White4)
     ) {
         Box(
             modifier = Modifier
@@ -283,7 +295,8 @@ fun ChatInput(
                 backgroundColor = White
             )
             IconButton(
-                onClick = onSendClick, modifier = Modifier.align(Alignment.CenterEnd)
+                onClick = onSendClick,
+                modifier = Modifier.align(Alignment.CenterEnd)
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_send),
