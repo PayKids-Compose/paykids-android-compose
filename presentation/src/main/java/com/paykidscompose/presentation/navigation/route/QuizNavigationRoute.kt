@@ -1,6 +1,6 @@
 package com.paykidscompose.presentation.navigation.route
 
-import com.paykidscompose.presentation.model.QuizClearType
+import com.paykidscompose.presentation.model.type.QuizClearType
 import kotlinx.serialization.Serializable
 
 
@@ -15,10 +15,13 @@ sealed interface QuizNavigationRoute {
     @Serializable
     data class QuizClearRoute(var clear: QuizClearType? = null): QuizNavigationRoute
 
+    @Serializable
+    data object StudyRoute: QuizNavigationRoute
 }
 
 fun QuizNavigationRoute.toRoute(): String = when(this) {
     is QuizNavigationRoute.QuizRoute -> "quiz/${stageNumber}"
     is QuizNavigationRoute.QuizEntryRoute -> "quiz_entry/${stageNumber}"
     is QuizNavigationRoute.QuizClearRoute -> "quiz_clear/${clear?.name}"
+    QuizNavigationRoute.StudyRoute -> "study"
 }
