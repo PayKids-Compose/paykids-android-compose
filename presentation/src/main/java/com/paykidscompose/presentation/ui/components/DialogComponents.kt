@@ -53,7 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.model.AllowanceType
+import com.paykidscompose.presentation.model.type.AllowanceType
 import com.paykidscompose.presentation.ui.components.util.PopupType
 import com.paykidscompose.presentation.ui.theme.AllowanceInputDateAndConfirmButtonTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceInputDialogAmountFieldTopBottomPadding

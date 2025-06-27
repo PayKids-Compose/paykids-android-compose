@@ -3,6 +3,7 @@ package com.paykidscompose.presentation.model
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import com.paykidscompose.presentation.R
+import com.paykidscompose.presentation.model.type.QuizClearType
 import com.paykidscompose.presentation.ui.theme.Gray10
 import com.paykidscompose.presentation.ui.theme.Gray8
 import com.paykidscompose.presentation.ui.theme.Purple

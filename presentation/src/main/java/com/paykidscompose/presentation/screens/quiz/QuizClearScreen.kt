@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import coil3.compose.AsyncImage
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.model.QuizClearType
+import com.paykidscompose.presentation.model.type.QuizClearType
 import com.paykidscompose.presentation.model.toConfig
 import com.paykidscompose.presentation.ui.components.DashedCard
 import com.paykidscompose.presentation.ui.components.DecisionButton

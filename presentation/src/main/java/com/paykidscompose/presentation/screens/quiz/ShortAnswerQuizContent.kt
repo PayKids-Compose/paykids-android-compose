@@ -14,13 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.model.QuizType
+import com.paykidscompose.presentation.model.type.QuizType
 import com.paykidscompose.presentation.ui.components.DecisionButton
 import com.paykidscompose.presentation.ui.components.OutlineInputField
 import com.paykidscompose.presentation.ui.theme.Blue2
 import com.paykidscompose.presentation.ui.theme.CardShadowElevation
 import com.paykidscompose.presentation.ui.theme.Gray2
-import com.paykidscompose.presentation.ui.theme.OutlineDefaultShadowRound
 import com.paykidscompose.presentation.ui.theme.PayKidsComposeTheme
 import com.paykidscompose.presentation.ui.theme.QuizShortAnswerTextStyle
 import com.paykidscompose.presentation.ui.theme.ShortAnswerImageQuizContentSpacer
