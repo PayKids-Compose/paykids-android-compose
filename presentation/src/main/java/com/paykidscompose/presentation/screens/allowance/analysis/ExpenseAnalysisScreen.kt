@@ -47,7 +47,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.AllowanceChartDTO
-import com.paykidscompose.presentation.model.AllowanceType
+import com.paykidscompose.presentation.model.type.AllowanceType
 import com.paykidscompose.presentation.screens.PayKidsScaffold
 import com.paykidscompose.presentation.ui.components.AllowanceInputDialog
 import com.paykidscompose.presentation.ui.components.AppBottomBar

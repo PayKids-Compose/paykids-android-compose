@@ -2,7 +2,7 @@ package com.paykidscompose.presentation.dummy
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.paykidscompose.presentation.model.AllowanceType
+import com.paykidscompose.presentation.model.type.AllowanceType
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 

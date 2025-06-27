@@ -44,7 +44,6 @@ import com.paykidscompose.presentation.ui.components.TitleText
 import com.paykidscompose.presentation.ui.components.util.PopupType
 import com.paykidscompose.presentation.ui.theme.Black
 import com.paykidscompose.presentation.ui.theme.Black2
-import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.Blue2
 import com.paykidscompose.presentation.ui.theme.Gray5
 import com.paykidscompose.presentation.ui.theme.MyInfoCardNicknameButtonTextStyle

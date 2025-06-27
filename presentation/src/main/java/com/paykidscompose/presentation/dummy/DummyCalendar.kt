@@ -1,6 +1,6 @@
 package com.paykidscompose.presentation.dummy
 
-import com.paykidscompose.presentation.model.AllowanceType
+import com.paykidscompose.presentation.model.type.AllowanceType
 
 
 data class AllowanceChartCategoryDto( // 편의점 -1,800 50%

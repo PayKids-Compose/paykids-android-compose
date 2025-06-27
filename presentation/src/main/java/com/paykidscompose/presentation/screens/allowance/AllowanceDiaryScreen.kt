@@ -48,7 +48,7 @@ import androidx.navigation.compose.rememberNavController
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.DummyDataManager
 import com.paykidscompose.presentation.model.AllowanceDiaryUIModel
-import com.paykidscompose.presentation.model.AllowanceType
+import com.paykidscompose.presentation.model.type.AllowanceType
 import com.paykidscompose.presentation.model.toUIModel
 import com.paykidscompose.presentation.screens.PayKidsScaffold
 import com.paykidscompose.presentation.ui.components.AllowanceInputDialog

@@ -40,7 +40,6 @@ import com.paykidscompose.presentation.ui.theme.Black2
 import com.paykidscompose.presentation.ui.theme.CustomCardSizeHeight
 import com.paykidscompose.presentation.ui.theme.Gray5
 import com.paykidscompose.presentation.ui.theme.Gray6
-import com.paykidscompose.presentation.ui.theme.MyPageDefaultScreenBottomPadding
 import com.paykidscompose.presentation.ui.theme.MyPageDefaultScreenImageSize
 import com.paykidscompose.presentation.ui.theme.MyPageDefaultScreenSpacer20
 import com.paykidscompose.presentation.ui.theme.MyPageDefaultScreenSpacer50
