@@ -36,7 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.model.ChatMessage
+import com.paykidscompose.presentation.model.ChatMessageUIModel
 import com.paykidscompose.presentation.screens.PayKidsScaffold
 import com.paykidscompose.presentation.ui.components.AppTopBar
 import com.paykidscompose.presentation.ui.components.OutlineInputField
@@ -112,10 +112,10 @@ fun Study(
 fun StudyScreen(modifier: Modifier = Modifier) {
     val messages = remember {
         mutableStateListOf(
-            ChatMessage("어린이 여러분 돈이란 무엇일까요?\n돈이 뭐냐면 사고 싶은 걸 살 수 있는 거랍니다", isFromGpt = true),
-            ChatMessage("우와 그렇구나\n돈 없이는 사고 싶은 걸 가질 수 없나요?", isFromGpt = false),
-            ChatMessage("아니요 불가능한 건 없답니다\n바로바로 아무도 모르게 훔치는 방법인데요", isFromGpt = true),
-            ChatMessage("아하~", isFromGpt = false),
+            ChatMessageUIModel("어린이 여러분 돈이란 무엇일까요?\n돈이 뭐냐면 사고 싶은 걸 살 수 있는 거랍니다", isFromGpt = true),
+            ChatMessageUIModel("우와 그렇구나\n돈 없이는 사고 싶은 걸 가질 수 없나요?", isFromGpt = false),
+            ChatMessageUIModel("아니요 불가능한 건 없답니다\n바로바로 아무도 모르게 훔치는 방법인데요", isFromGpt = true),
+            ChatMessageUIModel("아하~", isFromGpt = false),
         )
     }
     val stageNumber = "스테이지 3"
@@ -157,13 +157,13 @@ fun StudyScreen(modifier: Modifier = Modifier) {
 
         ChatInput(text = userInput, onTextChanged = { userInput = it }, onSendClick = {
             if (userInput.isNotBlank()) {
-                messages.add(ChatMessage(userInput, isFromGpt = false))
+                messages.add(ChatMessageUIModel(userInput, isFromGpt = false))
                 userInput = ""
 
                 // TODO: GPT 응답 받는 로직
                 coroutineScope.launch {
                     delay(500)
-                    messages.add(ChatMessage("GPT 응답 예시", isFromGpt = true))
+                    messages.add(ChatMessageUIModel("GPT 응답 예시", isFromGpt = true))
                     listState.animateScrollToItem(messages.size - 1)
                 }
             }
