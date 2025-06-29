@@ -11,17 +11,17 @@ import com.paykidscompose.presentation.ui.theme.Purple2
 import com.paykidscompose.presentation.ui.theme.QuizClearSmallSpacer
 import com.paykidscompose.presentation.ui.theme.QuizClearSpacer
 
-data class QuizClearConfig(
+data class QuizClearConfigUIModel(
     val textRes: Int,
     val bgRes: Int,
     val spacerHeight: Dp,
     val showReviewButton: Boolean,
     val shadowColor: Color,
     val dashedBorderColor: Color
-)
+): UIModel()
 
-fun QuizClearType.toConfig(): QuizClearConfig = when (this) {
-    QuizClearType.ALL_CLEAR -> QuizClearConfig(
+fun QuizClearType.toConfig(): QuizClearConfigUIModel = when (this) {
+    QuizClearType.ALL_CLEAR -> QuizClearConfigUIModel(
         textRes = R.string.text_box_all_clear,
         bgRes = R.drawable.bg_quiz_clear,
         spacerHeight = QuizClearSpacer,
@@ -30,7 +30,7 @@ fun QuizClearType.toConfig(): QuizClearConfig = when (this) {
         dashedBorderColor = Purple2
     )
 
-    QuizClearType.CLEAR_SUCCESS -> QuizClearConfig(
+    QuizClearType.CLEAR_SUCCESS -> QuizClearConfigUIModel(
         textRes = R.string.text_box_first_clear,
         bgRes = R.drawable.bg_quiz_clear,
         spacerHeight = QuizClearSmallSpacer,
@@ -39,7 +39,7 @@ fun QuizClearType.toConfig(): QuizClearConfig = when (this) {
         dashedBorderColor = Purple2
     )
 
-    QuizClearType.CLEAR_FAILED -> QuizClearConfig(
+    QuizClearType.CLEAR_FAILED -> QuizClearConfigUIModel(
         textRes = R.string.text_box_failed,
         bgRes = R.drawable.bg_quiz_fail,
         spacerHeight = QuizClearSmallSpacer,
@@ -48,7 +48,7 @@ fun QuizClearType.toConfig(): QuizClearConfig = when (this) {
         dashedBorderColor = Gray8
     )
 
-    QuizClearType.WRONG_ANSWER_QUIZ_CLEAR -> QuizClearConfig(
+    QuizClearType.WRONG_ANSWER_QUIZ_CLEAR -> QuizClearConfigUIModel(
         textRes = R.string.text_box_incorrect_answer_note_clear,
         bgRes = R.drawable.bg_quiz_clear,
         spacerHeight = QuizClearSpacer,
@@ -57,7 +57,7 @@ fun QuizClearType.toConfig(): QuizClearConfig = when (this) {
         dashedBorderColor = Purple2
     )
 
-    QuizClearType.WRONG_ANSWER_QUIZ_FAILED -> QuizClearConfig(
+    QuizClearType.WRONG_ANSWER_QUIZ_FAILED -> QuizClearConfigUIModel(
         textRes = R.string.text_box_failed,
         bgRes = R.drawable.bg_quiz_fail,
         spacerHeight = QuizClearSpacer,
@@ -66,7 +66,7 @@ fun QuizClearType.toConfig(): QuizClearConfig = when (this) {
         dashedBorderColor = Gray8
     )
 
-    QuizClearType.REVIEW_COMPLETED -> QuizClearConfig(
+    QuizClearType.REVIEW_COMPLETED -> QuizClearConfigUIModel(
         textRes = R.string.text_box_review,
         bgRes = R.drawable.bg_quiz_clear,
         spacerHeight = QuizClearSpacer,

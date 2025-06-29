@@ -51,7 +51,7 @@ fun QuizEntryScreen(
     onStudyClick: () -> Unit = {}
 ) {
     var showDialog by remember { mutableStateOf(false) }
-    var stageTitle by remember { mutableStateOf(getStageTitle(stageNumber)) }
+    var stageTitle by remember { mutableStateOf(getStageTitle(stageNumber - 1)) }
 
     Box(
         modifier = Modifier.fillMaxSize()
