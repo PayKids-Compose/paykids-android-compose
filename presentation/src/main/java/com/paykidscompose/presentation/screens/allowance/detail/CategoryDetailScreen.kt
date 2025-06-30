@@ -67,7 +67,6 @@ data class DetailTestModel(
 
 @Composable
 fun CategoryDetail(
-    navController: NavHostController
 ) {
     val category = "편의점" // uimodel로 다 바꿀겁니다. 지금은 정적인 화면 구현 중입니다.
     val amount = 150000
@@ -85,7 +84,6 @@ fun CategoryDetail(
     }
 
     CategoryDetailScreen(
-        navController = navController,
         category = category,
         amount = amount,
         details = details,
@@ -96,7 +94,6 @@ fun CategoryDetail(
 
 @Composable
 fun CategoryDetailScreen(
-    navController: NavHostController,
     category: String,
     amount: Int,
     showDialog: Boolean,
@@ -115,19 +112,11 @@ fun CategoryDetailScreen(
         )
     }
 
-    PayKidsScaffold(
-        bottomBar = {
-            AppBottomBar(
-                navController
-            )
-        }
-    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = Gray5)
                 .statusBarsPadding()
-                .padding(innerPadding)
                 .padding(
                     start = CategoryDetailScreenStartEndPadding,
                     end = CategoryDetailScreenStartEndPadding,
@@ -193,7 +182,6 @@ fun CategoryDetailScreen(
                     }
                 }
             }
-        }
     }
 }
 
@@ -255,5 +243,5 @@ fun DetailItem(
 @Preview
 @Composable
 fun CategoryDetailScreenPreview() {
-    CategoryDetail(rememberNavController())
+    CategoryDetail()
 }

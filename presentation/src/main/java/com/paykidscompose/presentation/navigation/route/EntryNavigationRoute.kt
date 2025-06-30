@@ -4,23 +4,14 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-sealed interface EntryNavigationRoute {
-    @Serializable
-    data object SplashRoute: EntryNavigationRoute
+sealed interface EntryNavigationRoute: NavigationRoute {
 
     @Serializable
     data object LoginRoute: EntryNavigationRoute
 
     @Serializable
     data object LoginNicknameRoute: EntryNavigationRoute
-
-    @Serializable
-    data object MainTabRoute: EntryNavigationRoute
-}
-
-fun EntryNavigationRoute.toRoute(): String = when(this) {
-    EntryNavigationRoute.SplashRoute -> "splash"
-    EntryNavigationRoute.LoginRoute -> "login"
-    EntryNavigationRoute.LoginNicknameRoute -> "login_nickname"
-    EntryNavigationRoute.MainTabRoute -> "main_tab"
+//
+//    @Serializable
+//    data object MainTabRoute: EntryNavigationRoute
 }

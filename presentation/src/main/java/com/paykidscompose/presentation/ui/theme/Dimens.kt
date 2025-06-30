@@ -129,7 +129,7 @@ val StudyChatSendIconSize = 24.dp
 
 // 마이페이지 기본 화면
 val MyPageDefaultScreenStartEndPadding = 20.dp
-val MyPageDefaultScreenTopPadding = 91.dp
+val MyPageDefaultScreenTopPadding = 90.dp
 val MyPageDefaultScreenBottomPadding = 62.dp
 val MyPageDefaultScreenImageSize = 160.dp
 val MyPageDefaultScreenSpacer8 = 8.dp
