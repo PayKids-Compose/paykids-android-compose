@@ -52,6 +52,7 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.getStageTitle
+import com.paykidscompose.presentation.navigation.bottom.BottomBarItem
 import com.paykidscompose.presentation.screens.PayKidsScaffold
 import com.paykidscompose.presentation.ui.components.AppBottomBar
 import com.paykidscompose.presentation.ui.components.ImageTooltip
@@ -89,7 +90,6 @@ val stageImageSet = listOf(
 
 @Composable
 fun HomeScreen(
-    navController: NavHostController,
     onStageNumber: (Int) -> Unit = {}
 ) {
     val scrollState = rememberLazyListState()
@@ -116,12 +116,7 @@ fun HomeScreen(
     val lastClearedStageIndex = 6 // 클리어 스테이지 인덱스
     val selectedStageIndex = remember { mutableIntStateOf(lastClearedStageIndex) }
 
-    PayKidsScaffold(
-        bottomBar = {
-            AppBottomBar(navController)
-        }
-    ) { innerPadding ->
-        Box(
+    Box(
             modifier = Modifier
                 .fillMaxSize()
         ) {
@@ -271,7 +266,7 @@ fun HomeScreen(
                         }
                 )
             }
-        }
+
     }
 }
 
@@ -279,5 +274,5 @@ fun HomeScreen(
 @Preview
 @Composable
 fun HomeScreenPreview(){
-    HomeScreen(rememberNavController())
+    HomeScreen()
 }

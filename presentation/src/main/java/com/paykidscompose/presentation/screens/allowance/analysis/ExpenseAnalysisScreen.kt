@@ -85,7 +85,6 @@ import java.time.LocalDate
 
 @Composable
 fun ExpenseAnalysis(
-    navController: NavHostController,
     onCategoryCard: () -> Unit = {}
 ) {
     var currentMonth by remember {
@@ -113,12 +112,9 @@ fun ExpenseAnalysis(
 
 
     ExpenseAnalysisScreen(
-        navController,
         onCategoryCard,
         currentMonth,
         AllowanceType.EXPENSE,
-        showInputDialog,
-        onShowDialog,
         onMonth,
         {}
     )
@@ -126,12 +122,9 @@ fun ExpenseAnalysis(
 
 @Composable
 fun ExpenseAnalysisScreen(
-    navController: NavHostController,
     onCategoryCard: () -> Unit,
     month: LocalDate,
     selected: AllowanceType,
-    showInputDialog: Boolean,
-    onShowDialog: (Boolean) -> Unit,
     onMonth: (LocalDate) -> Unit,
     onSelect: (AllowanceType) -> Unit,
 ) {
@@ -144,19 +137,12 @@ fun ExpenseAnalysisScreen(
         )
     )
 
-    PayKidsScaffold(
-        bottomBar = {
-            AppBottomBar(
-                navController
-            )
-        }
-    ) { innerPadding ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = Gray5)
                 .statusBarsPadding()
-                .padding(innerPadding)
                 .padding(start = 17.dp, end = 17.dp, top = 20.dp)
         ) {
 
@@ -342,7 +328,7 @@ fun ExpenseAnalysisScreen(
                         )
                     }
                 }
-            }
+
         }
     }
 }
@@ -492,5 +478,5 @@ private fun calculateCategoryStats(data: List<AllowanceChartDTO>): List<Category
 @Preview
 @Composable
 fun AnalysisScreenPreview() {
-    ExpenseAnalysis(rememberNavController())
+    ExpenseAnalysis()
 }

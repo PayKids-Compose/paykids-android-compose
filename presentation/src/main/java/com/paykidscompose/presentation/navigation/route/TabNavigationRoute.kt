@@ -3,7 +3,7 @@ package com.paykidscompose.presentation.navigation.route
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed interface TabNavigationRoute {
+sealed interface TabNavigationRoute: NavigationRoute {
     @Serializable
     data object HomeRoute: TabNavigationRoute
 
@@ -15,11 +15,4 @@ sealed interface TabNavigationRoute {
 
     @Serializable
     data object MyPageRoute: TabNavigationRoute
-}
-
-fun TabNavigationRoute.toRoute(): String = when(this) {
-    TabNavigationRoute.QuestAchievementsRoute -> "quest_achievements"
-    TabNavigationRoute.AllowanceDiaryRoute -> "allowance_diary"
-    TabNavigationRoute.HomeRoute -> "home"
-    TabNavigationRoute.MyPageRoute -> "my_page"
 }

@@ -43,16 +43,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.DummyDataManager
 import com.paykidscompose.presentation.model.AllowanceDiaryUIModel
-import com.paykidscompose.presentation.model.type.AllowanceType
 import com.paykidscompose.presentation.model.toUIModel
-import com.paykidscompose.presentation.screens.PayKidsScaffold
+import com.paykidscompose.presentation.model.type.AllowanceType
 import com.paykidscompose.presentation.ui.components.AllowanceInputDialog
-import com.paykidscompose.presentation.ui.components.AppBottomBar
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryCalendarDayTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryCalendarIncomeConsumeTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryCalendarWeekTextStyle
@@ -106,7 +102,6 @@ import kotlin.math.ceil
 
 @Composable
 fun AllowanceDiaryScreen(
-    navController: NavHostController,
     onCategoryExpense: () -> Unit = {},
 ) {
 
@@ -203,176 +198,166 @@ fun AllowanceDiaryScreen(
         ) { showInputDialog = false }
     }
 
-    PayKidsScaffold(
-        bottomBar = {
-            AppBottomBar(
-                navController
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Gray5)
+            .statusBarsPadding()
+            .padding(
+                start = AllowanceDiaryScreenStartEndPadding,
+                end = AllowanceDiaryScreenStartEndPadding,
+                top = AllowanceDiaryScreenTopBottomPadding
+            ),
+    ) {
+        item {
+            // < 12월 > + 버튼
+            HeaderSection(
+                month = currentMonth,
+                onPrev = { currentMonth = currentMonth.minusMonths(1) },
+                onNext = { currentMonth = currentMonth.plusMonths(1) },
+                onAddClick = {
+                    showInputDialog = true
+                }
             )
-        }
-    ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Gray5)
-                .statusBarsPadding()
-                .padding(innerPadding)
-                .padding(
-                    start = AllowanceDiaryScreenStartEndPadding,
-                    end = AllowanceDiaryScreenStartEndPadding,
-                    top = AllowanceDiaryScreenTopBottomPadding,
-                    bottom = AllowanceDiaryScreenTopBottomPadding
-                ),
-        ) {
-            item {
-                // < 12월 > + 버튼
-                HeaderSection(
-                    month = currentMonth,
-                    onPrev = { currentMonth = currentMonth.minusMonths(1) },
-                    onNext = { currentMonth = currentMonth.plusMonths(1) },
-                    onAddClick = {
-                        showInputDialog = true
-                    }
+
+            Spacer(Modifier.height(AllowanceDiaryScreenSpacer28))
+
+            Column(
+                horizontalAlignment = Alignment.Start
+            ) {
+                Text(
+                    stringResource(
+                        R.string.text_month_total_consume,
+                        formatAmount(totalExpense)
+                    ),
+                    style = AllowanceDiaryTitleExpenseTextStyle
+                        .copy(color = Black)
                 )
 
-                Spacer(Modifier.height(AllowanceDiaryScreenSpacer28))
+                Spacer(Modifier.height(AllowanceDiaryScreenSpacer16))
 
-                Column(
-                    horizontalAlignment = Alignment.Start
-                ) {
-                    Text(
-                        stringResource(
-                            R.string.text_month_total_consume,
-                            formatAmount(totalExpense)
-                        ),
-                        style = AllowanceDiaryTitleExpenseTextStyle
-                            .copy(color = Black)
-                    )
-
-                    Spacer(Modifier.height(AllowanceDiaryScreenSpacer16))
-
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(AllowanceDiaryScreenExpenseCardHeight)
-                            .clickable(
-                                onClick = {
-                                    onCategoryExpense()
-                                }
-                            )
-                            .shadow(
-                                elevation = CustomCardShadow,
-                                shape = RoundedCornerShape(AllowanceDiaryScreenCardShape),
-                                ambientColor = MyPageCardShadowColor,
-                                spotColor = MyPageCardShadowColor
-                            )
-                            .background(
-                                White, shape = RoundedCornerShape(AllowanceDiaryScreenCardShape)
-                            )
-                            .padding(
-                                start = AllowanceDiaryScreenExpenseCardStartPadding,
-                                end = AllowanceDiaryScreenExpenseCardEndPadding
-                            ),
-                        contentAlignment = Alignment.CenterStart,
-                    ) {
-                        if (maxCategory.isNotEmpty() && maxAmount > 0) {
-                            Text(
-                                buildAnnotatedString {
-                                    withStyle(SpanStyle(color = Black)) {
-                                        append(currentMonth.format(DateTimeFormatter.ofPattern("M월 달 ")))
-                                    }
-                                    withStyle(SpanStyle(color = Blue1)) {
-                                        append(maxCategory)
-                                    }
-                                    withStyle(SpanStyle(color = Black)) {
-                                        append(stringResource(R.string.text_month_most_consume2))
-                                    }
-                                },
-                                style = AllowanceDiaryMostConsumeTextStyle
-                            )
-
-                            Row(
-                                modifier = Modifier.align(Alignment.CenterEnd)
-                            ) {
-                                Text(
-                                    text = formatAmount(maxAmount),
-                                    modifier = Modifier.weight(1f, fill = false),
-                                    maxLines = 1,
-                                    textAlign = TextAlign.End,
-                                    style = AllowanceDiaryMostConsumeTitleTextStyle.copy(color = Black)
-                                )
-
-                                Spacer(modifier = Modifier.width(AllowanceDiaryScreenSpacer8))
-
-                                Text(
-                                    stringResource(R.string.text_consuming),
-                                    modifier = Modifier.wrapContentWidth(),
-                                    style = AllowanceDiaryMostConsumeTextStyle
-                                )
-                            }
-                        } else {
-                            Text(
-                                stringResource(R.string.text_month_no_consume),
-                                style = AllowanceDiaryMostConsumeTextStyle.copy(color = Blue1)
-                            )
-                        }
-                    }
-                }
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(AllowanceDiaryScreenSpacer16))
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .height(AllowanceDiaryScreenExpenseCardHeight)
+                        .clickable(
+                            onClick = {
+                                onCategoryExpense()
+                            }
+                        )
                         .shadow(
                             elevation = CustomCardShadow,
+                            shape = RoundedCornerShape(AllowanceDiaryScreenCardShape),
                             ambientColor = MyPageCardShadowColor,
                             spotColor = MyPageCardShadowColor
                         )
                         .background(
-                            White
+                            White, shape = RoundedCornerShape(AllowanceDiaryScreenCardShape)
                         )
                         .padding(
-                            start = AllowanceDiaryScreenCalendarStartEndTopPadding,
-                            end = AllowanceDiaryScreenCalendarStartEndTopPadding,
-                            top = AllowanceDiaryScreenCalendarStartEndTopPadding,
-                            bottom = AllowanceDiaryScreenCalendarBottomPadding
-                        )
+                            start = AllowanceDiaryScreenExpenseCardStartPadding,
+                            end = AllowanceDiaryScreenExpenseCardEndPadding
+                        ),
+                    contentAlignment = Alignment.CenterStart,
                 ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        CalendarGrid(
-                            dailySummary = dailySummary,
-                            month = currentMonth,
-                            selectedDate = selectedDate,
-                            onDateSelected = { selectedDate = it }
+                    if (maxCategory.isNotEmpty() && maxAmount > 0) {
+                        Text(
+                            buildAnnotatedString {
+                                withStyle(SpanStyle(color = Black)) {
+                                    append(currentMonth.format(DateTimeFormatter.ofPattern("M월 달 ")))
+                                }
+                                withStyle(SpanStyle(color = Blue1)) {
+                                    append(maxCategory)
+                                }
+                                withStyle(SpanStyle(color = Black)) {
+                                    append(stringResource(R.string.text_month_most_consume2))
+                                }
+                            },
+                            style = AllowanceDiaryMostConsumeTextStyle
+                        )
+
+                        Row(
+                            modifier = Modifier.align(Alignment.CenterEnd)
+                        ) {
+                            Text(
+                                text = formatAmount(maxAmount),
+                                modifier = Modifier.weight(1f, fill = false),
+                                maxLines = 1,
+                                textAlign = TextAlign.End,
+                                style = AllowanceDiaryMostConsumeTitleTextStyle.copy(color = Black)
+                            )
+
+                            Spacer(modifier = Modifier.width(AllowanceDiaryScreenSpacer8))
+
+                            Text(
+                                stringResource(R.string.text_consuming),
+                                modifier = Modifier.wrapContentWidth(),
+                                style = AllowanceDiaryMostConsumeTextStyle
+                            )
+                        }
+                    } else {
+                        Text(
+                            stringResource(R.string.text_month_no_consume),
+                            style = AllowanceDiaryMostConsumeTextStyle.copy(color = Blue1)
                         )
                     }
                 }
             }
+        }
 
-            item {
-                Spacer(modifier = Modifier.height(AllowanceDiaryScreenSpacer34))
-                Text(
-                    stringResource(R.string.text_detail_consume),
-                    style = AllowanceDiaryDetailConsumeTitleTextStyle.copy(color = Black)
-                )
-
-                Spacer(Modifier.height(AllowanceDiaryScreenSpacer10))
-
-                Text(
-                    text = selectedDate.format(DateTimeFormatter.ofPattern("M월 d일")),
-                    style = AllowanceDiaryDetailConsumeMonthDayTextStyle.copy(color = Gray8)
-                )
-
-                Spacer(Modifier.height(AllowanceDiaryScreenSpacer8))
+        item {
+            Spacer(modifier = Modifier.height(AllowanceDiaryScreenSpacer16))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(
+                        elevation = CustomCardShadow,
+                        ambientColor = MyPageCardShadowColor,
+                        spotColor = MyPageCardShadowColor
+                    )
+                    .background(
+                        White
+                    )
+                    .padding(
+                        start = AllowanceDiaryScreenCalendarStartEndTopPadding,
+                        end = AllowanceDiaryScreenCalendarStartEndTopPadding,
+                        top = AllowanceDiaryScreenCalendarStartEndTopPadding,
+                        bottom = AllowanceDiaryScreenCalendarBottomPadding
+                    )
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    CalendarGrid(
+                        dailySummary = dailySummary,
+                        month = currentMonth,
+                        selectedDate = selectedDate,
+                        onDateSelected = { selectedDate = it }
+                    )
+                }
             }
+        }
 
-            items(selectedUIModels) { item ->
-                TransactionItem(item, showInputDialog, onShowDialog)
-                Spacer(Modifier.height(AllowanceDiaryScreenSpacer8))
-            }
+        item {
+            Spacer(modifier = Modifier.height(AllowanceDiaryScreenSpacer34))
+            Text(
+                stringResource(R.string.text_detail_consume),
+                style = AllowanceDiaryDetailConsumeTitleTextStyle.copy(color = Black)
+            )
+
+            Spacer(Modifier.height(AllowanceDiaryScreenSpacer10))
+
+            Text(
+                text = selectedDate.format(DateTimeFormatter.ofPattern("M월 d일")),
+                style = AllowanceDiaryDetailConsumeMonthDayTextStyle.copy(color = Gray8)
+            )
+
+            Spacer(Modifier.height(AllowanceDiaryScreenSpacer8))
+        }
+
+        items(selectedUIModels) { item ->
+            TransactionItem(item, showInputDialog, onShowDialog)
+            Spacer(Modifier.height(AllowanceDiaryScreenSpacer8))
         }
     }
 }
@@ -607,5 +592,5 @@ fun TransactionItem(
 @Preview
 @Composable
 fun DiaryScreenPreview() {
-    AllowanceDiaryScreen(rememberNavController())
+    AllowanceDiaryScreen()
 }

@@ -5,23 +5,16 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-sealed interface QuizNavigationRoute {
+sealed interface QuizNavigationRoute: NavigationRoute {
     @Serializable
-    data class QuizRoute(var stageNumber: Int = 1): QuizNavigationRoute
+    data class QuizRoute(val stageNumber: Int): QuizNavigationRoute
 
     @Serializable
-    data class QuizEntryRoute(var stageNumber: Int = 1): QuizNavigationRoute
+    data class QuizEntryRoute(val stageNumber: Int): QuizNavigationRoute
 
     @Serializable
-    data class QuizClearRoute(var clear: QuizClearType? = null): QuizNavigationRoute
+    data class QuizClearRoute(val clear: QuizClearType): QuizNavigationRoute
 
     @Serializable
     data object StudyRoute: QuizNavigationRoute
-}
-
-fun QuizNavigationRoute.toRoute(): String = when(this) {
-    is QuizNavigationRoute.QuizRoute -> "quiz/${stageNumber}"
-    is QuizNavigationRoute.QuizEntryRoute -> "quiz_entry/${stageNumber}"
-    is QuizNavigationRoute.QuizClearRoute -> "quiz_clear/${clear?.name}"
-    QuizNavigationRoute.StudyRoute -> "study"
 }

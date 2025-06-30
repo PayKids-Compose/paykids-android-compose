@@ -23,13 +23,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.DummyUser
 import com.paykidscompose.presentation.model.MyPageUIModel
 import com.paykidscompose.presentation.screens.PayKidsScaffold
-import com.paykidscompose.presentation.ui.components.AppBottomBar
 import com.paykidscompose.presentation.ui.components.AppTopBar
 import com.paykidscompose.presentation.ui.components.CardItem
 import com.paykidscompose.presentation.ui.components.CustomCard
@@ -37,7 +34,6 @@ import com.paykidscompose.presentation.ui.components.PopupDialog
 import com.paykidscompose.presentation.ui.components.TitleText
 import com.paykidscompose.presentation.ui.components.util.PopupType
 import com.paykidscompose.presentation.ui.theme.Black2
-import com.paykidscompose.presentation.ui.theme.CustomCardSizeHeight
 import com.paykidscompose.presentation.ui.theme.Gray5
 import com.paykidscompose.presentation.ui.theme.Gray6
 import com.paykidscompose.presentation.ui.theme.MyPageDefaultScreenImageSize
@@ -50,7 +46,6 @@ import com.paykidscompose.presentation.ui.theme.Red
 
 @Composable
 fun MyPageScreen(
-    navController: NavHostController,
     onClickMyInfo: () -> Unit = {},
     onClickTerms: () -> Unit = {},
     onClickAppVersion: () -> Unit = {}
@@ -82,9 +77,7 @@ fun MyPageScreen(
             AppTopBar(stringResource(R.string.text_my_page))
         },
         bottomBar = {
-            AppBottomBar(
-                navController
-            )
+
         }
     ) { innerPadding ->
         Column(
@@ -120,7 +113,6 @@ fun MyPageScreen(
             CustomCard(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(CustomCardSizeHeight)
             ) {
                 CardItem(
                     stringResource(R.string.text_my_info),
@@ -128,10 +120,12 @@ fun MyPageScreen(
                     iconEnable = true,
                     onItemClick = onClickMyInfo
                 )
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(color = Gray6))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(color = Gray6)
+                )
                 CardItem(
                     stringResource(R.string.text_terms_policy_title),
                     iconEnable = true,
@@ -144,10 +138,12 @@ fun MyPageScreen(
                         .background(color = Gray6)
                 ) // Divider는 버그 있는 거 같아서 Box로 대체함.
                 CardItem(stringResource(R.string.text_app_version), onClickAppVersion)
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(color = Gray6))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(color = Gray6)
+                )
                 CardItem(
                     stringResource(R.string.text_logout),
                     textColor = Red,
@@ -161,5 +157,5 @@ fun MyPageScreen(
 @Preview
 @Composable
 fun MyPageScreenPreview() {
-    MyPageScreen(rememberNavController())
+    MyPageScreen()
 }
