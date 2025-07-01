@@ -38,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.model.ChatMessageUIModel
 import com.paykidscompose.presentation.screens.PayKidsScaffold
+import com.paykidscompose.presentation.screens.study.section.StudyTopBar
 import com.paykidscompose.presentation.ui.components.AppTopBar
 import com.paykidscompose.presentation.ui.components.OutlineInputField
 import com.paykidscompose.presentation.ui.theme.Black
@@ -88,18 +89,14 @@ import kotlinx.coroutines.launch
 fun Study(
     onBackClick: () -> Unit = {}
 ) {
-    PayKidsScaffold(topBar = {
-        AppTopBar(
-            title = stringResource(R.string.text_study_title),
-            titleStyle = StudyAppBarTextStyle,
-            showBackButton = true,
-            onBackClick = onBackClick,
-            titleColor = Black,
-            iconTint = Black
-        )
-    }, bottomBar = {
+    PayKidsScaffold(
+        topBar = {
+            StudyTopBar(
+                onBackClick = onBackClick
+            )
+        }, bottomBar = {
 
-    }) { innerPadding ->
+        }) { innerPadding ->
         StudyScreen(
             modifier = Modifier
                 .padding(innerPadding)
