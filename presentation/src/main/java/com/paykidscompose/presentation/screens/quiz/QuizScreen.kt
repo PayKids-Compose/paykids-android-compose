@@ -27,19 +27,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import coil3.compose.AsyncImage
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.model.type.QuizClearType
+import com.paykidscompose.presentation.model.type.QuizResultType
 import com.paykidscompose.presentation.model.type.QuizType
-import com.paykidscompose.presentation.ui.components.AppTopBar
+import com.paykidscompose.presentation.screens.quiz.section.ImageQuizContent
+import com.paykidscompose.presentation.screens.quiz.section.QuizTopBar
+import com.paykidscompose.presentation.screens.quiz.section.ShortAnswerQuizContent
+import com.paykidscompose.presentation.screens.quiz.section.TextChoiceQuizContent
 import com.paykidscompose.presentation.ui.components.PopupDialog
 import com.paykidscompose.presentation.ui.components.QuizResultCard
 import com.paykidscompose.presentation.ui.components.util.PopupType
-import com.paykidscompose.presentation.model.type.QuizResultType
-import com.paykidscompose.presentation.screens.quiz.section.ImageQuizContent
-import com.paykidscompose.presentation.screens.quiz.section.ShortAnswerQuizContent
-import com.paykidscompose.presentation.screens.quiz.section.TextChoiceQuizContent
 import com.paykidscompose.presentation.ui.theme.Black
-import com.paykidscompose.presentation.ui.theme.QuizAppBarShadowColor
-import com.paykidscompose.presentation.ui.theme.QuizAppBarShadowElevation
-import com.paykidscompose.presentation.ui.theme.QuizAppBarTextStyle
 import com.paykidscompose.presentation.ui.theme.QuizQuestionTextSpacer
 import com.paykidscompose.presentation.ui.theme.QuizQuestionTextStyle
 import com.paykidscompose.presentation.ui.theme.QuizResultCardSpacer
@@ -102,14 +99,10 @@ fun QuizScreen(
 
     Scaffold(
         topBar = {
-            AppTopBar(
-                title = stringResource(R.string.text_quiz_number, quizNumber, totalQuizCount),
-                titleStyle = QuizAppBarTextStyle,
-                showBackButton = true,
-                onBackClick = { showDialog = true },
-                iconTint = Black,
-                shadowColor = QuizAppBarShadowColor,
-                shadowElevation = QuizAppBarShadowElevation
+            QuizTopBar(
+                quizNumber = quizNumber,
+                totalQuizCount = totalQuizCount,
+                onBackClick = { showDialog = true }
             )
         }) { innerPadding ->
         Box(
