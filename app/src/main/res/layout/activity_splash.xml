@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".SplashActivity"
+    android:background="@color/blue1"
+    android:gravity="center">
+
+    <ImageView
+        android:layout_width="174dp"
+        android:layout_height="174dp"
+        android:src="@drawable/paykids_logo_white"/>
+</LinearLayout>
