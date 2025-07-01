@@ -32,7 +32,7 @@ import com.paykidscompose.presentation.ui.components.AppTopBar
 import com.paykidscompose.presentation.ui.components.PopupDialog
 import com.paykidscompose.presentation.ui.components.QuizResultCard
 import com.paykidscompose.presentation.ui.components.util.PopupType
-import com.paykidscompose.presentation.ui.state.QuizResultState
+import com.paykidscompose.presentation.model.type.QuizResultType
 import com.paykidscompose.presentation.ui.theme.Black
 import com.paykidscompose.presentation.ui.theme.QuizAppBarShadowColor
 import com.paykidscompose.presentation.ui.theme.QuizAppBarShadowElevation
@@ -75,7 +75,7 @@ fun QuizScreen(
 ) {
     var showDialog by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableStateOf<Int?>(null) }
-    var isCorrect by remember { mutableStateOf(QuizResultState.DEFAULT) }
+    var isCorrect by remember { mutableStateOf(QuizResultType.DEFAULT) }
     var userInput by remember { mutableStateOf("") }
 
     BackHandler(enabled = true) {
@@ -118,9 +118,9 @@ fun QuizScreen(
         ) {
             AsyncImage(
                 model = when (isCorrect) {
-                    QuizResultState.DEFAULT -> R.drawable.bg_quiz_default
-                    QuizResultState.CORRECT -> R.drawable.bg_quiz_correct
-                    QuizResultState.WRONG -> R.drawable.bg_quiz_wrong
+                    QuizResultType.DEFAULT -> R.drawable.bg_quiz_default
+                    QuizResultType.CORRECT -> R.drawable.bg_quiz_correct
+                    QuizResultType.WRONG -> R.drawable.bg_quiz_wrong
                 },
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
@@ -144,10 +144,10 @@ fun QuizScreen(
 
                 // 정답/오답 결과 카드 보여주기
                 if (quizType != QuizType.TEXT_CHOICE_IMAGE && quizType != QuizType.SHORT_ANSWER_IMAGE) { // 객관식(이미지), 주관식(이미지) 퀴즈는 이미지 위에 겹쳐서 표시
-                    if (isCorrect != QuizResultState.DEFAULT) {
+                    if (isCorrect != QuizResultType.DEFAULT) {
                         Spacer(modifier = Modifier.height(QuizResultCardSpacer))
                         QuizResultCard(
-                            isCorrect = isCorrect == QuizResultState.CORRECT
+                            isCorrect = isCorrect == QuizResultType.CORRECT
                         )
                         Spacer(modifier = Modifier.height(QuizResultCardSpacer))
                     } else {
@@ -165,7 +165,7 @@ fun QuizScreen(
                             onChoiceClick = { index ->
                                 selectedIndex = index
                                 isCorrect =
-                                    if (index == (answer[0] - 'A')) QuizResultState.CORRECT else QuizResultState.WRONG
+                                    if (index == (answer[0] - 'A')) QuizResultType.CORRECT else QuizResultType.WRONG
                                 onChoiceClick(index)
                             }
                         )
@@ -179,7 +179,7 @@ fun QuizScreen(
                             onChoiceClick = { index ->
                                 selectedIndex = index
                                 isCorrect =
-                                    if (index == (answer[0] - 'A')) QuizResultState.CORRECT else QuizResultState.WRONG
+                                    if (index == (answer[0] - 'A')) QuizResultType.CORRECT else QuizResultType.WRONG
                                 onChoiceClick(index)
                             }
                         )
@@ -207,9 +207,9 @@ fun QuizScreen(
                                     contentScale = ContentScale.FillWidth,
                                 )
 
-                                if (isCorrect != QuizResultState.DEFAULT) {
+                                if (isCorrect != QuizResultType.DEFAULT) {
                                     QuizResultCard(
-                                        isCorrect = isCorrect == QuizResultState.CORRECT,
+                                        isCorrect = isCorrect == QuizResultType.CORRECT,
                                         modifier = Modifier
                                             .align(Alignment.TopCenter)
                                     )
@@ -226,7 +226,7 @@ fun QuizScreen(
                                 onChoiceClick = { index ->
                                     selectedIndex = index
                                     isCorrect =
-                                        if (index == (answer[0] - 'A')) QuizResultState.CORRECT else QuizResultState.WRONG
+                                        if (index == (answer[0] - 'A')) QuizResultType.CORRECT else QuizResultType.WRONG
                                     onChoiceClick(index)
                                 }
                             )
@@ -240,7 +240,7 @@ fun QuizScreen(
                             onUserInputChange = { userInput = it },
                             onConfirmAnswer = { isCorrectAnswer ->
                                 isCorrect =
-                                    if (isCorrectAnswer) QuizResultState.CORRECT else QuizResultState.WRONG
+                                    if (isCorrectAnswer) QuizResultType.CORRECT else QuizResultType.WRONG
                                 onConfirmAnswer(isCorrectAnswer)
                                 onConfirmClick(QuizClearType.ALL_CLEAR)
                             }
@@ -269,9 +269,9 @@ fun QuizScreen(
                                     contentScale = ContentScale.FillWidth,
                                 )
 
-                                if (isCorrect != QuizResultState.DEFAULT) {
+                                if (isCorrect != QuizResultType.DEFAULT) {
                                     QuizResultCard(
-                                        isCorrect = isCorrect == QuizResultState.CORRECT,
+                                        isCorrect = isCorrect == QuizResultType.CORRECT,
                                         modifier = Modifier
                                             .align(Alignment.TopCenter)
                                     )
@@ -287,7 +287,7 @@ fun QuizScreen(
                                 onUserInputChange = { userInput = it },
                                 onConfirmAnswer = { isCorrectAnswer ->
                                     isCorrect =
-                                        if (isCorrectAnswer) QuizResultState.CORRECT else QuizResultState.WRONG
+                                        if (isCorrectAnswer) QuizResultType.CORRECT else QuizResultType.WRONG
                                     onConfirmAnswer(isCorrectAnswer)
                                 }
                             )
