@@ -35,8 +35,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.DummyUser
 import com.paykidscompose.presentation.model.MyInfoUIModel
-import com.paykidscompose.presentation.screens.PayKidsScaffold
-import com.paykidscompose.presentation.ui.components.AppTopBar
 import com.paykidscompose.presentation.ui.components.CustomCard
 import com.paykidscompose.presentation.ui.components.OutlineInputField
 import com.paykidscompose.presentation.ui.components.PopupDialog
@@ -76,7 +74,6 @@ import com.paykidscompose.presentation.ui.theme.White
 
 @Composable
 fun MyInfoScreen(
-    onBackClick: () -> Unit = {}
 ) {
     val user = DummyUser.getUsers().first()
 
@@ -116,72 +113,59 @@ fun MyInfoScreen(
         )
     }
 
-    PayKidsScaffold(
-        topBar = {
-            AppTopBar(
-                title = stringResource(R.string.text_my_page),
-                showBackButton = true,
-                onBackClick = onBackClick,
-                titleColor = Black2
-            )
-        },
-        containerColor = Gray5
-    ) { innerPadding ->
-        Column(
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Gray5)
+            .padding(
+                top = MyInfoScreenTopPadding
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .background(color = Gray5)
-                .padding(innerPadding)
-                .padding(
-                    top = MyInfoScreenTopPadding
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .size(MyInfoScreenBoxSize)
+                .clickable(onClick = {}), // 이미지 변경 클릭
+            contentAlignment = Alignment.Center
         ) {
-            Box(
+            Image(
+                painter = painterResource(uiModel.image),
+                contentDescription = null,
                 modifier = Modifier
-                    .size(MyInfoScreenBoxSize)
-                    .clickable(onClick = {}), // 이미지 변경 클릭
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    painter = painterResource(uiModel.image),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(MyInfoScreenProfileSize)
-                        .clip(CircleShape)
-                )
-                Icon(
-                    painter = painterResource(R.drawable.ic_add_photo),
-                    contentDescription = null,
-                    tint = Color.Unspecified,
-                    modifier = Modifier
-                        .size(MyInfoScreenAddIconSize)
-                        .align(Alignment.BottomEnd)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(MyInfoScreenSpacer20))
-
-            TitleText(
-                uiModel.nickname,
-                color = Black2,
-                style = MyPageNicknameTextStyle
+                    .size(MyInfoScreenProfileSize)
+                    .clip(CircleShape)
             )
+            Icon(
+                painter = painterResource(R.drawable.ic_add_photo),
+                contentDescription = null,
+                tint = Color.Unspecified,
+                modifier = Modifier
+                    .size(MyInfoScreenAddIconSize)
+                    .align(Alignment.BottomEnd)
+            )
+        }
 
-            Spacer(modifier = Modifier.height(MyInfoScreenSpacer73))
+        Spacer(modifier = Modifier.height(MyInfoScreenSpacer20))
 
-            CustomCard(
-                Modifier.fillMaxSize(),
-                shapeTop = MyInfoScreenShapeTop,
-                shapeBottom = MyInfoScreenShapeBottom
-            ) {
-                MyInfoEdit(
-                    uiModel,
-                    onNickname,
-                    onEmail,
-                    onPopupDialog
-                )
-            }
+        TitleText(
+            uiModel.nickname,
+            color = Black2,
+            style = MyPageNicknameTextStyle
+        )
+
+        Spacer(modifier = Modifier.height(MyInfoScreenSpacer73))
+
+        CustomCard(
+            Modifier.fillMaxSize(),
+            shapeTop = MyInfoScreenShapeTop,
+            shapeBottom = MyInfoScreenShapeBottom
+        ) {
+            MyInfoEdit(
+                uiModel,
+                onNickname,
+                onEmail,
+                onPopupDialog
+            )
         }
     }
 }
@@ -250,7 +234,9 @@ fun NicknameEdit(
             uiModel.nickname,
             onNickname,
             hint = stringResource(R.string.text_nickname_hint),
-            modifier = Modifier.height(OutlineHeight).weight(1f),
+            modifier = Modifier
+                .height(OutlineHeight)
+                .weight(1f),
             startPadding = MyInfoScreenNicknameStartPadding
         )
 

@@ -2,7 +2,6 @@ package com.paykidscompose.presentation.screens.mypage
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,20 +21,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.DummyUser
 import com.paykidscompose.presentation.model.MyPageUIModel
-import com.paykidscompose.presentation.screens.PayKidsScaffold
-import com.paykidscompose.presentation.ui.components.AppTopBar
 import com.paykidscompose.presentation.ui.components.CardItem
 import com.paykidscompose.presentation.ui.components.CustomCard
+import com.paykidscompose.presentation.ui.components.CustomDivider
 import com.paykidscompose.presentation.ui.components.PopupDialog
 import com.paykidscompose.presentation.ui.components.TitleText
 import com.paykidscompose.presentation.ui.components.util.PopupType
 import com.paykidscompose.presentation.ui.theme.Black2
 import com.paykidscompose.presentation.ui.theme.Gray5
-import com.paykidscompose.presentation.ui.theme.Gray6
 import com.paykidscompose.presentation.ui.theme.MyPageDefaultScreenImageSize
 import com.paykidscompose.presentation.ui.theme.MyPageDefaultScreenSpacer20
 import com.paykidscompose.presentation.ui.theme.MyPageDefaultScreenSpacer50
@@ -72,84 +68,65 @@ fun MyPageScreen(
         )
     }
 
-    PayKidsScaffold(
-        topBar = {
-            AppTopBar(stringResource(R.string.text_my_page))
-        },
-        bottomBar = {
-
-        }
-    ) { innerPadding ->
-        Column(
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Gray5)
+            .padding(
+                start = MyPageDefaultScreenStartEndPadding,
+                end = MyPageDefaultScreenStartEndPadding,
+                top = MyPageDefaultScreenTopPadding
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(uiModel.image),
+            contentDescription = null,
             modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .background(color = Gray5)
-                .padding(
-                    start = MyPageDefaultScreenStartEndPadding,
-                    end = MyPageDefaultScreenStartEndPadding,
-                    top = MyPageDefaultScreenTopPadding
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .size(MyPageDefaultScreenImageSize)
+                .clip(CircleShape)
+        )
+
+        Spacer(Modifier.height(MyPageDefaultScreenSpacer20))
+
+        TitleText(
+            uiModel.nickname,
+            color = Black2,
+            style = MyPageNicknameTextStyle
+        )
+
+        Spacer(Modifier.height(MyPageDefaultScreenSpacer50))
+
+        CustomCard(
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
-            Image(
-                painter = painterResource(uiModel.image),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(MyPageDefaultScreenImageSize)
-                    .clip(CircleShape)
+            CardItem(
+                stringResource(R.string.text_my_info),
+                iconText = stringResource(R.string.text_modify_my_info),
+                iconEnable = true,
+                onItemClick = onClickMyInfo
             )
 
-            Spacer(Modifier.height(MyPageDefaultScreenSpacer20))
+            CustomDivider()
 
-            TitleText(
-                uiModel.nickname,
-                color = Black2,
-                style = MyPageNicknameTextStyle
+            CardItem(
+                stringResource(R.string.text_terms_policy_title),
+                iconEnable = true,
+                onItemClick = onClickTerms
             )
 
-            Spacer(Modifier.height(MyPageDefaultScreenSpacer50))
+            CustomDivider()
 
-            CustomCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                CardItem(
-                    stringResource(R.string.text_my_info),
-                    iconText = stringResource(R.string.text_modify_my_info),
-                    iconEnable = true,
-                    onItemClick = onClickMyInfo
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(color = Gray6)
-                )
-                CardItem(
-                    stringResource(R.string.text_terms_policy_title),
-                    iconEnable = true,
-                    onItemClick = onClickTerms
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(color = Gray6)
-                ) // Divider는 버그 있는 거 같아서 Box로 대체함.
-                CardItem(stringResource(R.string.text_app_version), onClickAppVersion)
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(color = Gray6)
-                )
-                CardItem(
-                    stringResource(R.string.text_logout),
-                    textColor = Red,
-                    onItemClick = onPopupDialog
-                )
-            }
+            CardItem(stringResource(R.string.text_app_version), onClickAppVersion)
+
+            CustomDivider()
+
+            CardItem(
+                stringResource(R.string.text_logout),
+                textColor = Red,
+                onItemClick = onPopupDialog
+            )
         }
     }
 }
