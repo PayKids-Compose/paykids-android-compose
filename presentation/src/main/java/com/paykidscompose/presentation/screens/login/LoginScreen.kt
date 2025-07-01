@@ -1,6 +1,7 @@
 package com.paykidscompose.presentation.screens.login
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,9 +10,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -19,11 +22,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.DummyUser
 import com.paykidscompose.presentation.ui.components.InfoText
+import com.paykidscompose.presentation.ui.theme.Black
 import com.paykidscompose.presentation.ui.theme.BottomButtonPadding
 import com.paykidscompose.presentation.ui.theme.InfoTextStyle
-import com.paykidscompose.presentation.ui.theme.LoginKakaoTextBottomPadding
+import com.paykidscompose.presentation.ui.theme.LoginKakaoButtonTextStyle
+import com.paykidscompose.presentation.ui.theme.LoginScreenKakaoButtonImageBottomPadding
+import com.paykidscompose.presentation.ui.theme.LoginScreenKakaoButtonImageTopPadding
+import com.paykidscompose.presentation.ui.theme.LoginScreenKakaoButtonStartPadding
+import com.paykidscompose.presentation.ui.theme.LoginScreenKakaoTextBottomPadding
 import com.paykidscompose.presentation.ui.theme.PayKidsComposeTheme
+import com.paykidscompose.presentation.ui.theme.Shape5
 import com.paykidscompose.presentation.ui.theme.StartAndEndPadding
+import com.paykidscompose.presentation.ui.theme.Yellow
 
 @Composable
 fun LoginScreen(onKakaoClick: () -> Unit = {}) {
@@ -55,47 +65,44 @@ fun LoginScreen(onKakaoClick: () -> Unit = {}) {
                     style = InfoTextStyle
                 )
 
-                Spacer(modifier = Modifier.height(LoginKakaoTextBottomPadding))
+                Spacer(modifier = Modifier.height(LoginScreenKakaoTextBottomPadding))
 
-                Image(
-                    painter = painterResource(R.drawable.img_kakao_login),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(onClick = {
-                            DummyUser.createDummyUser()
-                            onKakaoClick()
-                        }),
-                    contentScale = ContentScale.FillWidth
-                )
+                KakaoButton(onKakaoClick)
             }
         }
     }
 }
 
-//
-//@Composable
-//fun KakaoButton(nickname: String, onKakaoClick: (User) -> Unit){
-//    Box(
-//        modifier = Modifier.background(Yellow).fillMaxWidth().clickable(onClick = {
-//            val user = DummyUser.createDummyUser(nickname)
-//            onKakaoClick(user)
-//        }).border()
-//
-//    ){
-//        Image(
-//            painter = painterResource(R.drawable.ic_logo_provider_kakao),
-//            contentDescription = null,
-//            modifier = Modifier.align(Alignment.CenterStart)
-//        )
-//        Text(
-//            text = stringResource(R.string.text_kakao_login_btn),
-//            modifier = Modifier.align(Alignment.Center),
-//            style = typography.bodyMedium
-//        )
-//
-//    }
-//}
+@Composable
+fun KakaoButton(onKakaoClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(shape = Shape5)
+            .background(color = Yellow)
+            .padding(start = LoginScreenKakaoButtonStartPadding)
+            .clickable(onClick = {
+                DummyUser.createDummyUser()
+                onKakaoClick()
+            }),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        Image(
+            painter = painterResource(R.drawable.ic_logo_provider_kakao),
+            contentDescription = null,
+            modifier = Modifier.padding(
+                top = LoginScreenKakaoButtonImageTopPadding,
+                bottom = LoginScreenKakaoButtonImageBottomPadding
+            )
+        )
+
+        Text(
+            stringResource(R.string.text_kakao_login_btn),
+            style = LoginKakaoButtonTextStyle.copy(color = Black),
+            modifier = Modifier.align(Alignment.Center)
+        )
+    }
+}
 
 
 @Preview
