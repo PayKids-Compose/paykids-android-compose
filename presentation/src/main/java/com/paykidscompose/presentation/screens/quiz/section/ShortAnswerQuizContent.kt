@@ -1,4 +1,4 @@
-package com.paykidscompose.presentation.screens.quiz
+package com.paykidscompose.presentation.screens.quiz.section
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

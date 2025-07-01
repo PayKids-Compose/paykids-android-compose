@@ -1,4 +1,4 @@
-package com.paykidscompose.presentation.screens.quiz
+package com.paykidscompose.presentation.screens.quiz.section
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

@@ -33,6 +33,9 @@ import com.paykidscompose.presentation.ui.components.PopupDialog
 import com.paykidscompose.presentation.ui.components.QuizResultCard
 import com.paykidscompose.presentation.ui.components.util.PopupType
 import com.paykidscompose.presentation.model.type.QuizResultType
+import com.paykidscompose.presentation.screens.quiz.section.ImageQuizContent
+import com.paykidscompose.presentation.screens.quiz.section.ShortAnswerQuizContent
+import com.paykidscompose.presentation.screens.quiz.section.TextChoiceQuizContent
 import com.paykidscompose.presentation.ui.theme.Black
 import com.paykidscompose.presentation.ui.theme.QuizAppBarShadowColor
 import com.paykidscompose.presentation.ui.theme.QuizAppBarShadowElevation
