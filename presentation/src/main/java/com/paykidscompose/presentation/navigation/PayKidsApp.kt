@@ -163,13 +163,17 @@ fun PayKidsApp(
 
             composable<MyPageNavigationRoute.MyInfoRoute> {
                 MyInfoScreen(
-
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
                 )
             }
 
             composable<MyPageNavigationRoute.TermsPolicyRoute> {
                 TermsPolicyScreen(
-
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
                 )
             }
 
