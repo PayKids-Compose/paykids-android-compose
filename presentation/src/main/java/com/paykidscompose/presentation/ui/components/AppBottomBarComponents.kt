@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.paykidscompose.presentation.navigation.bottom.BottomBarItem
 import com.paykidscompose.presentation.navigation.route.NavigationRoute
+import com.paykidscompose.presentation.navigation.route.serialName
 import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.BottomBarTextStyle
 import com.paykidscompose.presentation.ui.theme.Gray6
@@ -23,16 +24,18 @@ import com.paykidscompose.presentation.ui.theme.White
 
 @Composable
 fun AppBottomBar(
-    currentRoute: NavigationRoute?,
+    currentRoute: String?,
     onNavigate: (NavigationRoute) -> Unit = {}
 ) {
     val (bottomBarItems, bottomRoutes) = remember {
         val items = BottomBarItem.fetchBottomAppBarItems
-        val routes = items.flatMap { it.relatedRoutes }.distinct()
+        val routes = items.flatMap { it.relatedRoutes }
+            .map { it.serialName() }
+            .distinct()
         items to routes
     }
 
-    if(currentRoute !in bottomRoutes) return
+    if (currentRoute !in bottomRoutes) return
 
     // 터치 할 때 리플 수정 할 수 있으면 하기
     NavigationBar(
@@ -63,12 +66,13 @@ fun AppBottomBar(
                     unselectedTextColor = Gray6,
                     unselectedIconColor = Gray6,
                     indicatorColor = Transparent
-                ))
+                )
+            )
         }
     }
 }
 
 @Preview
 @Composable
-fun BottomBarPreview(){
+fun BottomBarPreview() {
 }
