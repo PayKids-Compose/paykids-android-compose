@@ -1,4 +1,4 @@
-package com.paykidscompose.presentation.screens.quiz
+package com.paykidscompose.presentation.screens.quiz.section
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -16,7 +16,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.paykidscompose.presentation.ui.state.QuizResultState
+import com.paykidscompose.presentation.model.type.QuizResultType
 import com.paykidscompose.presentation.ui.theme.Black
 import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.CardShadowElevation
@@ -34,7 +34,7 @@ fun TextChoiceQuizContent(
     textChoices: List<String>,
     answer: String,
     selectedIndex: Int?,
-    isCorrect: QuizResultState,
+    isCorrect: QuizResultType,
     onChoiceClick: (Int) -> Unit
 ) {
     val correctIndex = answer[0] - 'A'
@@ -46,15 +46,15 @@ fun TextChoiceQuizContent(
             val isCorrectCard = index == correctIndex
 
             val shadowColor = when {
-                isSelected && isCorrect == QuizResultState.WRONG -> Red
-                isCorrectCard && isCorrect == QuizResultState.WRONG -> Blue1
-                isSelected && isCorrect == QuizResultState.CORRECT -> Blue1
+                isSelected && isCorrect == QuizResultType.WRONG -> Red
+                isCorrectCard && isCorrect == QuizResultType.WRONG -> Blue1
+                isSelected && isCorrect == QuizResultType.CORRECT -> Blue1
                 else -> Gray3
             }
 
             Card(
                 modifier = Modifier
-                    .clickable(enabled = isCorrect == QuizResultState.DEFAULT) {
+                    .clickable(enabled = isCorrect == QuizResultType.DEFAULT) {
                         onChoiceClick(index)
                     }
                     .shadow(
@@ -97,7 +97,7 @@ fun TextChoiceQuizContentPreview(
                 ),
                 answer = "A",
                 selectedIndex = null,
-                isCorrect = QuizResultState.DEFAULT,
+                isCorrect = QuizResultType.DEFAULT,
                 onChoiceClick = {}
             )
         }
