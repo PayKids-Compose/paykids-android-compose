@@ -46,7 +46,15 @@ fun PayKidsApp(
 ) {
     val navController: NavHostController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute: NavigationRoute? = navBackStackEntry?.toRoute<NavigationRoute>()
+    val currentRoute = navBackStackEntry?.destination.let {
+        try {
+            navBackStackEntry?.toRoute<NavigationRoute>()
+        } catch(e: Exception) {
+            Log.e("PayKidsApp", "현재 목적지 경로 에러: $it", e)
+            null
+        }
+    }
+
     Log.d("PayKidsApp", "CurrentRoute: $currentRoute")
 
     var isLogin by remember { mutableStateOf(false) }

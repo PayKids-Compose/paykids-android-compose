@@ -15,6 +15,8 @@ coilCompose = "3.2.0"
 coilSvg = "2.7.0"
 kotlinxSerializationJson = "1.8.1"
 navigationCompose = "2.9.0"
+activity = "1.10.1"
+constraintlayout = "2.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -37,6 +39,8 @@ coil3-coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", versio
 coil-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coilSvg" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
