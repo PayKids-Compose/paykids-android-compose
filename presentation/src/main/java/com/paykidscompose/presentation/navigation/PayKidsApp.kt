@@ -10,7 +10,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -49,7 +48,7 @@ fun PayKidsApp(
     val currentRoute = navBackStackEntry?.destination.let {
         try {
             navBackStackEntry?.toRoute<NavigationRoute>()
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             Log.e("PayKidsApp", "현재 목적지 경로 에러: $it", e)
             null
         }
@@ -184,17 +183,13 @@ fun PayKidsApp(
 
             composable<MyPageNavigationRoute.MyInfoRoute> {
                 MyInfoScreen(
-                    onBackClick = {
-                        navController.popBackStack()
-                    }
+
                 )
             }
 
             composable<MyPageNavigationRoute.TermsPolicyRoute> {
                 TermsPolicyScreen(
-                    onBackClick = {
-                        navController.popBackStack()
-                    }
+
                 )
             }
 
