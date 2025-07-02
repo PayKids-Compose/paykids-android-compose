@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.DummyUser
 import com.paykidscompose.presentation.model.MyPageUIModel
+import com.paykidscompose.presentation.screens.mypage.section.MyPageTopBar
 import com.paykidscompose.presentation.ui.components.CardItem
 import com.paykidscompose.presentation.ui.components.CustomCard
 import com.paykidscompose.presentation.ui.components.CustomDivider
@@ -69,64 +70,70 @@ fun MyPageScreen(
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Gray5)
-            .padding(
-                start = MyPageDefaultScreenStartEndPadding,
-                end = MyPageDefaultScreenStartEndPadding,
-                top = MyPageDefaultScreenTopPadding
-            ),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            painter = painterResource(uiModel.image),
-            contentDescription = null,
+        modifier = Modifier.fillMaxSize()
+    ){
+        MyPageTopBar()
+
+        Column(
             modifier = Modifier
-                .size(MyPageDefaultScreenImageSize)
-                .clip(CircleShape)
-        )
-
-        Spacer(Modifier.height(MyPageDefaultScreenSpacer20))
-
-        TitleText(
-            uiModel.nickname,
-            color = Black2,
-            style = MyPageNicknameTextStyle
-        )
-
-        Spacer(Modifier.height(MyPageDefaultScreenSpacer50))
-
-        CustomCard(
-            modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
+                .background(color = Gray5)
+                .padding(
+                    start = MyPageDefaultScreenStartEndPadding,
+                    end = MyPageDefaultScreenStartEndPadding,
+                    top = MyPageDefaultScreenTopPadding
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CardItem(
-                stringResource(R.string.text_my_info),
-                iconText = stringResource(R.string.text_modify_my_info),
-                iconEnable = true,
-                onItemClick = onClickMyInfo
+            Image(
+                painter = painterResource(uiModel.image),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(MyPageDefaultScreenImageSize)
+                    .clip(CircleShape)
             )
 
-            CustomDivider()
+            Spacer(Modifier.height(MyPageDefaultScreenSpacer20))
 
-            CardItem(
-                stringResource(R.string.text_terms_policy_title),
-                iconEnable = true,
-                onItemClick = onClickTerms
+            TitleText(
+                uiModel.nickname,
+                color = Black2,
+                style = MyPageNicknameTextStyle
             )
 
-            CustomDivider()
+            Spacer(Modifier.height(MyPageDefaultScreenSpacer50))
 
-            CardItem(stringResource(R.string.text_app_version), onClickAppVersion)
+            CustomCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                CardItem(
+                    stringResource(R.string.text_my_info),
+                    iconText = stringResource(R.string.text_modify_my_info),
+                    iconEnable = true,
+                    onItemClick = onClickMyInfo
+                )
 
-            CustomDivider()
+                CustomDivider()
 
-            CardItem(
-                stringResource(R.string.text_logout),
-                textColor = Red,
-                onItemClick = onPopupDialog
-            )
+                CardItem(
+                    stringResource(R.string.text_terms_policy_title),
+                    iconEnable = true,
+                    onItemClick = onClickTerms
+                )
+
+                CustomDivider()
+
+                CardItem(stringResource(R.string.text_app_version), onClickAppVersion)
+
+                CustomDivider()
+
+                CardItem(
+                    stringResource(R.string.text_logout),
+                    textColor = Red,
+                    onItemClick = onPopupDialog
+                )
+            }
         }
     }
 }

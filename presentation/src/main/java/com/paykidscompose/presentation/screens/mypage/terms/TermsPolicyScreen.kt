@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.paykidscompose.presentation.R
+import com.paykidscompose.presentation.screens.mypage.section.TermsPolicyTopBar
 import com.paykidscompose.presentation.ui.components.CardItem
 import com.paykidscompose.presentation.ui.components.CustomCard
 import com.paykidscompose.presentation.ui.components.CustomDivider
@@ -28,55 +29,61 @@ import com.paykidscompose.presentation.ui.theme.TermsScreenTopPadding
 
 @Composable
 fun TermsPolicyScreen(
+    onBackClick: () -> Unit
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Gray5)
-            .padding(
-                top = TermsScreenTopPadding,
-                start = TermsScreenStartEndPadding,
-                end = TermsScreenStartEndPadding
-            )
-    ) {
-        Text(
-            stringResource(R.string.text_require_consent),
-            style = TermsPolicyInfoTitleTextStyle.copy(color = Gray8)
-        )
-
-        Spacer(modifier = Modifier.height(TermsScreenSpacer16))
-
-        CustomCard(
+        modifier = Modifier.fillMaxSize()
+    ){
+        TermsPolicyTopBar(onBackClick = onBackClick)
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(TermsScreenCardHeightSize),
-            shapeTop = TermsScreenCardShapeTopBottom,
-            shapeBottom = TermsScreenCardShapeTopBottom
+                .fillMaxSize()
+                .background(color = Gray5)
+                .padding(
+                    top = TermsScreenTopPadding,
+                    start = TermsScreenStartEndPadding,
+                    end = TermsScreenStartEndPadding
+                )
         ) {
-            CardItem(
-                stringResource(R.string.text_terms_of_use),
-                {},
-                titleTextStyle = TermsPolicyCardItemTitleTextStyle,
-                iconEnable = true
+            Text(
+                stringResource(R.string.text_require_consent),
+                style = TermsPolicyInfoTitleTextStyle.copy(color = Gray8)
             )
 
-            CustomDivider()
+            Spacer(modifier = Modifier.height(TermsScreenSpacer16))
 
-            CardItem(
-                stringResource(R.string.text_terms_policy_title),
-                {},
-                titleTextStyle = TermsPolicyCardItemTitleTextStyle,
-                iconEnable = true
-            )
+            CustomCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(TermsScreenCardHeightSize),
+                shapeTop = TermsScreenCardShapeTopBottom,
+                shapeBottom = TermsScreenCardShapeTopBottom
+            ) {
+                CardItem(
+                    stringResource(R.string.text_terms_of_use),
+                    {},
+                    titleTextStyle = TermsPolicyCardItemTitleTextStyle,
+                    iconEnable = true
+                )
 
-            CustomDivider()
+                CustomDivider()
 
-            CardItem(
-                stringResource(R.string.text_license),
-                {},
-                titleTextStyle = TermsPolicyCardItemTitleTextStyle,
-                iconEnable = true
-            )
+                CardItem(
+                    stringResource(R.string.text_terms_policy_title),
+                    {},
+                    titleTextStyle = TermsPolicyCardItemTitleTextStyle,
+                    iconEnable = true
+                )
+
+                CustomDivider()
+
+                CardItem(
+                    stringResource(R.string.text_license),
+                    {},
+                    titleTextStyle = TermsPolicyCardItemTitleTextStyle,
+                    iconEnable = true
+                )
+            }
         }
     }
 }
@@ -84,5 +91,5 @@ fun TermsPolicyScreen(
 @Preview
 @Composable
 fun TermsPolicyPreview() {
-    TermsPolicyScreen()
+    TermsPolicyScreen({})
 }

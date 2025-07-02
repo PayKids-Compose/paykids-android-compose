@@ -51,9 +51,6 @@ fun PayKidsApp(
     var isLogin by remember { mutableStateOf(false) }
 
     PayKidsScaffold(
-        topBar = {
-
-        },
         bottomBar = {
             AppBottomBar(
                 currentRoute = currentRoute,
@@ -163,13 +160,17 @@ fun PayKidsApp(
 
             composable<MyPageNavigationRoute.MyInfoRoute> {
                 MyInfoScreen(
-
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
                 )
             }
 
             composable<MyPageNavigationRoute.TermsPolicyRoute> {
                 TermsPolicyScreen(
-
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
                 )
             }
 

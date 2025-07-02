@@ -24,7 +24,7 @@ class SplashActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         handler.postDelayed({
-            Log.e(TAG, "초기화 작업 시작!")
+            Log.d(TAG, "초기화 작업 시작!")
             startActivity(Intent(this@SplashActivity, MainActivity::class.java))
             finish()
         }, 1500L)
