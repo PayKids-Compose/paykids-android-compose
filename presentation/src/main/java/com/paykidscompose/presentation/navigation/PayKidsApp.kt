@@ -1,8 +1,6 @@
 package com.paykidscompose.presentation.navigation
 
 import android.util.Log
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,7 +18,6 @@ import androidx.navigation.toRoute
 import com.paykidscompose.presentation.navigation.route.AllowanceDiaryNavigationRoute
 import com.paykidscompose.presentation.navigation.route.EntryNavigationRoute
 import com.paykidscompose.presentation.navigation.route.MyPageNavigationRoute
-import com.paykidscompose.presentation.navigation.route.NavigationRoute
 import com.paykidscompose.presentation.navigation.route.QuizNavigationRoute
 import com.paykidscompose.presentation.navigation.route.TabNavigationRoute
 import com.paykidscompose.presentation.screens.PayKidsScaffold
@@ -45,14 +42,9 @@ fun PayKidsApp(
 ) {
     val navController: NavHostController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination.let {
-        try {
-            navBackStackEntry?.toRoute<NavigationRoute>()
-        } catch (e: Exception) {
-            Log.e("PayKidsApp", "현재 목적지 경로 에러: $it", e)
-            null
-        }
-    }
+    // 다형성이 지원이 안되는 듯
+//    val currentRoute =  navBackStackEntry?.toRoute<NavigationRoute>()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     Log.d("PayKidsApp", "CurrentRoute: $currentRoute")
 
@@ -81,18 +73,6 @@ fun PayKidsApp(
         }
     ) { paddingValues ->
         NavHost(
-            enterTransition = {
-                EnterTransition.None
-            },
-            exitTransition = {
-                ExitTransition.None
-            },
-            popEnterTransition = {
-                EnterTransition.None
-            },
-            popExitTransition = {
-                ExitTransition.None
-            },
             navController = navController,
             startDestination = if (isLogin) {
                 TabNavigationRoute.HomeRoute

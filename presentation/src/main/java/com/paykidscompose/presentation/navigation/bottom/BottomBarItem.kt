@@ -4,6 +4,7 @@ import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.navigation.route.AllowanceDiaryNavigationRoute
 import com.paykidscompose.presentation.navigation.route.NavigationRoute
 import com.paykidscompose.presentation.navigation.route.TabNavigationRoute
+import com.paykidscompose.presentation.navigation.route.serialName
 
 
 data class BottomBarItem(
@@ -12,8 +13,12 @@ data class BottomBarItem(
     val destination: TabNavigationRoute,
     val relatedRoutes: List<NavigationRoute> = listOf(destination)
 ) {
-    fun isSelected(currentRoute: NavigationRoute?): Boolean =
-        currentRoute != null && currentRoute in relatedRoutes
+    fun isSelected(currentRoute: String?): Boolean {
+        if (currentRoute == null) return false
+        // 현재 루트를 문자열로 받기 때문에 관련 경로도 문자열로 변환해서 비교 진행
+        val relatedRouteNames = relatedRoutes.map { it.serialName() }
+        return currentRoute in relatedRouteNames
+    }
 
     companion object {
         const val QUEST = "퀘스트"
