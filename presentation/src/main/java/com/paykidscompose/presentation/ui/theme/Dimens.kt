@@ -12,6 +12,7 @@ val DeterminationButtonTextTopAndBottom = 14.dp
 val DeterminationButtonTextTopAndBottom2 = 15.dp
 val CardShadowElevation = 8.dp
 val TopAppBarShadowElevation = 16.dp
+val Shape5 = RoundedCornerShape(5.dp)
 val Shape10 = RoundedCornerShape(10.dp)
 val ShadowElevation16 = 16.dp
 
@@ -19,7 +20,10 @@ val ShadowElevation16 = 16.dp
 val SplashLogo = 174.dp
 
 // 로그인 화면
-val LoginKakaoTextBottomPadding = 11.dp
+val LoginScreenKakaoTextBottomPadding = 11.dp
+val LoginScreenKakaoButtonStartPadding = 8.dp
+val LoginScreenKakaoButtonImageTopPadding= 10.dp
+val LoginScreenKakaoButtonImageBottomPadding= 8.dp
 
 // 로그인 닉네임 입력 화면
 val NicknameScreenTopPadding = 196.dp

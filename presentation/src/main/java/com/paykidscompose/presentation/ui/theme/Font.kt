@@ -45,6 +45,14 @@ val StageTooltipTextStyle = TextStyle(
     lineHeight = 25.sp
 )
 
+// 로그인 스크린
+val LoginKakaoButtonTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 18.sp,
+    lineHeight = 22.sp
+)
+
 // 닉네임 스크린
 val NicknameTitleTextStyle = TextStyle(
     fontFamily = NanumSquare,
