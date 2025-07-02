@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -97,20 +96,16 @@ fun QuizScreen(
         )
     }
 
-    Scaffold(
-        topBar = {
-            QuizTopBar(
-                quizNumber = quizNumber,
-                totalQuizCount = totalQuizCount,
-                onBackClick = { showDialog = true }
-            )
-        }) { innerPadding ->
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        QuizTopBar(
+            quizNumber = quizNumber,
+            totalQuizCount = totalQuizCount,
+            onBackClick = { showDialog = true }
+        )
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    top = innerPadding.calculateTopPadding()
-                )
+            modifier = Modifier.fillMaxSize()
         ) {
             AsyncImage(
                 model = when (isCorrect) {
@@ -122,7 +117,6 @@ fun QuizScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
