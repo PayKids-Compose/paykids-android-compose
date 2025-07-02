@@ -51,9 +51,6 @@ fun PayKidsApp(
     var isLogin by remember { mutableStateOf(false) }
 
     PayKidsScaffold(
-        topBar = {
-
-        },
         bottomBar = {
             AppBottomBar(
                 currentRoute = currentRoute,
