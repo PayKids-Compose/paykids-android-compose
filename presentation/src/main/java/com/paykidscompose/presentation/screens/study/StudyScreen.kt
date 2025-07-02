@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -23,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.paykidscompose.presentation.model.ChatMessageUIModel
-import com.paykidscompose.presentation.screens.PayKidsScaffold
 import com.paykidscompose.presentation.screens.study.section.ChatInput
 import com.paykidscompose.presentation.screens.study.section.GptBubble
 import com.paykidscompose.presentation.screens.study.section.StageInfoBox
@@ -53,38 +51,30 @@ fun Study(
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
-    PayKidsScaffold(
-        topBar = {
-            StudyTopBar(
-                onBackClick = onBackClick
-            )
-        }, bottomBar = {
-
-        }) { innerPadding ->
-        StudyScreen(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
-            stageNumber = stageNumber,
-            userNickname = userNickname,
-            messages = messages,
-            userInput = userInput,
-            onUserInputChange = { userInput = it },
-            onSendClick = {
-                if (userInput.isNotBlank()) {
-                    messages.add(ChatMessageUIModel(userInput, isFromGpt = false))
-                    userInput = ""
-                    coroutineScope.launch {
-                        delay(500)
-                        messages.add(ChatMessageUIModel("GPT 응답 예시", isFromGpt = true))
-                        listState.animateScrollToItem(messages.size - 1)
-                    }
+    StudyScreen(
+        modifier = Modifier
+            .fillMaxSize(),
+        stageNumber = stageNumber,
+        userNickname = userNickname,
+        messages = messages,
+        userInput = userInput,
+        onBackClick = onBackClick,
+        onUserInputChange = { userInput = it },
+        onSendClick = {
+            if (userInput.isNotBlank()) {
+                messages.add(ChatMessageUIModel(userInput, isFromGpt = false))
+                userInput = ""
+                coroutineScope.launch {
+                    delay(500)
+                    messages.add(ChatMessageUIModel("GPT 응답 예시", isFromGpt = true))
+                    listState.animateScrollToItem(messages.size - 1)
                 }
-            },
-            listState = listState
-        )
-    }
+            }
+        },
+        listState = listState
+    )
 }
+
 
 @Composable
 fun StudyScreen(
@@ -93,6 +83,7 @@ fun StudyScreen(
     userNickname: String,
     messages: List<ChatMessageUIModel>,
     userInput: String,
+    onBackClick: () -> Unit,
     onUserInputChange: (String) -> Unit,
     onSendClick: () -> Unit,
     listState: LazyListState
@@ -102,6 +93,7 @@ fun StudyScreen(
             .fillMaxSize()
             .background(Gray5)
     ) {
+        StudyTopBar(onBackClick = onBackClick)
         LazyColumn(
             modifier = Modifier
                 .weight(1f)
