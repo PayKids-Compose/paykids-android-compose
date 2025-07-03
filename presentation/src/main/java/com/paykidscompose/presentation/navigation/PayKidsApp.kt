@@ -31,7 +31,7 @@ import com.paykidscompose.presentation.screens.mypage.MyPageScreen
 import com.paykidscompose.presentation.screens.mypage.info.MyInfoScreen
 import com.paykidscompose.presentation.screens.mypage.terms.TermsPolicyScreen
 import com.paykidscompose.presentation.screens.quiz.Quiz
-import com.paykidscompose.presentation.screens.quiz.QuizClearScreen
+import com.paykidscompose.presentation.screens.quiz.QuizClear
 import com.paykidscompose.presentation.screens.quiz.QuizEntry
 import com.paykidscompose.presentation.screens.quiz.QuizViewModel
 import com.paykidscompose.presentation.screens.study.Study
@@ -138,7 +138,7 @@ fun PayKidsApp(
                 val targetRoute = backStack.toRoute<QuizNavigationRoute.QuizClearRoute>()
                 val clearType = targetRoute.clear
 
-                QuizClearScreen(
+                QuizClear(
                     clearType = clearType,
                     onExitClick = {
                         navController.navigate(TabNavigationRoute.HomeRoute)
