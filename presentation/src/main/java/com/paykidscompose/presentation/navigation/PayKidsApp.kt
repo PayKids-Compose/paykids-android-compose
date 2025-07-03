@@ -136,7 +136,11 @@ fun PayKidsApp(
                 QuizClearScreen(
                     clearType = clearType,
                     onExitClick = {
-                        navController.navigate(TabNavigationRoute.HomeRoute)
+                        navController.navigate(TabNavigationRoute.HomeRoute) {
+                            popUpTo(navController.graph.findStartDestination().id)
+                            launchSingleTop = true
+                            // 백스택 맨 위에가 홈이라면 기존 화면을 재사용하기 위해서 넣음.
+                        }
                     }
                 )
             }
