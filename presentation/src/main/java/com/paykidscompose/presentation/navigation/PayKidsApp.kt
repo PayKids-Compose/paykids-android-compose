@@ -33,6 +33,7 @@ import com.paykidscompose.presentation.screens.mypage.terms.TermsPolicyScreen
 import com.paykidscompose.presentation.screens.quiz.QuizClearScreen
 import com.paykidscompose.presentation.screens.quiz.QuizEntryScreen
 import com.paykidscompose.presentation.screens.quiz.QuizScreen
+import com.paykidscompose.presentation.screens.quiz.QuizViewModel
 import com.paykidscompose.presentation.screens.study.Study
 import com.paykidscompose.presentation.ui.components.AppBottomBar
 
@@ -49,6 +50,8 @@ fun PayKidsApp(
     Log.d("PayKidsApp", "CurrentRoute: $currentRoute")
 
     var isLogin by remember { mutableStateOf(false) }
+
+    val quizViewModel = remember { QuizViewModel() }
 
     PayKidsScaffold(
         bottomBar = {
@@ -105,6 +108,7 @@ fun PayKidsApp(
 
                 QuizEntryScreen(
                     stageNumber = stageNumber,
+                    quizViewModel = quizViewModel,
                     onQuiz = {
                         navController.navigate(QuizNavigationRoute.QuizRoute(stageNumber))
                     },
@@ -120,6 +124,7 @@ fun PayKidsApp(
 
                 QuizScreen(
                     stageNumber = stageNumber,
+                    quizViewModel = quizViewModel,
                     onBackClick = {
                         navController.popBackStack()
                     },
