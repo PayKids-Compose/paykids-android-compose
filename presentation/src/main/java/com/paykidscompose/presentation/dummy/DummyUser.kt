@@ -18,8 +18,8 @@ object DummyUser {
     private val userList = mutableListOf<User>()
     var id = 1
 
-    fun getUser(id: String): User? {
-        return userList.find { it.id == id}
+    fun getUser(): User {
+        return userList.first()
     }
 
     fun setUser(user: User) {

@@ -24,7 +24,6 @@ import com.paykidscompose.presentation.ui.theme.White
 fun DecisionButton(
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
     backgroundColor: Color = Blue2,
     contentColor: Color = White,
     disabledBackgroundColor: Color = Gray2,
@@ -35,7 +34,7 @@ fun DecisionButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(DeterminationButtonCorner)),
         enabled = enabled,

@@ -27,6 +27,7 @@ import com.paykidscompose.presentation.screens.allowance.detail.CategoryDetail
 import com.paykidscompose.presentation.screens.home.HomeScreen
 import com.paykidscompose.presentation.screens.login.Login
 import com.paykidscompose.presentation.screens.login.LoginScreen
+import com.paykidscompose.presentation.screens.login.nickname.Nickname
 import com.paykidscompose.presentation.screens.login.nickname.NicknameScreen
 import com.paykidscompose.presentation.screens.mypage.MyPageScreen
 import com.paykidscompose.presentation.screens.mypage.info.MyInfoScreen
@@ -87,7 +88,7 @@ fun PayKidsApp(
             }
 
             composable<EntryNavigationRoute.LoginNicknameRoute> {
-                NicknameScreen {
+                Nickname {
                     isLogin = true
                 }
             }

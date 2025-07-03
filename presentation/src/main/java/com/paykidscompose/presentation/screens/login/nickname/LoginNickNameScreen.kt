@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.DummyUser
+import com.paykidscompose.presentation.dummy.User
 import com.paykidscompose.presentation.ui.components.DecisionButton
 import com.paykidscompose.presentation.ui.components.InfoText
 import com.paykidscompose.presentation.ui.components.TitleText
@@ -34,14 +35,30 @@ import com.paykidscompose.presentation.ui.theme.TitleAndFieldSpacer
 
 // 스플래시 이후 로그인 화면입니다.
 @Composable
-fun NicknameScreen(
-    onConfirmClick: () -> Unit
-) {
+fun Nickname(
+    onConfirmClick: () -> Unit = {}
+){
+    val user = DummyUser.getUser()
     var nickname by remember { mutableStateOf("") }
     val onNicknameChange = { value: String ->
         nickname = value
     }
-    val user = DummyUser.getUsers().first()
+
+    NicknameScreen(
+        user = user,
+        nickname = nickname,
+        onNicknameChange = onNicknameChange,
+        onConfirmClick = onConfirmClick
+    )
+}
+
+@Composable
+fun NicknameScreen(
+    user: User,
+    nickname: String,
+    onNicknameChange: (String) -> Unit,
+    onConfirmClick: () -> Unit
+) {
 
     Column(
         modifier = Modifier
@@ -78,7 +95,7 @@ fun NicknameScreen(
 }
 
 @Composable
-fun NicknameInput(nickname: String, onNicknameChange: (String) -> Unit) {
+private fun NicknameInput(nickname: String, onNicknameChange: (String) -> Unit) {
 
     Spacer(modifier = Modifier.height(TitleAndFieldSpacer))
 
@@ -103,6 +120,6 @@ fun NicknameInput(nickname: String, onNicknameChange: (String) -> Unit) {
 @Composable
 fun NicknameScreenPreview() {
     PayKidsComposeTheme {
-        NicknameScreen { }
+        Nickname { }
     }
 }
