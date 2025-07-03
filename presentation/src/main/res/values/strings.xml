@@ -23,11 +23,12 @@
     <string name="text_btn_review">오답노트 풀기</string>
 
     <!-- 퀴즈 풀기 화면 -->
-z   <string name="text_quiz_number">%1$d/%2$d</string>">
+z   <string name="text_quiz_number">%1$d/%2$d</string>
     <string name="text_correct_answer">정답이에요!</string>
     <string name="text_wrong_answer">오답이에요..</string>
     <string name="hint_input_answer">정답 입력하기...</string>
     <string name="text_confirm_answer">결정하기</string>
+    <string name="text_quiz_loading">퀴즈를 불러오는 중입니다...</string>
 
     <!-- 퀴즈 클리어 화면 -->
     <string name="text_box_all_clear">스테이지 클리어!\n놀라워요! 모든 문제를 다 맞혔어요!</string>
