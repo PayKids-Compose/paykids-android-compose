@@ -15,7 +15,7 @@ data class User(
 
 object DummyUser {
 
-    private val userList = mutableListOf<User>(User("TestMingyu", "Mingyu", "민규당", "test@naver.com"))
+    private val userList = mutableListOf<User>()
     var id = 1
 
     fun getUser(id: String): User? {
@@ -33,10 +33,10 @@ object DummyUser {
 
     fun createDummyUser() {
         val user = User(
-            id = "dummy_${id++}",
-            username = "kakaoUser${(1000..9999).random()}",
-            nickname = "",
-            email = "user${(1000..9999).random()}@kakao.com"
+            id = "TestMingyu",
+            username = "Mingyu",
+            nickname = "민규당",
+            email = "test@naver.com"
         )
         setUser(user)
     }
