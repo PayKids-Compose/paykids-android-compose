@@ -6,8 +6,96 @@ import com.paykidscompose.presentation.model.type.QuizType
 
 object DummyQuiz {
     private val dummyQuizzes = listOf(
+        // --- Stage 1 ---
         QuizUIModel(
             stage = 1,
+            number = 1,
+            quizType = QuizType.TEXT_CHOICE,
+            question = "돈을 벌기 위해 우리가 하는 일을 무엇이라고 하나요?",
+            choices = listOf(
+                "A" to "놀이",
+                "B" to "직업",
+                "C" to "여행",
+                "D" to "숙제"
+            ),
+            answer = "B",
+            imageUrl = null,
+            totalCount = 6
+        ),
+        QuizUIModel(
+            stage = 1,
+            number = 2,
+            quizType = QuizType.SHORT_ANSWER,
+            question = "은행에 돈을 맡기는 것을 무엇이라고 할까요?",
+            choices = null,
+            answer = "저축",
+            imageUrl = null,
+            totalCount = 6
+        ),
+        QuizUIModel(
+            stage = 1,
+            number = 3,
+            quizType = QuizType.IMAGE,
+            question = "다음 중 지폐는 무엇일까요?",
+            choices = listOf(
+                "A" to "지갑",
+                "B" to "10000원",
+                "C" to "신용카드",
+                "D" to "동전"
+            ),
+            answer = "B",
+            imageUrl = listOf(
+                R.drawable.img_quiz_item_default,
+                R.drawable.img_quiz_item_default,
+                R.drawable.img_quiz_item_default,
+                R.drawable.img_quiz_item_default
+            ),
+            totalCount = 6
+        ),
+        QuizUIModel(
+            stage = 1,
+            number = 4,
+            quizType = QuizType.TEXT_CHOICE_IMAGE,
+            question = "필요한 것을 사는 것을 무엇이라고 하나요?",
+            choices = listOf(
+                "A" to "소비",
+                "B" to "기부",
+                "C" to "저축",
+                "D" to "일"
+            ),
+            answer = "A",
+            imageUrl = listOf(R.drawable.img_quiz_item_default),
+            totalCount = 6
+        ),
+        QuizUIModel(
+            stage = 1,
+            number = 5,
+            quizType = QuizType.SHORT_ANSWER_IMAGE,
+            question = "사진 속 인물은 누구인가요?",
+            choices = null,
+            answer = "세종대왕",
+            imageUrl = listOf(R.drawable.img_king_sejong),
+            totalCount = 6
+        ),
+        QuizUIModel(
+            stage = 1,
+            number = 6,
+            quizType = QuizType.TEXT_CHOICE,
+            question = "돈을 모아두는 것을 무엇이라고 하나요?",
+            choices = listOf(
+                "A" to "기부",
+                "B" to "저축",
+                "C" to "소비",
+                "D" to "대출"
+            ),
+            answer = "B",
+            imageUrl = null,
+            totalCount = 6
+        ),
+
+        // --- Stage 2 ---
+        QuizUIModel(
+            stage = 2,
             number = 1,
             quizType = QuizType.TEXT_CHOICE,
             question = "다음 중 돈을 가장 잘 사용하는 방법은 무엇일까요?",
@@ -21,7 +109,7 @@ object DummyQuiz {
             totalCount = 5
         ),
         QuizUIModel(
-            stage = 1,
+            stage = 2,
             number = 2,
             quizType = QuizType.SHORT_ANSWER,
             question = "10000원 권 지폐에 그려진 인물은?",
@@ -31,7 +119,7 @@ object DummyQuiz {
             totalCount = 5
         ),
         QuizUIModel(
-            stage = 1,
+            stage = 2,
             number = 3,
             quizType = QuizType.TEXT_CHOICE_IMAGE,
             question = "합리적인 소비법",
@@ -51,7 +139,7 @@ object DummyQuiz {
             totalCount = 5
         ),
         QuizUIModel(
-            stage = 1,
+            stage = 2,
             number = 4,
             quizType = QuizType.SHORT_ANSWER,
             question = "1000원 권 지폐에 그려진 인물은?",
@@ -61,7 +149,7 @@ object DummyQuiz {
             totalCount = 5
         ),
         QuizUIModel(
-            stage = 1,
+            stage = 2,
             number = 5,
             quizType = QuizType.TEXT_CHOICE,
             question = "다음 중 계좌를 만들 수 있는 곳은?",
@@ -81,8 +169,12 @@ object DummyQuiz {
         return dummyQuizzes.firstOrNull { it.stage == stage && it.number == number }
     }
 
-    fun getWrongNoteQuizList(stage: Int, wrongQuizNumbers: List<Int>): List<QuizUIModel> {
-        return wrongQuizNumbers.mapNotNull { number ->
+    fun getQuizzes(stage: Int): List<QuizUIModel> {
+        return dummyQuizzes.filter { it.stage == stage }.sortedBy { it.number }
+    }
+
+    fun getWrongAnswerNoteQuizzes(stage: Int, wrongAnswerQuizNumbers: List<Int>): List<QuizUIModel> {
+        return wrongAnswerQuizNumbers.mapNotNull { number ->
             getQuiz(stage, number)
         }
     }
