@@ -47,13 +47,53 @@ import com.paykidscompose.presentation.ui.theme.TextChoiceQuizImageRound
 import kotlinx.coroutines.delay
 
 @Composable
+fun Quiz(
+    stageNumber: Int,
+    quizViewModel: QuizViewModel,
+    onBackClick: () -> Unit,
+    onConfirmClick: (QuizClearType) -> Unit
+) {
+    var showDialog by remember { mutableStateOf(false) }
+    var selectedIndex by remember { mutableStateOf<Int?>(null) }
+    var isCorrect by remember { mutableStateOf(QuizResultType.DEFAULT) }
+    var userInput by remember { mutableStateOf("") }
+
+    QuizScreen(
+        stageNumber = stageNumber,
+        quizViewModel = quizViewModel,
+        showDialog = showDialog,
+        onShowDialogChange = { showDialog = it },
+        selectedIndex = selectedIndex,
+        onSelectedIndexChange = { selectedIndex = it },
+        isCorrect = isCorrect,
+        onCorrectChange = { isCorrect = it },
+        userInput = userInput,
+        onUserInputChange = { userInput = it },
+        onBackClick = onBackClick,
+        onConfirmClick = onConfirmClick,
+        onChoiceClick = { selectedIndex = it },
+        onConfirmAnswer = { isCorrectAnswer ->
+            isCorrect = if (isCorrectAnswer) QuizResultType.CORRECT else QuizResultType.WRONG
+        }
+    )
+}
+
+@Composable
 fun QuizScreen(
     stageNumber: Int = 1,
     quizViewModel: QuizViewModel,
-    onBackClick: () -> Unit = {},
-    onConfirmClick: (QuizClearType) -> Unit = {},
-    onChoiceClick: (Int) -> Unit = {},
-    onConfirmAnswer: (Boolean) -> Unit = {}
+    showDialog: Boolean,
+    onShowDialogChange: (Boolean) -> Unit,
+    selectedIndex: Int?,
+    onSelectedIndexChange: (Int?) -> Unit,
+    isCorrect: QuizResultType,
+    onCorrectChange: (QuizResultType) -> Unit,
+    userInput: String,
+    onUserInputChange: (String) -> Unit,
+    onBackClick: () -> Unit,
+    onConfirmClick: (QuizClearType) -> Unit,
+    onChoiceClick: (Int) -> Unit,
+    onConfirmAnswer: (Boolean) -> Unit
 ) {
     val currentQuiz = quizViewModel.currentQuiz
     if (currentQuiz == null) {
@@ -67,13 +107,8 @@ fun QuizScreen(
     val totalCount = currentQuiz.totalCount
     val quizNumber = quizViewModel.currentIndex + 1
 
-    var showDialog by remember { mutableStateOf(false) }
-    var selectedIndex by remember { mutableStateOf<Int?>(null) }
-    var isCorrect by remember { mutableStateOf(QuizResultType.DEFAULT) }
-    var userInput by remember { mutableStateOf("") }
-
     BackHandler(enabled = true) {
-        showDialog = true
+        onShowDialogChange(true)
     }
 
     if (showDialog) {
@@ -81,10 +116,10 @@ fun QuizScreen(
             title = stringResource(R.string.dialog_check_exit),
             popupType = PopupType.QUIZ_EXIT,
             onCancelClick = {
-                showDialog = false
+                onShowDialogChange(false)
             },
             onConfirmClick = {
-                showDialog = false
+                onShowDialogChange(false)
                 onBackClick()
             },
             description = ""
@@ -98,9 +133,9 @@ fun QuizScreen(
                 onConfirmClick(QuizClearType.ALL_CLEAR)
             } else {
                 quizViewModel.moveToNext()
-                selectedIndex = null
-                isCorrect = QuizResultType.DEFAULT
-                userInput = ""
+                onSelectedIndexChange(null)
+                onCorrectChange(QuizResultType.DEFAULT)
+                onUserInputChange("")
             }
         }
     }
@@ -111,7 +146,7 @@ fun QuizScreen(
         QuizTopBar(
             quizNumber = quizNumber,
             totalQuizCount = totalCount,
-            onBackClick = { showDialog = true }
+            onBackClick = { onShowDialogChange(true) }
         )
         Box(
             modifier = Modifier.fillMaxSize()
@@ -167,9 +202,9 @@ fun QuizScreen(
                             selectedIndex = selectedIndex,
                             isCorrect = isCorrect,
                             onChoiceClick = { index ->
-                                selectedIndex = index
-                                isCorrect =
-                                    if (index == (currentQuiz.answer[0] - 'A')) QuizResultType.CORRECT else QuizResultType.WRONG
+                                onSelectedIndexChange(index)
+                                val isRight = index == (currentQuiz.answer[0] - 'A')
+                                onCorrectChange(if (isRight) QuizResultType.CORRECT else QuizResultType.WRONG)
                                 onChoiceClick(index)
                             }
                         )
@@ -183,9 +218,9 @@ fun QuizScreen(
                             selectedIndex = selectedIndex,
                             isCorrect = isCorrect,
                             onChoiceClick = { index ->
-                                selectedIndex = index
-                                isCorrect =
-                                    if (index == (currentQuiz.answer[0] - 'A')) QuizResultType.CORRECT else QuizResultType.WRONG
+                                onSelectedIndexChange(index)
+                                val isRight = index == (currentQuiz.answer[0] - 'A')
+                                onCorrectChange(if (isRight) QuizResultType.CORRECT else QuizResultType.WRONG)
                                 onChoiceClick(index)
                             }
                         )
@@ -232,9 +267,9 @@ fun QuizScreen(
                                 selectedIndex = selectedIndex,
                                 isCorrect = isCorrect,
                                 onChoiceClick = { index ->
-                                    selectedIndex = index
-                                    isCorrect =
-                                        if (index == (currentQuiz.answer[0] - 'A')) QuizResultType.CORRECT else QuizResultType.WRONG
+                                    onSelectedIndexChange(index)
+                                    val isRight = index == (currentQuiz.answer[0] - 'A')
+                                    onCorrectChange(if (isRight) QuizResultType.CORRECT else QuizResultType.WRONG)
                                     onChoiceClick(index)
                                 }
                             )
@@ -245,10 +280,11 @@ fun QuizScreen(
                             quizType = currentQuiz.quizType,
                             userInput = userInput,
                             answer = currentQuiz.answer,
-                            onUserInputChange = { userInput = it },
+                            onUserInputChange = onUserInputChange,
                             onConfirmAnswer = { isCorrectAnswer ->
-                                isCorrect =
+                                onCorrectChange(
                                     if (isCorrectAnswer) QuizResultType.CORRECT else QuizResultType.WRONG
+                                )
                                 onConfirmAnswer(isCorrectAnswer)
                                 //onConfirmClick(QuizClearType.ALL_CLEAR)
                             }
@@ -292,10 +328,11 @@ fun QuizScreen(
                                 quizType = currentQuiz.quizType,
                                 userInput = userInput,
                                 answer = currentQuiz.answer,
-                                onUserInputChange = { userInput = it },
+                                onUserInputChange = onUserInputChange,
                                 onConfirmAnswer = { isCorrectAnswer ->
-                                    isCorrect =
+                                    onCorrectChange(
                                         if (isCorrectAnswer) QuizResultType.CORRECT else QuizResultType.WRONG
+                                    )
                                     onConfirmAnswer(isCorrectAnswer)
                                 }
                             )

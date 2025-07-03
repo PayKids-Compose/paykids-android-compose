@@ -30,9 +30,9 @@ import com.paykidscompose.presentation.screens.login.nickname.NicknameScreen
 import com.paykidscompose.presentation.screens.mypage.MyPageScreen
 import com.paykidscompose.presentation.screens.mypage.info.MyInfoScreen
 import com.paykidscompose.presentation.screens.mypage.terms.TermsPolicyScreen
+import com.paykidscompose.presentation.screens.quiz.Quiz
 import com.paykidscompose.presentation.screens.quiz.QuizClearScreen
 import com.paykidscompose.presentation.screens.quiz.QuizEntryScreen
-import com.paykidscompose.presentation.screens.quiz.QuizScreen
 import com.paykidscompose.presentation.screens.quiz.QuizViewModel
 import com.paykidscompose.presentation.screens.study.Study
 import com.paykidscompose.presentation.ui.components.AppBottomBar
@@ -122,7 +122,7 @@ fun PayKidsApp(
                 val targetRoute = backStack.toRoute<QuizNavigationRoute.QuizRoute>()
                 val stageNumber = targetRoute.stageNumber
 
-                QuizScreen(
+                Quiz(
                     stageNumber = stageNumber,
                     quizViewModel = quizViewModel,
                     onBackClick = {
