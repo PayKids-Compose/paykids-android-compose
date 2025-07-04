@@ -47,6 +47,7 @@ import com.paykidscompose.presentation.ui.theme.White
 @Composable
 fun QuizEntryScreen(
     stageNumber: Int,
+    quizViewModel: QuizViewModel,
     onQuiz: (Int) -> Unit = {},
     onStudyClick: () -> Unit = {}
 ) {
@@ -112,6 +113,7 @@ fun QuizEntryScreen(
             DecisionButton( // 퀴즈 풀기
                 text = stringResource(R.string.text_btn_quiz),
                 onClick = {
+                    quizViewModel.loadQuiz(stageNumber)
                     onQuiz(stageNumber)
                 },
                 backgroundColor = Blue1,
@@ -138,5 +140,5 @@ fun QuizEntryScreen(
 @Preview
 @Composable
 fun QuizEntryScreenPreview(){
-    QuizEntryScreen(1)
+    QuizEntryScreen(2, remember { QuizViewModel() })
 }

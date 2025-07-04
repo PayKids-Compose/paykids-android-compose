@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.coil3.coil.compose)
     implementation(libs.coil.svg)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
