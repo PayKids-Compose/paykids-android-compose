@@ -1,13 +1,25 @@
 package com.paykidscompose.presentation.dummy
 
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.model.QuizUIModel
 import com.paykidscompose.presentation.model.type.QuizType
+
+data class Quiz(
+    val id: Int,
+    val stage: Int,
+    val number: Int,
+    val quizType: QuizType,
+    val question: String,
+    val choices: List<Pair<String, String>>?,
+    val answer: String,
+    val imageUrl: List<Int>?,
+    val totalCount: Int
+)
 
 object DummyQuiz {
     private val dummyQuizzes = listOf(
         // --- Stage 1 ---
-        QuizUIModel(
+        Quiz(
+            id = 1,
             stage = 1,
             number = 1,
             quizType = QuizType.TEXT_CHOICE,
@@ -22,7 +34,8 @@ object DummyQuiz {
             imageUrl = null,
             totalCount = 6
         ),
-        QuizUIModel(
+        Quiz(
+            id = 2,
             stage = 1,
             number = 2,
             quizType = QuizType.SHORT_ANSWER,
@@ -32,7 +45,8 @@ object DummyQuiz {
             imageUrl = null,
             totalCount = 6
         ),
-        QuizUIModel(
+        Quiz(
+            id = 3,
             stage = 1,
             number = 3,
             quizType = QuizType.IMAGE,
@@ -52,7 +66,8 @@ object DummyQuiz {
             ),
             totalCount = 6
         ),
-        QuizUIModel(
+        Quiz(
+            id = 4,
             stage = 1,
             number = 4,
             quizType = QuizType.TEXT_CHOICE_IMAGE,
@@ -67,7 +82,8 @@ object DummyQuiz {
             imageUrl = listOf(R.drawable.img_quiz_item_default),
             totalCount = 6
         ),
-        QuizUIModel(
+        Quiz(
+            id = 5,
             stage = 1,
             number = 5,
             quizType = QuizType.SHORT_ANSWER_IMAGE,
@@ -77,7 +93,8 @@ object DummyQuiz {
             imageUrl = listOf(R.drawable.img_king_sejong),
             totalCount = 6
         ),
-        QuizUIModel(
+        Quiz(
+            id = 6,
             stage = 1,
             number = 6,
             quizType = QuizType.TEXT_CHOICE,
@@ -94,7 +111,8 @@ object DummyQuiz {
         ),
 
         // --- Stage 2 ---
-        QuizUIModel(
+        Quiz(
+            id = 7,
             stage = 2,
             number = 1,
             quizType = QuizType.TEXT_CHOICE,
@@ -108,7 +126,8 @@ object DummyQuiz {
             imageUrl = null,
             totalCount = 5
         ),
-        QuizUIModel(
+        Quiz(
+            id = 8,
             stage = 2,
             number = 2,
             quizType = QuizType.SHORT_ANSWER,
@@ -118,7 +137,8 @@ object DummyQuiz {
             imageUrl = null,
             totalCount = 5
         ),
-        QuizUIModel(
+        Quiz(
+            id = 9,
             stage = 2,
             number = 3,
             quizType = QuizType.TEXT_CHOICE_IMAGE,
@@ -138,7 +158,8 @@ object DummyQuiz {
             ),
             totalCount = 5
         ),
-        QuizUIModel(
+        Quiz(
+            id = 10,
             stage = 2,
             number = 4,
             quizType = QuizType.SHORT_ANSWER,
@@ -148,7 +169,8 @@ object DummyQuiz {
             imageUrl = null,
             totalCount = 5
         ),
-        QuizUIModel(
+        Quiz(
+            id = 11,
             stage = 2,
             number = 5,
             quizType = QuizType.TEXT_CHOICE,
@@ -165,15 +187,15 @@ object DummyQuiz {
         ),
     )
 
-    fun getQuiz(stage: Int, number: Int): QuizUIModel? {
+    fun getQuiz(stage: Int, number: Int): Quiz? {
         return dummyQuizzes.firstOrNull { it.stage == stage && it.number == number }
     }
 
-    fun getQuizzes(stage: Int): List<QuizUIModel> {
+    fun getQuizzes(stage: Int): List<Quiz> {
         return dummyQuizzes.filter { it.stage == stage }.sortedBy { it.number }
     }
 
-    fun getWrongAnswerNoteQuizzes(stage: Int, wrongAnswerQuizNumbers: List<Int>): List<QuizUIModel> {
+    fun getWrongAnswerNoteQuizzes(stage: Int, wrongAnswerQuizNumbers: List<Int>): List<Quiz> {
         return wrongAnswerQuizNumbers.mapNotNull { number ->
             getQuiz(stage, number)
         }

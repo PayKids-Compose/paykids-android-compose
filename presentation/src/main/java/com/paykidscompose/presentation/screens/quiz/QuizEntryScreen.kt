@@ -48,7 +48,6 @@ import com.paykidscompose.presentation.ui.theme.White
 @Composable
 fun QuizEntry(
     stageNumber: Int,
-    quizViewModel: QuizViewModel,
     onShowDialogChange: (Boolean) -> Unit = {},
     onQuiz: (Int) -> Unit = {},
     onStudyClick: () -> Unit = {}
@@ -57,7 +56,6 @@ fun QuizEntry(
 
     QuizEntryScreen(
         stageNumber = stageNumber,
-        quizViewModel = quizViewModel,
         showDialog = showDialog,
         onShowDialogChange = onShowDialogChange,
         onQuiz = onQuiz,
@@ -68,7 +66,6 @@ fun QuizEntry(
 @Composable
 fun QuizEntryScreen(
     stageNumber: Int,
-    quizViewModel: QuizViewModel,
     showDialog: Boolean,
     onShowDialogChange: (Boolean) -> Unit,
     onQuiz: (Int) -> Unit = {},
@@ -135,7 +132,6 @@ fun QuizEntryScreen(
             DecisionButton( // 퀴즈 풀기
                 text = stringResource(R.string.text_btn_quiz),
                 onClick = {
-                    quizViewModel.loadQuiz(stageNumber)
                     onQuiz(stageNumber)
                 },
                 backgroundColor = Blue1,
@@ -163,6 +159,6 @@ fun QuizEntryScreen(
 @Composable
 fun QuizEntryScreenPreview(){
     PayKidsComposeTheme {
-        QuizEntry(2, remember { QuizViewModel() })
+        QuizEntry(2)
     }
 }

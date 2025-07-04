@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.model.type.QuizClearType
@@ -49,7 +50,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun Quiz(
     stageNumber: Int,
-    quizViewModel: QuizViewModel,
+    quizViewModel: QuizViewModel = viewModel(),
     onBackClick: () -> Unit,
     onConfirmClick: (QuizClearType) -> Unit
 ) {
@@ -57,6 +58,10 @@ fun Quiz(
     var selectedIndex by remember { mutableStateOf<Int?>(null) }
     var isCorrect by remember { mutableStateOf(QuizResultType.DEFAULT) }
     var userInput by remember { mutableStateOf("") }
+
+    LaunchedEffect(Unit) {
+        quizViewModel.loadQuiz(stageNumber)
+    }
 
     QuizScreen(
         stageNumber = stageNumber,
