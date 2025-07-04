@@ -45,19 +45,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.getStageTitle
-import com.paykidscompose.presentation.navigation.bottom.BottomBarItem
-import com.paykidscompose.presentation.screens.PayKidsScaffold
-import com.paykidscompose.presentation.ui.components.AppBottomBar
 import com.paykidscompose.presentation.ui.components.ImageTooltip
 import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.CardShadowElevation
+import com.paykidscompose.presentation.ui.theme.PayKidsComposeTheme
 import com.paykidscompose.presentation.ui.theme.StageCardNumberTextStyle
 import com.paykidscompose.presentation.ui.theme.StageCardTitleTextStyle
 import com.paykidscompose.presentation.ui.theme.StageCircleBorderWidth
@@ -89,15 +85,30 @@ val stageImageSet = listOf(
 )
 
 @Composable
+fun Home(
+    onStageNumber: (Int) -> Unit = {}
+) {
+    val selectedStageIndex = remember { mutableIntStateOf(6) } // 마지막 클리어 스테이지
+    val tooltipOffset = remember { mutableStateOf<Offset?>(null) }
+
+    HomeScreen(
+        selectedStageIndex = selectedStageIndex.intValue,
+        onStageSelected = { selectedStageIndex.intValue = it },
+        tooltipOffset = tooltipOffset.value,
+        onTooltipOffsetChange = { tooltipOffset.value = it },
+        onStageNumber = onStageNumber
+    )
+}
+
+@Composable
 fun HomeScreen(
+    selectedStageIndex: Int,
+    onStageSelected: (Int) -> Unit,
+    tooltipOffset: Offset?,
+    onTooltipOffsetChange: (Offset?) -> Unit,
     onStageNumber: (Int) -> Unit = {}
 ) {
     val scrollState = rememberLazyListState()
-
-    var clickedStageNumber by remember {
-        mutableIntStateOf(0)
-    }
-
     val density = LocalDensity.current
     val itemHeightDp = StageCircleSize + StageVerticalSpace
     val itemHeightPx = with(density) { itemHeightDp.toPx() }
@@ -109,160 +120,159 @@ fun HomeScreen(
             with(density) { -(totalOffsetPx * 0.6f).toDp() }
         }
     }
+
     val context = LocalContext.current
 
-    val tooltipOffset = remember { mutableStateOf<Offset?>(null) }
-
-    val lastClearedStageIndex = 6 // 클리어 스테이지 인덱스
-    val selectedStageIndex = remember { mutableIntStateOf(lastClearedStageIndex) }
-
     Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        AsyncImage(
+            model = ImageRequest.Builder(context)
+                .data(R.drawable.bg_home_2)
+                .crossfade(true)
+                .build(),
+            contentDescription = null,
+            filterQuality = FilterQuality.High,
+            contentScale = ContentScale.FillWidth,
+            clipToBounds = false,
+            alignment = Alignment.TopStart,
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
+                .offset(y = backgroundOffset)
+        )
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize(),
+            state = scrollState,
+            verticalArrangement = Arrangement.spacedBy(StageVerticalSpace),
+            contentPadding = PaddingValues(horizontal = StageHorizontalPadding)
         ) {
-            AsyncImage(
-                model = ImageRequest.Builder(context)
-                    .data(R.drawable.bg_home_2)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = null,
-                filterQuality = FilterQuality.High,
-                contentScale = ContentScale.FillWidth,
-                clipToBounds = false,
-                alignment = Alignment.TopStart,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .offset(y = backgroundOffset)
-            )
-
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize(),
-                state = scrollState,
-                verticalArrangement = Arrangement.spacedBy(StageVerticalSpace),
-                contentPadding = PaddingValues(horizontal = StageHorizontalPadding)
-            ) {
-                items(totalStageCount) { index ->
-                    if (index == 0) {
-                        Spacer(modifier = Modifier.height(StageTopPadding))
-                    }
-
-                    val (imageRes, borderColor) = getStageVisuals(
-                        index,
-                        unlockedStageCount,
-                        stageImageSet
-                    )
-                    val itemOffset = remember { mutableStateOf(Offset(0f, 0f)) }
-
-                    Box(
-                        modifier = Modifier
-                            .size(StageCircleSize)
-                            .background(color = White, shape = CircleShape)
-                            .border(
-                                width = StageCircleBorderWidth,
-                                color = borderColor,
-                                shape = CircleShape
-                            )
-                            .onGloballyPositioned { coordinates ->
-                                itemOffset.value = coordinates.positionInWindow()
-                            }
-                            .clickable(
-                                indication = null,
-                                interactionSource = remember { MutableInteractionSource() }
-                            ) {
-                                selectedStageIndex.intValue = index
-                                tooltipOffset.value = Offset(itemOffset.value.x, itemOffset.value.y)
-
-                                if (index < unlockedStageCount) {
-                                    onStageNumber(index + 1)
-                                } else {
-
-                                }
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            painter = painterResource(id = imageRes),
-                            contentDescription = null, // ripple 제거
-                            modifier = Modifier.size(StageIconSize)
-                        )
-                    }
+            items(totalStageCount) { index ->
+                if (index == 0) {
+                    Spacer(modifier = Modifier.height(StageTopPadding))
                 }
-            }
 
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .statusBarsPadding()
-                    .padding(
-                        horizontal = StageDescriptionCardHorizontalPadding,
-                        vertical = StageDescriptionCardVerticalPadding
-                    )
-                    .height(StageDescriptionCardHeight)
-                    .shadow(
-                        elevation = CardShadowElevation,
-                        shape = RoundedCornerShape(StageDescriptionCardRound),
-                        ambientColor = Blue1,
-                        spotColor = Blue1
-                    ),
-                shape = RoundedCornerShape(StageDescriptionCardRound),
-                colors = CardDefaults.cardColors(
-                    containerColor = White
+                val (imageRes, borderColor) = getStageVisuals(
+                    index,
+                    unlockedStageCount,
+                    stageImageSet
                 )
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(
-                            horizontal = StageDescriptionCardTextHorizontalPadding,
-                            vertical = StageDescriptionCardTextVerticalPadding
-                        )
-                ) {
-                    Text(
-                        text = stringResource(R.string.text_stage_number, selectedStageIndex.intValue + 1),
-                        modifier = Modifier.fillMaxWidth(),
-                        style = StageCardNumberTextStyle
-                    )
-                    Spacer(modifier = Modifier.height(StageDescriptionCardTextSpacer))
-                    Text(
-                        text = getStageTitle(selectedStageIndex.intValue),
-                        modifier = Modifier.fillMaxWidth(),
-                        style = StageCardTitleTextStyle
-                    )
-                }
-            }
+                val itemOffset = remember { mutableStateOf(Offset(0f, 0f)) }
 
-            // 화면을 클릭하면 툴팁 닫힘
-            if (tooltipOffset.value != null) {
                 Box(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .size(StageCircleSize)
+                        .background(color = White, shape = CircleShape)
+                        .border(
+                            width = StageCircleBorderWidth,
+                            color = borderColor,
+                            shape = CircleShape
+                        )
+                        .onGloballyPositioned { coordinates ->
+                            itemOffset.value = coordinates.positionInWindow()
+                        }
                         .clickable(
-                            onClick = {
-                                tooltipOffset.value = null
-                            },
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }
-                        )
-                )
-            }
+                        ) {
+                            onStageSelected(index)
+                            onTooltipOffsetChange(itemOffset.value)
 
-            // 툴팁 표시
-            tooltipOffset.value?.let { offset ->
-                ImageTooltip(
-                    tooltipText = stringResource(R.string.text_tooltip_start),
-                    modifier = Modifier
-                        .clickable {
-                            tooltipOffset.value = null
-                        }
-                        .offset {
-                            IntOffset(
-                                offset.x.toInt() - StageTooltipOffsetX,
-                                offset.y.toInt() - StageTooltipOffsetY
-                            )
-                        }
+                            if (index < unlockedStageCount) {
+                                onStageNumber(index + 1)
+                            } else {
+
+                            }
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = imageRes),
+                        contentDescription = null, // ripple 제거
+                        modifier = Modifier.size(StageIconSize)
+                    )
+                }
+            }
+        }
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .statusBarsPadding()
+                .padding(
+                    horizontal = StageDescriptionCardHorizontalPadding,
+                    vertical = StageDescriptionCardVerticalPadding
+                )
+                .height(StageDescriptionCardHeight)
+                .shadow(
+                    elevation = CardShadowElevation,
+                    shape = RoundedCornerShape(StageDescriptionCardRound),
+                    ambientColor = Blue1,
+                    spotColor = Blue1
+                ),
+            shape = RoundedCornerShape(StageDescriptionCardRound),
+            colors = CardDefaults.cardColors(
+                containerColor = White
+            )
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(
+                        horizontal = StageDescriptionCardTextHorizontalPadding,
+                        vertical = StageDescriptionCardTextVerticalPadding
+                    )
+            ) {
+                Text(
+                    text = stringResource(
+                        R.string.text_stage_number,
+                        selectedStageIndex + 1
+                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                    style = StageCardNumberTextStyle
+                )
+                Spacer(modifier = Modifier.height(StageDescriptionCardTextSpacer))
+                Text(
+                    text = getStageTitle(selectedStageIndex),
+                    modifier = Modifier.fillMaxWidth(),
+                    style = StageCardTitleTextStyle
                 )
             }
+        }
+
+        // 화면을 클릭하면 툴팁 닫힘
+        if (tooltipOffset != null) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable(
+                        onClick = {
+                            onTooltipOffsetChange(null)
+                        },
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    )
+            )
+        }
+
+        // 툴팁 표시
+        tooltipOffset?.let { offset ->
+            ImageTooltip(
+                tooltipText = stringResource(R.string.text_tooltip_start),
+                modifier = Modifier
+                    .clickable {
+                        onTooltipOffsetChange(null)
+                    }
+                    .offset {
+                        IntOffset(
+                            offset.x.toInt() - StageTooltipOffsetX,
+                            offset.y.toInt() - StageTooltipOffsetY
+                        )
+                    }
+            )
+        }
 
     }
 }
@@ -270,6 +280,8 @@ fun HomeScreen(
 
 @Preview
 @Composable
-fun HomeScreenPreview(){
-    HomeScreen()
+fun HomeScreenPreview() {
+    PayKidsComposeTheme {
+        Home()
+    }
 }

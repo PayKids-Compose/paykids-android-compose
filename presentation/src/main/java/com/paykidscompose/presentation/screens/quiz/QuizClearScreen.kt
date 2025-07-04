@@ -7,16 +7,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import coil3.compose.AsyncImage
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.model.type.QuizClearType
+import com.paykidscompose.presentation.model.QuizClearConfigUIModel
 import com.paykidscompose.presentation.model.toConfig
+import com.paykidscompose.presentation.model.type.QuizClearType
 import com.paykidscompose.presentation.ui.components.DashedCard
 import com.paykidscompose.presentation.ui.components.DecisionButton
 import com.paykidscompose.presentation.ui.theme.Black
@@ -29,16 +28,22 @@ import com.paykidscompose.presentation.ui.theme.QuizClearScreenColumnTopPadding
 import com.paykidscompose.presentation.ui.theme.StartAndEndPadding
 import com.paykidscompose.presentation.ui.theme.White
 
-
 @Composable
-fun QuizClearScreen(
+fun QuizClear(
     clearType: QuizClearType,
     onExitClick: () -> Unit = {}
 ) {
-    val isClear = remember { mutableStateOf(QuizClearType.ALL_CLEAR) }
+    QuizClearScreen(
+        config = clearType.toConfig(),
+        onExitClick = onExitClick
+    )
+}
 
-    val config = clearType.toConfig()
-
+@Composable
+fun QuizClearScreen(
+    config: QuizClearConfigUIModel,
+    onExitClick: () -> Unit = {}
+) {
     Box(modifier = Modifier.fillMaxSize()) {
         AsyncImage(
             model = config.bgRes,
@@ -86,6 +91,6 @@ fun QuizClearScreen(
 @Composable
 fun QuizClearScreenPreview() {
     PayKidsComposeTheme {
-        QuizClearScreen(QuizClearType.ALL_CLEAR)
+        QuizClear(QuizClearType.ALL_CLEAR)
     }
 }

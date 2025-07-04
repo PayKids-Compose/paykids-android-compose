@@ -24,7 +24,7 @@ import com.paykidscompose.presentation.screens.PayKidsScaffold
 import com.paykidscompose.presentation.screens.allowance.AllowanceDiaryScreen
 import com.paykidscompose.presentation.screens.allowance.analysis.ExpenseAnalysis
 import com.paykidscompose.presentation.screens.allowance.detail.CategoryDetail
-import com.paykidscompose.presentation.screens.home.HomeScreen
+import com.paykidscompose.presentation.screens.home.Home
 import com.paykidscompose.presentation.screens.login.Login
 import com.paykidscompose.presentation.screens.login.LoginScreen
 import com.paykidscompose.presentation.screens.login.nickname.Nickname
@@ -32,10 +32,9 @@ import com.paykidscompose.presentation.screens.login.nickname.NicknameScreen
 import com.paykidscompose.presentation.screens.mypage.MyPageScreen
 import com.paykidscompose.presentation.screens.mypage.info.MyInfoScreen
 import com.paykidscompose.presentation.screens.mypage.terms.TermsPolicyScreen
-import com.paykidscompose.presentation.screens.quiz.QuizClearScreen
-import com.paykidscompose.presentation.screens.quiz.QuizEntryScreen
-import com.paykidscompose.presentation.screens.quiz.QuizScreen
-import com.paykidscompose.presentation.screens.quiz.QuizViewModel
+import com.paykidscompose.presentation.screens.quiz.Quiz
+import com.paykidscompose.presentation.screens.quiz.QuizClear
+import com.paykidscompose.presentation.screens.quiz.QuizEntry
 import com.paykidscompose.presentation.screens.study.Study
 import com.paykidscompose.presentation.ui.components.AppBottomBar
 
@@ -52,8 +51,6 @@ fun PayKidsApp(
     Log.d("PayKidsApp", "CurrentRoute: $currentRoute")
 
     var isLogin by remember { mutableStateOf(false) }
-
-    val quizViewModel = remember { QuizViewModel() }
 
     PayKidsScaffold(
         bottomBar = {
@@ -97,7 +94,7 @@ fun PayKidsApp(
             }
 
             composable<TabNavigationRoute.HomeRoute> {
-                HomeScreen { stageNumber ->
+                Home { stageNumber ->
                     navController.navigate(
                         QuizNavigationRoute.QuizEntryRoute(stageNumber)
                     )
@@ -108,9 +105,8 @@ fun PayKidsApp(
                 val targetRoute = backStack.toRoute<QuizNavigationRoute.QuizEntryRoute>()
                 val stageNumber = targetRoute.stageNumber
 
-                QuizEntryScreen(
+                QuizEntry(
                     stageNumber = stageNumber,
-                    quizViewModel = quizViewModel,
                     onQuiz = {
                         navController.navigate(QuizNavigationRoute.QuizRoute(stageNumber))
                     },
@@ -124,9 +120,8 @@ fun PayKidsApp(
                 val targetRoute = backStack.toRoute<QuizNavigationRoute.QuizRoute>()
                 val stageNumber = targetRoute.stageNumber
 
-                QuizScreen(
+                Quiz(
                     stageNumber = stageNumber,
-                    quizViewModel = quizViewModel,
                     onBackClick = {
                         navController.popBackStack()
                     },
@@ -140,7 +135,7 @@ fun PayKidsApp(
                 val targetRoute = backStack.toRoute<QuizNavigationRoute.QuizClearRoute>()
                 val clearType = targetRoute.clear
 
-                QuizClearScreen(
+                QuizClear(
                     clearType = clearType,
                     onExitClick = {
                         navController.navigate(TabNavigationRoute.HomeRoute) {

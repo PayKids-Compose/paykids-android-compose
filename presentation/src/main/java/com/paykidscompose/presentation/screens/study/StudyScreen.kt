@@ -330,9 +330,8 @@ fun UserBubblePreview() {
 
 @Preview
 @Composable
-fun StudyPreview() {
+fun StudyScreenPreview() {
     PayKidsComposeTheme {
-        Study(
-        )
+        Study()
     }
 }

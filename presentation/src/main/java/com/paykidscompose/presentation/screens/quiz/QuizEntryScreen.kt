@@ -31,6 +31,7 @@ import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.DeterminationButtonTextTopAndBottom2
 import com.paykidscompose.presentation.ui.theme.DeterminationTextStyle2
 import com.paykidscompose.presentation.ui.theme.Gray5
+import com.paykidscompose.presentation.ui.theme.PayKidsComposeTheme
 import com.paykidscompose.presentation.ui.theme.QuizEntryButtonSpacer
 import com.paykidscompose.presentation.ui.theme.QuizEntryScreenBottomPadding
 import com.paykidscompose.presentation.ui.theme.QuizEntryScreenSpacer1
@@ -45,14 +46,32 @@ import com.paykidscompose.presentation.ui.theme.StartAndEndPadding
 import com.paykidscompose.presentation.ui.theme.White
 
 @Composable
-fun QuizEntryScreen(
+fun QuizEntry(
     stageNumber: Int,
-    quizViewModel: QuizViewModel,
+    onShowDialogChange: (Boolean) -> Unit = {},
     onQuiz: (Int) -> Unit = {},
     onStudyClick: () -> Unit = {}
 ) {
     var showDialog by remember { mutableStateOf(false) }
-    var stageTitle by remember { mutableStateOf(getStageTitle(stageNumber - 1)) }
+
+    QuizEntryScreen(
+        stageNumber = stageNumber,
+        showDialog = showDialog,
+        onShowDialogChange = onShowDialogChange,
+        onQuiz = onQuiz,
+        onStudyClick = onStudyClick
+    )
+}
+
+@Composable
+fun QuizEntryScreen(
+    stageNumber: Int,
+    showDialog: Boolean,
+    onShowDialogChange: (Boolean) -> Unit,
+    onQuiz: (Int) -> Unit = {},
+    onStudyClick: () -> Unit = {}
+) {
+    val stageTitle = getStageTitle(stageNumber - 1)
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -61,8 +80,8 @@ fun QuizEntryScreen(
             PopupDialog(
                 title = stringResource(R.string.dialog_incorrect_nothing),
                 popupType = PopupType.INCORRECT_ANSWER_NOTE_ERROR,
-                onCancelClick = { showDialog = false },
-                onConfirmClick = { showDialog = false },
+                onCancelClick = { onShowDialogChange(false) },
+                onConfirmClick = { onShowDialogChange(false) },
                 description = ""
             )
         }
@@ -113,7 +132,6 @@ fun QuizEntryScreen(
             DecisionButton( // 퀴즈 풀기
                 text = stringResource(R.string.text_btn_quiz),
                 onClick = {
-                    quizViewModel.loadQuiz(stageNumber)
                     onQuiz(stageNumber)
                 },
                 backgroundColor = Blue1,
@@ -125,7 +143,7 @@ fun QuizEntryScreen(
             DecisionButton( // 오답노트 풀기
                 text = stringResource(R.string.text_btn_review),
                 onClick = {
-                    showDialog = true
+                    onShowDialogChange(true)
                 },
                 backgroundColor = White,
                 contentColor = Blue1,
@@ -140,5 +158,7 @@ fun QuizEntryScreen(
 @Preview
 @Composable
 fun QuizEntryScreenPreview(){
-    QuizEntryScreen(2, remember { QuizViewModel() })
+    PayKidsComposeTheme {
+        QuizEntry(2)
+    }
 }
