@@ -36,6 +36,14 @@ import com.paykidscompose.presentation.ui.theme.StartAndEndPadding
 import com.paykidscompose.presentation.ui.theme.Yellow
 
 @Composable
+fun Login(onKakaoClick: () -> Unit = {}) {
+
+    LoginScreen(
+        onKakaoClick = onKakaoClick
+    )
+}
+
+@Composable
 fun LoginScreen(onKakaoClick: () -> Unit = {}) {
     Box(
         modifier = Modifier.fillMaxSize(),

@@ -25,7 +25,9 @@ import com.paykidscompose.presentation.screens.allowance.AllowanceDiaryScreen
 import com.paykidscompose.presentation.screens.allowance.analysis.ExpenseAnalysis
 import com.paykidscompose.presentation.screens.allowance.detail.CategoryDetail
 import com.paykidscompose.presentation.screens.home.Home
+import com.paykidscompose.presentation.screens.login.Login
 import com.paykidscompose.presentation.screens.login.LoginScreen
+import com.paykidscompose.presentation.screens.login.nickname.Nickname
 import com.paykidscompose.presentation.screens.login.nickname.NicknameScreen
 import com.paykidscompose.presentation.screens.mypage.MyPageScreen
 import com.paykidscompose.presentation.screens.mypage.info.MyInfoScreen
@@ -80,13 +82,13 @@ fun PayKidsApp(
         ) {
 
             composable<EntryNavigationRoute.LoginRoute> {
-                LoginScreen {
+                Login {
                     navController.navigate(EntryNavigationRoute.LoginNicknameRoute)
                 }
             }
 
             composable<EntryNavigationRoute.LoginNicknameRoute> {
-                NicknameScreen {
+                Nickname {
                     isLogin = true
                 }
             }
@@ -136,7 +138,11 @@ fun PayKidsApp(
                 QuizClear(
                     clearType = clearType,
                     onExitClick = {
-                        navController.navigate(TabNavigationRoute.HomeRoute)
+                        navController.navigate(TabNavigationRoute.HomeRoute) {
+                            popUpTo(navController.graph.findStartDestination().id)
+                            launchSingleTop = true
+                            // 백스택 맨 위에가 홈이라면 기존 화면을 재사용하기 위해서 넣음.
+                        }
                     }
                 )
             }
