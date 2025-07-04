@@ -131,6 +131,7 @@ fun StudyScreen(
 @Composable
 fun StudyPreview() {
     PayKidsComposeTheme {
+
         Study(
         )
     }
