@@ -28,6 +28,7 @@ import com.paykidscompose.presentation.screens.home.Home
 import com.paykidscompose.presentation.screens.login.Login
 import com.paykidscompose.presentation.screens.login.nickname.Nickname
 import com.paykidscompose.presentation.screens.mypage.MyPage
+import com.paykidscompose.presentation.screens.mypage.info.MyInfo
 import com.paykidscompose.presentation.screens.mypage.info.MyInfoScreen
 import com.paykidscompose.presentation.screens.mypage.terms.TermsPolicyScreen
 import com.paykidscompose.presentation.screens.quiz.Quiz
@@ -163,7 +164,7 @@ fun PayKidsApp(
             }
 
             composable<MyPageNavigationRoute.MyInfoRoute> {
-                MyInfoScreen(
+                MyInfo(
                     onBackClick = {
                         navController.popBackStack()
                     }
