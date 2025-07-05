@@ -17,10 +17,6 @@ class MyPageViewModel: ViewModel() {
     private val _uiState = MutableStateFlow(MyPageUIState())
     val uiState = _uiState.asStateFlow()
 
-    init {
-        load()
-    }
-
     fun load() {
         if(_uiState.value.isLoading) return
 
@@ -29,7 +25,7 @@ class MyPageViewModel: ViewModel() {
                 it.copy(isLoading = true, error = null)
             }
 
-            delay(2000)
+            delay(1000)
 
             runCatching {
                 val user = withContext(Dispatchers.IO) {

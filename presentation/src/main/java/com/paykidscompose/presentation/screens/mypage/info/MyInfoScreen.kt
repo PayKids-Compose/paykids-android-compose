@@ -21,10 +21,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,13 +30,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.dummy.DummyUser
 import com.paykidscompose.presentation.model.MyInfoUIModel
 import com.paykidscompose.presentation.screens.mypage.section.MyInfoTopBar
 import com.paykidscompose.presentation.ui.components.CustomCard
 import com.paykidscompose.presentation.ui.components.OutlineInputField
 import com.paykidscompose.presentation.ui.components.PopupDialog
+import com.paykidscompose.presentation.ui.components.ScreenLoading
 import com.paykidscompose.presentation.ui.components.TitleText
 import com.paykidscompose.presentation.ui.components.util.PopupType
 import com.paykidscompose.presentation.ui.theme.Black
@@ -74,47 +73,54 @@ import com.paykidscompose.presentation.ui.theme.Red
 import com.paykidscompose.presentation.ui.theme.White
 
 @Composable
-fun MyInfoScreen(
-    onBackClick: () -> Unit
-) {
-    val user = DummyUser.getUsers().first()
+fun MyInfo(
+    viewModel: MyInfoViewModel = viewModel(),
+    onBackClick: () -> Unit = {}
+){
+    val uiState by viewModel.uiState.collectAsState()
 
-    var uiModel by remember {
-        mutableStateOf(
-            MyInfoUIModel(
-                user.nickname,
-                user.email,
-                user.profileImageURL
-            )
-        )
-    }
 
-    var showPopupDialog by remember { mutableStateOf(false) }
-
-    val onNickname = { value: String ->
-        uiModel = uiModel.copy(nickname = value)
-    }
-
-    val onEmail = { value: String ->
-        uiModel = uiModel.copy(email = value)
-    }
-
-    val onPopupDialog = {
-        showPopupDialog = !showPopupDialog
-    }
-
-    if (showPopupDialog) {
+    if (uiState.showPopupDialog) {
         PopupDialog(
             title = stringResource(R.string.dialog_withdraw_title),
             description = stringResource(R.string.dialog_withdraw_message),
-            onCancelClick = { showPopupDialog = false },
-            onConfirmClick = {
-                showPopupDialog = false
-            },
+            onCancelClick = { viewModel.closePopupDialog() },
+            onConfirmClick = { viewModel.confirmPopupDialog() },
             popupType = PopupType.USER_DELETE
         )
     }
 
+    when {
+        uiState.isLoading -> {
+            ScreenLoading()
+        }
+        uiState.error != null -> {
+            viewModel.load()
+        }
+        uiState.myInfo != null -> {
+            uiState.myInfo?.let { myInfo ->
+                MyInfoScreen(
+                    uiModel = myInfo,
+                    onNickname = { viewModel.updateNickname(it) },
+                    onEmail = { viewModel.updateEmail(it) },
+                    onConfirmNicknameClick = { viewModel.confirmNicknameChange() },
+                    onBackClick = onBackClick,
+                    onPopupDialog = { viewModel.togglePopupDialog() }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun MyInfoScreen(
+    uiModel: MyInfoUIModel,
+    onNickname: (String) -> Unit,
+    onEmail: (String) -> Unit,
+    onConfirmNicknameClick: () -> Unit,
+    onBackClick: () -> Unit,
+    onPopupDialog: () -> Unit
+) {
     Column(
         modifier = Modifier.fillMaxSize()
     ){
@@ -131,7 +137,7 @@ fun MyInfoScreen(
             Box(
                 modifier = Modifier
                     .size(MyInfoScreenBoxSize)
-                    .clickable(onClick = {}), // 이미지 변경 클릭
+                    .clickable(onClick = {}),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
@@ -170,6 +176,7 @@ fun MyInfoScreen(
                     uiModel,
                     onNickname,
                     onEmail,
+                    onConfirmNicknameClick,
                     onPopupDialog
                 )
             }
@@ -182,6 +189,7 @@ fun MyInfoEdit(
     uiModel: MyInfoUIModel,
     onNickname: (String) -> Unit,
     onEmail: (String) -> Unit,
+    onConfirmNicknameClick: () -> Unit,
     onPopupDialog: () -> Unit
 ) {
     Column(
@@ -203,7 +211,7 @@ fun MyInfoEdit(
 
         Spacer(modifier = Modifier.height(MyInfoScreenSpacer36))
 
-        NicknameEdit(uiModel, onNickname)
+        NicknameEdit(uiModel, onNickname, onConfirmNicknameClick)
 
         Spacer(modifier = Modifier.height(MyInfoScreenSpacer20))
 
@@ -223,7 +231,8 @@ fun MyInfoEdit(
 @Composable
 fun NicknameEdit(
     uiModel: MyInfoUIModel,
-    onNickname: (String) -> Unit
+    onNickname: (String) -> Unit,
+    onConfirmNicknameClick: () -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -250,7 +259,7 @@ fun NicknameEdit(
         Spacer(modifier = Modifier.width(MyInfoScreenSpacer4))
 
         Button(
-            onClick = {},
+            onClick = onConfirmNicknameClick,
             shape = RoundedCornerShape(MyInfoScreenButtonShape),
             contentPadding = PaddingValues(
                 horizontal = MyInfoScreenButtonHorizontalPadding,
@@ -301,5 +310,5 @@ fun EmailEdit(
 @Preview()
 @Composable
 fun MyInfoScreenPreview() {
-    MyInfoScreen({})
+    MyInfo()
 }
