@@ -26,10 +26,8 @@ import com.paykidscompose.presentation.screens.allowance.analysis.ExpenseAnalysi
 import com.paykidscompose.presentation.screens.allowance.detail.CategoryDetail
 import com.paykidscompose.presentation.screens.home.Home
 import com.paykidscompose.presentation.screens.login.Login
-import com.paykidscompose.presentation.screens.login.LoginScreen
 import com.paykidscompose.presentation.screens.login.nickname.Nickname
-import com.paykidscompose.presentation.screens.login.nickname.NicknameScreen
-import com.paykidscompose.presentation.screens.mypage.MyPageScreen
+import com.paykidscompose.presentation.screens.mypage.MyPage
 import com.paykidscompose.presentation.screens.mypage.info.MyInfoScreen
 import com.paykidscompose.presentation.screens.mypage.terms.TermsPolicyScreen
 import com.paykidscompose.presentation.screens.quiz.Quiz
@@ -155,7 +153,7 @@ fun PayKidsApp(
                 )
             }
             composable<TabNavigationRoute.MyPageRoute> {
-                MyPageScreen(
+                MyPage(
                     onClickMyInfo = {
                         navController.navigate(MyPageNavigationRoute.MyInfoRoute)
                     },
