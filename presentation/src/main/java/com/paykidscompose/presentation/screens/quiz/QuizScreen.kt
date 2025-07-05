@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.paykidscompose.presentation.R
+import com.paykidscompose.presentation.model.QuizUIModel
 import com.paykidscompose.presentation.model.type.QuizClearType
 import com.paykidscompose.presentation.model.type.QuizResultType
 import com.paykidscompose.presentation.model.type.QuizType
@@ -35,6 +37,8 @@ import com.paykidscompose.presentation.screens.quiz.section.ShortAnswerQuizConte
 import com.paykidscompose.presentation.screens.quiz.section.TextChoiceQuizContent
 import com.paykidscompose.presentation.ui.components.PopupDialog
 import com.paykidscompose.presentation.ui.components.QuizResultCard
+import com.paykidscompose.presentation.ui.components.ScreenError
+import com.paykidscompose.presentation.ui.components.ScreenLoading
 import com.paykidscompose.presentation.ui.components.util.PopupType
 import com.paykidscompose.presentation.ui.theme.Black
 import com.paykidscompose.presentation.ui.theme.QuizQuestionTextSpacer
@@ -59,34 +63,47 @@ fun Quiz(
     var isCorrect by remember { mutableStateOf(QuizResultType.DEFAULT) }
     var userInput by remember { mutableStateOf("") }
 
+    val uiState by quizViewModel.uiState.collectAsState()
+
     LaunchedEffect(Unit) {
         quizViewModel.loadQuiz(stageNumber)
     }
 
-    QuizScreen(
-        stageNumber = stageNumber,
-        quizViewModel = quizViewModel,
-        showDialog = showDialog,
-        onShowDialogChange = { showDialog = it },
-        selectedIndex = selectedIndex,
-        onSelectedIndexChange = { selectedIndex = it },
-        isCorrect = isCorrect,
-        onCorrectChange = { isCorrect = it },
-        userInput = userInput,
-        onUserInputChange = { userInput = it },
-        onBackClick = onBackClick,
-        onConfirmClick = onConfirmClick,
-        onChoiceClick = { selectedIndex = it },
-        onConfirmAnswer = { isCorrectAnswer ->
-            isCorrect = if (isCorrectAnswer) QuizResultType.CORRECT else QuizResultType.WRONG
+    when {
+        uiState.isLoading -> {
+            ScreenLoading()
         }
-    )
+        uiState.error != null -> {
+            ScreenError {
+                quizViewModel.loadQuiz(stageNumber)
+            }
+        }
+        uiState.currentQuiz != null -> {
+            QuizScreen(
+                currentQuiz = uiState.currentQuiz!!,
+                isLastQuiz = quizViewModel.isLastQuiz(),
+                showDialog = showDialog,
+                onShowDialogChange = { showDialog = it },
+                selectedIndex = selectedIndex,
+                onSelectedIndexChange = { selectedIndex = it },
+                isCorrect = isCorrect,
+                onCorrectChange = { isCorrect = it },
+                userInput = userInput,
+                onUserInputChange = { userInput = it },
+                quizNumber = uiState.currentIndex + 1,
+                totalCount = uiState.totalCount,
+                onBackClick = onBackClick,
+                onConfirmClick = onConfirmClick,
+                onNextQuiz = { quizViewModel.moveToNext() }
+            )
+        }
+    }
 }
 
 @Composable
 fun QuizScreen(
-    stageNumber: Int = 1,
-    quizViewModel: QuizViewModel,
+    currentQuiz: QuizUIModel,
+    isLastQuiz: Boolean,
     showDialog: Boolean,
     onShowDialogChange: (Boolean) -> Unit,
     selectedIndex: Int?,
@@ -95,23 +112,12 @@ fun QuizScreen(
     onCorrectChange: (QuizResultType) -> Unit,
     userInput: String,
     onUserInputChange: (String) -> Unit,
+    quizNumber: Int,
+    totalCount: Int,
     onBackClick: () -> Unit,
     onConfirmClick: (QuizClearType) -> Unit,
-    onChoiceClick: (Int) -> Unit,
-    onConfirmAnswer: (Boolean) -> Unit
+    onNextQuiz: () -> Unit
 ) {
-    val currentQuiz = quizViewModel.currentQuiz
-    if (currentQuiz == null) {
-        // 퀴즈 없을 때 임시로 보여줄 화면
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(text = stringResource(R.string.text_quiz_loading), style = QuizQuestionTextStyle)
-        }
-        return
-    }
-
-    val totalCount = currentQuiz.totalCount
-    val quizNumber = quizViewModel.currentIndex + 1
-
     BackHandler(enabled = true) {
         onShowDialogChange(true)
     }
@@ -120,9 +126,7 @@ fun QuizScreen(
         PopupDialog(
             title = stringResource(R.string.dialog_check_exit),
             popupType = PopupType.QUIZ_EXIT,
-            onCancelClick = {
-                onShowDialogChange(false)
-            },
+            onCancelClick = { onShowDialogChange(false) },
             onConfirmClick = {
                 onShowDialogChange(false)
                 onBackClick()
@@ -134,10 +138,10 @@ fun QuizScreen(
     LaunchedEffect(isCorrect) {
         if (isCorrect != QuizResultType.DEFAULT) {
             delay(2000L)
-            if (quizViewModel.isLastQuiz()) {
+            if (isLastQuiz) {
                 onConfirmClick(QuizClearType.ALL_CLEAR)
             } else {
-                quizViewModel.moveToNext()
+                onNextQuiz()
                 onSelectedIndexChange(null)
                 onCorrectChange(QuizResultType.DEFAULT)
                 onUserInputChange("")
@@ -145,17 +149,14 @@ fun QuizScreen(
         }
     }
 
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    Column(modifier = Modifier.fillMaxSize()) {
         QuizTopBar(
             quizNumber = quizNumber,
             totalQuizCount = totalCount,
             onBackClick = { onShowDialogChange(true) }
         )
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
+
+        Box(modifier = Modifier.fillMaxSize()) {
             AsyncImage(
                 model = when (isCorrect) {
                     QuizResultType.DEFAULT -> R.drawable.bg_quiz_default
@@ -166,6 +167,7 @@ fun QuizScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -181,13 +183,10 @@ fun QuizScreen(
                     textAlign = TextAlign.Center
                 )
 
-                // 정답/오답 결과 카드 보여주기
-                if (currentQuiz.quizType != QuizType.TEXT_CHOICE_IMAGE && currentQuiz.quizType != QuizType.SHORT_ANSWER_IMAGE) { // 객관식(이미지), 주관식(이미지) 퀴즈는 이미지 위에 겹쳐서 표시
+                if (currentQuiz.quizType !in listOf(QuizType.TEXT_CHOICE_IMAGE, QuizType.SHORT_ANSWER_IMAGE)) {
                     if (isCorrect != QuizResultType.DEFAULT) {
                         Spacer(modifier = Modifier.height(QuizResultCardSpacer))
-                        QuizResultCard(
-                            isCorrect = isCorrect == QuizResultType.CORRECT
-                        )
+                        QuizResultCard(isCorrect = isCorrect == QuizResultType.CORRECT)
                         Spacer(modifier = Modifier.height(QuizResultCardSpacer))
                     } else {
                         Spacer(modifier = Modifier.height(QuizQuestionTextSpacer))
@@ -196,11 +195,11 @@ fun QuizScreen(
 
                 when (currentQuiz.quizType) {
                     QuizType.IMAGE -> {
-                        val imageChoices: List<Pair<Int, String>> = currentQuiz.imageUrl
-                            ?.mapIndexed { index, resId ->
-                                val label = currentQuiz.choices?.getOrNull(index)?.second ?: ""
-                                resId to label
-                            } ?: emptyList()
+                        val imageChoices = currentQuiz.imageUrl?.mapIndexed { index, resId ->
+                            val label = currentQuiz.choices?.getOrNull(index)?.second ?: ""
+                            resId to label
+                        } ?: emptyList()
+
                         ImageQuizContent(
                             imgChoices = imageChoices,
                             answer = currentQuiz.answer,
@@ -210,13 +209,38 @@ fun QuizScreen(
                                 onSelectedIndexChange(index)
                                 val isRight = index == (currentQuiz.answer[0] - 'A')
                                 onCorrectChange(if (isRight) QuizResultType.CORRECT else QuizResultType.WRONG)
-                                onChoiceClick(index)
                             }
                         )
                     }
 
-                    QuizType.TEXT_CHOICE -> {
-                        val textChoices: List<String> = currentQuiz.choices?.map { it.second } ?: emptyList()
+                    QuizType.TEXT_CHOICE, QuizType.TEXT_CHOICE_IMAGE -> {
+                        val textChoices = currentQuiz.choices?.map { it.second } ?: emptyList()
+
+                        if (currentQuiz.quizType == QuizType.TEXT_CHOICE_IMAGE) {
+                            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                                Spacer(modifier = Modifier.height(QuizResultCardTextChoiceImageSmallSpacer))
+
+                                Box(modifier = Modifier.fillMaxWidth()) {
+                                    AsyncImage(
+                                        model = currentQuiz.imageUrl?.first(),
+                                        contentDescription = null,
+                                        modifier = Modifier
+                                            .clip(RoundedCornerShape(TextChoiceQuizImageRound))
+                                            .fillMaxWidth()
+                                            .padding(top = QuizResultCardTextChoiceImageTopPadding),
+                                        contentScale = ContentScale.FillWidth,
+                                    )
+                                    if (isCorrect != QuizResultType.DEFAULT) {
+                                        QuizResultCard(
+                                            isCorrect = isCorrect == QuizResultType.CORRECT,
+                                            modifier = Modifier.align(Alignment.TopCenter)
+                                        )
+                                    }
+                                }
+                                Spacer(modifier = Modifier.height(QuizResultCardTextChoiceImageSpacer))
+                            }
+                        }
+
                         TextChoiceQuizContent(
                             textChoices = textChoices,
                             answer = currentQuiz.answer,
@@ -226,125 +250,47 @@ fun QuizScreen(
                                 onSelectedIndexChange(index)
                                 val isRight = index == (currentQuiz.answer[0] - 'A')
                                 onCorrectChange(if (isRight) QuizResultType.CORRECT else QuizResultType.WRONG)
-                                onChoiceClick(index)
                             }
                         )
                     }
 
-                    QuizType.TEXT_CHOICE_IMAGE ->
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Spacer(
-                                modifier = Modifier.height(
-                                    QuizResultCardTextChoiceImageSmallSpacer
-                                )
-                            )
-
-                            //Box로 이미지와 정답 카드 겹치기
-                            Box(modifier = Modifier.fillMaxWidth()) {
-                                AsyncImage(
-                                    model = currentQuiz.imageUrl?.first(),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .clip(RoundedCornerShape(TextChoiceQuizImageRound))
-                                        .fillMaxWidth()
-                                        .padding(top = QuizResultCardTextChoiceImageTopPadding),
-                                    contentScale = ContentScale.FillWidth,
-                                )
-
-                                if (isCorrect != QuizResultType.DEFAULT) {
-                                    QuizResultCard(
-                                        isCorrect = isCorrect == QuizResultType.CORRECT,
+                    QuizType.SHORT_ANSWER, QuizType.SHORT_ANSWER_IMAGE -> {
+                        if (currentQuiz.quizType == QuizType.SHORT_ANSWER_IMAGE) {
+                            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                                Spacer(modifier = Modifier.height(QuizResultCardTextChoiceImageSmallSpacer))
+                                Box(modifier = Modifier.fillMaxWidth()) {
+                                    AsyncImage(
+                                        model = currentQuiz.imageUrl?.first(),
+                                        contentDescription = null,
                                         modifier = Modifier
-                                            .align(Alignment.TopCenter)
+                                            .clip(RoundedCornerShape(TextChoiceQuizImageRound))
+                                            .fillMaxWidth()
+                                            .padding(top = QuizResultCardTextChoiceImageTopPadding),
+                                        contentScale = ContentScale.FillWidth,
                                     )
+                                    if (isCorrect != QuizResultType.DEFAULT) {
+                                        QuizResultCard(
+                                            isCorrect = isCorrect == QuizResultType.CORRECT,
+                                            modifier = Modifier.align(Alignment.TopCenter)
+                                        )
+                                    }
                                 }
+                                Spacer(modifier = Modifier.height(QuizResultCardTextChoiceImageSpacer))
                             }
-
-                            Spacer(modifier = Modifier.height(QuizResultCardTextChoiceImageSpacer))
-
-                            val textChoices: List<String> = currentQuiz.choices?.map { it.second } ?: emptyList()
-                            TextChoiceQuizContent(
-                                textChoices = textChoices,
-                                answer = currentQuiz.answer,
-                                selectedIndex = selectedIndex,
-                                isCorrect = isCorrect,
-                                onChoiceClick = { index ->
-                                    onSelectedIndexChange(index)
-                                    val isRight = index == (currentQuiz.answer[0] - 'A')
-                                    onCorrectChange(if (isRight) QuizResultType.CORRECT else QuizResultType.WRONG)
-                                    onChoiceClick(index)
-                                }
-                            )
                         }
 
-                    QuizType.SHORT_ANSWER ->
                         ShortAnswerQuizContent(
                             quizType = currentQuiz.quizType,
                             userInput = userInput,
                             answer = currentQuiz.answer,
                             onUserInputChange = onUserInputChange,
                             onConfirmAnswer = { isCorrectAnswer ->
-                                onCorrectChange(
-                                    if (isCorrectAnswer) QuizResultType.CORRECT else QuizResultType.WRONG
-                                )
-                                onConfirmAnswer(isCorrectAnswer)
-                                //onConfirmClick(QuizClearType.ALL_CLEAR)
+                                onCorrectChange(if (isCorrectAnswer) QuizResultType.CORRECT else QuizResultType.WRONG)
                             }
                         )
-
-                    QuizType.SHORT_ANSWER_IMAGE ->
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Spacer(
-                                modifier = Modifier.height(
-                                    QuizResultCardTextChoiceImageSmallSpacer
-                                )
-                            )
-
-                            //Box로 이미지와 정답 카드 겹치기
-                            Box(modifier = Modifier.fillMaxWidth()) {
-                                AsyncImage(
-                                    model = currentQuiz.imageUrl?.first(),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .clip(RoundedCornerShape(TextChoiceQuizImageRound))
-                                        .fillMaxWidth()
-                                        .padding(top = QuizResultCardTextChoiceImageTopPadding),
-                                    contentScale = ContentScale.FillWidth,
-                                )
-
-                                if (isCorrect != QuizResultType.DEFAULT) {
-                                    QuizResultCard(
-                                        isCorrect = isCorrect == QuizResultType.CORRECT,
-                                        modifier = Modifier
-                                            .align(Alignment.TopCenter)
-                                    )
-                                }
-                            }
-
-                            Spacer(modifier = Modifier.height(QuizResultCardTextChoiceImageSpacer))
-
-                            ShortAnswerQuizContent(
-                                quizType = currentQuiz.quizType,
-                                userInput = userInput,
-                                answer = currentQuiz.answer,
-                                onUserInputChange = onUserInputChange,
-                                onConfirmAnswer = { isCorrectAnswer ->
-                                    onCorrectChange(
-                                        if (isCorrectAnswer) QuizResultType.CORRECT else QuizResultType.WRONG
-                                    )
-                                    onConfirmAnswer(isCorrectAnswer)
-                                }
-                            )
-                        }
+                    }
                 }
             }
         }
     }
-
 }
