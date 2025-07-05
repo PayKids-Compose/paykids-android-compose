@@ -11,24 +11,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.dummy.DummyUser
 import com.paykidscompose.presentation.model.MyPageUIModel
 import com.paykidscompose.presentation.screens.mypage.section.MyPageTopBar
 import com.paykidscompose.presentation.ui.components.CardItem
 import com.paykidscompose.presentation.ui.components.CustomCard
 import com.paykidscompose.presentation.ui.components.CustomDivider
 import com.paykidscompose.presentation.ui.components.PopupDialog
+import com.paykidscompose.presentation.ui.components.ScreenError
+import com.paykidscompose.presentation.ui.components.ScreenLoading
 import com.paykidscompose.presentation.ui.components.TitleText
 import com.paykidscompose.presentation.ui.components.util.PopupType
 import com.paykidscompose.presentation.ui.theme.Black2
@@ -42,32 +42,55 @@ import com.paykidscompose.presentation.ui.theme.MyPageNicknameTextStyle
 import com.paykidscompose.presentation.ui.theme.Red
 
 @Composable
-fun MyPageScreen(
+fun MyPage(
+    viewModel: MyPageViewModel = viewModel(),
     onClickMyInfo: () -> Unit = {},
     onClickTerms: () -> Unit = {},
     onClickAppVersion: () -> Unit = {}
-) {
-    val user = DummyUser.getUsers().first()
+){
+    val uiState by viewModel.uiState.collectAsState()
 
-    val uiModel = MyPageUIModel(user.nickname, user.profileImageURL)
-
-    var showPopupDialog by remember { mutableStateOf(false) }
-
-    val onPopupDialog = {
-        showPopupDialog = !showPopupDialog
-    }
-
-    if (showPopupDialog) {
+    if(uiState.showLogoutDialog) {
         PopupDialog(
             title = stringResource(R.string.dialog_signout_title),
             description = stringResource(R.string.dialog_signout_message),
-            onCancelClick = { showPopupDialog = false },
-            onConfirmClick = {
-                showPopupDialog = false
-            },
+            onCancelClick = { viewModel.dismissLogoutDialog() },
+            onConfirmClick = { viewModel.confirmLogout() },
             popupType = PopupType.LOGOUT
         )
     }
+
+    when {
+        uiState.isLoading -> {
+            ScreenLoading()
+        }
+        uiState.error != null -> {
+            ScreenError {
+                viewModel.load()
+            }
+        }
+        uiState.myPage != null -> {
+            uiState.myPage?.let { myPage ->
+                MyPageScreen(
+                    uiModel = myPage,
+                    onClickMyInfo = onClickMyInfo,
+                    onClickTerms = onClickTerms,
+                    onClickAppVersion = onClickAppVersion,
+                    onLogoutClick = { viewModel.onLogoutClick() }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun MyPageScreen(
+    uiModel: MyPageUIModel,
+    onClickMyInfo: () -> Unit = {},
+    onClickTerms: () -> Unit = {},
+    onClickAppVersion: () -> Unit = {},
+    onLogoutClick: () -> Unit = {}
+) {
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -131,7 +154,7 @@ fun MyPageScreen(
                 CardItem(
                     stringResource(R.string.text_logout),
                     textColor = Red,
-                    onItemClick = onPopupDialog
+                    onItemClick = onLogoutClick
                 )
             }
         }
@@ -141,5 +164,5 @@ fun MyPageScreen(
 @Preview
 @Composable
 fun MyPageScreenPreview() {
-    MyPageScreen()
+    MyPage()
 }
