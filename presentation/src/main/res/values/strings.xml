@@ -122,6 +122,7 @@ z   <string name="text_quiz_number">%1$d/%2$d</string>
     <!-- 소비 상세 내역 페이지 -->
     <string name="text_delete_category">카테고리 삭제</string>
     <string name="text_add_category">+ 추가하기</string>
+    <string name="text_delete">삭제하기</string>
 
     <!-- 퀘스트 페이지 -->
     <string name="text_tab_quest">퀘스트</string>

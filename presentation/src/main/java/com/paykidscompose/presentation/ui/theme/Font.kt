@@ -388,6 +388,12 @@ val ExpenseAnalysisItemAddButtonTextStyle = TextStyle(
     fontSize = 16.sp,
     lineHeight = 18.sp
 )
+val ExpenseAnalysisProgressBarNameTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 12.sp
+)
+
 
 // 카테고리 세부내역 스크린
 val CategoryDetailTitleTextStyle = TextStyle(

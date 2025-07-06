@@ -59,6 +59,25 @@ import com.paykidscompose.presentation.ui.theme.AllowanceInputDialogExpenseIncom
 import com.paykidscompose.presentation.ui.theme.AllowanceInputDialogShape
 import com.paykidscompose.presentation.ui.theme.AllowanceInputDialogToggleShadowColor
 import com.paykidscompose.presentation.ui.theme.AllowanceInputToggleTextStyle
+import com.paykidscompose.presentation.ui.theme.AnalysisScreenAddButtonVertical
+import com.paykidscompose.presentation.ui.theme.AnalysisScreenBorderWidth1
+import com.paykidscompose.presentation.ui.theme.AnalysisScreenDeleteButtonHorizontal
+import com.paykidscompose.presentation.ui.theme.AnalysisScreenDeleteButtonVertical
+import com.paykidscompose.presentation.ui.theme.AnalysisScreenElevation16
+import com.paykidscompose.presentation.ui.theme.AnalysisScreenProgressBarHeight
+import com.paykidscompose.presentation.ui.theme.AnalysisScreenProgressBarSize
+import com.paykidscompose.presentation.ui.theme.AnalysisScreenProgressBarSpace
+import com.paykidscompose.presentation.ui.theme.AnalysisScreenShape10
+import com.paykidscompose.presentation.ui.theme.AnalysisScreenShape100
+import com.paykidscompose.presentation.ui.theme.AnalysisScreenShape4
+import com.paykidscompose.presentation.ui.theme.AnalysisScreenShape5
+import com.paykidscompose.presentation.ui.theme.AnalysisScreenShape8
+import com.paykidscompose.presentation.ui.theme.AnalysisScreenSpacer12
+import com.paykidscompose.presentation.ui.theme.AnalysisScreenSpacer28
+import com.paykidscompose.presentation.ui.theme.AnalysisScreenSpacer34
+import com.paykidscompose.presentation.ui.theme.AnalysisScreenSpacer8
+import com.paykidscompose.presentation.ui.theme.AnalysisScreenStartEndPadding
+import com.paykidscompose.presentation.ui.theme.AnalysisScreenTopPadding
 import com.paykidscompose.presentation.ui.theme.Black
 import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.CustomCardShadow
@@ -67,6 +86,7 @@ import com.paykidscompose.presentation.ui.theme.ExpenseAnalysisItemAddButtonText
 import com.paykidscompose.presentation.ui.theme.ExpenseAnalysisItemAmountTextStyle
 import com.paykidscompose.presentation.ui.theme.ExpenseAnalysisItemCategoryTextStyle
 import com.paykidscompose.presentation.ui.theme.ExpenseAnalysisItemPercentTextStyle
+import com.paykidscompose.presentation.ui.theme.ExpenseAnalysisProgressBarNameTextStyle
 import com.paykidscompose.presentation.ui.theme.Gray1
 import com.paykidscompose.presentation.ui.theme.Gray5
 import com.paykidscompose.presentation.ui.theme.Gray6
@@ -87,6 +107,11 @@ fun ExpenseAnalysis(
         mutableStateOf(
             LocalDate.now()
         )
+    }
+    var selectedAllowanceType by remember { mutableStateOf(AllowanceType.EXPENSE)}
+
+    val onSelectAllowanceType = { type: AllowanceType ->
+        selectedAllowanceType = type
     }
 
     val onMonth = { month: LocalDate ->
@@ -110,9 +135,9 @@ fun ExpenseAnalysis(
     ExpenseAnalysisScreen(
         onCategoryCard,
         currentMonth,
-        AllowanceType.EXPENSE,
+        selectedAllowanceType,
         onMonth,
-        {}
+        onSelectAllowanceType
     )
 }
 
@@ -129,7 +154,8 @@ fun ExpenseAnalysisScreen(
             AllowanceChartDTO(1, "2025-06-01", AllowanceType.EXPENSE, "편의점", 3000, "음료"),
             AllowanceChartDTO(2, "2025-06-02", AllowanceType.EXPENSE, "식비", 12000, "점심"),
             AllowanceChartDTO(3, "2025-06-03", AllowanceType.EXPENSE, "편의점", 2000, "간식"),
-            AllowanceChartDTO(4, "2025-06-04", AllowanceType.EXPENSE, "식비", 10000, "저녁")
+            AllowanceChartDTO(4, "2025-06-04", AllowanceType.EXPENSE, "식비", 10000, "저녁"),
+            AllowanceChartDTO(5, "2025-06-05", AllowanceType.EXPENSE, "기타", 10000, "저녁")
         )
     )
 
@@ -139,7 +165,11 @@ fun ExpenseAnalysisScreen(
             .fillMaxSize()
             .background(color = Gray5)
             .statusBarsPadding()
-            .padding(start = 17.dp, end = 17.dp, top = 20.dp)
+            .padding(
+                start = AnalysisScreenStartEndPadding,
+                end = AnalysisScreenStartEndPadding,
+                top = AnalysisScreenTopPadding
+            )
     ) {
 
         Row(
@@ -176,7 +206,7 @@ fun ExpenseAnalysisScreen(
             }
         }
 
-        Spacer(Modifier.height(28.dp))
+        Spacer(Modifier.height(AnalysisScreenSpacer28))
 
         Row(
             modifier = Modifier
@@ -254,7 +284,7 @@ fun ExpenseAnalysisScreen(
             }
         }
 
-        Spacer(Modifier.height(34.dp))
+        Spacer(Modifier.height(AnalysisScreenSpacer34))
 
         Text(
             stringResource(R.string.text_month_total_consume, formatAmount(150000)),
@@ -262,48 +292,49 @@ fun ExpenseAnalysisScreen(
                 .copy(color = Black)
         )
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(AnalysisScreenSpacer12))
 
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(8.dp))
-                .background(color = White)
-                .border(width = 1.dp, color = Gray6, shape = RoundedCornerShape(8.dp))
         ) {
             CategoryProgressBar(data)
         }
 
-        Spacer(Modifier.height(34.dp))
+        Spacer(Modifier.height(AnalysisScreenSpacer34))
 
         Button(
             onClick = {},
-            shape = RoundedCornerShape(5.dp),
+            shape = RoundedCornerShape(AnalysisScreenShape5),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Gray7,
                 contentColor = White
             ),
-            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
+            contentPadding = PaddingValues(
+                horizontal = AnalysisScreenDeleteButtonHorizontal,
+                vertical = AnalysisScreenDeleteButtonVertical
+            ),
             modifier = Modifier.align(Alignment.End)
         ) {
-            Text("삭제하기", style = ExpenseAnalysisDeleteButtonTextStyle)
+            Text(stringResource(R.string.text_delete), style = ExpenseAnalysisDeleteButtonTextStyle)
         }
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(AnalysisScreenSpacer12))
 
         LazyColumn(
             modifier = Modifier.fillMaxWidth()
         ) {
             items(data) {
-                AnalysisItem("편의점", -1800, "50%", onCategoryCard)
-                Spacer(Modifier.height(8.dp))
+                AnalysisItem(it.name, it.amount,
+                    "${(it.percent * 100).toInt()}%", onCategoryCard)
+                Spacer(Modifier.height(AnalysisScreenSpacer8))
             }
 
             item {
 
                 Button(
                     onClick = {},
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(AnalysisScreenShape10),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = White2,
                         contentColor = Gray7
@@ -311,15 +342,15 @@ fun ExpenseAnalysisScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .shadow(
-                            16.dp,
-                            shape = RoundedCornerShape(10.dp),
+                            AnalysisScreenElevation16,
+                            shape = RoundedCornerShape(AnalysisScreenShape10),
                             ambientColor = MyPageCardShadowColor,
                             spotColor = MyPageCardShadowColor
                         ),
-                    contentPadding = PaddingValues(vertical = 14.dp)
+                    contentPadding = PaddingValues(vertical = AnalysisScreenAddButtonVertical)
                 ) {
                     Text(
-                        "+ 추가하기",
+                        stringResource(R.string.text_add_category),
                         style = ExpenseAnalysisItemAddButtonTextStyle
                     )
                 }
@@ -393,10 +424,9 @@ private fun CategoryProgressBar(stats: List<CategoryStat>) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(20.dp)
-                .clip(RoundedCornerShape(100.dp))
-                .background(Color.White)
-                .border(1.dp, Gray6, RoundedCornerShape(100.dp))
+                .height(AnalysisScreenProgressBarHeight)
+                .clip(RoundedCornerShape(AnalysisScreenShape100))
+                .border(AnalysisScreenBorderWidth1, Gray6, RoundedCornerShape(AnalysisScreenShape100))
         ) {
             Row(Modifier.fillMaxSize()) {
                 stats.forEach { stat ->
@@ -410,11 +440,11 @@ private fun CategoryProgressBar(stats: List<CategoryStat>) {
             }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(AnalysisScreenShape8))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(AnalysisScreenProgressBarSpace),
             verticalAlignment = Alignment.CenterVertically
         ) {
             stats.forEach { stat ->
@@ -423,13 +453,13 @@ private fun CategoryProgressBar(stats: List<CategoryStat>) {
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(8.dp)
+                            .size(AnalysisScreenProgressBarSize)
                             .background(stat.color, shape = CircleShape)
                     )
-                    Spacer(Modifier.width(4.dp))
+                    Spacer(Modifier.width(AnalysisScreenShape4))
                     Text(
                         text = stat.name,
-                        style = TextStyle(fontSize = 12.sp, color = Black)
+                        style = ExpenseAnalysisProgressBarNameTextStyle
                     )
                 }
             }
