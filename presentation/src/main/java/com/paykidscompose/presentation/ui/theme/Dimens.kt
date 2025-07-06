@@ -54,6 +54,8 @@ const val StageTooltipOffsetX = 86
 const val StageTooltipOffsetY = 100
 
 // 퀴즈 진입 화면
+val QuizEntryBackButtonHorizontalPadding = 24.dp
+val QuizEntryBackButtonVerticalPadding = 20.dp
 val QuizEntryScreenTopPadding = 230.dp
 val QuizEntryScreenBottomPadding = 248.dp
 val StageNumberCardRound = 100.dp
