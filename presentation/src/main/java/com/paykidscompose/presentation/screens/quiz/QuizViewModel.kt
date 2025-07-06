@@ -1,52 +1,73 @@
 package com.paykidscompose.presentation.screens.quiz
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.paykidscompose.presentation.dummy.DummyQuiz
 import com.paykidscompose.presentation.model.QuizUIModel
+import com.paykidscompose.presentation.model.QuizUIState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class QuizViewModel : ViewModel() {
-    private val _quizzes = mutableStateListOf<QuizUIModel>()
-
-    var currentIndex by mutableStateOf(0)
-        private set
-
-    var currentQuiz by mutableStateOf(_quizzes.firstOrNull())
-        private set
+    private val _uiState = MutableStateFlow(QuizUIState())
+    val uiState = _uiState.asStateFlow()
 
     fun loadQuiz(stageNumber: Int) {
         viewModelScope.launch {
-            val quizzes = DummyQuiz.getQuizzes(stageNumber).map { quiz ->
-                QuizUIModel(
-                    quiz.stage,
-                    quiz.number,
-                    quiz.quizType,
-                    quiz.question,
-                    quiz.choices,
-                    quiz.answer,
-                    quiz.imageUrl,
-                    quiz.totalCount
-                )
+            _uiState.update { it.copy(isLoading = true, error = null) }
+
+            delay(500)
+
+            runCatching {
+                val quizzes = DummyQuiz.getQuizzes(stageNumber).map { quiz ->
+                    QuizUIModel(
+                        quiz.stage,
+                        quiz.number,
+                        quiz.quizType,
+                        quiz.question,
+                        quiz.choices,
+                        quiz.answer,
+                        quiz.imageUrl,
+                        quiz.totalCount
+                    )
+                }
+
+                // 예외 상황 처리: 퀴즈가 비어 있으면 예외 발생
+                require(quizzes.isNotEmpty())
+
+                quizzes
+            }.onSuccess { quizzes ->
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        quizzes = quizzes,
+                        currentIndex = 0,
+                        totalCount = quizzes.first().totalCount
+                    )
+                }
+            }.onFailure { e ->
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        error = e.message
+                    )
+                }
             }
-            _quizzes.addAll(quizzes)
-            currentIndex = 0
-            currentQuiz = _quizzes[currentIndex]
         }
     }
 
     fun moveToNext() {
-        if (currentIndex < _quizzes.size - 1) {
-            currentIndex++
-            currentQuiz = _quizzes[currentIndex]
+        _uiState.update {
+            if (it.currentIndex < it.quizzes.lastIndex) {
+                it.copy(currentIndex = it.currentIndex + 1)
+            } else it
         }
     }
 
     fun isLastQuiz(): Boolean {
-        return currentIndex == _quizzes.size - 1
+        return uiState.value.currentIndex == uiState.value.quizzes.lastIndex
     }
 }
