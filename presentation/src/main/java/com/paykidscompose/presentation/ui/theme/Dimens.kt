@@ -251,6 +251,27 @@ val AllowanceInputDialogIconHeight = 6.dp
 val AllowanceInputDialogDateItemStartEndPadding = 8.dp
 val AllowanceInputDialogDateItemTopBottomPadding = 4.dp
 
+// 용돈일기 분석 화면
+val AnalysisScreenStartEndPadding = 17.dp
+val AnalysisScreenTopPadding = 20.dp
+val AnalysisScreenSpacer8 = 8.dp
+val AnalysisScreenSpacer12 = 12.dp
+val AnalysisScreenSpacer28 = 28.dp
+val AnalysisScreenSpacer34 = 34.dp
+val AnalysisScreenShape4 = 4.dp
+val AnalysisScreenShape5 = 5.dp
+val AnalysisScreenShape8 = 8.dp
+val AnalysisScreenShape10 = 10.dp
+val AnalysisScreenShape100 = 100.dp
+val AnalysisScreenElevation16 = 16.dp
+val AnalysisScreenBorderWidth1 = 1.dp
+val AnalysisScreenDeleteButtonHorizontal = 8.dp
+val AnalysisScreenDeleteButtonVertical = 0.dp
+val AnalysisScreenAddButtonVertical = 14.dp
+val AnalysisScreenProgressBarHeight = 20.dp
+val AnalysisScreenProgressBarSpace = 16.dp
+val AnalysisScreenProgressBarSize = 8.dp
+
 // 카테고리 상세내역 화면
 val CategoryDetailScreenStartEndPadding = 17.dp
 val CategoryDetailScreenTopPadding = 70.dp
