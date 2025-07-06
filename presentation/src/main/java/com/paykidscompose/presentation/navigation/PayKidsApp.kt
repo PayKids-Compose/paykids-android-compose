@@ -109,7 +109,7 @@ fun PayKidsApp(
                         navController.navigate(QuizNavigationRoute.QuizRoute(stageNumber))
                     },
                     onStudyClick = {
-                        navController.navigate(QuizNavigationRoute.StudyRoute)
+                        navController.navigate(QuizNavigationRoute.StudyRoute(stageNumber))
                     },
                     onBackClick = {
                         navController.popBackStack()
@@ -148,8 +148,12 @@ fun PayKidsApp(
                 )
             }
 
-            composable<QuizNavigationRoute.StudyRoute> {
+            composable<QuizNavigationRoute.StudyRoute> { backStack ->
+                val targetRoute = backStack.toRoute<QuizNavigationRoute.StudyRoute>()
+                val stageNumber = targetRoute.stageNumber
+
                 Study(
+                    stageNumber = stageNumber,
                     onBackClick = {
                         navController.popBackStack()
                     }
