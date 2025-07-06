@@ -1,15 +1,20 @@
 package com.paykidscompose.presentation.screens.quiz
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,7 +23,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import coil3.compose.AsyncImage
@@ -32,6 +39,8 @@ import com.paykidscompose.presentation.ui.theme.DeterminationButtonTextTopAndBot
 import com.paykidscompose.presentation.ui.theme.DeterminationTextStyle2
 import com.paykidscompose.presentation.ui.theme.Gray5
 import com.paykidscompose.presentation.ui.theme.PayKidsComposeTheme
+import com.paykidscompose.presentation.ui.theme.QuizEntryBackButtonHorizontalPadding
+import com.paykidscompose.presentation.ui.theme.QuizEntryBackButtonVerticalPadding
 import com.paykidscompose.presentation.ui.theme.QuizEntryButtonSpacer
 import com.paykidscompose.presentation.ui.theme.QuizEntryScreenBottomPadding
 import com.paykidscompose.presentation.ui.theme.QuizEntryScreenSpacer1
@@ -50,7 +59,8 @@ fun QuizEntry(
     stageNumber: Int,
     onShowDialogChange: (Boolean) -> Unit = {},
     onQuiz: (Int) -> Unit = {},
-    onStudyClick: () -> Unit = {}
+    onStudyClick: () -> Unit = {},
+    onBackClick: () -> Unit = {}
 ) {
     var showDialog by remember { mutableStateOf(false) }
 
@@ -59,7 +69,8 @@ fun QuizEntry(
         showDialog = showDialog,
         onShowDialogChange = onShowDialogChange,
         onQuiz = onQuiz,
-        onStudyClick = onStudyClick
+        onStudyClick = onStudyClick,
+        onBackClick = onBackClick
     )
 }
 
@@ -69,7 +80,8 @@ fun QuizEntryScreen(
     showDialog: Boolean,
     onShowDialogChange: (Boolean) -> Unit,
     onQuiz: (Int) -> Unit = {},
-    onStudyClick: () -> Unit = {}
+    onStudyClick: () -> Unit = {},
+    onBackClick: () -> Unit = {}
 ) {
     val stageTitle = getStageTitle(stageNumber - 1)
 
@@ -93,6 +105,22 @@ fun QuizEntryScreen(
             contentScale = ContentScale.Crop
         )
 
+        Box( // 뒤로 가기 버튼 커스텀
+            modifier = Modifier
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .padding(
+                    horizontal = QuizEntryBackButtonHorizontalPadding,
+                    vertical = QuizEntryBackButtonVerticalPadding
+                )
+                .clickable(onClick = onBackClick)
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_left_white),
+                contentDescription = null,
+                tint = Color.Unspecified
+            )
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -107,10 +135,16 @@ fun QuizEntryScreen(
                 colors = CardDefaults.cardColors(containerColor = Gray5)
             ) {
                 Column(
-                    modifier = Modifier.padding(horizontal = StageNumberCardHorizontalPadding, vertical = StageNumberCardVerticalPadding),
+                    modifier = Modifier.padding(
+                        horizontal = StageNumberCardHorizontalPadding,
+                        vertical = StageNumberCardVerticalPadding
+                    ),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = stringResource(R.string.text_stage_number, stageNumber), style = StageNumberCardTextStyle)
+                    Text(
+                        text = stringResource(R.string.text_stage_number, stageNumber),
+                        style = StageNumberCardTextStyle
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(QuizEntryScreenSpacer1))
@@ -157,7 +191,7 @@ fun QuizEntryScreen(
 
 @Preview
 @Composable
-fun QuizEntryScreenPreview(){
+fun QuizEntryScreenPreview() {
     PayKidsComposeTheme {
         QuizEntry(2)
     }
