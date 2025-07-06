@@ -21,7 +21,7 @@ import com.paykidscompose.presentation.navigation.route.MyPageNavigationRoute
 import com.paykidscompose.presentation.navigation.route.QuizNavigationRoute
 import com.paykidscompose.presentation.navigation.route.TabNavigationRoute
 import com.paykidscompose.presentation.screens.PayKidsScaffold
-import com.paykidscompose.presentation.screens.allowance.AllowanceDiaryScreen
+import com.paykidscompose.presentation.screens.allowance.AllowanceDiary
 import com.paykidscompose.presentation.screens.allowance.analysis.ExpenseAnalysis
 import com.paykidscompose.presentation.screens.allowance.detail.CategoryDetail
 import com.paykidscompose.presentation.screens.home.Home
@@ -179,7 +179,7 @@ fun PayKidsApp(
             }
 
             composable<TabNavigationRoute.AllowanceDiaryRoute> {
-                AllowanceDiaryScreen(
+                AllowanceDiary(
                     onCategoryExpense = {
                         navController.navigate(AllowanceDiaryNavigationRoute.ExpenseAnalysisRoute)
                     }

@@ -24,12 +24,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,12 +40,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.dummy.DummyDataManager
 import com.paykidscompose.presentation.model.AllowanceDiaryUIModel
-import com.paykidscompose.presentation.model.toUIModel
-import com.paykidscompose.presentation.model.type.AllowanceType
+import com.paykidscompose.presentation.model.AllowanceDiaryUIState
 import com.paykidscompose.presentation.ui.components.AllowanceInputDialog
+import com.paykidscompose.presentation.ui.components.ScreenError
+import com.paykidscompose.presentation.ui.components.ScreenLoading
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryCalendarDayTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryCalendarIncomeConsumeTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryCalendarWeekTextStyle
@@ -90,113 +88,59 @@ import com.paykidscompose.presentation.ui.theme.Gray8
 import com.paykidscompose.presentation.ui.theme.MyPageCardShadowColor
 import com.paykidscompose.presentation.ui.theme.Red
 import com.paykidscompose.presentation.ui.theme.White
-import com.paykidscompose.presentation.util.DateFormatterDay
-import com.paykidscompose.presentation.util.DateFormatterMonth
 import com.paykidscompose.presentation.util.MonthFormatter
 import com.paykidscompose.presentation.util.formatAmount
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlin.math.ceil
 
 @Composable
-fun AllowanceDiaryScreen(
-    onCategoryExpense: () -> Unit = {},
+fun AllowanceDiary(
+    viewModel: AllowanceDiaryViewModel = viewModel(),
+    onCategoryExpense: () -> Unit = {}
 ) {
+    val uiState by viewModel.uiState.collectAsState()
 
-    /*
-    용돈일기 추가나 수정에서 데이터 전달 구현은 안했습니다.
-     */
-
-    val dummyDataManager = remember { DummyDataManager() }
-
-
-    var currentMonth by remember {
-        mutableStateOf(
-            LocalDate.now().withDayOfMonth(1)
-        )
-    } // 현재 달을 저장 day를 항상 1일로 고정
-
-    var selectedDate by remember { mutableStateOf(LocalDate.now()) } // 선택한 날짜, 처음은 현재 날짜
-
-    val allAllowanceCharts = remember { dummyDataManager.getAllAllowanceCharts() }
-    val selectedDateString = remember(selectedDate) { selectedDate.format(DateFormatterDay) }
-
-    val selectedUIModels by remember(selectedDateString, allAllowanceCharts) {
-        derivedStateOf {
-            allAllowanceCharts
-                .filter { it.date == selectedDateString }
-                .map { it.toUIModel() }
-        }
-    }
-
-    val totalExpense by remember(currentMonth, allAllowanceCharts) {
-        derivedStateOf {
-            val monthPrefix = currentMonth.format(DateFormatterMonth)
-            allAllowanceCharts
-                .filter {
-                    it.allowanceType == AllowanceType.EXPENSE && it.date.startsWith(
-                        monthPrefix
-                    )
-                }
-                .sumOf { it.amount }
-        }
-    }
-
-    // 달력에 보여줄 수입/지출 합계
-    val dailySummary by remember(allAllowanceCharts) {
-        derivedStateOf {
-            allAllowanceCharts
-                .groupBy { LocalDate.parse(it.date) }
-                .mapValues { (_, list) ->
-                    val income =
-                        list.filter { it.allowanceType == AllowanceType.INCOME }.sumOf { it.amount }
-                    val expense = list.filter { it.allowanceType == AllowanceType.EXPENSE }
-                        .sumOf { it.amount }
-                    income to expense
-                }
-        }
-    }
-
-    // 최대 소비 카테고리, 소비 금액 계산
-    var maxExpenseCategoryAndAmount by remember { mutableStateOf<Pair<String, Int>?>(null) }
-
-    LaunchedEffect(currentMonth, allAllowanceCharts) {
-        withContext(Dispatchers.Default) {
-            val monthPrefix = currentMonth.format(DateFormatterMonth)
-            val expenseByCategory = allAllowanceCharts
-                .filter {
-                    it.allowanceType == AllowanceType.EXPENSE && it.date.startsWith(
-                        monthPrefix
-                    )
-                }
-                .groupBy { it.category }
-                .mapValues { entry -> entry.value.sumOf { it.amount } }
-
-            val max = expenseByCategory.maxByOrNull { it.value }
-            withContext(Dispatchers.Main) {
-                maxExpenseCategoryAndAmount =
-                    max?.let { it.key to it.value } // 상태를 업데이트 하는거라서 메인 스레드에서 돼야함.
-            }
-        }
-    }
-
-    val maxCategory = maxExpenseCategoryAndAmount?.first ?: ""
-    val maxAmount = maxExpenseCategoryAndAmount?.second ?: 0
-
-    var showInputDialog by remember { mutableStateOf(false) }
-
-    val onShowDialog = { value: Boolean ->
-        showInputDialog = value
-    }
-
-    if (showInputDialog) {
+    if (uiState.showInputDialog) {
         AllowanceInputDialog(
             onSelect = {},
-            onCancelClick = { showInputDialog = false }
-        ) { showInputDialog = false }
+            onCancelClick = { viewModel.setShowDialog(false) }
+        ) { viewModel.setShowDialog(false) }
     }
+
+    when{
+        uiState.isLoading -> {
+            ScreenLoading()
+        }
+        uiState.error != null -> {
+            ScreenError { viewModel.calculateAll() }
+        }
+        else -> {
+            AllowanceDiaryScreen(
+                uiState = uiState,
+                onPrevMonth = { viewModel.onPrevMonth() },
+                onNextMonth = { viewModel.onNextMonth() },
+                onDateSelected = { viewModel.onDateSelected(it) },
+                onAddClick = { viewModel.setShowDialog(true) },
+                onShowDialog = { viewModel.setShowDialog(true) },
+                onCategoryExpense = onCategoryExpense
+            )
+        }
+    }
+}
+
+@Composable
+fun AllowanceDiaryScreen(
+    uiState: AllowanceDiaryUIState,
+    onPrevMonth: () -> Unit,
+    onNextMonth: () -> Unit,
+    onDateSelected: (LocalDate) -> Unit,
+    onAddClick: () -> Unit,
+    onShowDialog: (Boolean) -> Unit,
+    onCategoryExpense: () -> Unit = {},
+) {
+    val maxCategory = uiState.maxExpenseCategoryAndAmount?.first ?: ""
+    val maxAmount = uiState.maxExpenseCategoryAndAmount?.second ?: 0
 
     LazyColumn(
         modifier = Modifier
@@ -212,11 +156,11 @@ fun AllowanceDiaryScreen(
         item {
             // < 12월 > + 버튼
             HeaderSection(
-                month = currentMonth,
-                onPrev = { currentMonth = currentMonth.minusMonths(1) },
-                onNext = { currentMonth = currentMonth.plusMonths(1) },
+                month = uiState.currentMonth,
+                onPrev = { onPrevMonth() },
+                onNext = { onNextMonth() },
                 onAddClick = {
-                    showInputDialog = true
+                    onAddClick()
                 }
             )
 
@@ -228,7 +172,7 @@ fun AllowanceDiaryScreen(
                 Text(
                     stringResource(
                         R.string.text_month_total_consume,
-                        formatAmount(totalExpense)
+                        formatAmount(uiState.totalExpense)
                     ),
                     style = AllowanceDiaryTitleExpenseTextStyle
                         .copy(color = Black)
@@ -264,7 +208,7 @@ fun AllowanceDiaryScreen(
                         Text(
                             buildAnnotatedString {
                                 withStyle(SpanStyle(color = Black)) {
-                                    append(currentMonth.format(DateTimeFormatter.ofPattern("M월 달 ")))
+                                    append(uiState.currentMonth.format(DateTimeFormatter.ofPattern("M월 달 ")))
                                 }
                                 withStyle(SpanStyle(color = Blue1)) {
                                     append(maxCategory)
@@ -329,10 +273,10 @@ fun AllowanceDiaryScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     CalendarGrid(
-                        dailySummary = dailySummary,
-                        month = currentMonth,
-                        selectedDate = selectedDate,
-                        onDateSelected = { selectedDate = it }
+                        dailySummary = uiState.dailySummary,
+                        month = uiState.currentMonth,
+                        selectedDate = uiState.selectedDate,
+                        onDateSelected = onDateSelected
                     )
                 }
             }
@@ -348,15 +292,15 @@ fun AllowanceDiaryScreen(
             Spacer(Modifier.height(AllowanceDiaryScreenSpacer10))
 
             Text(
-                text = selectedDate.format(DateTimeFormatter.ofPattern("M월 d일")),
+                text = uiState.selectedDate.format(DateTimeFormatter.ofPattern("M월 d일")),
                 style = AllowanceDiaryDetailConsumeMonthDayTextStyle.copy(color = Gray8)
             )
 
             Spacer(Modifier.height(AllowanceDiaryScreenSpacer8))
         }
 
-        items(selectedUIModels) { item ->
-            TransactionItem(item, showInputDialog, onShowDialog)
+        items(uiState.selectedUIModels) { item ->
+            TransactionItem(item, uiState.showInputDialog, onShowDialog )
             Spacer(Modifier.height(AllowanceDiaryScreenSpacer8))
         }
     }
@@ -592,5 +536,5 @@ fun TransactionItem(
 @Preview
 @Composable
 fun DiaryScreenPreview() {
-    AllowanceDiaryScreen()
+    AllowanceDiary()
 }
