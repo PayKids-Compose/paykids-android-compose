@@ -110,6 +110,9 @@ fun PayKidsApp(
                     },
                     onStudyClick = {
                         navController.navigate(QuizNavigationRoute.StudyRoute)
+                    },
+                    onBackClick = {
+                        navController.popBackStack()
                     }
                 )
             }
