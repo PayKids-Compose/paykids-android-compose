@@ -1,6 +1,5 @@
 package com.paykidscompose.data.model.allowance
 
-
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
