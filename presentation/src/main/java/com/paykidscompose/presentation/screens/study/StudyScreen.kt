@@ -84,6 +84,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun Study(
+    stageNumber: Int,
     onBackClick: () -> Unit = {}
 ) {
     val messages = remember {
@@ -92,7 +93,7 @@ fun Study(
             ChatMessageUIModel("우와 그렇구나\n돈 없이는 사고 싶은 걸 가질 수 없나요?", isFromGpt = false),
         )
     }
-    val stageNumber = "스테이지 3"
+    val stageNumberText = stringResource(R.string.text_stage_number, stageNumber)
     val userNickname = "닉네임"
     var userInput by remember { mutableStateOf("") }
 
@@ -102,7 +103,7 @@ fun Study(
     StudyScreen(
         modifier = Modifier
             .fillMaxSize(),
-        stageNumber = stageNumber,
+        stageNumberText = stageNumberText,
         userNickname = userNickname,
         messages = messages,
         userInput = userInput,
@@ -127,7 +128,7 @@ fun Study(
 @Composable
 fun StudyScreen(
     modifier: Modifier = Modifier,
-    stageNumber: String,
+    stageNumberText: String,
     userNickname: String,
     messages: List<ChatMessageUIModel>,
     userInput: String,
@@ -154,7 +155,7 @@ fun StudyScreen(
                 Box(
                     modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
                 ) {
-                    StageInfoBox(stage = stageNumber)
+                    StageInfoBox(stage = stageNumberText)
                 }
             }
 
@@ -332,6 +333,6 @@ fun UserBubblePreview() {
 @Composable
 fun StudyScreenPreview() {
     PayKidsComposeTheme {
-        Study()
+        Study(stageNumber = 3)
     }
 }
