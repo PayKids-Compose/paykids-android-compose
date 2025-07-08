@@ -8,13 +8,17 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -50,14 +54,15 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.getStageTitle
-import com.paykidscompose.presentation.screens.home.constants.StageFirstItemStartPadding
-import com.paykidscompose.presentation.screens.home.constants.StageStartPaddingPattern
+import com.paykidscompose.presentation.screens.home.constants.StageFirstItemOffset
+import com.paykidscompose.presentation.screens.home.constants.StageOffsetPattern
 import com.paykidscompose.presentation.screens.home.constants.stageImageSet
 import com.paykidscompose.presentation.ui.components.ImageTooltip
 import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.CardShadowElevation
 import com.paykidscompose.presentation.ui.theme.Gray2
 import com.paykidscompose.presentation.ui.theme.PayKidsComposeTheme
+import com.paykidscompose.presentation.ui.theme.StageBottomPadding
 import com.paykidscompose.presentation.ui.theme.StageCardNumberTextStyle
 import com.paykidscompose.presentation.ui.theme.StageCardTitleTextStyle
 import com.paykidscompose.presentation.ui.theme.StageCircleBorderWidth
@@ -70,6 +75,7 @@ import com.paykidscompose.presentation.ui.theme.StageDescriptionCardTextSpacer
 import com.paykidscompose.presentation.ui.theme.StageDescriptionCardTextVerticalPadding
 import com.paykidscompose.presentation.ui.theme.StageDescriptionCardVerticalPadding
 import com.paykidscompose.presentation.ui.theme.StageIconSize
+import com.paykidscompose.presentation.ui.theme.StageStartAndEndPadding
 import com.paykidscompose.presentation.ui.theme.StageTooltipImageWidth
 import com.paykidscompose.presentation.ui.theme.StageTopPadding
 import com.paykidscompose.presentation.ui.theme.StageVerticalSpace
@@ -113,7 +119,7 @@ fun HomeScreen(
         derivedStateOf {
             val totalOffsetPx = scrollState.firstVisibleItemIndex * itemHeightPx +
                     scrollState.firstVisibleItemScrollOffset
-            with(density) { -(totalOffsetPx * 0.6f).toDp() }
+            with(density) { -totalOffsetPx.toDp() }
         }
     }
 
@@ -140,56 +146,66 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize(),
             state = scrollState,
-            verticalArrangement = Arrangement.spacedBy(StageVerticalSpace)
+            verticalArrangement = Arrangement.spacedBy(StageVerticalSpace),
+            contentPadding = PaddingValues(
+                start = StageStartAndEndPadding,
+                end = StageStartAndEndPadding,
+                top = StageTopPadding + WindowInsets.statusBars.asPaddingValues()
+                    .calculateTopPadding(),
+                bottom = StageBottomPadding
+            )
         ) {
             items(totalStageCount) { index ->
-                if (index == 0) {
-                    Spacer(modifier = Modifier.height(StageTopPadding))
-                }
-
                 val (imageRes, borderColor) = getStageVisuals(
                     index,
                     unlockedStageCount,
                     stageImageSet
                 )
-                val itemOffset = remember { mutableStateOf(Offset(0f, 0f)) }
+                val stageCenterBottomOffset = remember { mutableStateOf(Offset(0f, 0f)) }
+                val stageHorizontalOffset = getStageHorizontalOffset(index)
 
-                val startPadding = getStartPadding(index)
-                Box(
+                Box( // 아이템별 스테이지 가로 오프셋 적용을 위한 박스
                     modifier = Modifier
-                        .padding(start = startPadding)
-                        .size(StageCircleSize)
-                        .background(color = White, shape = CircleShape)
-                        .border(
-                            width = StageCircleBorderWidth,
-                            color = borderColor,
-                            shape = CircleShape
-                        )
-                        .clickable(
-                            indication = null,
-                            interactionSource = remember { MutableInteractionSource() }
-                        ) {
-                            onStageSelected(index)
-                            onTooltipOffsetChange(itemOffset.value)
-                        },
+                        .fillMaxWidth()
+                        .height(StageCircleSize),
                     contentAlignment = Alignment.Center
                 ) {
-                    Image(
-                        painter = painterResource(id = imageRes),
-                        contentDescription = null, // ripple 제거
+                    Box( // 스테이지 커스텀을 위한 박스
                         modifier = Modifier
-                            .size(StageIconSize)
-                            .onGloballyPositioned { coordinates ->
-                                val stagePosition = coordinates.positionInWindow()
-                                val stageWidthHalf = coordinates.size.width / 2
-                                val stageHeight = coordinates.size.height
+                            .offset(x = stageHorizontalOffset)
+                            .size(StageCircleSize)
+                            .background(color = White, shape = CircleShape)
+                            .border(
+                                width = StageCircleBorderWidth,
+                                color = borderColor,
+                                shape = CircleShape
+                            )
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                onStageSelected(index)
+                                onTooltipOffsetChange(stageCenterBottomOffset.value)
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Image(
+                            painter = painterResource(id = imageRes),
+                            contentDescription = null, // ripple 제거
+                            modifier = Modifier
+                                .size(StageIconSize)
+                                .onGloballyPositioned { coordinates ->
+                                    val stagePosition = coordinates.positionInWindow()
+                                    val stageWidthHalf = coordinates.size.width / 2
+                                    val stageHeight = coordinates.size.height
 
-                                itemOffset.value = Offset(
-                                    x = stagePosition.x + stageWidthHalf,
-                                    y = stagePosition.y + stageHeight
-                                )
-                            }
-                    )
+                                    stageCenterBottomOffset.value = Offset(
+                                        x = stagePosition.x + stageWidthHalf,
+                                        y = stagePosition.y + stageHeight
+                                    )
+                                }
+                        )
+                    }
                 }
             }
         }
@@ -270,7 +286,7 @@ fun HomeScreen(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
-                       onStageNumber(selectedStageIndex + 1)
+                        onStageNumber(selectedStageIndex + 1)
                     }
             )
         }
@@ -289,10 +305,10 @@ private fun getStageVisuals(
     return imageRes to borderColor
 }
 
-private fun getStartPadding(index: Int): Dp {
+fun getStageHorizontalOffset(index: Int): Dp {
     return when (index) {
-        0 -> StageFirstItemStartPadding
-        else -> StageStartPaddingPattern[(index - 1) % StageStartPaddingPattern.size]
+        0 -> StageFirstItemOffset
+        else -> StageOffsetPattern[(index - 1) % StageOffsetPattern.size]
     }
 }
 
