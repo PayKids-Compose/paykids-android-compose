@@ -30,7 +30,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -44,7 +43,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.DpOffset
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -67,8 +66,6 @@ import com.paykidscompose.presentation.ui.theme.StageDescriptionCardTextVertical
 import com.paykidscompose.presentation.ui.theme.StageDescriptionCardVerticalPadding
 import com.paykidscompose.presentation.ui.theme.StageHorizontalPadding
 import com.paykidscompose.presentation.ui.theme.StageIconSize
-import com.paykidscompose.presentation.ui.theme.StageTooltipOffsetX
-import com.paykidscompose.presentation.ui.theme.StageTooltipOffsetY
 import com.paykidscompose.presentation.ui.theme.StageTopPadding
 import com.paykidscompose.presentation.ui.theme.StageVerticalSpace
 import com.paykidscompose.presentation.ui.theme.White
@@ -110,6 +107,8 @@ fun HomeScreen(
 ) {
     val scrollState = rememberLazyListState()
     val density = LocalDensity.current
+    val context = LocalContext.current
+
     val itemHeightDp = StageCircleSize + StageVerticalSpace
     val itemHeightPx = with(density) { itemHeightDp.toPx() }
 
@@ -120,8 +119,6 @@ fun HomeScreen(
             with(density) { -(totalOffsetPx * 0.6f).toDp() }
         }
     }
-
-    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -170,9 +167,6 @@ fun HomeScreen(
                             color = borderColor,
                             shape = CircleShape
                         )
-                        .onGloballyPositioned { coordinates ->
-                            itemOffset.value = coordinates.positionInWindow()
-                        }
                         .clickable(
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }
@@ -191,7 +185,18 @@ fun HomeScreen(
                     Image(
                         painter = painterResource(id = imageRes),
                         contentDescription = null, // ripple 제거
-                        modifier = Modifier.size(StageIconSize)
+                        modifier = Modifier
+                            .size(StageIconSize)
+                            .onGloballyPositioned { coordinates ->
+                                val stagePosition = coordinates.positionInWindow()
+                                val stageWidthHalf = coordinates.size.width / 2
+                                val stageHeight = coordinates.size.height
+
+                                itemOffset.value = Offset(
+                                    x = stagePosition.x + stageWidthHalf,
+                                    y = stagePosition.y + stageHeight
+                                )
+                            }
                     )
                 }
             }
@@ -259,21 +264,21 @@ fun HomeScreen(
 
         // 툴팁 표시
         tooltipOffset?.let { offset ->
+            val tooltipPosition = with(LocalDensity.current) {
+                DpOffset(
+                    offset.x.toDp(),
+                    offset.y.toDp()
+                )
+            }
             ImageTooltip(
                 tooltipText = stringResource(R.string.text_tooltip_start),
+                offset = tooltipPosition,
                 modifier = Modifier
                     .clickable {
                         onTooltipOffsetChange(null)
                     }
-                    .offset {
-                        IntOffset(
-                            offset.x.toInt() - StageTooltipOffsetX,
-                            offset.y.toInt() - StageTooltipOffsetY
-                        )
-                    }
             )
         }
-
     }
 }
 
