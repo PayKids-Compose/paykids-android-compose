@@ -11,5 +11,6 @@ val stageImageSet = listOf(
     R.drawable.ic_home_moneybag_unlock to R.drawable.ic_home_moneybag_lock
 )
 
-val StageStartPaddingPattern = listOf(35, 90, 154, 206, 233, 206, 154, 90, 35).map { it.dp }
-val StageFirstItemStartPadding = 62.dp
+// center 기준 스테이지 좌우 움직임 값
+val StageOffsetPattern = listOf(-100, -45, 19, 71, 98, 98, 71, 19, -45, -100).map { it.dp }
+val StageFirstItemOffset = (-73).dp
