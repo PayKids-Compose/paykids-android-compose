@@ -66,6 +66,7 @@ import com.paykidscompose.presentation.ui.theme.StageDescriptionCardTextVertical
 import com.paykidscompose.presentation.ui.theme.StageDescriptionCardVerticalPadding
 import com.paykidscompose.presentation.ui.theme.StageHorizontalPadding
 import com.paykidscompose.presentation.ui.theme.StageIconSize
+import com.paykidscompose.presentation.ui.theme.StageTooltipImageWidth
 import com.paykidscompose.presentation.ui.theme.StageTopPadding
 import com.paykidscompose.presentation.ui.theme.StageVerticalSpace
 import com.paykidscompose.presentation.ui.theme.White
@@ -173,12 +174,6 @@ fun HomeScreen(
                         ) {
                             onStageSelected(index)
                             onTooltipOffsetChange(itemOffset.value)
-
-                            if (index < unlockedStageCount) {
-                                onStageNumber(index + 1)
-                            } else {
-
-                            }
                         },
                     contentAlignment = Alignment.Center
                 ) {
@@ -272,10 +267,13 @@ fun HomeScreen(
             }
             ImageTooltip(
                 tooltipText = stringResource(R.string.text_tooltip_start),
-                offset = tooltipPosition,
                 modifier = Modifier
-                    .clickable {
-                        onTooltipOffsetChange(null)
+                    .offset(tooltipPosition.x - StageTooltipImageWidth / 2, tooltipPosition.y)
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                       onStageNumber(selectedStageIndex + 1)
                     }
             )
         }
