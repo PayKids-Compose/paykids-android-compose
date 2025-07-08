@@ -33,6 +33,7 @@ val NicknameScreenFieldBoxHeight = 1.dp
 
 // 홈 화면 
 val StageTopPadding = 163.dp
+val StageBottomPadding = 90.dp
 val StageVerticalSpace = 38.dp
 val StageCircleSize = 90.dp
 val StageCircleBorderWidth = 6.dp
