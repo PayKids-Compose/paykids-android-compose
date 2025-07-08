@@ -8,7 +8,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -43,15 +43,20 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.getStageTitle
+import com.paykidscompose.presentation.screens.home.constants.StageFirstItemStartPadding
+import com.paykidscompose.presentation.screens.home.constants.StageStartPaddingPattern
+import com.paykidscompose.presentation.screens.home.constants.stageImageSet
 import com.paykidscompose.presentation.ui.components.ImageTooltip
 import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.CardShadowElevation
+import com.paykidscompose.presentation.ui.theme.Gray2
 import com.paykidscompose.presentation.ui.theme.PayKidsComposeTheme
 import com.paykidscompose.presentation.ui.theme.StageCardNumberTextStyle
 import com.paykidscompose.presentation.ui.theme.StageCardTitleTextStyle
@@ -64,23 +69,14 @@ import com.paykidscompose.presentation.ui.theme.StageDescriptionCardTextHorizont
 import com.paykidscompose.presentation.ui.theme.StageDescriptionCardTextSpacer
 import com.paykidscompose.presentation.ui.theme.StageDescriptionCardTextVerticalPadding
 import com.paykidscompose.presentation.ui.theme.StageDescriptionCardVerticalPadding
-import com.paykidscompose.presentation.ui.theme.StageHorizontalPadding
 import com.paykidscompose.presentation.ui.theme.StageIconSize
 import com.paykidscompose.presentation.ui.theme.StageTooltipImageWidth
 import com.paykidscompose.presentation.ui.theme.StageTopPadding
 import com.paykidscompose.presentation.ui.theme.StageVerticalSpace
 import com.paykidscompose.presentation.ui.theme.White
-import com.paykidscompose.presentation.util.getStageVisuals
 
 private const val totalStageCount = 26
 private const val unlockedStageCount = 7
-val stageImageSet = listOf(
-    R.drawable.ic_home_pig_unlock to R.drawable.ic_home_pig_lock,
-    R.drawable.ic_home_coin_unlock to R.drawable.ic_home_coin_lock,
-    R.drawable.ic_home_card_unlock to R.drawable.ic_home_card_lock,
-    R.drawable.ic_home_acount_unlock to R.drawable.ic_home_acount_lock,
-    R.drawable.ic_home_moneybag_unlock to R.drawable.ic_home_moneybag_lock
-)
 
 @Composable
 fun Home(
@@ -144,8 +140,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize(),
             state = scrollState,
-            verticalArrangement = Arrangement.spacedBy(StageVerticalSpace),
-            contentPadding = PaddingValues(horizontal = StageHorizontalPadding)
+            verticalArrangement = Arrangement.spacedBy(StageVerticalSpace)
         ) {
             items(totalStageCount) { index ->
                 if (index == 0) {
@@ -159,8 +154,10 @@ fun HomeScreen(
                 )
                 val itemOffset = remember { mutableStateOf(Offset(0f, 0f)) }
 
+                val startPadding = getStartPadding(index)
                 Box(
                     modifier = Modifier
+                        .padding(start = startPadding)
                         .size(StageCircleSize)
                         .background(color = White, shape = CircleShape)
                         .border(
@@ -280,6 +277,24 @@ fun HomeScreen(
     }
 }
 
+private fun getStageVisuals(
+    index: Int,
+    unlockedStageCount: Int,
+    imageSet: List<Pair<Int, Int>>
+): Pair<Int, Color> {
+    val isUnlocked = index < unlockedStageCount
+    val imagePair = imageSet[index % imageSet.size]
+    val imageRes = if (isUnlocked) imagePair.first else imagePair.second
+    val borderColor = if (isUnlocked) Blue1 else Gray2
+    return imageRes to borderColor
+}
+
+private fun getStartPadding(index: Int): Dp {
+    return when (index) {
+        0 -> StageFirstItemStartPadding
+        else -> StageStartPaddingPattern[(index - 1) % StageStartPaddingPattern.size]
+    }
+}
 
 @Preview
 @Composable
