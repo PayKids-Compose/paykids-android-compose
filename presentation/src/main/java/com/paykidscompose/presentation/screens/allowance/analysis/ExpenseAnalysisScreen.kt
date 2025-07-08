@@ -331,6 +331,11 @@ fun ExpenseAnalysisScreen(
             }
 
             item {
+                AnalysisItem("기타", 0, "0%", onCategoryCard)
+                Spacer(Modifier.height(AnalysisScreenSpacer8))
+            }
+
+            item {
 
                 Button(
                     onClick = {},
