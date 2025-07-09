@@ -1,4 +1,6 @@
-package com.paykidscompose.common.model
+package com.paykidscompose.common.mapper
+
+import com.paykidscompose.common.model.Model
 
 /**
  * M: 공통 모델을 의미합니다. common의 모델 (UserModel)
