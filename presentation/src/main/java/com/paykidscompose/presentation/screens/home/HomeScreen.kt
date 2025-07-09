@@ -10,12 +10,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -34,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -43,16 +47,22 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.getStageTitle
+import com.paykidscompose.presentation.screens.home.constants.StageFirstItemOffset
+import com.paykidscompose.presentation.screens.home.constants.StageOffsetPattern
+import com.paykidscompose.presentation.screens.home.constants.stageImageSet
 import com.paykidscompose.presentation.ui.components.ImageTooltip
 import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.CardShadowElevation
+import com.paykidscompose.presentation.ui.theme.Gray2
 import com.paykidscompose.presentation.ui.theme.PayKidsComposeTheme
+import com.paykidscompose.presentation.ui.theme.StageBottomPadding
 import com.paykidscompose.presentation.ui.theme.StageCardNumberTextStyle
 import com.paykidscompose.presentation.ui.theme.StageCardTitleTextStyle
 import com.paykidscompose.presentation.ui.theme.StageCircleBorderWidth
@@ -64,22 +74,15 @@ import com.paykidscompose.presentation.ui.theme.StageDescriptionCardTextHorizont
 import com.paykidscompose.presentation.ui.theme.StageDescriptionCardTextSpacer
 import com.paykidscompose.presentation.ui.theme.StageDescriptionCardTextVerticalPadding
 import com.paykidscompose.presentation.ui.theme.StageDescriptionCardVerticalPadding
-import com.paykidscompose.presentation.ui.theme.StageHorizontalPadding
 import com.paykidscompose.presentation.ui.theme.StageIconSize
+import com.paykidscompose.presentation.ui.theme.StageStartAndEndPadding
+import com.paykidscompose.presentation.ui.theme.StageTooltipImageWidth
 import com.paykidscompose.presentation.ui.theme.StageTopPadding
 import com.paykidscompose.presentation.ui.theme.StageVerticalSpace
 import com.paykidscompose.presentation.ui.theme.White
-import com.paykidscompose.presentation.util.getStageVisuals
 
 private const val totalStageCount = 26
 private const val unlockedStageCount = 7
-val stageImageSet = listOf(
-    R.drawable.ic_home_pig_unlock to R.drawable.ic_home_pig_lock,
-    R.drawable.ic_home_coin_unlock to R.drawable.ic_home_coin_lock,
-    R.drawable.ic_home_card_unlock to R.drawable.ic_home_card_lock,
-    R.drawable.ic_home_acount_unlock to R.drawable.ic_home_acount_lock,
-    R.drawable.ic_home_moneybag_unlock to R.drawable.ic_home_moneybag_lock
-)
 
 @Composable
 fun Home(
@@ -116,7 +119,7 @@ fun HomeScreen(
         derivedStateOf {
             val totalOffsetPx = scrollState.firstVisibleItemIndex * itemHeightPx +
                     scrollState.firstVisibleItemScrollOffset
-            with(density) { -(totalOffsetPx * 0.6f).toDp() }
+            with(density) { -totalOffsetPx.toDp() }
         }
     }
 
@@ -144,60 +147,65 @@ fun HomeScreen(
                 .fillMaxSize(),
             state = scrollState,
             verticalArrangement = Arrangement.spacedBy(StageVerticalSpace),
-            contentPadding = PaddingValues(horizontal = StageHorizontalPadding)
+            contentPadding = PaddingValues(
+                start = StageStartAndEndPadding,
+                end = StageStartAndEndPadding,
+                top = StageTopPadding + WindowInsets.statusBars.asPaddingValues()
+                    .calculateTopPadding(),
+                bottom = StageBottomPadding
+            )
         ) {
             items(totalStageCount) { index ->
-                if (index == 0) {
-                    Spacer(modifier = Modifier.height(StageTopPadding))
-                }
-
                 val (imageRes, borderColor) = getStageVisuals(
                     index,
                     unlockedStageCount,
                     stageImageSet
                 )
-                val itemOffset = remember { mutableStateOf(Offset(0f, 0f)) }
+                val stageCenterBottomOffset = remember { mutableStateOf(Offset(0f, 0f)) }
+                val stageHorizontalOffset = getStageHorizontalOffset(index)
 
-                Box(
+                Box( // 아이템별 스테이지 가로 오프셋 적용을 위한 박스
                     modifier = Modifier
-                        .size(StageCircleSize)
-                        .background(color = White, shape = CircleShape)
-                        .border(
-                            width = StageCircleBorderWidth,
-                            color = borderColor,
-                            shape = CircleShape
-                        )
-                        .clickable(
-                            indication = null,
-                            interactionSource = remember { MutableInteractionSource() }
-                        ) {
-                            onStageSelected(index)
-                            onTooltipOffsetChange(itemOffset.value)
-
-                            if (index < unlockedStageCount) {
-                                onStageNumber(index + 1)
-                            } else {
-
-                            }
-                        },
+                        .fillMaxWidth()
+                        .height(StageCircleSize),
                     contentAlignment = Alignment.Center
                 ) {
-                    Image(
-                        painter = painterResource(id = imageRes),
-                        contentDescription = null, // ripple 제거
+                    Box( // 스테이지 커스텀을 위한 박스
                         modifier = Modifier
-                            .size(StageIconSize)
-                            .onGloballyPositioned { coordinates ->
-                                val stagePosition = coordinates.positionInWindow()
-                                val stageWidthHalf = coordinates.size.width / 2
-                                val stageHeight = coordinates.size.height
+                            .offset(x = stageHorizontalOffset)
+                            .size(StageCircleSize)
+                            .background(color = White, shape = CircleShape)
+                            .border(
+                                width = StageCircleBorderWidth,
+                                color = borderColor,
+                                shape = CircleShape
+                            )
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                onStageSelected(index)
+                                onTooltipOffsetChange(stageCenterBottomOffset.value)
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Image(
+                            painter = painterResource(id = imageRes),
+                            contentDescription = null, // ripple 제거
+                            modifier = Modifier
+                                .size(StageIconSize)
+                                .onGloballyPositioned { coordinates ->
+                                    val stagePosition = coordinates.positionInWindow()
+                                    val stageWidthHalf = coordinates.size.width / 2
+                                    val stageHeight = coordinates.size.height
 
-                                itemOffset.value = Offset(
-                                    x = stagePosition.x + stageWidthHalf,
-                                    y = stagePosition.y + stageHeight
-                                )
-                            }
-                    )
+                                    stageCenterBottomOffset.value = Offset(
+                                        x = stagePosition.x + stageWidthHalf,
+                                        y = stagePosition.y + stageHeight
+                                    )
+                                }
+                        )
+                    }
                 }
             }
         }
@@ -272,16 +280,37 @@ fun HomeScreen(
             }
             ImageTooltip(
                 tooltipText = stringResource(R.string.text_tooltip_start),
-                offset = tooltipPosition,
                 modifier = Modifier
-                    .clickable {
-                        onTooltipOffsetChange(null)
+                    .offset(tooltipPosition.x - StageTooltipImageWidth / 2, tooltipPosition.y)
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        onStageNumber(selectedStageIndex + 1)
                     }
             )
         }
     }
 }
 
+private fun getStageVisuals(
+    index: Int,
+    unlockedStageCount: Int,
+    imageSet: List<Pair<Int, Int>>
+): Pair<Int, Color> {
+    val isUnlocked = index < unlockedStageCount
+    val imagePair = imageSet[index % imageSet.size]
+    val imageRes = if (isUnlocked) imagePair.first else imagePair.second
+    val borderColor = if (isUnlocked) Blue1 else Gray2
+    return imageRes to borderColor
+}
+
+fun getStageHorizontalOffset(index: Int): Dp {
+    return when (index) {
+        0 -> StageFirstItemOffset
+        else -> StageOffsetPattern[(index - 1) % StageOffsetPattern.size]
+    }
+}
 
 @Preview
 @Composable

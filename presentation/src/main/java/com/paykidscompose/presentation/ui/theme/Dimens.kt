@@ -31,10 +31,11 @@ val TitleAndFieldSpacer = 38.dp
 val FieldAndInfoSpacer = 7.dp
 val NicknameScreenFieldBoxHeight = 1.dp
 
-// 홈 화면 
+// 홈 화면
+val StageStartAndEndPadding = 0.dp
 val StageTopPadding = 163.dp
+val StageBottomPadding = 90.dp
 val StageVerticalSpace = 38.dp
-val StageHorizontalPadding = 32.dp
 val StageCircleSize = 90.dp
 val StageCircleBorderWidth = 6.dp
 val StageIconSize = 55.dp
