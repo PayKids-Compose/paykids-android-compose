@@ -12,7 +12,8 @@ import com.paykidscompose.data.util.REFRESH_TOKEN
 class AuthRepositoryImpl(private val authApiService: AuthApiService = NetworkModule.provideAuthApiService()) {
     suspend fun fetchRefreshToken(refreshToken: String): DataResourceResult<LoginDTO> {
         return runCatching {
-            authApiService.fetchRefreshToken(refreshToken)
+            val header = "Bearer $refreshToken"
+            authApiService.fetchRefreshToken(header)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
             onFailure = { DataResourceResult.Failure(it) }
@@ -21,7 +22,8 @@ class AuthRepositoryImpl(private val authApiService: AuthApiService = NetworkMod
 
     suspend fun fetchLoginToken(idToken: String): DataResourceResult<Unit> {
         return runCatching {
-            val token = authApiService.fetchLoginToken(idToken)
+            val header = "Bearer $idToken"
+            val token = authApiService.fetchLoginToken(header)
             PayKidsPreference.getInstance().edit {
                 putString(ACCESS_TOKEN, token.data.accessToken)
                 putString(REFRESH_TOKEN, token.data.refreshToken)
