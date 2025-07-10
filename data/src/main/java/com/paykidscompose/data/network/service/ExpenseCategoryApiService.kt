@@ -15,11 +15,10 @@ interface ExpenseCategoryApiService {
     ): BaseResponse<Boolean>
 
     @GET ("/expense/category/category-list")
-    suspend fun getExpenseCategoryList(): BaseResponse<CategoryDTO>
+    suspend fun getExpenseCategoryList(): BaseResponse<List<CategoryDTO>>
 
     @POST("/expense/category/save-category")
     suspend fun saveExpenseCategory(
-        @Query("category") category: String,
-        @Body request: CategoryDTO
+        @Query("category") category: String
     ): BaseResponse<Boolean>
 }

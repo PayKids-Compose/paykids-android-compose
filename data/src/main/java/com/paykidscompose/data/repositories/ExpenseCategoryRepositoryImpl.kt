@@ -18,16 +18,16 @@ class ExpenseCategoryRepositoryImpl(private val categoryApiService: ExpenseCateg
         )
     }
 
-    suspend fun saveExpenseCategory(category: String, request: CategoryDTO): DataResourceResult<Boolean> {
+    suspend fun saveExpenseCategory(category: String): DataResourceResult<Boolean> {
         return runCatching {
-            categoryApiService.saveExpenseCategory(category, request)
+            categoryApiService.saveExpenseCategory(category)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data)},
             onFailure = { DataResourceResult.Failure(it)}
         )
     }
 
-    fun getExpenseCategoryList(): Flow<DataResourceResult<CategoryDTO>> = flow {
+    fun getExpenseCategoryList(): Flow<DataResourceResult<List<CategoryDTO>>> = flow {
         emit(DataResourceResult.Loading)
         runCatching {
             categoryApiService.getExpenseCategoryList()
