@@ -3,6 +3,7 @@ package com.paykidscompose.data.network
 import com.paykidscompose.data.BuildConfig
 import com.paykidscompose.data.network.service.AchievementApiService
 import com.paykidscompose.data.network.service.AuthApiService
+import com.paykidscompose.data.network.service.ExpenseAllowanceApiService
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -18,14 +19,13 @@ object NetworkModule {
         .client(client)
         .build()
 
-    private val achievementApiService = retrofit.create(AchievementApiService::class.java)
-    private val authApiService = retrofit.create(AuthApiService::class.java)
+    private val achievementApiService by lazy { retrofit.create(AchievementApiService::class.java) }
+    private val authApiService by lazy { retrofit.create(AuthApiService::class.java) }
+    private val expenseApiService by lazy { retrofit.create(ExpenseAllowanceApiService::class.java) }
 
-    fun provideAchievementApiService(): AchievementApiService {
-        return achievementApiService
-    }
+    fun provideAchievementApiService(): AchievementApiService = achievementApiService
 
-    fun provideAuthApiService(): AuthApiService {
-        return authApiService
-    }
+    fun provideAuthApiService(): AuthApiService = authApiService
+
+    fun provideExpenseApiService(): ExpenseAllowanceApiService = expenseApiService
 }
