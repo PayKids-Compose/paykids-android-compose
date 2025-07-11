@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.converter.moshi)
     implementation(libs.androidx.preference.ktx)
     implementation(libs.androidx.security.crypto.ktx)
+    implementation(libs.logging.interceptor)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -8,18 +8,29 @@ import com.paykidscompose.data.network.service.ExpenseCategoryApiService
 import com.paykidscompose.data.network.service.IncomeAllowanceApiService
 import com.paykidscompose.data.network.service.IncomeCategoryApiService
 import com.paykidscompose.data.network.service.UserApiService
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 object NetworkModule {
+    private val loggingInterceptor = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
+    }
     private val client = OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
         .addInterceptor(NetworkInterceptor())
         .build()
-
+    private val moshi = MoshiConverterFactory.create(
+        Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+    )
     private val retrofit = Retrofit.Builder()
         .baseUrl(BuildConfig.BASE_URL)
-        .addConverterFactory(MoshiConverterFactory.create())
+        .addConverterFactory(moshi)
         .client(client)
         .build()
 
