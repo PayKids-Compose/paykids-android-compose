@@ -7,6 +7,7 @@ import com.paykidscompose.data.network.service.ExpenseAllowanceApiService
 import com.paykidscompose.data.network.service.ExpenseCategoryApiService
 import com.paykidscompose.data.network.service.IncomeAllowanceApiService
 import com.paykidscompose.data.network.service.IncomeCategoryApiService
+import com.paykidscompose.data.network.service.QuizApiService
 import com.paykidscompose.data.network.service.UserApiService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -41,6 +42,7 @@ object NetworkModule {
     private val incomeApiService by lazy { retrofit.create(IncomeAllowanceApiService::class.java) }
     private val incomeCategoryApiService by lazy { retrofit.create(IncomeCategoryApiService::class.java) }
     private val userApiService by lazy { retrofit.create(UserApiService::class.java) }
+    private val quizApiService by lazy { retrofit.create(QuizApiService::class.java) }
 
     fun provideAchievementApiService(): AchievementApiService = achievementApiService
 
@@ -55,4 +57,6 @@ object NetworkModule {
     fun provideIncomeCategoryApiService(): IncomeCategoryApiService = incomeCategoryApiService
 
     fun provideUserApiService(): UserApiService = userApiService
+
+    fun provideQuizApiService(): QuizApiService = quizApiService
 }
