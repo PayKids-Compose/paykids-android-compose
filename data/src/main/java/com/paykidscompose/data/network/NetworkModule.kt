@@ -3,6 +3,7 @@ package com.paykidscompose.data.network
 import com.paykidscompose.data.BuildConfig
 import com.paykidscompose.data.network.service.AchievementApiService
 import com.paykidscompose.data.network.service.AuthApiService
+import com.paykidscompose.data.network.service.ChatApiService
 import com.paykidscompose.data.network.service.ExpenseAllowanceApiService
 import com.paykidscompose.data.network.service.ExpenseCategoryApiService
 import com.paykidscompose.data.network.service.IncomeAllowanceApiService
@@ -15,6 +16,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import kotlin.getValue
 
 object NetworkModule {
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
@@ -43,6 +45,7 @@ object NetworkModule {
     private val incomeCategoryApiService by lazy { retrofit.create(IncomeCategoryApiService::class.java) }
     private val userApiService by lazy { retrofit.create(UserApiService::class.java) }
     private val quizApiService by lazy { retrofit.create(QuizApiService::class.java) }
+    private val chatApiService by lazy { retrofit.create(ChatApiService::class.java) }
 
     fun provideAchievementApiService(): AchievementApiService = achievementApiService
 
@@ -59,4 +62,6 @@ object NetworkModule {
     fun provideUserApiService(): UserApiService = userApiService
 
     fun provideQuizApiService(): QuizApiService = quizApiService
+
+    fun provideChatApiService(): ChatApiService = chatApiService
 }
