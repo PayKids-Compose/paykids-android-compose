@@ -180,6 +180,42 @@ val StudyChatInputTextStyle = TextStyle(
     lineHeight = 26.sp
 )
 
+// 퀘스트 및 업적 스크린
+val QuestAndAchievementTabTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 16.sp,
+    lineHeight = 18.sp
+)
+
+val QuestPageDailyQuestTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 20.sp,
+    lineHeight = 23.sp
+)
+
+val QuestPageDailyQuestDescriptionTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 14.sp,
+    lineHeight = 26.sp
+)
+
+val QuestPageQuestCardTitleTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 14.sp,
+    lineHeight = 16.sp
+)
+
+val QuestPageQuestCardProgressTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 10.sp,
+    lineHeight = 13.sp
+)
+
 // 마이페이지 스크린
 val MyPageAppBarTextStyle = TextStyle(
     fontFamily = NanumSquare,

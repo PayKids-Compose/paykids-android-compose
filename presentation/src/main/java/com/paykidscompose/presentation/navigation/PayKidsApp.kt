@@ -30,6 +30,7 @@ import com.paykidscompose.presentation.screens.login.nickname.Nickname
 import com.paykidscompose.presentation.screens.mypage.MyPage
 import com.paykidscompose.presentation.screens.mypage.info.MyInfo
 import com.paykidscompose.presentation.screens.mypage.terms.TermsPolicyScreen
+import com.paykidscompose.presentation.screens.quest.QuestAndAchievement
 import com.paykidscompose.presentation.screens.quiz.Quiz
 import com.paykidscompose.presentation.screens.quiz.QuizClear
 import com.paykidscompose.presentation.screens.quiz.QuizEntry
@@ -159,6 +160,11 @@ fun PayKidsApp(
                     }
                 )
             }
+
+            composable<TabNavigationRoute.QuestAndAchievementRoute> {
+                QuestAndAchievement()
+            }
+
             composable<TabNavigationRoute.MyPageRoute> {
                 MyPage(
                     onClickMyInfo = {

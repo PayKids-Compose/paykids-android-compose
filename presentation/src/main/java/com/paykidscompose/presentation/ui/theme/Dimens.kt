@@ -134,6 +134,22 @@ val StudyChatInputFieldStartPadding = 14.dp
 val StudyChatInputFieldRound = 20.dp
 val StudyChatSendIconSize = 24.dp
 
+// 퀘스트 및 업적 화면
+val QuestAndAchievementTabIndicatorHeight = 2.dp
+val QuestAndAchievementTabHeight = 60.dp
+val QuestPageHorizontalPadding = 20.dp
+val QuestPageDailyQuestTextTopPadding = 34.dp
+val QuestPageDailyQuestTextBottomPadding = 6.dp
+val QuestPageDailyQuestDescriptionTextBottomPadding = 24.dp
+val QuestCardHeight = 80.dp
+val QuestCardRound = 10.dp
+val QuestCardInnerPadding = 18.dp
+val QuestCardShadowElevation = 16.dp
+val QuestCardProgressBarHeight = 16.dp
+val QuestCardProgressBarRound = 100.dp
+val QuestCardProgressBarBorderWidth = 1.dp
+val QuestCardBottomPadding = 8.dp
+
 // 마이페이지 기본 화면
 val MyPageDefaultScreenStartEndPadding = 20.dp
 val MyPageDefaultScreenTopPadding = 90.dp

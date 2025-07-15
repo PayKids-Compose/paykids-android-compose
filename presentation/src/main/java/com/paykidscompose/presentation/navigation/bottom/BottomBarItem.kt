@@ -30,7 +30,7 @@ data class BottomBarItem(
             BottomBarItem(
                 tabName = QUEST,
                 icon = R.drawable.ic_quest_tab,
-                destination = TabNavigationRoute.QuestAchievementsRoute
+                destination = TabNavigationRoute.QuestAndAchievementRoute
             ),
             BottomBarItem(
                 tabName = ALLOWANCE_DIARY,
