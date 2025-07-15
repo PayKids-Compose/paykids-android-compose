@@ -11,7 +11,7 @@ sealed interface TabNavigationRoute: NavigationRoute {
     data object AllowanceDiaryRoute: TabNavigationRoute
 
     @Serializable
-    data object QuestAchievementsRoute: TabNavigationRoute
+    data object QuestAndAchievementRoute: TabNavigationRoute
 
     @Serializable
     data object MyPageRoute: TabNavigationRoute
