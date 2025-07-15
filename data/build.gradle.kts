@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -43,6 +44,8 @@ android {
 
 dependencies {
     implementation(project(":common"))
+
+    implementation(libs.v2.user)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
