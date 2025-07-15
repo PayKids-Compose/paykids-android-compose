@@ -25,6 +25,7 @@ preferenceKtx = "1.2.1"
 v2User = "2.21.4"
 loggingInterceptor = "4.12.0"
 securityCrypto = "1.0.0"
+kotlinxCoroutinesCore = "1.10.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -57,6 +58,7 @@ androidx-preference-ktx = { group = "androidx.preference", name = "preference-kt
 v2-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "v2User"}
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
 androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "securityCrypto" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
