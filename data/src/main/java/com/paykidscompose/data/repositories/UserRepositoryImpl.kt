@@ -1,15 +1,19 @@
 package com.paykidscompose.data.repositories
 
+import com.paykidscompose.common.model.user.UserModel
+import com.paykidscompose.common.repositories.UserRepository
 import com.paykidscompose.common.result.DataResourceResult
-import com.paykidscompose.data.model.user.UserDTO
+import com.paykidscompose.data.mapper.user.UserMapper
 import com.paykidscompose.data.network.NetworkModule
 import com.paykidscompose.data.network.service.UserApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class UserRepositoryImpl(private val userApiService: UserApiService = NetworkModule.provideUserApiService()) {
+class UserRepositoryImpl(
+    private val userApiService: UserApiService = NetworkModule.provideUserApiService()
+) : UserRepository {
 
-    suspend fun deleteUser(): DataResourceResult<String> {
+    override suspend fun deleteUser(): DataResourceResult<String> {
         return runCatching {
             userApiService.deleteUser()
         }.fold(
@@ -18,7 +22,7 @@ class UserRepositoryImpl(private val userApiService: UserApiService = NetworkMod
         )
     }
 
-    suspend fun saveNickname(nickname: String): DataResourceResult<String> {
+    override suspend fun saveNickname(nickname: String): DataResourceResult<String> {
         return runCatching {
             userApiService.saveNickname(nickname)
         }.fold(
@@ -27,7 +31,7 @@ class UserRepositoryImpl(private val userApiService: UserApiService = NetworkMod
         )
     }
 
-    suspend fun replaceNickname(newNickname: String): DataResourceResult<String> {
+    override suspend fun replaceNickname(newNickname: String): DataResourceResult<String> {
         return runCatching {
             userApiService.replaceNickname(newNickname)
         }.fold(
@@ -36,7 +40,7 @@ class UserRepositoryImpl(private val userApiService: UserApiService = NetworkMod
         )
     }
 
-    suspend fun replaceProfileImage(file: String): DataResourceResult<String> {
+    override suspend fun replaceProfileImage(file: String): DataResourceResult<String> {
         return runCatching {
             userApiService.replaceProfileImage(file)
         }.fold(
@@ -45,12 +49,15 @@ class UserRepositoryImpl(private val userApiService: UserApiService = NetworkMod
         )
     }
 
-    fun getUser(): Flow<DataResourceResult<UserDTO>> = flow {
+    override fun getUser(): Flow<DataResourceResult<UserModel>> = flow {
         emit(DataResourceResult.Loading)
         runCatching {
             userApiService.getUser()
         }.fold(
-            onSuccess = { emit(DataResourceResult.Success(it.data)) },
+            onSuccess = {
+                val user = UserMapper.mapToModel(it.data)
+                emit(DataResourceResult.Success(user))
+            },
             onFailure = { emit(DataResourceResult.Failure(it)) }
         )
     }
