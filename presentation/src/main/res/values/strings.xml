@@ -129,9 +129,10 @@ z   <string name="text_quiz_number">%1$d/%2$d</string>
     <string name="text_tab_achievement">업적</string>
     <string name="text_daily_quest">일일 퀘스트</string>
     <string name="text_daily_quest_description">퀘스트를 완료하고 배지를 받아보세요!</string>
+    <string name="text_daily_quest_all_completed">모든 일일 퀘스트를\n완료했어요!</string>
 
     <!-- 업적 페이지 -->
-    <string name="text_no_badge1">아직 얻은 뱃지가 없어요!</string>
+    <string name="text_no_badge1">아직 얻은 배지가 없어요!</string>
     <string name="text_no_badge2">일일 퀘스트를 완료하고 배지를 획득해 보세요</string>
 
 </resources>
