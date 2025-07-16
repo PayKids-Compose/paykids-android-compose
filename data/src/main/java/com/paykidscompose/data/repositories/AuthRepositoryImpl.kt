@@ -1,10 +1,9 @@
 package com.paykidscompose.data.repositories
 
-import android.util.Log
 import androidx.core.content.edit
+import com.paykidscompose.common.repositories.AuthRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.data.database.PayKidsPreference
-import com.paykidscompose.data.model.user.LoginDTO
 import com.paykidscompose.data.network.NetworkModule
 import com.paykidscompose.data.network.service.AuthApiService
 import com.paykidscompose.data.network.service.authentication.KakaoLoginService
@@ -16,38 +15,48 @@ import kotlinx.coroutines.withContext
 class AuthRepositoryImpl(
     private val authApiService: AuthApiService = NetworkModule.provideAuthApiService(),
     private val kakaoLoginService: KakaoLoginService
-) {
-    suspend fun fetchRefreshToken(): DataResourceResult<LoginDTO> {
+) : AuthRepository {
+    override suspend fun fetchRefreshToken(): DataResourceResult<Unit> { // 이 함수는 완성본이 아닙니다.
         return runCatching {
             val token = PayKidsPreference.getInstance().getString(REFRESH_TOKEN, null)
                 ?: throw IllegalStateException("저장소에 REFRESH TOKEN이 없습니다.")
             authApiService.fetchRefreshToken(token)
-        }.fold(
-            onSuccess = { DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(it) }
-        )
-    }
-
-    suspend fun fetchLoginToken(): DataResourceResult<Unit> {
-        return runCatching {
-            val token = kakaoLoginService.login()
-            val response = authApiService.fetchLoginToken(token.idToken)
-            withContext(Dispatchers.IO) {
-                PayKidsPreference.getInstance().edit {
-                    putString(ACCESS_TOKEN, response.data.accessToken)
-                    putString(REFRESH_TOKEN, response.data.refreshToken)
-                }
-            }
         }.fold(
             onSuccess = { DataResourceResult.Success(Unit) },
             onFailure = { DataResourceResult.Failure(it) }
         )
     }
 
-    suspend fun logout(): DataResourceResult<Boolean> {
+    override suspend fun fetchLoginToken(): DataResourceResult<Unit> {
+        return runCatching {
+            val token = kakaoLoginService.login()
+            authApiService.fetchLoginToken(token.idToken)
+        }.fold(
+            onSuccess = {
+                withContext(Dispatchers.IO) {
+                    PayKidsPreference.getInstance().edit {
+                        putString(ACCESS_TOKEN, it.data.accessToken)
+                        putString(REFRESH_TOKEN, it.data.refreshToken)
+                    }
+                }
+                DataResourceResult.Success(Unit)
+            },
+            onFailure = { DataResourceResult.Failure(it) }
+        )
+    }
+
+    override suspend fun logout(): DataResourceResult<Unit> {
         val result = kakaoLoginService.logout()
         return result.fold(
-            onSuccess = { DataResourceResult.Success(true) },
+            onSuccess = {
+                withContext(Dispatchers.IO) {
+                    PayKidsPreference.getInstance().edit {
+                        remove(ACCESS_TOKEN)
+                        remove(REFRESH_TOKEN)
+                    }
+                }
+                DataResourceResult.Success(Unit)
+            },
             onFailure = { DataResourceResult.Failure(it) }
         )
     }

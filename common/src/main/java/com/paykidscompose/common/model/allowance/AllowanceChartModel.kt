@@ -1,6 +1,7 @@
 package com.paykidscompose.common.model.allowance
 
 import com.paykidscompose.common.model.AllowanceType
+import com.paykidscompose.common.model.Model
 import java.time.LocalDate
 
 data class AllowanceChartModel(
@@ -10,4 +11,4 @@ data class AllowanceChartModel(
     val category: String,
     val amount: Int,
     val memo: String
-)
+) : Model()
