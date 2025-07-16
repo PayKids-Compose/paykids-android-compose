@@ -5,8 +5,7 @@ import com.paykidscompose.common.mapper.ModelMapper
 import com.paykidscompose.common.model.allowance.AllowanceChartCategoryModel
 import com.paykidscompose.data.model.allowance.AllowanceChartCategoryDTO
 
-object AllowanceChartCategoryMapper :
-    ModelMapper<AllowanceChartCategoryModel, AllowanceChartCategoryDTO> {
+object AllowanceChartCategoryMapper : ModelMapper<AllowanceChartCategoryModel, AllowanceChartCategoryDTO> {
     override fun mapToModel(layerModel: AllowanceChartCategoryDTO): AllowanceChartCategoryModel {
         return AllowanceChartCategoryModel(
             type = AllowanceType.valueOf(layerModel.allowanceType),
