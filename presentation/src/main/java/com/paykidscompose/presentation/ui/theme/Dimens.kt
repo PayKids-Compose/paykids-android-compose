@@ -150,6 +150,22 @@ val QuestCardProgressBarRound = 100.dp
 val QuestCardProgressBarBorderWidth = 1.dp
 val QuestCardBottomPadding = 8.dp
 
+val AchievementPageNoBadgeTextSpacerHeight = 10.dp
+val AchievementCardWidth = 152.dp
+val AchievementCardHeight = 188.dp
+val AchievementCardRound = 10.dp
+val AchievementCardShadowElevation = 16.dp
+val AchievementCardHorizontalPadding = 12.dp
+val AchievementCardTopPadding = 18.dp
+val AchievementCardImageSize = 100.dp
+val AchievementCardFirstTextSpacerHeight = 12.dp
+val AchievementCardSecondTextSpacerHeight = 8.dp
+val AchievementCardSecondText2LineSpacerHeight = 4.dp
+val AchievementGridHorizontalPadding = 20.dp
+val AchievementGridArrangementSpace = 16.dp
+val AchievementGridTopSpacerHeight = 22.dp
+val AchievementGridBottomSpacerHeight = 30.dp
+
 // 마이페이지 기본 화면
 val MyPageDefaultScreenStartEndPadding = 20.dp
 val MyPageDefaultScreenTopPadding = 90.dp
