@@ -4,7 +4,7 @@ import com.paykidscompose.common.mapper.ModelMapper
 import com.paykidscompose.common.model.user.UserModel
 import com.paykidscompose.data.model.user.UserDTO
 
-object UserMapper: ModelMapper<UserModel, UserDTO> {
+object UserMapper : ModelMapper<UserModel, UserDTO> {
     override fun mapToModel(layerModel: UserDTO): UserModel {
         return UserModel(
             nickname = layerModel.nickname,
@@ -14,7 +14,6 @@ object UserMapper: ModelMapper<UserModel, UserDTO> {
     }
 
     override fun mapToLayerModel(model: UserModel): UserDTO {
-        TODO("유저의 Model -> DTO 변환은 지원하지 않습니다.")
+        throw UnsupportedOperationException("UserModel -> UserDTO 변환은 지원하지 않습니다.")
     }
-
 }
