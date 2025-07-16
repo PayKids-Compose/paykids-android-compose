@@ -1,11 +1,11 @@
 package com.paykidscompose.data.mapper.allowance
 
+import com.paykidscompose.common.enums.AllowanceType
 import com.paykidscompose.common.mapper.ModelMapper
-import com.paykidscompose.common.model.AllowanceType
 import com.paykidscompose.common.model.allowance.CategoryModel
 import com.paykidscompose.data.model.allowance.CategoryDTO
 
-object CategoryMapper: ModelMapper<CategoryModel, CategoryDTO> {
+object CategoryMapper : ModelMapper<CategoryModel, CategoryDTO> {
     override fun mapToModel(layerModel: CategoryDTO): CategoryModel {
         return CategoryModel(
             id = layerModel.id,

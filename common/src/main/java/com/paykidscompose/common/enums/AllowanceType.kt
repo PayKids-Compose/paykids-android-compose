@@ -1,4 +1,4 @@
-package com.paykidscompose.common.model
+package com.paykidscompose.common.enums
 
 enum class AllowanceType {
     INCOME, // 수입

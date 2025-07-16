@@ -1,7 +1,7 @@
 package com.paykidscompose.data.mapper.allowance
 
+import com.paykidscompose.common.enums.AllowanceType
 import com.paykidscompose.common.mapper.ModelMapper
-import com.paykidscompose.common.model.AllowanceType
 import com.paykidscompose.common.model.allowance.AllowanceChartModel
 import com.paykidscompose.data.model.allowance.AllowanceChartDTO
 import java.time.LocalDate
