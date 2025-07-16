@@ -1,7 +1,12 @@
 package com.paykidscompose.presentation.screens.quest.page
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,13 +24,22 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import coil3.compose.AsyncImage
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.dummyQuests
 import com.paykidscompose.presentation.ui.theme.Blue1
@@ -50,44 +64,115 @@ import com.paykidscompose.presentation.ui.theme.QuestPageHorizontalPadding
 import com.paykidscompose.presentation.ui.theme.QuestPageQuestCardProgressTextStyle
 import com.paykidscompose.presentation.ui.theme.QuestPageQuestCardTitleTextStyle
 import com.paykidscompose.presentation.ui.theme.White
+import kotlinx.coroutines.delay
 
 @Composable
 fun QuestPage() {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Gray5)
-            .padding(horizontal = QuestPageHorizontalPadding)
-    ) {
-        item {
+    var quests by rememberSaveable { mutableStateOf(dummyQuests) }
+
+    if (quests.isEmpty()) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            AsyncImage(
+                model = R.drawable.bg_quest_all_completed,
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
             Text(
-                text = stringResource(R.string.text_daily_quest),
+                text = stringResource(R.string.text_daily_quest_all_completed),
                 style = QuestPageDailyQuestTextStyle,
-                modifier = Modifier.padding(top = QuestPageDailyQuestTextTopPadding, bottom = QuestPageDailyQuestTextBottomPadding)
+                textAlign = TextAlign.Center,
             )
         }
-        item {
-            Text(
-                text = stringResource(R.string.text_daily_quest_description),
-                style = QuestPageDailyQuestDescriptionTextStyle,
-                color = Blue1,
-                modifier = Modifier.padding(bottom = QuestPageDailyQuestDescriptionTextBottomPadding)
-            )
+    } else {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Gray5)
+                .padding(horizontal = QuestPageHorizontalPadding)
+        ) {
+            item {
+                Text(
+                    text = stringResource(R.string.text_daily_quest),
+                    style = QuestPageDailyQuestTextStyle,
+                    modifier = Modifier.padding(
+                        top = QuestPageDailyQuestTextTopPadding,
+                        bottom = QuestPageDailyQuestTextBottomPadding
+                    )
+                )
+            }
+            item {
+                Text(
+                    text = stringResource(R.string.text_daily_quest_description),
+                    style = QuestPageDailyQuestDescriptionTextStyle,
+                    color = Blue1,
+                    modifier = Modifier.padding(bottom = QuestPageDailyQuestDescriptionTextBottomPadding)
+                )
+            }
+            items(quests, key = { it.title }) { quest ->
+                QuestCardWithSlideOut(
+                    questTitle = quest.title,
+                    progress = quest.progress,
+                    maxProgress = quest.maxProgress,
+                    modifier = Modifier.padding(bottom = QuestCardBottomPadding),
+                    onRemove = {
+                        quests = quests.filterNot { it.title == quest.title }
+                    }
+                )
+            }
         }
-        items(dummyQuests) { quest ->
-            QuestCard(
-                questTitle = quest.title,
-                progress = quest.progress,
-                maxProgress = quest.maxProgress,
-                modifier = Modifier.padding(bottom = QuestCardBottomPadding)
-            )
+    }
+}
+
+@Composable
+fun QuestCardWithSlideOut(
+    questTitle: String,
+    progress: Int,
+    maxProgress: Int,
+    modifier: Modifier = Modifier,
+    onRemove: () -> Unit = {}
+) {
+    var visible by remember { mutableStateOf(true) }
+
+    AnimatedVisibility(
+        visible = visible,
+        exit = slideOutVertically(
+            targetOffsetY = { -it }, // 상단으로 밀려나기
+            animationSpec = tween(durationMillis = 500)
+        ) + fadeOut(animationSpec = tween(durationMillis = 500))
+    ) {
+        QuestCard(
+            questTitle = questTitle,
+            progress = progress,
+            maxProgress = maxProgress,
+            modifier = modifier,
+            onClickIfCompleted = {
+                if (progress >= maxProgress) {
+                    visible = false // 애니메이션 시작
+                }
+            }
+        )
+    }
+
+    // visible이 false가 된 후에 딜레이를 주고 리스트에서 제거 콜백 호출
+    if (!visible) {
+        LaunchedEffect(Unit) {
+            delay(500) // 애니메이션 재생 시간 동안 대기
+            onRemove()
         }
     }
 }
 
 @Composable
 fun QuestCard(
-    questTitle: String, progress: Int, maxProgress: Int, modifier: Modifier = Modifier
+    questTitle: String,
+    progress: Int,
+    maxProgress: Int,
+    modifier: Modifier = Modifier,
+    onClickIfCompleted: () -> Unit = {}
 ) {
     val isCompleted = progress >= maxProgress
 
@@ -106,7 +191,10 @@ fun QuestCard(
                 shape = RoundedCornerShape(QuestCardRound),
                 ambientColor = Blue2,
                 spotColor = Blue2
-            ),
+            )
+            .clickable(enabled = isCompleted) {
+                onClickIfCompleted()
+            },
         shape = RoundedCornerShape(QuestCardRound),
         colors = CardDefaults.cardColors(containerColor = cardBackgroundColor)
     ) {
