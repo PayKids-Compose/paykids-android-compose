@@ -6,7 +6,7 @@ data class Quest(
     val maxProgress: Int
 )
 
-val dummyQuests = listOf(
+val dummyQuests = listOf<Quest>(
     Quest("오답노트 풀기 2회", 1, 2),
     Quest("단어 10개 외우기", 0, 1),
     Quest("퀴즈 3문제 풀기", 3, 3),
