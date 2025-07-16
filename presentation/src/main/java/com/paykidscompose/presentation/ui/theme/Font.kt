@@ -216,6 +216,34 @@ val QuestPageQuestCardProgressTextStyle = TextStyle(
     lineHeight = 13.sp
 )
 
+val AchievementPageNoBadgeTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 20.sp,
+    lineHeight = 23.sp
+)
+
+val AchievementPageNoBadgeDescriptionTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 14.sp,
+    lineHeight = 26.sp
+)
+
+val AchievementCardTitleTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.ExtraBold,
+    fontSize = 16.sp,
+    lineHeight = 18.sp
+)
+
+val AchievementCardDescriptionTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 12.sp,
+    lineHeight = 14.sp
+)
+
 // 마이페이지 스크린
 val MyPageAppBarTextStyle = TextStyle(
     fontFamily = NanumSquare,
