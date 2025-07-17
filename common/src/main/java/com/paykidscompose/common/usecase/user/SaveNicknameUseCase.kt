@@ -2,15 +2,21 @@ package com.paykidscompose.common.usecase.user
 
 import com.paykidscompose.common.repositories.UserRepository
 import com.paykidscompose.common.result.DataResourceResult
+import com.paykidscompose.common.usecase.base.SuspendUseCase
 
 class SaveNicknameUseCase(
     private val userRepository: UserRepository
-) {
-    suspend operator fun invoke(nickname: String): DataResourceResult<String> {
-        if (nickname.length < 2) {
-            return DataResourceResult.Failure(IllegalArgumentException("닉네임은 2자 이상이어야 합니다."))
-        }
+) : SuspendUseCase<SaveNicknameUseCase.Params, DataResourceResult<String>>() {
 
-        return userRepository.saveNickname(nickname)
+    override suspend fun execute(params: Params?): DataResourceResult<String> {
+        return if (params != null) {
+            userRepository.saveNickname(params.nickname)
+        } else {
+            DataResourceResult.Failure(IllegalArgumentException("닉네임은 2자 이상이어야 합니다."))
+        }
     }
+
+    data class Params(
+        val nickname: String
+    )
 }
