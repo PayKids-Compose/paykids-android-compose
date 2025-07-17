@@ -28,13 +28,15 @@ class LoginViewModel(
                         it.copy(isLoading = false, isLoginSuccess = true)
                     }
                 }
+
                 is DataResourceResult.Failure -> {
                     _uiState.update {
                         it.copy(isLoading = false, error = result.exception.message)
                     }
                 }
-                DataResourceResult.DummyConstructor -> TODO()
-                DataResourceResult.Loading -> TODO()
+
+                DataResourceResult.DummyConstructor, DataResourceResult.Loading -> {
+                }
             }
         }
 

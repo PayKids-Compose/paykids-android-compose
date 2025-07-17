@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -45,7 +46,9 @@ fun Login(
 ) {
     val uiState by loginViewModel.uiState.collectAsState()
 
-    if(uiState.isLoginSuccess) onLoginSuccess()
+    LaunchedEffect(uiState.isLoginSuccess) {
+        if(uiState.isLoginSuccess) onLoginSuccess()
+    }
 
     LoginScreen(
         onKakaoClick = { loginViewModel.kakaoLogin() }
