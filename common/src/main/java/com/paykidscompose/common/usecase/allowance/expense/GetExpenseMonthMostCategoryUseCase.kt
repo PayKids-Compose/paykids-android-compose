@@ -1,0 +1,26 @@
+package com.paykidscompose.common.usecase.allowance.expense
+
+import com.paykidscompose.common.model.allowance.AllowanceChartCategoryModel
+import com.paykidscompose.common.repositories.ExpenseAllowanceRepository
+import com.paykidscompose.common.result.DataResourceResult
+import com.paykidscompose.common.usecase.base.FlowUseCase
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+
+class GetExpenseMonthMostCategoryUseCase(
+    private val repository: ExpenseAllowanceRepository
+) : FlowUseCase<GetExpenseMonthMostCategoryUseCase.Params, DataResourceResult<List<AllowanceChartCategoryModel>>>() {
+
+    override fun execute(params: Params?): Flow<DataResourceResult<List<AllowanceChartCategoryModel>>> {
+        return if (params != null) {
+            repository.getExpenseMonthMostCategory(params.year, params.month)
+        } else {
+            flowOf(DataResourceResult.Failure(IllegalArgumentException("가장 많이 소비한 항목을 보려면 연도와 월을 선택해주세요.")))
+        }
+    }
+
+    data class Params(
+        val year: Int,
+        val month: Int
+    )
+}
