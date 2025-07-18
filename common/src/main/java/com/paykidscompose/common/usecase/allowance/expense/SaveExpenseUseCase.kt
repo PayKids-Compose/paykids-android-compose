@@ -13,7 +13,7 @@ class SaveExpenseUseCase(
         return if (params != null) {
             expenseAllowanceRepository.saveExpense(params.allowanceChart)
         } else {
-            DataResourceResult.Failure(IllegalArgumentException("저장할 소비 정보가 없습니다."))
+            DataResourceResult.Failure(IllegalArgumentException("저장할 소비 정보가 유효하지 않습니다."))
         }
     }
 
