@@ -43,7 +43,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.model.AllowanceDiaryUIModel
-import com.paykidscompose.presentation.model.AllowanceDiaryUIState
 import com.paykidscompose.presentation.ui.components.AllowanceInputDialog
 import com.paykidscompose.presentation.ui.components.ScreenError
 import com.paykidscompose.presentation.ui.components.ScreenLoading

@@ -43,9 +43,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.paykidscompose.common.enums.AllowanceType
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.AllowanceChartDTO
-import com.paykidscompose.presentation.model.type.AllowanceType
 import com.paykidscompose.presentation.ui.components.AllowanceInputDialog
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryHeadMonthTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenCardShape

@@ -1,8 +1,9 @@
 package com.paykidscompose.presentation.model
 
 import androidx.compose.ui.graphics.Color
+import com.paykidscompose.common.enums.AllowanceType
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.presentation.base.UIState
-import com.paykidscompose.presentation.model.type.AllowanceType
 import java.time.LocalDate
 
 
@@ -15,7 +16,7 @@ data class AnalysisUIModel(
 
 data class ExpenseAnalysisUiState(
     override val isLoading: Boolean = false,
-    override val error: String? = null,
+    override val error: PayKidsException? = null,
     val stats: List<AnalysisUIModel> = emptyList(),
     val showInputDialog: Boolean = false,
     val selectedType: AllowanceType = AllowanceType.EXPENSE,

@@ -1,6 +1,6 @@
 package com.paykidscompose.presentation.screens.mypage.info
 
-import androidx.compose.foundation.Image
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -21,16 +21,19 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.AsyncImage
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.model.MyInfoUIModel
 import com.paykidscompose.presentation.screens.mypage.section.MyInfoTopBar
@@ -76,9 +79,9 @@ import com.paykidscompose.presentation.ui.theme.White
 fun MyInfo(
     viewModel: MyInfoViewModel = viewModel(),
     onBackClick: () -> Unit = {}
-){
+) {
     val uiState by viewModel.uiState.collectAsState()
-
+    val context = LocalContext.current
 
     if (uiState.showPopupDialog) {
         PopupDialog(
@@ -90,24 +93,27 @@ fun MyInfo(
         )
     }
 
+    LaunchedEffect(uiState.isDeleteUserSuccess) {
+        if (uiState.isDeleteUserSuccess) (context as? Activity)?.finishAffinity()
+    }
+
     when {
         uiState.isLoading -> {
             ScreenLoading()
         }
+
         uiState.error != null -> {
-            viewModel.load()
         }
+
         uiState.myInfo != null -> {
-            uiState.myInfo?.let { myInfo ->
-                MyInfoScreen(
-                    uiModel = myInfo,
-                    onNickname = { viewModel.updateNickname(it) },
-                    onEmail = { viewModel.updateEmail(it) },
-                    onConfirmNicknameClick = { viewModel.confirmNicknameChange() },
-                    onBackClick = onBackClick,
-                    onPopupDialog = { viewModel.togglePopupDialog() }
-                )
-            }
+            MyInfoScreen(
+                uiModel = uiState.myInfo!!,
+                onNickname = { viewModel.updateNickname(it) },
+                onSaveNicknameClick = { viewModel.saveNickname() },
+                onBackClick = onBackClick,
+                onPopupDialog = { viewModel.togglePopupDialog() }
+            )
+
         }
     }
 }
@@ -116,14 +122,13 @@ fun MyInfo(
 fun MyInfoScreen(
     uiModel: MyInfoUIModel,
     onNickname: (String) -> Unit,
-    onEmail: (String) -> Unit,
-    onConfirmNicknameClick: () -> Unit,
+    onSaveNicknameClick: () -> Unit,
     onBackClick: () -> Unit,
     onPopupDialog: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
-    ){
+    ) {
         MyInfoTopBar(onBackClick = onBackClick)
         Column(
             modifier = Modifier
@@ -140,8 +145,8 @@ fun MyInfoScreen(
                     .clickable(onClick = {}),
                 contentAlignment = Alignment.Center
             ) {
-                Image(
-                    painter = painterResource(uiModel.image),
+                AsyncImage(
+                    model = uiModel.image,
                     contentDescription = null,
                     modifier = Modifier
                         .size(MyInfoScreenProfileSize)
@@ -175,8 +180,7 @@ fun MyInfoScreen(
                 MyInfoEdit(
                     uiModel,
                     onNickname,
-                    onEmail,
-                    onConfirmNicknameClick,
+                    onSaveNicknameClick,
                     onPopupDialog
                 )
             }
@@ -188,8 +192,7 @@ fun MyInfoScreen(
 fun MyInfoEdit(
     uiModel: MyInfoUIModel,
     onNickname: (String) -> Unit,
-    onEmail: (String) -> Unit,
-    onConfirmNicknameClick: () -> Unit,
+    onSaveNicknameClick: () -> Unit,
     onPopupDialog: () -> Unit
 ) {
     Column(
@@ -211,11 +214,9 @@ fun MyInfoEdit(
 
         Spacer(modifier = Modifier.height(MyInfoScreenSpacer36))
 
-        NicknameEdit(uiModel, onNickname, onConfirmNicknameClick)
+        NicknameEdit(uiModel, onNickname, onSaveNicknameClick)
 
         Spacer(modifier = Modifier.height(MyInfoScreenSpacer20))
-
-        EmailEdit(uiModel, onEmail)
 
         Spacer(modifier = Modifier.weight(1f))
 
@@ -232,7 +233,7 @@ fun MyInfoEdit(
 fun NicknameEdit(
     uiModel: MyInfoUIModel,
     onNickname: (String) -> Unit,
-    onConfirmNicknameClick: () -> Unit
+    onSaveNicknameClick: () -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -259,7 +260,7 @@ fun NicknameEdit(
         Spacer(modifier = Modifier.width(MyInfoScreenSpacer4))
 
         Button(
-            onClick = onConfirmNicknameClick,
+            onClick = onSaveNicknameClick,
             shape = RoundedCornerShape(MyInfoScreenButtonShape),
             contentPadding = PaddingValues(
                 horizontal = MyInfoScreenButtonHorizontalPadding,

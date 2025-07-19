@@ -24,8 +24,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.dummy.DummyUser
 import com.paykidscompose.presentation.ui.components.InfoText
+import com.paykidscompose.presentation.ui.components.ScreenLoading
 import com.paykidscompose.presentation.ui.theme.Black
 import com.paykidscompose.presentation.ui.theme.BottomButtonPadding
 import com.paykidscompose.presentation.ui.theme.InfoTextStyle
@@ -47,12 +47,24 @@ fun Login(
     val uiState by loginViewModel.uiState.collectAsState()
 
     LaunchedEffect(uiState.isLoginSuccess) {
-        if(uiState.isLoginSuccess) onLoginSuccess()
+        if (uiState.isLoginSuccess) onLoginSuccess()
     }
 
-    LoginScreen(
-        onKakaoClick = { loginViewModel.kakaoLogin() }
-    )
+    when {
+        uiState.isLoading -> {
+            ScreenLoading()
+        }
+
+        uiState.error != null -> {
+
+        }
+
+        else -> {
+            LoginScreen(
+                onKakaoClick = { loginViewModel.kakaoLogin() }
+            )
+        }
+    }
 }
 
 @Composable
