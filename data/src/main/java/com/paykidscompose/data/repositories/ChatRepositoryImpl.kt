@@ -1,14 +1,17 @@
 package com.paykidscompose.data.repositories
 
+import com.paykidscompose.common.model.ChatResponseModel
+import com.paykidscompose.common.repositories.ChatRepository
 import com.paykidscompose.common.result.DataResourceResult
-import com.paykidscompose.data.model.study.ChatResponseDTO
+import com.paykidscompose.data.mapper.ChatResponseDTOMapper
 import com.paykidscompose.data.network.NetworkModule
 import com.paykidscompose.data.network.service.ChatApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class ChatRepositoryImpl(private val chatApiService: ChatApiService = NetworkModule.provideChatApiService()) {
-    suspend fun getChatCount(): DataResourceResult<Int> {
+class ChatRepositoryImpl(private val chatApiService: ChatApiService = NetworkModule.provideChatApiService()) :
+    ChatRepository {
+    override suspend fun getChatCount(): DataResourceResult<Int> {
         return runCatching {
             chatApiService.getChatCount()
         }.fold(
@@ -17,13 +20,14 @@ class ChatRepositoryImpl(private val chatApiService: ChatApiService = NetworkMod
         )
     }
 
-    fun getChatResponse(prompt: String): Flow<DataResourceResult<ChatResponseDTO>> = flow {
-        emit(DataResourceResult.Loading)
-        runCatching {
-            chatApiService.getChatResponse(prompt)
-        }.fold(
-            onSuccess = { emit(DataResourceResult.Success(it)) },
-            onFailure = { emit(DataResourceResult.Failure(it)) }
-        )
-    }
+    override fun getChatResponse(prompt: String): Flow<DataResourceResult<ChatResponseModel>> =
+        flow {
+            emit(DataResourceResult.Loading)
+            runCatching {
+                chatApiService.getChatResponse(prompt)
+            }.fold(
+                onSuccess = { emit(DataResourceResult.Success(ChatResponseDTOMapper.mapToModel(it))) },
+                onFailure = { emit(DataResourceResult.Failure(it)) }
+            )
+        }
 }
