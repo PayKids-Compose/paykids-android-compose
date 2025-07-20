@@ -195,9 +195,9 @@ fun QuizScreen(
 
                 when (currentQuiz.quizType) {
                     QuizType.IMAGE -> {
-                        val imageChoices = currentQuiz.imageUrl?.mapIndexed { index, resId ->
-                            val label = currentQuiz.choices?.getOrNull(index)?.second ?: ""
-                            resId to label
+                        val imageChoices = currentQuiz.imageUrl?.mapIndexed { index, imageUrl ->
+                            val label = currentQuiz.choices?.getOrNull(index)?: ""
+                            imageUrl to label
                         } ?: emptyList()
 
                         ImageQuizContent(
@@ -214,7 +214,7 @@ fun QuizScreen(
                     }
 
                     QuizType.TEXT_CHOICE, QuizType.TEXT_CHOICE_IMAGE -> {
-                        val textChoices = currentQuiz.choices?.map { it.second } ?: emptyList()
+                        val textChoices = currentQuiz.choices?: emptyList()
 
                         if (currentQuiz.quizType == QuizType.TEXT_CHOICE_IMAGE) {
                             Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {

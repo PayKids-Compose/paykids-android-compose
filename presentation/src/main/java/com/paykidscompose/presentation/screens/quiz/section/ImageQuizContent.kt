@@ -25,7 +25,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.model.type.QuizResultType
 import com.paykidscompose.presentation.ui.theme.Black
 import com.paykidscompose.presentation.ui.theme.Blue1
@@ -41,12 +40,10 @@ import com.paykidscompose.presentation.ui.theme.ImageQuizCardTextSpacer
 import com.paykidscompose.presentation.ui.theme.PayKidsComposeTheme
 import com.paykidscompose.presentation.ui.theme.QuizAnswerTextStyle
 import com.paykidscompose.presentation.ui.theme.Red
-import kotlin.Int
-import kotlin.Pair
 
 @Composable
 fun ImageQuizContent(
-    imgChoices: List<Pair<Int, String>>,
+    imgChoices: List<Pair<String, String>>,
     answer: String,
     selectedIndex: Int?,
     isCorrect: QuizResultType,
@@ -62,7 +59,7 @@ fun ImageQuizContent(
         ) {
             for (col in 0 until 2) {
                 val index = row * 2 + col
-                val (imageRes, label) = imgChoices.getOrNull(index) ?: continue
+                val (imageUrl, label) = imgChoices.getOrNull(index) ?: continue
 
                 val isSelected = selectedIndex == index
                 val isCorrectCard = index == correctIndex
@@ -96,7 +93,7 @@ fun ImageQuizContent(
                         verticalArrangement = Arrangement.Center
                     ) {
                         AsyncImage(
-                            model = imageRes,
+                            model = imageUrl,
                             contentDescription = label,
                             modifier = Modifier
                                 .size(ImageQuizCardImageSize)
@@ -126,10 +123,10 @@ fun ImageQuizContentPreview() {
         Column(modifier = Modifier.height(500.dp)) {
             ImageQuizContent(
                 imgChoices = listOf(
-                    R.drawable.img_quiz_item_default to "세종대왕",
-                    R.drawable.img_quiz_item_default to "신사임당",
-                    R.drawable.img_quiz_item_default to "퇴계 이황",
-                    R.drawable.img_quiz_item_default to "이순신"
+                    "https://picsum.photos/200" to "세종대왕",
+                    "https://picsum.photos/200" to "신사임당",
+                    "https://picsum.photos/200" to "퇴계 이황",
+                    "https://picsum.photos/200" to "이순신"
                 ),
                 answer = "A",
                 selectedIndex = null,
