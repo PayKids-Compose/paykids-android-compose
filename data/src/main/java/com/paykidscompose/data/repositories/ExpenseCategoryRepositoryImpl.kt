@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class ExpenseCategoryRepositoryImpl(
-    private val categoryApiService: ExpenseCategoryApiService = NetworkModule.provideExpenseCategoryApiService()
+    private val categoryApiService: ExpenseCategoryApiService
 ) : ExpenseCategoryRepository {
 
     override suspend fun deleteExpenseCategory(category: String): DataResourceResult<Boolean> {

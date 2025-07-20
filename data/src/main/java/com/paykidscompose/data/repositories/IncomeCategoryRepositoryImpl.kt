@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class IncomeCategoryRepositoryImpl(
-    private val incomeCategoryApiService: IncomeCategoryApiService = NetworkModule.provideIncomeCategoryApiService()
+    private val incomeCategoryApiService: IncomeCategoryApiService
 ) : IncomeCategoryRepository {
 
     override suspend fun deleteIncomeCategory(category: String): DataResourceResult<Boolean> {

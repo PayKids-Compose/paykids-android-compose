@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.flow
 import java.time.LocalDate
 
 class IncomeAllowanceRepositoryImpl(
-    private val incomeAllowanceApiService: IncomeAllowanceApiService = NetworkModule.provideIncomeApiService()
+    private val incomeAllowanceApiService: IncomeAllowanceApiService
 ) : IncomeAllowanceRepository {
 
     override suspend fun deleteIncome(id: Int): DataResourceResult<Boolean> {

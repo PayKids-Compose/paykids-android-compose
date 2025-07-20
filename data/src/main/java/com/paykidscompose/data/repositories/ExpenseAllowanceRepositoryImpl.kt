@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.flow
 import java.time.LocalDate
 
 class ExpenseAllowanceRepositoryImpl(
-    private val expenseApiService: ExpenseAllowanceApiService = NetworkModule.provideExpenseApiService()
+    private val expenseApiService: ExpenseAllowanceApiService
 ) : ExpenseAllowanceRepository {
 
     override suspend fun deleteExpense(id: Int): DataResourceResult<Boolean> {

@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class UserRepositoryImpl(
-    private val userApiService: UserApiService = NetworkModule.provideUserApiService()
+    private val userApiService: UserApiService
 ) : UserRepository {
 
     override suspend fun deleteUser(): DataResourceResult<String> {

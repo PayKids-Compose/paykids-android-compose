@@ -13,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class AuthRepositoryImpl(
-    private val authApiService: AuthApiService = NetworkModule.provideAuthApiService(),
+    private val authApiService: AuthApiService,
     private val kakaoLoginService: KakaoLoginService
 ) : AuthRepository {
     override suspend fun fetchRefreshToken(): DataResourceResult<Unit> { // 이 함수는 완성본이 아닙니다.
