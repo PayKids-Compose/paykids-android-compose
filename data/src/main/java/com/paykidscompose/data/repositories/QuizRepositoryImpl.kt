@@ -4,14 +4,14 @@ import com.paykidscompose.common.model.QuizClearedModel
 import com.paykidscompose.common.model.QuizModel
 import com.paykidscompose.common.repositories.QuizRepository
 import com.paykidscompose.common.result.DataResourceResult
-import com.paykidscompose.data.mapper.QuizClearedDTOMapper
-import com.paykidscompose.data.mapper.QuizDTOMapper
+import com.paykidscompose.data.mapper.quiz.QuizClearedMapper
+import com.paykidscompose.data.mapper.quiz.QuizMapper
 import com.paykidscompose.data.network.NetworkModule
 import com.paykidscompose.data.network.service.QuizApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class QuizRepositoryImpl(private val quizApiService: QuizApiService = NetworkModule.provideQuizApiService()):
+class QuizRepositoryImpl(private val quizApiService: QuizApiService):
     QuizRepository {
     override suspend fun getStageToGo(): DataResourceResult<Int> {
         return runCatching {
@@ -44,7 +44,7 @@ class QuizRepositoryImpl(private val quizApiService: QuizApiService = NetworkMod
         return runCatching {
             quizApiService.getCheckStage(stage)
         }.fold(
-            onSuccess = { DataResourceResult.Success(QuizClearedDTOMapper.mapToModel(it.data)) },
+            onSuccess = { DataResourceResult.Success(QuizClearedMapper.mapToModel(it.data)) },
             onFailure = { DataResourceResult.Failure(it) }
         )
     }
@@ -63,7 +63,7 @@ class QuizRepositoryImpl(private val quizApiService: QuizApiService = NetworkMod
         runCatching {
             quizApiService.getQuiz(stage, number)
         }.fold(
-            onSuccess = { emit(DataResourceResult.Success(QuizDTOMapper.mapToModel(it.data))) },
+            onSuccess = { emit(DataResourceResult.Success(QuizMapper.mapToModel(it.data))) },
             onFailure = { emit(DataResourceResult.Failure(it)) }
         )
     }

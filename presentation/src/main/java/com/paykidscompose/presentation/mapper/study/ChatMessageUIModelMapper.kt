@@ -1,4 +1,4 @@
-package com.paykidscompose.presentation.mapper
+package com.paykidscompose.presentation.mapper.study
 
 import com.paykidscompose.common.mapper.ModelMapper
 import com.paykidscompose.common.model.ChatResponseModel

@@ -1,10 +1,10 @@
-package com.paykidscompose.data.mapper
+package com.paykidscompose.data.mapper.quiz
 
 import com.paykidscompose.common.mapper.ModelMapper
 import com.paykidscompose.common.model.QuizModel
 import com.paykidscompose.data.model.quiz.QuizDTO
 
-object QuizDTOMapper : ModelMapper<QuizModel, QuizDTO> {
+object QuizMapper : ModelMapper<QuizModel, QuizDTO> {
     override fun mapToModel(layerModel: QuizDTO): QuizModel {
         return QuizModel(
             id = layerModel.id,

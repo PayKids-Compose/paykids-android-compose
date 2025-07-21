@@ -3,13 +3,13 @@ package com.paykidscompose.data.repositories
 import com.paykidscompose.common.model.ChatResponseModel
 import com.paykidscompose.common.repositories.ChatRepository
 import com.paykidscompose.common.result.DataResourceResult
-import com.paykidscompose.data.mapper.ChatResponseDTOMapper
+import com.paykidscompose.data.mapper.study.ChatResponseMapper
 import com.paykidscompose.data.network.NetworkModule
 import com.paykidscompose.data.network.service.ChatApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class ChatRepositoryImpl(private val chatApiService: ChatApiService = NetworkModule.provideChatApiService()) :
+class ChatRepositoryImpl(private val chatApiService: ChatApiService) :
     ChatRepository {
     override suspend fun getChatCount(): DataResourceResult<Int> {
         return runCatching {
@@ -26,7 +26,7 @@ class ChatRepositoryImpl(private val chatApiService: ChatApiService = NetworkMod
             runCatching {
                 chatApiService.getChatResponse(prompt)
             }.fold(
-                onSuccess = { emit(DataResourceResult.Success(ChatResponseDTOMapper.mapToModel(it))) },
+                onSuccess = { emit(DataResourceResult.Success(ChatResponseMapper.mapToModel(it))) },
                 onFailure = { emit(DataResourceResult.Failure(it)) }
             )
         }
