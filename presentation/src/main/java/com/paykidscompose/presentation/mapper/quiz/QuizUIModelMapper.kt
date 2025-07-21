@@ -7,7 +7,7 @@ import com.paykidscompose.presentation.model.type.QuizType
 
 object QuizUIModelMapper: ModelMapper<QuizModel, QuizUIModel> {
     override fun mapToModel(layerModel: QuizUIModel): QuizModel {
-        throw UnsupportedOperationException("QuizUIModel에서 QuizModel 변환은 지원하지 않습니다.")
+        throw UnsupportedOperationException("QuizUIModel -> QuizModel 변환은 지원하지 않습니다.")
     }
 
     override fun mapToLayerModel(model: QuizModel): QuizUIModel {

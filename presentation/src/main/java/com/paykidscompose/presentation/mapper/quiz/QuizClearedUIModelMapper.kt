@@ -6,10 +6,7 @@ import com.paykidscompose.presentation.model.QuizClearedUIModel
 
 object QuizClearedUIModelMapper: ModelMapper<QuizClearedModel, QuizClearedUIModel> {
     override fun mapToModel(layerModel: QuizClearedUIModel): QuizClearedModel {
-        return QuizClearedModel(
-            message = layerModel.message,
-            isCleared = layerModel.isCleared
-        )
+        throw UnsupportedOperationException("QuizClearedUIModel -> QuizClearedModel 변환은 지원하지 않습니다.")
     }
 
     override fun mapToLayerModel(model: QuizClearedModel): QuizClearedUIModel {
