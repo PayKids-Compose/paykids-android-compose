@@ -2,6 +2,7 @@ package com.paykidscompose.presentation.screens.quiz
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.presentation.dummy.DummyQuiz
 import com.paykidscompose.presentation.model.QuizUIModel
 import com.paykidscompose.presentation.model.QuizUIState
@@ -52,7 +53,7 @@ class QuizViewModel : ViewModel() {
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        error = e.message
+                        error = PayKidsException.SnackBarException(message = e.message?: "")
                     )
                 }
             }
