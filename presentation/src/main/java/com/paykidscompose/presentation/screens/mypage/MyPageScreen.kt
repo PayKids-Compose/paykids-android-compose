@@ -1,6 +1,5 @@
 package com.paykidscompose.presentation.screens.mypage
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,16 +10,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.AsyncImage
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.model.MyPageUIModel
 import com.paykidscompose.presentation.screens.mypage.section.MyPageTopBar
@@ -48,14 +46,10 @@ fun MyPage(
     onClickMyInfo: () -> Unit = {},
     onClickTerms: () -> Unit = {},
     onClickAppVersion: () -> Unit = {}
-){
+) {
     val uiState by viewModel.uiState.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.load()
-    }
-
-    if(uiState.showLogoutDialog) {
+    if (uiState.showLogoutDialog) {
         PopupDialog(
             title = stringResource(R.string.dialog_signout_title),
             description = stringResource(R.string.dialog_signout_message),
@@ -69,21 +63,22 @@ fun MyPage(
         uiState.isLoading -> {
             ScreenLoading()
         }
+
         uiState.error != null -> {
             ScreenError {
                 viewModel.load()
             }
         }
+
         uiState.myPage != null -> {
-            uiState.myPage?.let { myPage ->
-                MyPageScreen(
-                    uiModel = myPage,
-                    onClickMyInfo = onClickMyInfo,
-                    onClickTerms = onClickTerms,
-                    onClickAppVersion = onClickAppVersion,
-                    onLogoutClick = { viewModel.onLogoutClick() }
-                )
-            }
+            MyPageScreen(
+                uiModel = uiState.myPage!!,
+                onClickMyInfo = onClickMyInfo,
+                onClickTerms = onClickTerms,
+                onClickAppVersion = onClickAppVersion,
+                onLogoutClick = { viewModel.onLogoutClick() }
+            )
+
         }
     }
 }
@@ -99,7 +94,7 @@ fun MyPageScreen(
 
     Column(
         modifier = Modifier.fillMaxSize()
-    ){
+    ) {
         MyPageTopBar()
 
         Column(
@@ -113,8 +108,8 @@ fun MyPageScreen(
                 ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(uiModel.image),
+            AsyncImage(
+                model = uiModel.image,
                 contentDescription = null,
                 modifier = Modifier
                     .size(MyPageDefaultScreenImageSize)

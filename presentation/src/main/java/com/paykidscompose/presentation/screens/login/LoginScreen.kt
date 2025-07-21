@@ -12,6 +12,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,9 +22,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.dummy.DummyUser
 import com.paykidscompose.presentation.ui.components.InfoText
+import com.paykidscompose.presentation.ui.components.ScreenLoading
 import com.paykidscompose.presentation.ui.theme.Black
 import com.paykidscompose.presentation.ui.theme.BottomButtonPadding
 import com.paykidscompose.presentation.ui.theme.InfoTextStyle
@@ -36,11 +40,31 @@ import com.paykidscompose.presentation.ui.theme.StartAndEndPadding
 import com.paykidscompose.presentation.ui.theme.Yellow
 
 @Composable
-fun Login(onKakaoClick: () -> Unit = {}) {
+fun Login(
+    loginViewModel: LoginViewModel = viewModel(),
+    onLoginSuccess: () -> Unit = {}
+) {
+    val uiState by loginViewModel.uiState.collectAsState()
 
-    LoginScreen(
-        onKakaoClick = onKakaoClick
-    )
+    LaunchedEffect(uiState.isLoginSuccess) {
+        if (uiState.isLoginSuccess) onLoginSuccess()
+    }
+
+    when {
+        uiState.isLoading -> {
+            ScreenLoading()
+        }
+
+        uiState.error != null -> {
+
+        }
+
+        else -> {
+            LoginScreen(
+                onKakaoClick = { loginViewModel.kakaoLogin() }
+            )
+        }
+    }
 }
 
 @Composable
@@ -90,7 +114,6 @@ fun KakaoButton(onKakaoClick: () -> Unit) {
             .background(color = Yellow)
             .padding(start = LoginScreenKakaoButtonStartPadding)
             .clickable(onClick = {
-                DummyUser.createDummyUser()
                 onKakaoClick()
             }),
         contentAlignment = Alignment.CenterStart

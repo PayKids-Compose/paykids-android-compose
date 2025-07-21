@@ -1,17 +1,24 @@
 package com.paykidscompose.data.repositories
 
+import com.paykidscompose.common.model.allowance.AllowanceChartAmountModel
+import com.paykidscompose.common.model.allowance.AllowanceChartCategoryModel
+import com.paykidscompose.common.model.allowance.AllowanceChartModel
+import com.paykidscompose.common.repositories.IncomeAllowanceRepository
 import com.paykidscompose.common.result.DataResourceResult
-import com.paykidscompose.data.model.allowance.AllowanceChartAmountDTO
-import com.paykidscompose.data.model.allowance.AllowanceChartCategoryDTO
-import com.paykidscompose.data.model.allowance.AllowanceChartDTO
+import com.paykidscompose.data.mapper.allowance.AllowanceChartAmountMapper
+import com.paykidscompose.data.mapper.allowance.AllowanceChartCategoryMapper
+import com.paykidscompose.data.mapper.allowance.AllowanceChartMapper
 import com.paykidscompose.data.network.NetworkModule
 import com.paykidscompose.data.network.service.IncomeAllowanceApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.time.LocalDate
 
-class IncomeAllowanceRepositoryImpl(private val incomeAllowanceApiService: IncomeAllowanceApiService = NetworkModule.provideIncomeApiService()) {
+class IncomeAllowanceRepositoryImpl(
+    private val incomeAllowanceApiService: IncomeAllowanceApiService
+) : IncomeAllowanceRepository {
 
-    suspend fun deleteIncome(id: Int): DataResourceResult<Boolean> {
+    override suspend fun deleteIncome(id: Int): DataResourceResult<Boolean> {
         return runCatching {
             incomeAllowanceApiService.deleteIncome(id)
         }.fold(
@@ -20,25 +27,27 @@ class IncomeAllowanceRepositoryImpl(private val incomeAllowanceApiService: Incom
         )
     }
 
-    suspend fun saveIncome(request: AllowanceChartDTO): DataResourceResult<Boolean> {
+    override suspend fun saveIncome(request: AllowanceChartModel): DataResourceResult<Boolean> {
         return runCatching {
-            incomeAllowanceApiService.saveIncome(request)
+            val dto = AllowanceChartMapper.mapToLayerModel(request)
+            incomeAllowanceApiService.saveIncome(dto)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
             onFailure = { DataResourceResult.Failure(it) }
         )
     }
 
-    suspend fun replaceIncome(request: AllowanceChartDTO): DataResourceResult<Boolean> {
+    override suspend fun replaceIncome(request: AllowanceChartModel): DataResourceResult<Boolean> {
         return runCatching {
-            incomeAllowanceApiService.replaceIncome(request)
+            val dto = AllowanceChartMapper.mapToLayerModel(request)
+            incomeAllowanceApiService.replaceIncome(dto)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
             onFailure = { DataResourceResult.Failure(it) }
         )
     }
 
-    suspend fun getIncomeMonthTotalAmount(year: Int, month: Int): DataResourceResult<Int> {
+    override suspend fun getIncomeMonthTotalAmount(year: Int, month: Int): DataResourceResult<Int> {
         return runCatching {
             incomeAllowanceApiService.getIncomeMonthTotalAmount(year, month)
         }.fold(
@@ -47,54 +56,74 @@ class IncomeAllowanceRepositoryImpl(private val incomeAllowanceApiService: Incom
         )
     }
 
-    fun getIncomeMonthDailyAmount(
+    override fun getIncomeMonthDailyAmount(
         year: Int,
         month: Int
-    ): Flow<DataResourceResult<List<AllowanceChartAmountDTO>>> = flow {
+    ): Flow<DataResourceResult<List<AllowanceChartAmountModel>>> = flow {
         emit(DataResourceResult.Loading)
         runCatching {
             incomeAllowanceApiService.getIncomeMonthDailyAmount(year, month)
         }.fold(
-            onSuccess = { emit(DataResourceResult.Success(it.data)) },
+            onSuccess = {
+                val models = it.data.map { dto ->
+                    AllowanceChartAmountMapper.mapToModel(dto)
+                }
+                emit(DataResourceResult.Success(models))
+            },
             onFailure = { emit(DataResourceResult.Failure(it)) }
         )
     }
 
-    fun getIncomeMonthCategory(
+    override fun getIncomeMonthCategory(
         year: Int,
         month: Int,
         category: String
-    ): Flow<DataResourceResult<List<AllowanceChartDTO>>> = flow {
+    ): Flow<DataResourceResult<List<AllowanceChartModel>>> = flow {
         emit(DataResourceResult.Loading)
         runCatching {
             incomeAllowanceApiService.getIncomeMonthCategory(year, month, category)
         }.fold(
-            onSuccess = { emit(DataResourceResult.Success(it.data)) },
+            onSuccess = {
+                val models = it.data.map { dto ->
+                    AllowanceChartMapper.mapToModel(dto)
+                }
+                emit(DataResourceResult.Success(models))
+            },
             onFailure = { emit(DataResourceResult.Failure(it)) }
         )
     }
 
-    fun getIncomeMonthAllCategory(
+    override fun getIncomeMonthAllCategory(
         year: Int,
         month: Int
-    ): Flow<DataResourceResult<List<AllowanceChartCategoryDTO>>> = flow {
+    ): Flow<DataResourceResult<List<AllowanceChartCategoryModel>>> = flow {
         emit(DataResourceResult.Loading)
         runCatching {
             incomeAllowanceApiService.getIncomeMonthAllCategory(year, month)
         }.fold(
-            onSuccess = { emit(DataResourceResult.Success(it.data)) },
+            onSuccess = {
+                val models = it.data.map { dto ->
+                    AllowanceChartCategoryMapper.mapToModel(dto)
+                }
+                emit(DataResourceResult.Success(models))
+            },
             onFailure = { emit(DataResourceResult.Failure(it)) }
         )
     }
 
-    fun getIncomeDay(
-        localDate: String
-    ): Flow<DataResourceResult<List<AllowanceChartDTO>>> = flow {
+    override fun getIncomeDay(
+        localDate: LocalDate
+    ): Flow<DataResourceResult<List<AllowanceChartModel>>> = flow {
         emit(DataResourceResult.Loading)
         runCatching {
-            incomeAllowanceApiService.getIncomeDay(localDate)
+            incomeAllowanceApiService.getIncomeDay(localDate.toString())
         }.fold(
-            onSuccess = { emit(DataResourceResult.Success(it.data)) },
+            onSuccess = {
+                val models = it.data.map { dto ->
+                    AllowanceChartMapper.mapToModel(dto)
+                }
+                emit(DataResourceResult.Success(models))
+            },
             onFailure = { emit(DataResourceResult.Failure(it)) }
         )
     }

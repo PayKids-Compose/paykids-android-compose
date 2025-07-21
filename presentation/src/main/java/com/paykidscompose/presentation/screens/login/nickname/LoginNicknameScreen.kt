@@ -9,19 +9,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.dummy.DummyUser
-import com.paykidscompose.presentation.dummy.User
+import com.paykidscompose.presentation.model.LoginNicknameUIModel
 import com.paykidscompose.presentation.ui.components.DecisionButton
 import com.paykidscompose.presentation.ui.components.InfoText
+import com.paykidscompose.presentation.ui.components.ScreenLoading
 import com.paykidscompose.presentation.ui.components.TitleText
 import com.paykidscompose.presentation.ui.components.UnderlineInputField
 import com.paykidscompose.presentation.ui.theme.Blue2
@@ -36,28 +36,42 @@ import com.paykidscompose.presentation.ui.theme.TitleAndFieldSpacer
 // 스플래시 이후 로그인 화면입니다.
 @Composable
 fun Nickname(
+    viewModel: LoginNicknameViewModel = viewModel(),
     onConfirmClick: () -> Unit = {}
-){
-    val user = DummyUser.getUser()
-    var nickname by remember { mutableStateOf("") }
-    val onNicknameChange = { value: String ->
-        nickname = value
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(uiState.isSaveSuccess) {
+        if (uiState.isSaveSuccess) onConfirmClick()
     }
 
-    NicknameScreen(
-        user = user,
-        nickname = nickname,
-        onNicknameChange = onNicknameChange,
-        onConfirmClick = onConfirmClick
-    )
+    when {
+        uiState.isLoading -> {
+            ScreenLoading()
+        }
+
+        uiState.error != null -> {
+
+        }
+
+        else -> {
+            uiState.uiModel?.let { uiModel ->
+                NicknameScreen(
+                    uiModel = uiModel,
+                    onSaveNickname = { viewModel.saveNickname() },
+                    onNicknameChange = { viewModel.updateNicknameInput(it) }
+                )
+            }
+
+        }
+    }
 }
 
 @Composable
 fun NicknameScreen(
-    user: User,
-    nickname: String,
-    onNicknameChange: (String) -> Unit,
-    onConfirmClick: () -> Unit
+    uiModel: LoginNicknameUIModel,
+    onSaveNickname: () -> Unit,
+    onNicknameChange: (String) -> Unit
 ) {
 
     Column(
@@ -76,7 +90,7 @@ fun NicknameScreen(
             Modifier.fillMaxWidth()
         )
 
-        NicknameInput(nickname, onNicknameChange)
+        NicknameInput(uiModel.nickname, onNicknameChange)
 
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -85,9 +99,7 @@ fun NicknameScreen(
             DecisionButton(
                 stringResource(R.string.text_confirm_nickname),
                 onClick = {
-                    user.nickname = nickname
-                    DummyUser.setUser(user)
-                    onConfirmClick()
+                    onSaveNickname()
                 }
             )
         }

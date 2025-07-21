@@ -2,10 +2,12 @@ package com.paykidscompose.presentation.screens.allowance
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.paykidscompose.common.enums.AllowanceType
+import com.paykidscompose.common.exception.PayKidsException
+import com.paykidscompose.presentation.base.UIState
 import com.paykidscompose.presentation.dummy.DummyDataManager
-import com.paykidscompose.presentation.model.AllowanceDiaryUIState
+import com.paykidscompose.presentation.model.AllowanceDiaryUIModel
 import com.paykidscompose.presentation.model.toUIModel
-import com.paykidscompose.presentation.model.type.AllowanceType
 import com.paykidscompose.presentation.util.DateFormatterDay
 import com.paykidscompose.presentation.util.DateFormatterMonth
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -61,7 +63,13 @@ class AllowanceDiaryViewModel : ViewModel() {
                 updateDailySummary()
                 updateMaxExpenseCategory()
             }.onFailure { throwable ->
-                _uiState.update { it.copy(error = throwable.message) }
+                _uiState.update {
+                    it.copy(
+                        error = PayKidsException.SnackBarException(
+                            message = throwable.message ?: ""
+                        )
+                    )
+                }
             }
             _uiState.update { it.copy(isLoading = false) }
         }
@@ -116,3 +124,16 @@ class AllowanceDiaryViewModel : ViewModel() {
         }
     }
 }
+
+
+data class AllowanceDiaryUIState(
+    override val isLoading: Boolean = false,
+    override val error: PayKidsException? = null,
+    val currentMonth: LocalDate = LocalDate.now().withDayOfMonth(1),
+    val selectedDate: LocalDate = LocalDate.now(),
+    val selectedUIModels: List<AllowanceDiaryUIModel> = emptyList(),
+    val totalExpense: Int = 0,
+    val dailySummary: Map<LocalDate, Pair<Int, Int>> = emptyMap(),
+    val maxExpenseCategoryAndAmount: Pair<String, Int>? = null,
+    val showInputDialog: Boolean = false
+) : UIState()
