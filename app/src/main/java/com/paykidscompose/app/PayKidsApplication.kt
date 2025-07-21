@@ -9,6 +9,6 @@ class PayKidsApplication: Application() {
         super.onCreate()
 
         KakaoSdk.init(this, BuildConfig.KAKAO_KEY)
-        Log.e("Kakao", KakaoSdk.keyHash)
+        //Log.e("Kakao", KakaoSdk.keyHash)
     }
 }

@@ -3,12 +3,23 @@ package com.paykidscompose.common.usecase.quiz
 import com.paykidscompose.common.model.QuizModel
 import com.paykidscompose.common.repositories.QuizRepository
 import com.paykidscompose.common.result.DataResourceResult
+import com.paykidscompose.common.usecase.base.FlowUseCase
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 class GetQuizUseCase(
     private val quizRepository: QuizRepository
-) {
-    operator fun invoke(stage: Int, number: Int): Flow<DataResourceResult<QuizModel>> {
-        return quizRepository.getQuiz(stage, number)
+) : FlowUseCase<GetQuizUseCase.Params, DataResourceResult<QuizModel>>() {
+    override fun execute(params: Params?): Flow<DataResourceResult<QuizModel>> {
+        return if (params != null) {
+            quizRepository.getQuiz(params.stage, params.number)
+        } else {
+            flowOf(DataResourceResult.Failure(IllegalArgumentException("")))
+        }
     }
+
+    data class Params(
+        val stage: Int,
+        val number: Int
+    )
 }
