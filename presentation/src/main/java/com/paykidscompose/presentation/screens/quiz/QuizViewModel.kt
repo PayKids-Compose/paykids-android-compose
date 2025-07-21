@@ -33,7 +33,7 @@ class QuizViewModel : ViewModel() {
                         quiz.imageUrl,
                         quiz.totalCount
                     )
-                }
+                }.toMutableList()
 
                 // 예외 상황 처리: 퀴즈가 비어 있으면 예외 발생
                 require(quizzes.isNotEmpty())
