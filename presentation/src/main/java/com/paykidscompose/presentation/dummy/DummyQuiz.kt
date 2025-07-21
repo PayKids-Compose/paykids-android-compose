@@ -1,6 +1,5 @@
 package com.paykidscompose.presentation.dummy
 
-import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.model.type.QuizType
 
 data class Quiz(
@@ -9,9 +8,9 @@ data class Quiz(
     val number: Int,
     val quizType: QuizType,
     val question: String,
-    val choices: List<Pair<String, String>>?,
+    val choices: List<String>?,
     val answer: String,
-    val imageUrl: List<Int>?,
+    val imageUrl: List<String>?,
     val totalCount: Int
 )
 
@@ -25,10 +24,10 @@ object DummyQuiz {
             quizType = QuizType.TEXT_CHOICE,
             question = "돈을 벌기 위해 우리가 하는 일을 무엇이라고 하나요?",
             choices = listOf(
-                "A" to "놀이",
-                "B" to "직업",
-                "C" to "여행",
-                "D" to "숙제"
+                "놀이",
+                "직업",
+                "여행",
+                "숙제"
             ),
             answer = "B",
             imageUrl = null,
@@ -52,17 +51,17 @@ object DummyQuiz {
             quizType = QuizType.IMAGE,
             question = "다음 중 지폐는 무엇일까요?",
             choices = listOf(
-                "A" to "지갑",
-                "B" to "10000원",
-                "C" to "신용카드",
-                "D" to "동전"
+                "지갑",
+                "10000원",
+                "신용카드",
+                "동전"
             ),
             answer = "B",
             imageUrl = listOf(
-                R.drawable.img_quiz_item_default,
-                R.drawable.img_quiz_item_default,
-                R.drawable.img_quiz_item_default,
-                R.drawable.img_quiz_item_default
+                "https://picsum.photos/200",
+                "https://picsum.photos/201",
+                "https://picsum.photos/202",
+                "https://picsum.photos/203"
             ),
             totalCount = 6
         ),
@@ -73,13 +72,13 @@ object DummyQuiz {
             quizType = QuizType.TEXT_CHOICE_IMAGE,
             question = "필요한 것을 사는 것을 무엇이라고 하나요?",
             choices = listOf(
-                "A" to "소비",
-                "B" to "기부",
-                "C" to "저축",
-                "D" to "일"
+                "소비",
+                "기부",
+                "저축",
+                "일"
             ),
             answer = "A",
-            imageUrl = listOf(R.drawable.img_quiz_item_default),
+            imageUrl = listOf("https://picsum.photos/200"),
             totalCount = 6
         ),
         Quiz(
@@ -90,7 +89,7 @@ object DummyQuiz {
             question = "사진 속 인물은 누구인가요?",
             choices = null,
             answer = "세종대왕",
-            imageUrl = listOf(R.drawable.img_king_sejong),
+            imageUrl = listOf("https://picsum.photos/201"),
             totalCount = 6
         ),
         Quiz(
@@ -100,10 +99,10 @@ object DummyQuiz {
             quizType = QuizType.TEXT_CHOICE,
             question = "돈을 모아두는 것을 무엇이라고 하나요?",
             choices = listOf(
-                "A" to "기부",
-                "B" to "저축",
-                "C" to "소비",
-                "D" to "대출"
+                "기부",
+                "저축",
+                "소비",
+                "대출"
             ),
             answer = "B",
             imageUrl = null,
@@ -118,9 +117,9 @@ object DummyQuiz {
             quizType = QuizType.TEXT_CHOICE,
             question = "다음 중 돈을 가장 잘 사용하는 방법은 무엇일까요?",
             choices = listOf(
-                "A" to "필요한 물건만 산다",
-                "B" to "원하는 것은 다 산다",
-                "C" to "친구가 사는 걸 따라서 산다"
+                "필요한 물건만 산다",
+                "원하는 것은 다 산다",
+                "친구가 사는 걸 따라서 산다"
             ),
             answer = "A",
             imageUrl = null,
@@ -144,18 +143,13 @@ object DummyQuiz {
             quizType = QuizType.TEXT_CHOICE_IMAGE,
             question = "합리적인 소비법",
             choices = listOf(
-                "A" to "ㅁㅁㅁ",
-                "B" to "ㄴㄴㄴ",
-                "C" to "ㄹㄹㄹ",
-                "D" to "ㄱㄱㄱ"
+                "ㅁㅁㅁ",
+                "ㄴㄴㄴ",
+                "ㄹㄹㄹ",
+                "ㄱㄱㄱ"
             ),
             answer = "A",
-            imageUrl = listOf(
-                R.drawable.img_quiz_item_default,
-                R.drawable.img_quiz_item_default,
-                R.drawable.img_quiz_item_default,
-                R.drawable.img_quiz_item_default
-            ),
+            imageUrl = listOf("https://picsum.photos/204"),
             totalCount = 5
         ),
         Quiz(
@@ -176,10 +170,10 @@ object DummyQuiz {
             quizType = QuizType.TEXT_CHOICE,
             question = "다음 중 계좌를 만들 수 있는 곳은?",
             choices = listOf(
-                "A" to "학원",
-                "B" to "친구 집",
-                "C" to "은행",
-                "D" to "학원"
+                "학원",
+                "친구 집",
+                "은행",
+                "학원"
             ),
             answer = "C",
             imageUrl = null,

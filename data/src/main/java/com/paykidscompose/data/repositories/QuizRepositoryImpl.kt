@@ -1,15 +1,19 @@
 package com.paykidscompose.data.repositories
 
+import com.paykidscompose.common.model.QuizClearedModel
+import com.paykidscompose.common.model.QuizModel
+import com.paykidscompose.common.repositories.QuizRepository
 import com.paykidscompose.common.result.DataResourceResult
-import com.paykidscompose.data.model.quiz.QuizClearedDTO
-import com.paykidscompose.data.model.quiz.QuizDTO
+import com.paykidscompose.data.mapper.quiz.QuizClearedMapper
+import com.paykidscompose.data.mapper.quiz.QuizMapper
 import com.paykidscompose.data.network.NetworkModule
 import com.paykidscompose.data.network.service.QuizApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class QuizRepositoryImpl(private val quizApiService: QuizApiService = NetworkModule.provideQuizApiService()) {
-    suspend fun getStageToGo(): DataResourceResult<Int> {
+class QuizRepositoryImpl(private val quizApiService: QuizApiService):
+    QuizRepository {
+    override suspend fun getStageToGo(): DataResourceResult<Int> {
         return runCatching {
             quizApiService.getStageToGo()
         }.fold(
@@ -18,7 +22,7 @@ class QuizRepositoryImpl(private val quizApiService: QuizApiService = NetworkMod
         )
     }
 
-    suspend fun getStageName(stage: Int): DataResourceResult<String> {
+    override suspend fun getStageName(stage: Int): DataResourceResult<String> {
         return runCatching {
             quizApiService.getStageName(stage)
         }.fold(
@@ -27,7 +31,7 @@ class QuizRepositoryImpl(private val quizApiService: QuizApiService = NetworkMod
         )
     }
 
-    suspend fun getStagCount(): DataResourceResult<Int> {
+    override suspend fun getStageCount(): DataResourceResult<Int> {
         return runCatching {
             quizApiService.getStageCount()
         }.fold(
@@ -36,16 +40,16 @@ class QuizRepositoryImpl(private val quizApiService: QuizApiService = NetworkMod
         )
     }
 
-    suspend fun getCheckStage(stage: Int): DataResourceResult<QuizClearedDTO> {
+    override suspend fun getCheckStage(stage: Int): DataResourceResult<QuizClearedModel> {
         return runCatching {
             quizApiService.getCheckStage(stage)
         }.fold(
-            onSuccess = { DataResourceResult.Success(it.data) },
+            onSuccess = { DataResourceResult.Success(QuizClearedMapper.mapToModel(it.data)) },
             onFailure = { DataResourceResult.Failure(it) }
         )
     }
 
-    suspend fun getCheckAnswer(stage: Int, number: Int, answer: String): DataResourceResult<Boolean> {
+    override suspend fun getCheckAnswer(stage: Int, number: Int, answer: String): DataResourceResult<Boolean> {
         return runCatching {
             quizApiService.getCheckAnswer(stage, number, answer)
         }.fold(
@@ -54,17 +58,17 @@ class QuizRepositoryImpl(private val quizApiService: QuizApiService = NetworkMod
         )
     }
 
-    fun getQuiz(stage: Int, number: Int): Flow<DataResourceResult<QuizDTO>> = flow {
+    override fun getQuiz(stage: Int, number: Int): Flow<DataResourceResult<QuizModel>> = flow {
         emit(DataResourceResult.Loading)
         runCatching {
             quizApiService.getQuiz(stage, number)
         }.fold(
-            onSuccess = { emit(DataResourceResult.Success(it.data)) },
+            onSuccess = { emit(DataResourceResult.Success(QuizMapper.mapToModel(it.data))) },
             onFailure = { emit(DataResourceResult.Failure(it)) }
         )
     }
 
-    fun getIncorrectQuizList(stage: Int): Flow<DataResourceResult<List<Int>>> = flow {
+    override fun getIncorrectQuizList(stage: Int): Flow<DataResourceResult<List<Int>>> = flow {
         emit(DataResourceResult.Loading)
         runCatching {
             quizApiService.getIncorrectQuizList(stage)
