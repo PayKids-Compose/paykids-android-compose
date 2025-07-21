@@ -6,7 +6,7 @@ import com.paykidscompose.presentation.model.ChatMessageUIModel
 
 object ChatMessageUIModelMapper: ModelMapper<ChatResponseModel, ChatMessageUIModel> {
     override fun mapToModel(layerModel: ChatMessageUIModel): ChatResponseModel {
-        throw UnsupportedOperationException("ChatMessageUIModel에서 ChatResponseModel 변환은 지원하지 않습니다.")
+        throw UnsupportedOperationException("ChatMessageUIModel -> ChatResponseModel 변환은 지원하지 않습니다.")
     }
 
     override fun mapToLayerModel(model: ChatResponseModel): ChatMessageUIModel {
