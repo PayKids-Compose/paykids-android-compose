@@ -26,11 +26,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
+import com.paykidscompose.common.enums.QuizType
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.model.QuizUIModel
-import com.paykidscompose.presentation.model.type.QuizClearType
+import com.paykidscompose.common.enums.QuizClearType
 import com.paykidscompose.presentation.model.type.QuizResultType
-import com.paykidscompose.presentation.model.type.QuizType
 import com.paykidscompose.presentation.screens.quiz.section.ImageQuizContent
 import com.paykidscompose.presentation.screens.quiz.section.QuizTopBar
 import com.paykidscompose.presentation.screens.quiz.section.ShortAnswerQuizContent
@@ -194,7 +194,7 @@ fun QuizScreen(
                 }
 
                 when (currentQuiz.quizType) {
-                    QuizType.IMAGE -> {
+                    QuizType.IMAGE_CHOICE -> {
                         val imageChoices = currentQuiz.imageUrl?.mapIndexed { index, imageUrl ->
                             val label = currentQuiz.choices?.getOrNull(index)?: ""
                             imageUrl to label

@@ -1,6 +1,6 @@
 package com.paykidscompose.presentation.dummy
 
-import com.paykidscompose.presentation.model.type.QuizType
+import com.paykidscompose.common.enums.QuizType
 
 data class Quiz(
     val id: Int,
@@ -48,7 +48,7 @@ object DummyQuiz {
             id = 3,
             stage = 1,
             number = 3,
-            quizType = QuizType.IMAGE,
+            quizType = QuizType.IMAGE_CHOICE,
             question = "다음 중 지폐는 무엇일까요?",
             choices = listOf(
                 "지갑",
