@@ -26,7 +26,6 @@ class SplashActivity : ComponentActivity() {
         super.onResume()
         handler.postDelayed({
             Log.d(TAG, "초기화 작업 시작!")
-            PayKidsPreference.init(applicationContext)
             startActivity(Intent(this@SplashActivity, MainActivity::class.java))
             finish()
         }, 1500L)

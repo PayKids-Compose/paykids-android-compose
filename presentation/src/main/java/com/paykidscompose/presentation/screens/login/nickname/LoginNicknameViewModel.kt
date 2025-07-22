@@ -1,5 +1,6 @@
 package com.paykidscompose.presentation.screens.login.nickname
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.paykidscompose.common.exception.PayKidsException
@@ -20,13 +21,13 @@ class LoginNicknameViewModel(
 
     fun updateNicknameInput(nickname: String) {
         _uiState.update {
-            it.copy(uiModel = LoginNicknameUIModel(nickname))
+            it.copy(uiModel = it.uiModel.copy(nickname))
         }
     }
 
     fun saveNickname() {
         if (_uiState.value.isLoading) return
-        val nickname = _uiState.value.uiModel?.nickname ?: ""
+        val nickname = _uiState.value.uiModel.nickname
 
         _uiState.update {
             it.copy(isLoading = true, error = null)
@@ -35,6 +36,7 @@ class LoginNicknameViewModel(
         viewModelScope.launch {
             when (val result = saveNicknameUseCase(SaveNicknameUseCase.Params(nickname))) {
                 is DataResourceResult.Success -> {
+                    Log.d("LoginNicknameViewModel", "Success")
                     _uiState.update {
                         it.copy(isLoading = false, isSaveSuccess = true)
                     }
@@ -61,6 +63,6 @@ class LoginNicknameViewModel(
 data class LoginNicknameUIState(
     override val isLoading: Boolean = false,
     override val error: PayKidsException? = null,
-    val uiModel: LoginNicknameUIModel? = null,
+    val uiModel: LoginNicknameUIModel = LoginNicknameUIModel(""),
     val isSaveSuccess: Boolean = false
 ) : UIState()

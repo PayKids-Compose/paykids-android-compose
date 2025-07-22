@@ -22,10 +22,6 @@ class MyPageViewModel(
     private val _uiState = MutableStateFlow(MyPageUIState())
     val uiState = _uiState.asStateFlow()
 
-    init {
-        load()
-    }
-
     fun load() {
         if (_uiState.value.isLoading) return
 

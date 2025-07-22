@@ -21,6 +21,7 @@ import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.model.LoginNicknameUIModel
 import com.paykidscompose.presentation.ui.components.DecisionButton
 import com.paykidscompose.presentation.ui.components.InfoText
+import com.paykidscompose.presentation.ui.components.ScreenError
 import com.paykidscompose.presentation.ui.components.ScreenLoading
 import com.paykidscompose.presentation.ui.components.TitleText
 import com.paykidscompose.presentation.ui.components.UnderlineInputField
@@ -36,7 +37,7 @@ import com.paykidscompose.presentation.ui.theme.TitleAndFieldSpacer
 // 스플래시 이후 로그인 화면입니다.
 @Composable
 fun Nickname(
-    viewModel: LoginNicknameViewModel = viewModel(),
+        viewModel: LoginNicknameViewModel = viewModel(),
     onConfirmClick: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -51,18 +52,15 @@ fun Nickname(
         }
 
         uiState.error != null -> {
-
+            ScreenError(message = uiState.error?.message!!) {  }
         }
 
         else -> {
-            uiState.uiModel?.let { uiModel ->
-                NicknameScreen(
-                    uiModel = uiModel,
-                    onSaveNickname = { viewModel.saveNickname() },
-                    onNicknameChange = { viewModel.updateNicknameInput(it) }
-                )
-            }
-
+            NicknameScreen(
+                uiModel = uiState.uiModel,
+                onSaveNickname = { viewModel.saveNickname() },
+                onNicknameChange = { viewModel.updateNicknameInput(it) }
+            )
         }
     }
 }
