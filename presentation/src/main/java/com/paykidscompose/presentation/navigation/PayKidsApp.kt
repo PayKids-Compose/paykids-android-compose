@@ -8,8 +8,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -17,11 +15,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.paykidscompose.common.di.ApplicationContainerProvider
-import com.paykidscompose.presentation.factory.LoginNicknameViewModelFactory
-import com.paykidscompose.presentation.factory.LoginViewModelFactory
-import com.paykidscompose.presentation.factory.MyInfoViewModelFactory
-import com.paykidscompose.presentation.factory.MyPageViewModelFactory
 import com.paykidscompose.presentation.navigation.route.AllowanceDiaryNavigationRoute
 import com.paykidscompose.presentation.navigation.route.EntryNavigationRoute
 import com.paykidscompose.presentation.navigation.route.MyPageNavigationRoute
@@ -50,26 +43,12 @@ import com.paykidscompose.presentation.ui.components.AppBottomBar
 
 
 @Composable
-fun PayKidsApp() {
-    val applicationContext = LocalContext.current.applicationContext
-    val provider = (applicationContext as ApplicationContainerProvider)
-    val loginUseCase = provider.provideAppContainer().loginUseCase
-    val logoutUseCase = provider.provideAppContainer().logoutUseCase
-    val saveNicknameUseCase = provider.provideAppContainer().saveNicknameUseCase
-    val getUserUseCase = provider.provideAppContainer().getUserUseCase
-    val deleteUserUseCase = provider.provideAppContainer().deleteUserUseCase
-
-    val loginViewModelFactory = LoginViewModelFactory(loginUseCase)
-    val loginNicknameViewModelFactory = LoginNicknameViewModelFactory(saveNicknameUseCase)
-    val myInfoViewModelFactory = MyInfoViewModelFactory(getUserUseCase,saveNicknameUseCase,deleteUserUseCase)
-    val myPageViewModelFactory = MyPageViewModelFactory(getUserUseCase, logoutUseCase)
-
-    val loginViewModel: LoginViewModel = viewModel(factory = loginViewModelFactory)
-    val loginNicknameViewModel: LoginNicknameViewModel = viewModel(factory = loginNicknameViewModelFactory)
-    val myInfoViewModel: MyInfoViewModel = viewModel(factory = myInfoViewModelFactory)
-    val myPageViewModel: MyPageViewModel = viewModel(factory = myPageViewModelFactory)
-
-
+fun PayKidsApp(
+    loginViewModel: LoginViewModel,
+    loginNicknameViewModel: LoginNicknameViewModel,
+    myInfoViewModel: MyInfoViewModel,
+    myPageViewModel: MyPageViewModel
+) {
     val navController: NavHostController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     // 다형성이 지원이 안되는 듯
