@@ -19,15 +19,11 @@ import kotlinx.coroutines.launch
 
 class MyInfoViewModel(
     private val getUserUseCase: GetUserUseCase,
-    private val saveNicknameUseCase: SaveNicknameUseCase,
+    private val saveNicknameUseCase: SaveNicknameUseCase, // ReplaceNicknameUseCase 타입으로 바꾸기
     private val deleteUserUseCase: DeleteUserUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(MyInfoUIState())
     val uiState = _uiState.asStateFlow()
-
-    init {
-        load()
-    }
 
     fun load() {
         if (_uiState.value.isLoading) return

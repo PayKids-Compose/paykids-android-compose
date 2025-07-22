@@ -9,7 +9,7 @@ class SaveNicknameUseCase(
 ) : SuspendUseCase<SaveNicknameUseCase.Params, DataResourceResult<String>>() {
 
     override suspend fun execute(params: Params?): DataResourceResult<String> {
-        return if (params != null && params.nickname.length < 2) {
+        return if (params != null && params.nickname.length >= 2) {
             userRepository.saveNickname(params.nickname)
         } else {
             DataResourceResult.Failure(IllegalArgumentException("닉네임은 2자 이상이어야 합니다."))

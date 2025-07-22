@@ -93,6 +93,10 @@ fun MyInfo(
         )
     }
 
+    LaunchedEffect(true) {
+        viewModel.load()
+    }
+
     LaunchedEffect(uiState.isDeleteUserSuccess) {
         if (uiState.isDeleteUserSuccess) (context as? Activity)?.finishAffinity()
     }
