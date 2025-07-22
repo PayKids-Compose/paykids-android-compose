@@ -1,6 +1,6 @@
 package com.paykidscompose.presentation.navigation.route
 
-import com.paykidscompose.presentation.model.type.QuizClearType
+import com.paykidscompose.common.enums.QuizClearType
 import kotlinx.serialization.Serializable
 
 

@@ -1,4 +1,4 @@
-package com.paykidscompose.presentation.model.type
+package com.paykidscompose.common.enums
 
 enum class QuizClearType {
     ALL_CLEAR,
