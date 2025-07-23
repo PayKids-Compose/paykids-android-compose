@@ -13,7 +13,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,13 +23,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
+import com.paykidscompose.common.enums.QuizClearType
+import com.paykidscompose.common.enums.QuizType
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.model.QuizUIModel
-import com.paykidscompose.presentation.model.type.QuizClearType
 import com.paykidscompose.presentation.model.type.QuizResultType
-import com.paykidscompose.presentation.model.type.QuizType
 import com.paykidscompose.presentation.screens.quiz.section.ImageQuizContent
 import com.paykidscompose.presentation.screens.quiz.section.QuizTopBar
 import com.paykidscompose.presentation.screens.quiz.section.ShortAnswerQuizContent
@@ -63,7 +63,7 @@ fun Quiz(
     var isCorrect by remember { mutableStateOf(QuizResultType.DEFAULT) }
     var userInput by remember { mutableStateOf("") }
 
-    val uiState by quizViewModel.uiState.collectAsState()
+    val uiState by quizViewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         quizViewModel.loadQuiz(stageNumber)
@@ -194,7 +194,7 @@ fun QuizScreen(
                 }
 
                 when (currentQuiz.quizType) {
-                    QuizType.IMAGE -> {
+                    QuizType.IMAGE_CHOICE -> {
                         val imageChoices = currentQuiz.imageUrl?.mapIndexed { index, imageUrl ->
                             val label = currentQuiz.choices?.getOrNull(index)?: ""
                             imageUrl to label

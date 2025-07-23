@@ -3,9 +3,9 @@ package com.paykidscompose.presentation.screens.quiz
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.paykidscompose.common.exception.PayKidsException
+import com.paykidscompose.presentation.base.UIState
 import com.paykidscompose.presentation.dummy.DummyQuiz
 import com.paykidscompose.presentation.model.QuizUIModel
-import com.paykidscompose.presentation.model.QuizUIState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -71,4 +71,15 @@ class QuizViewModel : ViewModel() {
     fun isLastQuiz(): Boolean {
         return uiState.value.currentIndex == uiState.value.quizzes.lastIndex
     }
+}
+
+data class QuizUIState(
+    override val isLoading: Boolean = false,
+    override val error: PayKidsException? = null,
+    val quizzes: MutableList<QuizUIModel> = mutableListOf(),
+    val totalCount: Int = 0,
+    val currentIndex: Int = 0,
+): UIState() {
+    val currentQuiz: QuizUIModel?
+        get() = quizzes.getOrNull(currentIndex)
 }

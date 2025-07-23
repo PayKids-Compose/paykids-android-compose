@@ -34,7 +34,6 @@ import com.paykidscompose.presentation.ui.theme.NicknameScreenFieldBoxHeight
 import com.paykidscompose.presentation.ui.theme.NicknameTitleTextStyle
 import com.paykidscompose.presentation.ui.theme.OutlineBorder
 import com.paykidscompose.presentation.ui.theme.OutlineDefaultShadowElevation
-import com.paykidscompose.presentation.ui.theme.OutlineDefaultShadowRound
 import com.paykidscompose.presentation.ui.theme.OutlineShape
 import com.paykidscompose.presentation.ui.theme.TitleColor
 import com.paykidscompose.presentation.ui.theme.White
