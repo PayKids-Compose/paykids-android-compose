@@ -43,14 +43,9 @@ import com.paykidscompose.presentation.ui.theme.Yellow
 fun Login(
     loginViewModel: LoginViewModel = viewModel(),
     onNavigateHome: () -> Unit = {},
-    onLoginSuccess: () -> Unit = {}
+    onLoginSuccess: () -> Unit = {} // 뷰 모델에서 이벤트 처리하기
 ) {
     val uiState by loginViewModel.uiState.collectAsStateWithLifecycle()
-
-    LaunchedEffect(uiState.isLoginSuccess) {
-        if (uiState.isLoginSuccess && uiState.isRegistered) onNavigateHome()
-        if (uiState.isLoginSuccess && !uiState.isRegistered) onLoginSuccess()
-    }
 
     when {
         uiState.isLoading -> {

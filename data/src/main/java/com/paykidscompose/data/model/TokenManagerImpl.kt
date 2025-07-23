@@ -5,6 +5,7 @@ import com.paykidscompose.common.model.TokenManager
 import com.paykidscompose.data.database.PayKidsPreference
 import com.paykidscompose.data.util.ACCESS_TOKEN
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
@@ -16,9 +17,13 @@ class TokenManagerImpl : TokenManager() {
                 if (key == ACCESS_TOKEN) {
                     PayKidsPreference.getInstance().getString(ACCESS_TOKEN, null)
                         .let {
-                            trySend(it ?: "")
+                            trySendBlocking(it ?: "")
                         }
                 }
+            }
+        PayKidsPreference.getInstance().getString(ACCESS_TOKEN, null)
+            .let {
+                send(it ?: "")
             }
         PayKidsPreference.getInstance().registerOnSharedPreferenceChangeListener(
             listener
