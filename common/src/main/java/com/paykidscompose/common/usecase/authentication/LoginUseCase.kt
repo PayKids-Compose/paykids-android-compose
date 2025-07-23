@@ -6,6 +6,6 @@ import com.paykidscompose.common.usecase.base.SuspendUseCase
 
 class LoginUseCase(
     private val authRepository: AuthRepository
-) : SuspendUseCase<Unit, DataResourceResult<Unit>>() {
-    override suspend fun execute(params: Unit?): DataResourceResult<Unit> = authRepository.fetchLoginToken()
+) : SuspendUseCase<Unit, DataResourceResult<Boolean>>() {
+    override suspend fun execute(params: Unit?): DataResourceResult<Boolean> = authRepository.fetchLoginToken()
 }
