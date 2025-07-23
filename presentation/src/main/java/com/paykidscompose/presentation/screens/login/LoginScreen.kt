@@ -42,12 +42,14 @@ import com.paykidscompose.presentation.ui.theme.Yellow
 @Composable
 fun Login(
     loginViewModel: LoginViewModel = viewModel(),
+    onNavigateHome: () -> Unit = {},
     onLoginSuccess: () -> Unit = {}
 ) {
     val uiState by loginViewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(uiState.isLoginSuccess) {
-        if (uiState.isLoginSuccess) onLoginSuccess()
+        if (uiState.isLoginSuccess && uiState.isRegistered) onNavigateHome()
+        if (uiState.isLoginSuccess && !uiState.isRegistered) onLoginSuccess()
     }
 
     when {

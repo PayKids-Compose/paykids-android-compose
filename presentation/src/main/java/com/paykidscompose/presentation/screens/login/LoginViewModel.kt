@@ -52,5 +52,6 @@ class LoginViewModel(
 data class LoginUIState(
     override val isLoading: Boolean = false,
     override val error: PayKidsException? = null,
+    val isRegistered: Boolean = false,
     val isLoginSuccess: Boolean = false
 ) : UIState()
