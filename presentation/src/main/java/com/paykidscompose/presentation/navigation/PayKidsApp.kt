@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.paykidscompose.common.di.ApplicationContainer
 import com.paykidscompose.presentation.navigation.route.AllowanceDiaryNavigationRoute
 import com.paykidscompose.presentation.navigation.route.EntryNavigationRoute
 import com.paykidscompose.presentation.navigation.route.MyPageNavigationRoute
@@ -44,6 +45,7 @@ import com.paykidscompose.presentation.ui.components.AppBottomBar
 
 @Composable
 fun PayKidsApp(
+    isLogin: Boolean,
     loginViewModel: LoginViewModel,
     loginNicknameViewModel: LoginNicknameViewModel,
     myInfoViewModel: MyInfoViewModel,
@@ -56,8 +58,6 @@ fun PayKidsApp(
     val currentRoute = navBackStackEntry?.destination?.route
 
     Log.d("PayKidsApp", "CurrentRoute: $currentRoute")
-
-    var isLogin by remember { mutableStateOf(false) }
 
     PayKidsScaffold(
         bottomBar = {
@@ -96,7 +96,7 @@ fun PayKidsApp(
 
             composable<EntryNavigationRoute.LoginNicknameRoute> {
                 Nickname(loginNicknameViewModel) {
-                    isLogin = true
+
                 }
             }
 

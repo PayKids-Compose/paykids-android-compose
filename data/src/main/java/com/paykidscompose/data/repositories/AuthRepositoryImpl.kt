@@ -4,7 +4,6 @@ import androidx.core.content.edit
 import com.paykidscompose.common.repositories.AuthRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.data.database.PayKidsPreference
-import com.paykidscompose.data.network.NetworkModule
 import com.paykidscompose.data.network.service.AuthApiService
 import com.paykidscompose.data.network.service.authentication.KakaoLoginService
 import com.paykidscompose.data.util.ACCESS_TOKEN
@@ -27,7 +26,7 @@ class AuthRepositoryImpl(
         )
     }
 
-    override suspend fun fetchLoginToken(): DataResourceResult<Unit> {
+    override suspend fun fetchLoginToken(): DataResourceResult<Boolean> {
         return runCatching {
             val token = kakaoLoginService.login()
             authApiService.fetchLoginToken(token.idToken)
@@ -39,7 +38,7 @@ class AuthRepositoryImpl(
                         putString(REFRESH_TOKEN, it.data.refreshToken)
                     }
                 }
-                DataResourceResult.Success(Unit)
+                DataResourceResult.Success(it.data.isRegistered)
             },
             onFailure = { DataResourceResult.Failure(it) }
         )
