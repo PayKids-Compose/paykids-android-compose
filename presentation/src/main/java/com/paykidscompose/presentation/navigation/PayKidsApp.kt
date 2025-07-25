@@ -4,9 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -15,7 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.paykidscompose.common.di.ApplicationContainer
+import com.paykidscompose.common.enums.EntryPoint
 import com.paykidscompose.presentation.navigation.route.AllowanceDiaryNavigationRoute
 import com.paykidscompose.presentation.navigation.route.EntryNavigationRoute
 import com.paykidscompose.presentation.navigation.route.MyPageNavigationRoute
@@ -45,7 +42,7 @@ import com.paykidscompose.presentation.ui.components.AppBottomBar
 
 @Composable
 fun PayKidsApp(
-    isLogin: Boolean,
+    loginStatus: EntryPoint,
     loginViewModel: LoginViewModel,
     loginNicknameViewModel: LoginNicknameViewModel,
     myInfoViewModel: MyInfoViewModel,
@@ -80,11 +77,12 @@ fun PayKidsApp(
     ) { paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = if (isLogin) {
-                TabNavigationRoute.HomeRoute
-            } else {
-                EntryNavigationRoute.LoginRoute
-            },
+            startDestination =
+                when (loginStatus) {
+                    EntryPoint.LOGIN -> EntryNavigationRoute.LoginRoute
+                    EntryPoint.ONBOARDING -> EntryNavigationRoute.LoginNicknameRoute
+                    EntryPoint.HOME -> TabNavigationRoute.HomeRoute
+                },
             modifier = Modifier.padding(paddingValues = paddingValues),
         ) {
 

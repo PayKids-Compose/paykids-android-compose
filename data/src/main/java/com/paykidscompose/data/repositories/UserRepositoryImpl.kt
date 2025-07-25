@@ -1,10 +1,11 @@
 package com.paykidscompose.data.repositories
 
+import androidx.core.content.edit
 import com.paykidscompose.common.model.user.UserModel
 import com.paykidscompose.common.repositories.UserRepository
 import com.paykidscompose.common.result.DataResourceResult
+import com.paykidscompose.data.database.PayKidsPreference
 import com.paykidscompose.data.mapper.user.UserMapper
-import com.paykidscompose.data.network.NetworkModule
 import com.paykidscompose.data.network.service.UserApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -26,7 +27,11 @@ class UserRepositoryImpl(
         return runCatching {
             userApiService.saveNickname(nickname)
         }.fold(
-            onSuccess = { DataResourceResult.Success(it.data) },
+            onSuccess = {
+                PayKidsPreference.getInstance().edit {
+                    putBoolean("isRegistered", true)
+                }
+                DataResourceResult.Success(it.data) },
             onFailure = { DataResourceResult.Failure(it) }
         )
     }

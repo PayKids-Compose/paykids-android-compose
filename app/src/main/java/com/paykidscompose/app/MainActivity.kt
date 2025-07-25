@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.paykidscompose.app.ui.theme.PayKidsComposeTheme
 import com.paykidscompose.common.di.ApplicationContainerProvider
+import com.paykidscompose.common.enums.EntryPoint
 import com.paykidscompose.common.usecase.authentication.CheckUserCompletionStatusUseCase
 import com.paykidscompose.data.model.TokenManagerImpl
 import com.paykidscompose.presentation.factory.LoginNicknameViewModelFactory
@@ -25,21 +26,22 @@ class MainActivity : ComponentActivity() {
     private val provider by lazy {
         (applicationContext as ApplicationContainerProvider).provideAppContainer()
     }
-    private val userCompletionStatusUseCase = CheckUserCompletionStatusUseCase(TokenManagerImpl())
+    private val userCompletionStatusUseCase = CheckUserCompletionStatusUseCase(TokenManagerImpl)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val isLogin by userCompletionStatusUseCase().collectAsStateWithLifecycle(
-                intent.getBooleanExtra(
-                    "isLogin",
-                    false
+            val loginStatus by userCompletionStatusUseCase().collectAsStateWithLifecycle(
+                EntryPoint.valueOf(
+                    intent.getStringExtra(
+                        "loginStatus"
+                    ) ?: "LOGIN"
                 )
             )
             PayKidsComposeTheme {
                 PayKidsApp(
-                    isLogin,
+                    loginStatus,
                     loginViewModel = ViewModelProvider(
                         this,
                         LoginViewModelFactory(provider.loginUseCase)
