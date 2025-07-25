@@ -15,7 +15,7 @@ import kotlinx.coroutines.runBlocking
 class SplashActivity : ComponentActivity() {
 
     private lateinit var binding: ActivitySplashBinding
-    private val userCompletionStatusUseCase = CheckUserCompletionStatusUseCase(TokenManagerImpl())
+    private val userCompletionStatusUseCase = CheckUserCompletionStatusUseCase(TokenManagerImpl)
 
     private val handler = Handler(Looper.getMainLooper())
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,11 +30,11 @@ class SplashActivity : ComponentActivity() {
         super.onResume()
         handler.postDelayed({
             Log.d(TAG, "초기화 작업 시작!")
-            val isLogin = runBlocking {
+            val loginStatus = runBlocking {
                 userCompletionStatusUseCase().first()
             }
             startActivity(Intent(this@SplashActivity, MainActivity::class.java).apply {
-                putExtra("isLogin", isLogin)
+                putExtra("loginStatus", loginStatus.name)
             })
             finish()
         }, 1500L)

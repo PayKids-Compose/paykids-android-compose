@@ -36,6 +36,7 @@ class AuthRepositoryImpl(
                     PayKidsPreference.getInstance().edit {
                         putString(ACCESS_TOKEN, it.data.accessToken)
                         putString(REFRESH_TOKEN, it.data.refreshToken)
+                        putBoolean("isRegistered", it.data.isRegistered)
                     }
                 }
                 DataResourceResult.Success(it.data.isRegistered)
