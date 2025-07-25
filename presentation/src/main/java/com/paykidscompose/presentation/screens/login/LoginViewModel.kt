@@ -18,6 +18,15 @@ class LoginViewModel(
     private val _uiState = MutableStateFlow(LoginUIState())
     val uiState = _uiState.asStateFlow()
 
+//    init {
+//        Log.e(TAG, "뷰모델 생성!!!!!!!")
+//    }
+//
+//    override fun onCleared() {
+//        super.onCleared()
+//        Log.e(TAG, "뷰모델 소멸!!!!!!")
+//    }
+
     fun kakaoLogin() {
         if (_uiState.value.isLoading || _uiState.value.isLoginSuccess) return
 
@@ -45,6 +54,10 @@ class LoginViewModel(
             }
         }
 
+    }
+
+    companion object {
+        private const val TAG = "LoginViewModel"
     }
 
 }
