@@ -19,6 +19,15 @@ class LoginNicknameViewModel(
     private val _uiState = MutableStateFlow(LoginNicknameUIState())
     val uiState = _uiState.asStateFlow()
 
+//    init {
+//        Log.e(TAG, "닉네임 뷰모델 생성!!!!!!!")
+//    }
+//
+//    override fun onCleared() {
+//        super.onCleared()
+//        Log.e(TAG, "닉네임 뷰모델 소멸!!!!!!")
+//    }
+
     fun updateNicknameInput(nickname: String) {
         _uiState.update {
             it.copy(uiModel = it.uiModel.copy(nickname))
@@ -58,6 +67,9 @@ class LoginNicknameViewModel(
         }
     }
 
+    companion object {
+        private const val TAG = "LoginNicknameViewModel"
+    }
 }
 
 data class LoginNicknameUIState(

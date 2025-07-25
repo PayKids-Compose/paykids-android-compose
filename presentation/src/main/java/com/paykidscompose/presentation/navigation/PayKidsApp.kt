@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -13,6 +14,15 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.paykidscompose.common.enums.EntryPoint
+import com.paykidscompose.common.usecase.authentication.LoginUseCase
+import com.paykidscompose.common.usecase.authentication.LogoutUseCase
+import com.paykidscompose.common.usecase.user.DeleteUserUseCase
+import com.paykidscompose.common.usecase.user.GetUserUseCase
+import com.paykidscompose.common.usecase.user.SaveNicknameUseCase
+import com.paykidscompose.presentation.factory.LoginNicknameViewModelFactory
+import com.paykidscompose.presentation.factory.LoginViewModelFactory
+import com.paykidscompose.presentation.factory.MyInfoViewModelFactory
+import com.paykidscompose.presentation.factory.MyPageViewModelFactory
 import com.paykidscompose.presentation.navigation.route.AllowanceDiaryNavigationRoute
 import com.paykidscompose.presentation.navigation.route.EntryNavigationRoute
 import com.paykidscompose.presentation.navigation.route.MyPageNavigationRoute
@@ -43,10 +53,11 @@ import com.paykidscompose.presentation.ui.components.AppBottomBar
 @Composable
 fun PayKidsApp(
     loginStatus: EntryPoint,
-    loginViewModel: LoginViewModel,
-    loginNicknameViewModel: LoginNicknameViewModel,
-    myInfoViewModel: MyInfoViewModel,
-    myPageViewModel: MyPageViewModel
+    loginUseCase: LoginUseCase,
+    saveNicknameUseCase: SaveNicknameUseCase,
+    getUserUseCase: GetUserUseCase,
+    deleteUserUseCase: DeleteUserUseCase,
+    logoutUseCase: LogoutUseCase
 ) {
     val navController: NavHostController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -87,14 +98,21 @@ fun PayKidsApp(
         ) {
 
             composable<EntryNavigationRoute.LoginRoute> {
-                Login(loginViewModel) {
+                val viewModel: LoginViewModel = viewModel(
+                    viewModelStoreOwner = it,
+                    factory = LoginViewModelFactory(loginUseCase)
+                )
+                Login(viewModel) {
                     navController.navigate(EntryNavigationRoute.LoginNicknameRoute)
                 }
             }
 
             composable<EntryNavigationRoute.LoginNicknameRoute> {
-                Nickname(loginNicknameViewModel) {
-
+                val viewModel: LoginNicknameViewModel = viewModel(
+                    viewModelStoreOwner = it,
+                    factory = LoginNicknameViewModelFactory(saveNicknameUseCase)
+                )
+                Nickname(viewModel) {
                 }
             }
 
@@ -172,8 +190,12 @@ fun PayKidsApp(
             }
 
             composable<TabNavigationRoute.MyPageRoute> {
+                val viewModel: MyPageViewModel = viewModel(
+                    viewModelStoreOwner = it,
+                    factory = MyPageViewModelFactory(getUserUseCase, logoutUseCase)
+                )
                 MyPage(
-                    myPageViewModel,
+                    viewModel,
                     onClickMyInfo = {
                         navController.navigate(MyPageNavigationRoute.MyInfoRoute)
                     },
@@ -183,8 +205,14 @@ fun PayKidsApp(
             }
 
             composable<MyPageNavigationRoute.MyInfoRoute> {
+                val viewModel: MyInfoViewModel = viewModel(
+                    viewModelStoreOwner = it,
+                    factory = MyInfoViewModelFactory(
+                        getUserUseCase, saveNicknameUseCase, deleteUserUseCase
+                    )
+                )
                 MyInfo(
-                    myInfoViewModel,
+                    viewModel,
                     onBackClick = {
                         navController.popBackStack()
                     }
