@@ -16,9 +16,13 @@ import androidx.navigation.toRoute
 import com.paykidscompose.common.enums.EntryPoint
 import com.paykidscompose.common.usecase.authentication.LoginUseCase
 import com.paykidscompose.common.usecase.authentication.LogoutUseCase
+import com.paykidscompose.common.usecase.quiz.GetStageCountUseCase
+import com.paykidscompose.common.usecase.quiz.GetStageNameUseCase
+import com.paykidscompose.common.usecase.quiz.GetStageToGoUseCase
 import com.paykidscompose.common.usecase.user.DeleteUserUseCase
 import com.paykidscompose.common.usecase.user.GetUserUseCase
 import com.paykidscompose.common.usecase.user.SaveNicknameUseCase
+import com.paykidscompose.presentation.factory.HomeViewModelFactory
 import com.paykidscompose.presentation.factory.LoginNicknameViewModelFactory
 import com.paykidscompose.presentation.factory.LoginViewModelFactory
 import com.paykidscompose.presentation.factory.MyInfoViewModelFactory
@@ -33,6 +37,7 @@ import com.paykidscompose.presentation.screens.allowance.AllowanceDiary
 import com.paykidscompose.presentation.screens.allowance.analysis.ExpenseAnalysis
 import com.paykidscompose.presentation.screens.allowance.detail.CategoryDetail
 import com.paykidscompose.presentation.screens.home.Home
+import com.paykidscompose.presentation.screens.home.HomeViewModel
 import com.paykidscompose.presentation.screens.login.Login
 import com.paykidscompose.presentation.screens.login.LoginViewModel
 import com.paykidscompose.presentation.screens.login.nickname.LoginNicknameViewModel
@@ -57,7 +62,10 @@ fun PayKidsApp(
     saveNicknameUseCase: SaveNicknameUseCase,
     getUserUseCase: GetUserUseCase,
     deleteUserUseCase: DeleteUserUseCase,
-    logoutUseCase: LogoutUseCase
+    logoutUseCase: LogoutUseCase,
+    getStageCountUseCase: GetStageCountUseCase,
+    getStageToGoUseCase: GetStageToGoUseCase,
+    getStageNameUseCase: GetStageNameUseCase
 ) {
     val navController: NavHostController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -117,7 +125,11 @@ fun PayKidsApp(
             }
 
             composable<TabNavigationRoute.HomeRoute> {
-                Home { stageNumber ->
+                val viewModel: HomeViewModel = viewModel(
+                    viewModelStoreOwner = it,
+                    factory = HomeViewModelFactory(getStageCountUseCase, getStageToGoUseCase, getStageNameUseCase)
+                )
+                Home(viewModel) { stageNumber ->
                     navController.navigate(
                         QuizNavigationRoute.QuizEntryRoute(stageNumber)
                     )
