@@ -222,6 +222,8 @@ fun MyInfoEdit(
 
         Spacer(modifier = Modifier.height(MyInfoScreenSpacer20))
 
+        EmailEdit(uiModel) { }
+
         Spacer(modifier = Modifier.weight(1f))
 
         Text(

@@ -14,7 +14,7 @@ import com.paykidscompose.presentation.ui.theme.Gray6
 // 제공되는 Divider 컴포저블은 버그 있는 거 같아서 대체 컴포넌트 구현함
 @Composable
 fun CustomDivider(
-    height: Dp = 1.dp,
+    height: Dp = 0.5.dp,
     backgroundColor: Color = Gray6
 ) {
     Box(
