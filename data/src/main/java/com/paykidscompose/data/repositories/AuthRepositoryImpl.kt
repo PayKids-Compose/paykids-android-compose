@@ -53,6 +53,7 @@ class AuthRepositoryImpl(
                     PayKidsPreference.getInstance().edit {
                         remove(ACCESS_TOKEN)
                         remove(REFRESH_TOKEN)
+                        remove("isRegistered")
                     }
                 }
                 DataResourceResult.Success(Unit)
