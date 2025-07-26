@@ -19,7 +19,9 @@ class UserRepositoryImpl(
         return runCatching {
             userApiService.deleteUser()
         }.fold(
-            onSuccess = { DataResourceResult.Success(it.data) },
+            onSuccess = {
+                // 프리퍼런스 작업하기
+                DataResourceResult.Success(it.data) },
             onFailure = { DataResourceResult.Failure(it) }
         )
     }

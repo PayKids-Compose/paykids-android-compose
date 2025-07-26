@@ -6,103 +6,65 @@ import com.paykidscompose.data.database.PayKidsPreference
 import com.paykidscompose.data.util.ACCESS_TOKEN
 import com.paykidscompose.data.util.USER_REGISTERED
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 object AuthStatusManagerImpl : AuthStatusManager() {
-//    private val sharedFlow = MutableSharedFlow<String>(replay = 1)
-//    init {
-//        var listener: OnSharedPreferenceChangeListener? =
-//            OnSharedPreferenceChangeListener { sharedPreferences, key ->
-//                if (key == null) {
-//                    Log.e("AuthStatusManagerImpl", "Key is null")
-//                    return@OnSharedPreferenceChangeListener
-//                }
-//                sharedFlow.tryEmit(key)
-//            }
-//        PayKidsPreference.getInstance().registerOnSharedPreferenceChangeListener(
-//            listener
-//        )
-//    }
+    private val preference = PayKidsPreference.getInstance()
+    private val registeredFlow = MutableSharedFlow<Boolean>(replay = 1)
+    private val tokenFlow = MutableSharedFlow<String>(replay = 1)
 
-    override fun getIsRegistered(): Flow<Boolean> = callbackFlow {
-        var listener: OnSharedPreferenceChangeListener? =
-            OnSharedPreferenceChangeListener { sharedPreferences, key ->
-                if (key == USER_REGISTERED) {
-                    PayKidsPreference.getInstance().getBoolean(USER_REGISTERED, false)
-                        .let {
-                            trySend(it)
-                        }
-                }
+    private val listener = OnSharedPreferenceChangeListener { _, key ->
+        when (key) {
+            USER_REGISTERED -> {
+                registeredFlow.tryEmit(preference.getBoolean(USER_REGISTERED, false))
             }
 
+            ACCESS_TOKEN -> {
+                tokenFlow.tryEmit(preference.getString(ACCESS_TOKEN, null) ?: "")
+            }
+        }
+    }
+
+    init {
+        preference.registerOnSharedPreferenceChangeListener(listener)
+    }
+
+    override fun getIsRegistered(): Flow<Boolean> = callbackFlow {
         PayKidsPreference.getInstance().getBoolean(USER_REGISTERED, false)
             .let {
                 send(it)
             }
-
-        PayKidsPreference.getInstance().registerOnSharedPreferenceChangeListener(
-            listener
-        )
-        awaitClose {
-            PayKidsPreference.getInstance().unregisterOnSharedPreferenceChangeListener(listener)
-            listener = null
+        val job = registeredFlow.onEach { key ->
+            PayKidsPreference.getInstance().getBoolean(USER_REGISTERED, false)
+                .let {
+                    send(it)
+                }
         }
-//        PayKidsPreference.getInstance().getBoolean(USER_REGISTERED, false)
-//            .let {
-//                send(it)
-//            }
-//        val job = sharedFlow.onEach { key ->
-//            if (key == USER_REGISTERED) {
-//                PayKidsPreference.getInstance().getBoolean(USER_REGISTERED, false)
-//                    .let {
-//                        send(it)
-//                    }
-//            }
-//        }
-//            .launchIn(this)
-//        awaitClose {
-//            job.cancel()
-//        }
+            .launchIn(this)
+        awaitClose {
+            job.cancel()
+        }
     }
 
     override fun getToken(): Flow<String> = callbackFlow {
-        var listener: OnSharedPreferenceChangeListener? =
-            OnSharedPreferenceChangeListener { sharedPreferences, key ->
-                if (key == ACCESS_TOKEN) {
-                    PayKidsPreference.getInstance().getString(ACCESS_TOKEN, null)
-                        .let {
-                            trySend(it ?: "")
-                        }
-                }
-            }
         PayKidsPreference.getInstance().getString(ACCESS_TOKEN, null)
             .let {
-                send(it ?: "")
+                trySendBlocking(it ?: "")
             }
-        PayKidsPreference.getInstance().registerOnSharedPreferenceChangeListener(
-            listener
-        )
-        awaitClose {
-            PayKidsPreference.getInstance().unregisterOnSharedPreferenceChangeListener(listener)
-            listener = null
+        val job = tokenFlow.onEach { key ->
+            PayKidsPreference.getInstance().getString(ACCESS_TOKEN, null)
+                .let {
+                    send(it ?: "")
+                }
         }
-
-        //        PayKidsPreference.getInstance().getString(ACCESS_TOKEN, null)
-//            .let {
-//                trySendBlocking(it ?: "")
-//            }
-//        val job = sharedFlow.onEach { key ->
-//            if (key == ACCESS_TOKEN) {
-//                PayKidsPreference.getInstance().getString(ACCESS_TOKEN, null)
-//                    .let {
-//                        send(it ?: "")
-//                    }
-//            }
-//        }
-//            .launchIn(this)
-//        awaitClose {
-//            job.cancel()
-//        }
+            .launchIn(this)
+        awaitClose {
+            job.cancel()
+        }
     }
 }
