@@ -8,8 +8,7 @@ import com.paykidscompose.data.network.service.AuthApiService
 import com.paykidscompose.data.network.service.authentication.KakaoLoginService
 import com.paykidscompose.data.util.ACCESS_TOKEN
 import com.paykidscompose.data.util.REFRESH_TOKEN
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.paykidscompose.data.util.USER_REGISTERED
 
 class AuthRepositoryImpl(
     private val authApiService: AuthApiService,
@@ -32,12 +31,10 @@ class AuthRepositoryImpl(
             authApiService.fetchLoginToken(token.idToken)
         }.fold(
             onSuccess = {
-                withContext(Dispatchers.IO) {
-                    PayKidsPreference.getInstance().edit {
-                        putString(ACCESS_TOKEN, it.data.accessToken)
-                        putString(REFRESH_TOKEN, it.data.refreshToken)
-                        putBoolean("isRegistered", it.data.isRegistered)
-                    }
+                PayKidsPreference.getInstance().edit {
+                    putString(ACCESS_TOKEN, it.data.accessToken)
+                    putString(REFRESH_TOKEN, it.data.refreshToken)
+                    putBoolean(USER_REGISTERED, it.data.isRegistered)
                 }
                 DataResourceResult.Success(it.data.isRegistered)
             },
@@ -49,12 +46,10 @@ class AuthRepositoryImpl(
         val result = kakaoLoginService.logout()
         return result.fold(
             onSuccess = {
-                withContext(Dispatchers.IO) {
-                    PayKidsPreference.getInstance().edit {
-                        remove(ACCESS_TOKEN)
-                        remove(REFRESH_TOKEN)
-                        remove("isRegistered")
-                    }
+                PayKidsPreference.getInstance().edit {
+                    remove(ACCESS_TOKEN)
+                    remove(REFRESH_TOKEN)
+                    remove(USER_REGISTERED)
                 }
                 DataResourceResult.Success(Unit)
             },

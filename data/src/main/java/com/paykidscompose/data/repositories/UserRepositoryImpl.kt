@@ -7,6 +7,7 @@ import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.data.database.PayKidsPreference
 import com.paykidscompose.data.mapper.user.UserMapper
 import com.paykidscompose.data.network.service.UserApiService
+import com.paykidscompose.data.util.USER_REGISTERED
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -29,7 +30,7 @@ class UserRepositoryImpl(
         }.fold(
             onSuccess = {
                 PayKidsPreference.getInstance().edit {
-                    putBoolean("isRegistered", true)
+                    putBoolean(USER_REGISTERED, true)
                 }
                 DataResourceResult.Success(it.data) },
             onFailure = { DataResourceResult.Failure(it) }
