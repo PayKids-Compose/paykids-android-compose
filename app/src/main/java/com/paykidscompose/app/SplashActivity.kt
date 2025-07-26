@@ -8,14 +8,14 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import com.paykidscompose.app.databinding.ActivitySplashBinding
 import com.paykidscompose.common.usecase.authentication.CheckUserCompletionStatusUseCase
-import com.paykidscompose.data.model.TokenManagerImpl
+import com.paykidscompose.data.model.AuthStatusManagerImpl
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 class SplashActivity : ComponentActivity() {
 
     private lateinit var binding: ActivitySplashBinding
-    private val userCompletionStatusUseCase = CheckUserCompletionStatusUseCase(TokenManagerImpl)
+    private val userCompletionStatusUseCase = CheckUserCompletionStatusUseCase(AuthStatusManagerImpl)
 
     private val handler = Handler(Looper.getMainLooper())
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +34,7 @@ class SplashActivity : ComponentActivity() {
                 userCompletionStatusUseCase().first()
             }
             startActivity(Intent(this@SplashActivity, MainActivity::class.java).apply {
-                putExtra("loginStatus", loginStatus.name)
+                putExtra(LOGIN_STATUS, loginStatus.name)
             })
             finish()
         }, 1500L)
@@ -42,5 +42,6 @@ class SplashActivity : ComponentActivity() {
 
     companion object {
         private const val TAG = "Splash Activity"
+        const val LOGIN_STATUS = "Login Status"
     }
 }

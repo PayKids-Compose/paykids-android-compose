@@ -6,18 +6,19 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.paykidscompose.app.SplashActivity.Companion.LOGIN_STATUS
 import com.paykidscompose.app.ui.theme.PayKidsComposeTheme
 import com.paykidscompose.common.di.ApplicationContainerProvider
 import com.paykidscompose.common.enums.EntryPoint
 import com.paykidscompose.common.usecase.authentication.CheckUserCompletionStatusUseCase
-import com.paykidscompose.data.model.TokenManagerImpl
+import com.paykidscompose.data.model.AuthStatusManagerImpl
 import com.paykidscompose.presentation.navigation.PayKidsApp
 
 class MainActivity : ComponentActivity() {
     private val provider by lazy {
         (applicationContext as ApplicationContainerProvider).provideAppContainer()
     }
-    private val userCompletionStatusUseCase = CheckUserCompletionStatusUseCase(TokenManagerImpl)
+    private val userCompletionStatusUseCase = CheckUserCompletionStatusUseCase(AuthStatusManagerImpl)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +27,8 @@ class MainActivity : ComponentActivity() {
             val loginStatus by userCompletionStatusUseCase().collectAsStateWithLifecycle(
                 EntryPoint.valueOf(
                     intent.getStringExtra(
-                        "loginStatus"
-                    ) ?: "LOGIN"
+                        LOGIN_STATUS
+                    ) ?: EntryPoint.LOGIN.name
                 )
             )
             PayKidsComposeTheme {
