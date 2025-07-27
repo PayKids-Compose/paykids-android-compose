@@ -6,10 +6,13 @@ import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.authentication.LogoutUseCase
 import com.paykidscompose.common.usecase.user.GetUserUseCase
+import com.paykidscompose.presentation.base.UIEvent
 import com.paykidscompose.presentation.base.UIState
 import com.paykidscompose.presentation.model.MyPageUIModel
 import com.paykidscompose.presentation.model.MyPageUIModelMapper
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
@@ -21,6 +24,9 @@ class MyPageViewModel(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(MyPageUIState())
     val uiState = _uiState.asStateFlow()
+
+    private val _uiEvent = MutableSharedFlow<UIEvent>()
+    val uiEvent = _uiEvent.asSharedFlow()
 
     fun load() {
         if (_uiState.value.isLoading) return
@@ -47,15 +53,14 @@ class MyPageViewModel(
                                 error = null
                             )
                         }
+                        _uiEvent.emit(UIEvent.SuccessShowToast("유저 정보를 정상적으로 가져왔습니다."))
                     }
 
                     is DataResourceResult.Failure -> {
                         _uiState.update {
                             it.copy(
                                 isLoading = false,
-                                error = PayKidsException.SnackBarException(
-                                    message = result.exception.message ?: "유저 정보를 불러오지 못했습니다."
-                                )
+                                error = result.exception
                             )
                         }
                     }
@@ -85,14 +90,13 @@ class MyPageViewModel(
                     _uiState.update {
                         it.copy(isLogoutSuccess = true)
                     }
+                    _uiEvent.emit(UIEvent.SuccessShowToast("로그아웃 되었습니다!"))
                 }
 
                 is DataResourceResult.Failure -> {
                     _uiState.update {
                         it.copy(
-                            error = PayKidsException.SnackBarException(
-                                message = result.exception.message ?: "로그아웃 과정에 오류가 발생했습니다."
-                            )
+                            error = result.exception
                         )
                     }
                 }
@@ -102,6 +106,11 @@ class MyPageViewModel(
         }
     }
 
+    fun clearError() {
+        _uiState.update {
+            it.copy(error = null)
+        }
+    }
 }
 
 data class MyPageUIState(
