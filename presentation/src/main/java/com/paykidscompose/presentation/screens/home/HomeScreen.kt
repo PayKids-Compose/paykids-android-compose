@@ -85,7 +85,7 @@ import com.paykidscompose.presentation.ui.theme.White
 @Composable
 fun Home(
     homeViewModel: HomeViewModel = viewModel(),
-    onStageNumber: (Int) -> Unit = {}
+    onNavigateToQuiz: (Int, String) -> Unit = { _, _ -> }
 ) {
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -93,29 +93,14 @@ fun Home(
         homeViewModel.loadAllData()
     }
 
-//    val selectedStageIndex = rememberSaveable {
-//        mutableIntStateOf(-1)
-//    }
-//
-//    LaunchedEffect(uiState.unlockedStageNumber) {
-//        if (uiState.unlockedStageNumber > 0 && selectedStageIndex.intValue == -1) {
-//            selectedStageIndex.intValue = uiState.unlockedStageNumber - 1
-//        }
-//    } // 마지막 클리어 스테이지
-
     val tooltipOffset = remember { mutableStateOf<Offset?>(null) }
 
     HomeScreen(
-//        selectedStageIndex = selectedStageIndex.intValue,
-//        onStageSelected = {
-//            selectedStageIndex.intValue = it
-//            homeViewModel.loadStageTitle(it + 1)
-//        },
         selectedStageIndex = uiState.selectedStageIndex,
         onStageSelected = homeViewModel::onStageSelected,
         tooltipOffset = tooltipOffset.value,
         onTooltipOffsetChange = { tooltipOffset.value = it },
-        onStageNumber = onStageNumber,
+        onNavigateToQuiz = onNavigateToQuiz,
         totalStageCount = uiState.totalStageCount,
         unlockedStageCount = uiState.unlockedStageNumber,
         stageTitle = uiState.stageTitle
@@ -131,7 +116,7 @@ fun HomeScreen(
     onStageSelected: (Int) -> Unit,
     tooltipOffset: Offset?,
     onTooltipOffsetChange: (Offset?) -> Unit,
-    onStageNumber: (Int) -> Unit = {}
+    onNavigateToQuiz: (Int, String) -> Unit = { _, _ -> }
 ) {
     val scrollState = rememberLazyListState()
     val density = LocalDensity.current
@@ -311,7 +296,7 @@ fun HomeScreen(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
-                        onStageNumber(selectedStageIndex + 1)
+                        onNavigateToQuiz(selectedStageIndex + 1, stageTitle)
                     }
             )
         }
