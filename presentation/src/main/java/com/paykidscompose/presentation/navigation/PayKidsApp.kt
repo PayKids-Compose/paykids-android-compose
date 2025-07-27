@@ -1,6 +1,9 @@
 package com.paykidscompose.presentation.navigation
 
 import android.util.Log
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -105,6 +108,8 @@ fun PayKidsApp(
                     EntryPoint.HOME -> TabNavigationRoute.HomeRoute
                 },
             modifier = Modifier.padding(paddingValues = paddingValues),
+            enterTransition = { fadeIn(animationSpec = tween(700)) },
+            exitTransition = { fadeOut(animationSpec = tween(700)) }
         ) {
 
             composable<EntryNavigationRoute.LoginRoute> {
@@ -129,7 +134,11 @@ fun PayKidsApp(
             composable<TabNavigationRoute.HomeRoute> {
                 val viewModel: HomeViewModel = viewModel(
                     viewModelStoreOwner = it,
-                    factory = HomeViewModelFactory(getStageCountUseCase, getStageToGoUseCase, getStageNameUseCase)
+                    factory = HomeViewModelFactory(
+                        getStageCountUseCase,
+                        getStageToGoUseCase,
+                        getStageNameUseCase
+                    )
                 )
                 Home(viewModel) { stageNumber, stageTitle ->
                     navController.navigate(
