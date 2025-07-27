@@ -16,10 +16,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.model.MyPageUIModel
 import com.paykidscompose.presentation.screens.mypage.section.MyPageTopBar
@@ -27,7 +29,6 @@ import com.paykidscompose.presentation.ui.components.CardItem
 import com.paykidscompose.presentation.ui.components.CustomCard
 import com.paykidscompose.presentation.ui.components.CustomDivider
 import com.paykidscompose.presentation.ui.components.PopupDialog
-import com.paykidscompose.presentation.ui.components.ScreenError
 import com.paykidscompose.presentation.ui.components.ScreenLoading
 import com.paykidscompose.presentation.ui.components.TitleText
 import com.paykidscompose.presentation.ui.components.util.PopupType
@@ -50,6 +51,8 @@ fun MyPage(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
+    val context = LocalContext.current
+
     if (uiState.showLogoutDialog) {
         PopupDialog(
             title = stringResource(R.string.dialog_signout_title),
@@ -60,19 +63,31 @@ fun MyPage(
         )
     }
 
-    LaunchedEffect(true) {
+    LaunchedEffect(Unit) {
         viewModel.load()
+    }
+
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let {
+            when (it) {
+                is PayKidsException.SnackBarException -> {
+
+                }
+
+                is PayKidsException.DialogException -> {
+
+                }
+
+                is PayKidsException.ToastException -> {
+
+                }
+            }
+        }
     }
 
     when {
         uiState.isLoading -> {
             ScreenLoading()
-        }
-
-        uiState.error != null -> {
-            ScreenError {
-                viewModel.load()
-            }
         }
 
         uiState.myPage != null -> {
