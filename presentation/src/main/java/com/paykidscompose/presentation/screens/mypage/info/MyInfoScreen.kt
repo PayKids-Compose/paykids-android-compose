@@ -122,6 +122,8 @@ fun MyInfo(
 
                 is PayKidsException.SnackBarException -> {
                 }
+
+                is PayKidsException.DialogException -> TODO()
             }
 
             viewModel.clearError()

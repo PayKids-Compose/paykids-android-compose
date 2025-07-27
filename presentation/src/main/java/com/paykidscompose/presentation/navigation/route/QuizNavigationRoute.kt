@@ -10,7 +10,7 @@ sealed interface QuizNavigationRoute: NavigationRoute {
     data class QuizRoute(val stageNumber: Int): QuizNavigationRoute
 
     @Serializable
-    data class QuizEntryRoute(val stageNumber: Int): QuizNavigationRoute
+    data class QuizEntryRoute(val stageNumber: Int, val stageTitle: String): QuizNavigationRoute
 
     @Serializable
     data class QuizClearRoute(val clear: QuizClearType): QuizNavigationRoute

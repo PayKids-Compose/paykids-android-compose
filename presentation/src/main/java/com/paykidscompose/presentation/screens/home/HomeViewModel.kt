@@ -48,7 +48,7 @@ class HomeViewModel(
 
                 is DataResourceResult.Failure -> {
                     _uiState.update {
-                        it.copy(error = PayKidsException.SnackBarException(message = ""))
+                        it.copy(error = result.exception)
                     }
                     Log.d(TAG, "error: ${result.exception.message}")
                 }
@@ -76,7 +76,7 @@ class HomeViewModel(
 
                 is DataResourceResult.Failure -> {
                     _uiState.update {
-                        it.copy(error = PayKidsException.SnackBarException(message = ""))
+                        it.copy(error = result.exception)
                     }
                     Log.d(TAG, "error: ${result.exception.message}")
                 }
@@ -103,7 +103,7 @@ class HomeViewModel(
 
                 is DataResourceResult.Failure -> {
                     _uiState.update {
-                        it.copy(error = PayKidsException.SnackBarException(message = ""))
+                        it.copy(error = result.exception)
                     }
                     Log.d(TAG, "error: ${result.exception.message}")
                 }

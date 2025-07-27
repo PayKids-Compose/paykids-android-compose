@@ -64,7 +64,7 @@ fun PayKidsApp(
     getUserUseCase: GetUserUseCase,
     deleteUserUseCase: DeleteUserUseCase,
     logoutUseCase: LogoutUseCase,
-    replaceNicknameUseCase: ReplaceNicknameUseCase
+    replaceNicknameUseCase: ReplaceNicknameUseCase,
     getStageCountUseCase: GetStageCountUseCase,
     getStageToGoUseCase: GetStageToGoUseCase,
     getStageNameUseCase: GetStageNameUseCase
@@ -131,9 +131,9 @@ fun PayKidsApp(
                     viewModelStoreOwner = it,
                     factory = HomeViewModelFactory(getStageCountUseCase, getStageToGoUseCase, getStageNameUseCase)
                 )
-                Home(viewModel) { stageNumber ->
+                Home(viewModel) { stageNumber, stageTitle ->
                     navController.navigate(
-                        QuizNavigationRoute.QuizEntryRoute(stageNumber)
+                        QuizNavigationRoute.QuizEntryRoute(stageNumber, stageTitle)
                     )
                 }
             }
@@ -141,9 +141,11 @@ fun PayKidsApp(
             composable<QuizNavigationRoute.QuizEntryRoute> { backStack ->
                 val targetRoute = backStack.toRoute<QuizNavigationRoute.QuizEntryRoute>()
                 val stageNumber = targetRoute.stageNumber
+                val stageTitle = targetRoute.stageTitle
 
                 QuizEntry(
                     stageNumber = stageNumber,
+                    stageTitle = stageTitle,
                     onQuiz = {
                         navController.navigate(QuizNavigationRoute.QuizRoute(stageNumber))
                     },

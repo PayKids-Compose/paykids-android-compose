@@ -30,7 +30,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import coil3.compose.AsyncImage
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.dummy.getStageTitle
 import com.paykidscompose.presentation.ui.components.DecisionButton
 import com.paykidscompose.presentation.ui.components.PopupDialog
 import com.paykidscompose.presentation.ui.components.util.PopupType
@@ -57,6 +56,7 @@ import com.paykidscompose.presentation.ui.theme.White
 @Composable
 fun QuizEntry(
     stageNumber: Int,
+    stageTitle: String,
     onShowDialogChange: (Boolean) -> Unit = {},
     onQuiz: (Int) -> Unit = {},
     onStudyClick: () -> Unit = {},
@@ -66,6 +66,7 @@ fun QuizEntry(
 
     QuizEntryScreen(
         stageNumber = stageNumber,
+        stageTitle = stageTitle,
         showDialog = showDialog,
         onShowDialogChange = onShowDialogChange,
         onQuiz = onQuiz,
@@ -77,13 +78,14 @@ fun QuizEntry(
 @Composable
 fun QuizEntryScreen(
     stageNumber: Int,
+    stageTitle: String,
     showDialog: Boolean,
     onShowDialogChange: (Boolean) -> Unit,
     onQuiz: (Int) -> Unit = {},
     onStudyClick: () -> Unit = {},
     onBackClick: () -> Unit = {}
 ) {
-    val stageTitle = getStageTitle(stageNumber - 1)
+    //val stageTitle = getStageTitle(stageNumber - 1)
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -193,6 +195,6 @@ fun QuizEntryScreen(
 @Composable
 fun QuizEntryScreenPreview() {
     PayKidsComposeTheme {
-        QuizEntry(2)
+        QuizEntry(2, "은행은 어떤 곳인가요?")
     }
 }
