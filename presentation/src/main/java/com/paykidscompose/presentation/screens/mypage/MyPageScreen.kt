@@ -1,5 +1,6 @@
 package com.paykidscompose.presentation.screens.mypage
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,10 +19,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.presentation.R
+import com.paykidscompose.presentation.base.UIEvent
 import com.paykidscompose.presentation.model.MyPageUIModel
 import com.paykidscompose.presentation.screens.mypage.section.MyPageTopBar
 import com.paykidscompose.presentation.ui.components.CardItem
@@ -49,7 +51,7 @@ fun MyPage(
     onClickTerms: () -> Unit = {},
     onClickAppVersion: () -> Unit = {}
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
 
@@ -67,6 +69,16 @@ fun MyPage(
         viewModel.load()
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is UIEvent.SuccessShowToast -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
     LaunchedEffect(uiState.error) {
         uiState.error?.let {
             when (it) {
@@ -75,13 +87,14 @@ fun MyPage(
                 }
 
                 is PayKidsException.DialogException -> {
-
                 }
 
                 is PayKidsException.ToastException -> {
-
+                    Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                 }
             }
+
+            viewModel.clearError()
         }
     }
 
@@ -98,7 +111,6 @@ fun MyPage(
                 onClickAppVersion = onClickAppVersion,
                 onLogoutClick = { viewModel.onLogoutClick() }
             )
-
         }
     }
 }

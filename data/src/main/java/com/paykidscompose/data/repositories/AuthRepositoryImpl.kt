@@ -53,9 +53,7 @@ class AuthRepositoryImpl(
                     remove(REFRESH_TOKEN)
                     remove(USER_REGISTERED)
                 }
-
-//                AuthStatusManagerImpl.notifyLoginScreenNav()
-
+                AuthStatusManagerImpl.notifyLoginScreenNav()
                 DataResourceResult.Success(Unit)
             },
             onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }

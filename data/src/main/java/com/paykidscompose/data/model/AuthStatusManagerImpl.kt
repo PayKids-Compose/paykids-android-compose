@@ -54,4 +54,9 @@ object AuthStatusManagerImpl : AuthStatusManager() {
             job.cancel()
         }
     }
+
+    fun notifyLoginScreenNav() {
+        registeredFlow.tryEmit(false)
+        tokenFlow.tryEmit("")
+    }
 }
