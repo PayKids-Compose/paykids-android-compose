@@ -4,6 +4,7 @@ import androidx.core.content.edit
 import com.paykidscompose.common.repositories.AuthRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.data.database.PayKidsPreference
+import com.paykidscompose.data.model.AuthStatusManagerImpl
 import com.paykidscompose.data.network.service.AuthApiService
 import com.paykidscompose.data.network.service.authentication.KakaoLoginService
 import com.paykidscompose.data.util.ACCESS_TOKEN
@@ -51,6 +52,9 @@ class AuthRepositoryImpl(
                     remove(REFRESH_TOKEN)
                     remove(USER_REGISTERED)
                 }
+
+//                AuthStatusManagerImpl.notifyLoginScreenNav()
+
                 DataResourceResult.Success(Unit)
             },
             onFailure = { DataResourceResult.Failure(it) }

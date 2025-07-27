@@ -1,6 +1,7 @@
 package com.paykidscompose.common.exception
 
 import com.paykidscompose.common.enums.ExceptionType
+import com.paykidscompose.common.model.Dialog
 
 sealed class PayKidsException(
     open val code: Int,
@@ -18,4 +19,8 @@ sealed class PayKidsException(
         override val message: String
     ) : PayKidsException(code, ExceptionType.Toast, message)
 
+    data class DialogException(
+        override val code: Int,
+        val dialog: Dialog
+    ) : PayKidsException(code, ExceptionType.Dialog, null)
 }
