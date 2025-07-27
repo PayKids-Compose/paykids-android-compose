@@ -40,6 +40,10 @@ class MainActivity : ComponentActivity() {
                     provider.deleteUserUseCase,
                     provider.logoutUseCase,
                     provider.replaceNicknameUseCase
+
+                    provider.getStageCountUseCase,
+                    provider.getStageToGoUseCase,
+                    provider.getStageNameUseCase
                 )
             }
         }

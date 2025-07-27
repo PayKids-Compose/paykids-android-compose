@@ -28,9 +28,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -49,11 +49,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.dummy.getStageTitle
 import com.paykidscompose.presentation.screens.home.constants.StageFirstItemOffset
 import com.paykidscompose.presentation.screens.home.constants.StageOffsetPattern
 import com.paykidscompose.presentation.screens.home.constants.stageImageSet
@@ -81,27 +82,51 @@ import com.paykidscompose.presentation.ui.theme.StageTopPadding
 import com.paykidscompose.presentation.ui.theme.StageVerticalSpace
 import com.paykidscompose.presentation.ui.theme.White
 
-private const val totalStageCount = 26
-private const val unlockedStageCount = 7
-
 @Composable
 fun Home(
+    homeViewModel: HomeViewModel = viewModel(),
     onStageNumber: (Int) -> Unit = {}
 ) {
-    val selectedStageIndex = remember { mutableIntStateOf(6) } // 마지막 클리어 스테이지
+    val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        homeViewModel.loadAllData()
+    }
+
+//    val selectedStageIndex = rememberSaveable {
+//        mutableIntStateOf(-1)
+//    }
+//
+//    LaunchedEffect(uiState.unlockedStageNumber) {
+//        if (uiState.unlockedStageNumber > 0 && selectedStageIndex.intValue == -1) {
+//            selectedStageIndex.intValue = uiState.unlockedStageNumber - 1
+//        }
+//    } // 마지막 클리어 스테이지
+
     val tooltipOffset = remember { mutableStateOf<Offset?>(null) }
 
     HomeScreen(
-        selectedStageIndex = selectedStageIndex.intValue,
-        onStageSelected = { selectedStageIndex.intValue = it },
+//        selectedStageIndex = selectedStageIndex.intValue,
+//        onStageSelected = {
+//            selectedStageIndex.intValue = it
+//            homeViewModel.loadStageTitle(it + 1)
+//        },
+        selectedStageIndex = uiState.selectedStageIndex,
+        onStageSelected = homeViewModel::onStageSelected,
         tooltipOffset = tooltipOffset.value,
         onTooltipOffsetChange = { tooltipOffset.value = it },
-        onStageNumber = onStageNumber
+        onStageNumber = onStageNumber,
+        totalStageCount = uiState.totalStageCount,
+        unlockedStageCount = uiState.unlockedStageNumber,
+        stageTitle = uiState.stageTitle
     )
 }
 
 @Composable
 fun HomeScreen(
+    totalStageCount: Int,
+    unlockedStageCount: Int,
+    stageTitle: String,
     selectedStageIndex: Int,
     onStageSelected: (Int) -> Unit,
     tooltipOffset: Offset?,
@@ -248,7 +273,7 @@ fun HomeScreen(
                 )
                 Spacer(modifier = Modifier.height(StageDescriptionCardTextSpacer))
                 Text(
-                    text = getStageTitle(selectedStageIndex),
+                    text = stageTitle,
                     modifier = Modifier.fillMaxWidth(),
                     style = StageCardTitleTextStyle
                 )
@@ -305,7 +330,7 @@ private fun getStageVisuals(
     return imageRes to borderColor
 }
 
-fun getStageHorizontalOffset(index: Int): Dp {
+private fun getStageHorizontalOffset(index: Int): Dp {
     return when (index) {
         0 -> StageFirstItemOffset
         else -> StageOffsetPattern[(index - 1) % StageOffsetPattern.size]
