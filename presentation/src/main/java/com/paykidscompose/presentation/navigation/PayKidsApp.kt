@@ -1,9 +1,12 @@
 package com.paykidscompose.presentation.navigation
 
 import android.util.Log
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -108,8 +111,8 @@ fun PayKidsApp(
                     EntryPoint.HOME -> TabNavigationRoute.HomeRoute
                 },
             modifier = Modifier.padding(paddingValues = paddingValues),
-            enterTransition = { fadeIn(animationSpec = tween(700)) },
-            exitTransition = { fadeOut(animationSpec = tween(700)) }
+            enterTransition = { fadeIn(animationSpec = tween(800)) },
+            exitTransition = { fadeOut(animationSpec = tween(800)) }
         ) {
 
             composable<EntryNavigationRoute.LoginRoute> {
