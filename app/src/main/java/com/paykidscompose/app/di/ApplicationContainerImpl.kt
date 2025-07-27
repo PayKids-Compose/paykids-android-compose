@@ -6,6 +6,7 @@ import com.paykidscompose.common.usecase.authentication.LoginUseCase
 import com.paykidscompose.common.usecase.authentication.LogoutUseCase
 import com.paykidscompose.common.usecase.user.DeleteUserUseCase
 import com.paykidscompose.common.usecase.user.GetUserUseCase
+import com.paykidscompose.common.usecase.user.ReplaceNicknameUseCase
 import com.paykidscompose.common.usecase.user.SaveNicknameUseCase
 import com.paykidscompose.data.network.NetworkModule
 import com.paykidscompose.data.network.service.authentication.KakaoLoginService
@@ -30,4 +31,5 @@ class ApplicationContainerImpl(
     override val getUserUseCase: GetUserUseCase = GetUserUseCase(userRepository)
     override val logoutUseCase: LogoutUseCase = LogoutUseCase(authRepository)
     override val deleteUserUseCase: DeleteUserUseCase = DeleteUserUseCase(userRepository)
+    override val replaceNicknameUseCase: ReplaceNicknameUseCase = ReplaceNicknameUseCase(userRepository)
 }

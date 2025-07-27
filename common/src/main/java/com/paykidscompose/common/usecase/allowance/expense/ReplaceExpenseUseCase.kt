@@ -1,5 +1,6 @@
 package com.paykidscompose.common.usecase.allowance.expense
 
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.allowance.AllowanceChartModel
 import com.paykidscompose.common.repositories.ExpenseAllowanceRepository
 import com.paykidscompose.common.result.DataResourceResult
@@ -13,7 +14,7 @@ class ReplaceExpenseUseCase(
         return if (params != null) {
             expenseAllowanceRepository.replaceExpense(params.allowanceChart)
         } else {
-            DataResourceResult.Failure(IllegalArgumentException("수정할 소비 정보가 존재하지 않습니다."))
+            DataResourceResult.Failure(PayKidsException.ToastException(code = -1,"수정할 소비 정보가 존재하지 않습니다."))
         }
     }
 

@@ -1,5 +1,6 @@
 package com.paykidscompose.common.usecase.allowance.income
 
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.allowance.AllowanceChartModel
 import com.paykidscompose.common.repositories.IncomeAllowanceRepository
 import com.paykidscompose.common.result.DataResourceResult
@@ -16,7 +17,7 @@ class GetIncomeDayUseCase(
         return if (params != null) {
             repository.getIncomeDay(params.localDate)
         } else {
-            flowOf(DataResourceResult.Failure(IllegalArgumentException("일별 수입 데이터를 조회하려면 날짜를 제대로 입력해주세요.")))
+            flowOf(DataResourceResult.Failure(PayKidsException.ToastException(code = -1,"일별 수입 데이터를 조회하려면 날짜를 제대로 입력해주세요.")))
         }
     }
 

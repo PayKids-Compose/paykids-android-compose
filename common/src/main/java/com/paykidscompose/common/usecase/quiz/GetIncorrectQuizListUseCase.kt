@@ -1,5 +1,6 @@
 package com.paykidscompose.common.usecase.quiz
 
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.repositories.QuizRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.FlowUseCase
@@ -13,7 +14,7 @@ class GetIncorrectQuizListUseCase(
         return if (params != null) {
             quizRepository.getIncorrectQuizList(params.stage)
         } else {
-            flowOf(DataResourceResult.Failure(IllegalArgumentException("")))
+            flowOf(DataResourceResult.Failure(PayKidsException.ToastException(code = -1,"")))
         }
     }
 

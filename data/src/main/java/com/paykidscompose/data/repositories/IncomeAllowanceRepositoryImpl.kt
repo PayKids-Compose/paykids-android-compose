@@ -1,5 +1,6 @@
 package com.paykidscompose.data.repositories
 
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.allowance.AllowanceChartAmountModel
 import com.paykidscompose.common.model.allowance.AllowanceChartCategoryModel
 import com.paykidscompose.common.model.allowance.AllowanceChartModel
@@ -23,7 +24,7 @@ class IncomeAllowanceRepositoryImpl(
             incomeAllowanceApiService.deleteIncome(id)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(it) }
+            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
         )
     }
 
@@ -33,7 +34,7 @@ class IncomeAllowanceRepositoryImpl(
             incomeAllowanceApiService.saveIncome(dto)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(it) }
+            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
         )
     }
 
@@ -43,7 +44,7 @@ class IncomeAllowanceRepositoryImpl(
             incomeAllowanceApiService.replaceIncome(dto)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(it) }
+            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
         )
     }
 
@@ -52,7 +53,7 @@ class IncomeAllowanceRepositoryImpl(
             incomeAllowanceApiService.getIncomeMonthTotalAmount(year, month)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(it) }
+            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
         )
     }
 
@@ -70,7 +71,7 @@ class IncomeAllowanceRepositoryImpl(
                 }
                 emit(DataResourceResult.Success(models))
             },
-            onFailure = { emit(DataResourceResult.Failure(it)) }
+            onFailure = { emit(DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: ""))) }
         )
     }
 
@@ -89,7 +90,7 @@ class IncomeAllowanceRepositoryImpl(
                 }
                 emit(DataResourceResult.Success(models))
             },
-            onFailure = { emit(DataResourceResult.Failure(it)) }
+            onFailure = { emit(DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: ""))) }
         )
     }
 
@@ -107,7 +108,7 @@ class IncomeAllowanceRepositoryImpl(
                 }
                 emit(DataResourceResult.Success(models))
             },
-            onFailure = { emit(DataResourceResult.Failure(it)) }
+            onFailure = { emit(DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: ""))) }
         )
     }
 
@@ -124,7 +125,7 @@ class IncomeAllowanceRepositoryImpl(
                 }
                 emit(DataResourceResult.Success(models))
             },
-            onFailure = { emit(DataResourceResult.Failure(it)) }
+            onFailure = { emit(DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: ""))) }
         )
     }
 }

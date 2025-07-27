@@ -1,5 +1,6 @@
 package com.paykidscompose.data.repositories
 
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.data.model.BaseResponse
 import com.paykidscompose.data.model.quest_achivement.AchievementDTO
@@ -9,7 +10,7 @@ import com.paykidscompose.data.network.NetworkModule
 class AchievementRepositoryImpl(private val achievementApiService: AchievementApiService = NetworkModule.provideAchievementApiService()) {
     suspend fun getAchievements(): DataResourceResult<BaseResponse<List<AchievementDTO>>> {
         return runCatching { achievementApiService.getAchievements() }
-            .getOrElse { return DataResourceResult.Failure(it) }
+            .getOrElse { return DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
             .let { DataResourceResult.Success(it) }
     }
 }

@@ -1,6 +1,7 @@
 package com.paykidscompose.data.repositories
 
 import androidx.core.content.edit
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.repositories.AuthRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.data.database.PayKidsPreference
@@ -21,7 +22,7 @@ class AuthRepositoryImpl(
             authApiService.fetchRefreshToken(token)
         }.fold(
             onSuccess = { DataResourceResult.Success(Unit) },
-            onFailure = { DataResourceResult.Failure(it) }
+            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
         )
     }
 
@@ -38,7 +39,7 @@ class AuthRepositoryImpl(
                 }
                 DataResourceResult.Success(it.data.isRegistered)
             },
-            onFailure = { DataResourceResult.Failure(it) }
+            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
         )
     }
 
@@ -53,7 +54,7 @@ class AuthRepositoryImpl(
                 }
                 DataResourceResult.Success(Unit)
             },
-            onFailure = { DataResourceResult.Failure(it) }
+            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
         )
     }
 }

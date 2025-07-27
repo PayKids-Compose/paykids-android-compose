@@ -1,5 +1,6 @@
 package com.paykidscompose.common.usecase.study
 
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.ChatResponseModel
 import com.paykidscompose.common.repositories.ChatRepository
 import com.paykidscompose.common.result.DataResourceResult
@@ -14,7 +15,7 @@ class GetChatResponseUseCase(
         return if (params != null) {
             chatRepository.getChatResponse(params.prompt)
         } else {
-            flowOf(DataResourceResult.Failure(IllegalArgumentException("")))
+            flowOf(DataResourceResult.Failure(PayKidsException.ToastException(code = -1,"")))
         }
     }
 

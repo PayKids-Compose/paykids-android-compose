@@ -1,5 +1,6 @@
 package com.paykidscompose.data.repositories
 
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.QuizClearedModel
 import com.paykidscompose.common.model.QuizModel
 import com.paykidscompose.common.repositories.QuizRepository
@@ -18,7 +19,7 @@ class QuizRepositoryImpl(private val quizApiService: QuizApiService):
             quizApiService.getStageToGo()
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(it) }
+            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
         )
     }
 
@@ -27,7 +28,7 @@ class QuizRepositoryImpl(private val quizApiService: QuizApiService):
             quizApiService.getStageName(stage)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(it) }
+            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
         )
     }
 
@@ -36,7 +37,7 @@ class QuizRepositoryImpl(private val quizApiService: QuizApiService):
             quizApiService.getStageCount()
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(it) }
+            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
         )
     }
 
@@ -45,7 +46,7 @@ class QuizRepositoryImpl(private val quizApiService: QuizApiService):
             quizApiService.getCheckStage(stage)
         }.fold(
             onSuccess = { DataResourceResult.Success(QuizClearedMapper.mapToModel(it.data)) },
-            onFailure = { DataResourceResult.Failure(it) }
+            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
         )
     }
 
@@ -54,7 +55,7 @@ class QuizRepositoryImpl(private val quizApiService: QuizApiService):
             quizApiService.getCheckAnswer(stage, number, answer)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(it) }
+            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
         )
     }
 
@@ -64,7 +65,7 @@ class QuizRepositoryImpl(private val quizApiService: QuizApiService):
             quizApiService.getQuiz(stage, number)
         }.fold(
             onSuccess = { emit(DataResourceResult.Success(QuizMapper.mapToModel(it.data))) },
-            onFailure = { emit(DataResourceResult.Failure(it)) }
+            onFailure = { emit(DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: ""))) }
         )
     }
 
@@ -74,7 +75,7 @@ class QuizRepositoryImpl(private val quizApiService: QuizApiService):
             quizApiService.getIncorrectQuizList(stage)
         }.fold(
             onSuccess = { emit(DataResourceResult.Success(it.data)) },
-            onFailure = { emit(DataResourceResult.Failure(it)) }
+            onFailure = { emit(DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: ""))) }
         )
     }
 

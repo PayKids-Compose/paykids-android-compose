@@ -1,12 +1,15 @@
 package com.paykidscompose.data.repositories
 
 import androidx.core.content.edit
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.user.UserModel
 import com.paykidscompose.common.repositories.UserRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.data.database.PayKidsPreference
 import com.paykidscompose.data.mapper.user.UserMapper
 import com.paykidscompose.data.network.service.UserApiService
+import com.paykidscompose.data.util.ACCESS_TOKEN
+import com.paykidscompose.data.util.REFRESH_TOKEN
 import com.paykidscompose.data.util.USER_REGISTERED
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -20,9 +23,14 @@ class UserRepositoryImpl(
             userApiService.deleteUser()
         }.fold(
             onSuccess = {
-                // 프리퍼런스 작업하기
-                DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(it) }
+                PayKidsPreference.getInstance().edit {
+                    remove(ACCESS_TOKEN)
+                    remove(REFRESH_TOKEN)
+                    remove(USER_REGISTERED)
+                }
+                DataResourceResult.Success(it.data)
+            },
+            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "회원탈퇴 과정 중 통신 에러 발생")) }
         )
     }
 
@@ -34,8 +42,9 @@ class UserRepositoryImpl(
                 PayKidsPreference.getInstance().edit {
                     putBoolean(USER_REGISTERED, true)
                 }
-                DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(it) }
+                DataResourceResult.Success(it.data)
+            },
+            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "닉네임 저장 과정 중 통신 에러 발생")) }
         )
     }
 
@@ -44,7 +53,7 @@ class UserRepositoryImpl(
             userApiService.replaceNickname(newNickname)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(it) }
+            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "닉네임 변경 과정 중 통신 에러 발생")) }
         )
     }
 
@@ -53,7 +62,7 @@ class UserRepositoryImpl(
             userApiService.replaceProfileImage(file)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(it) }
+            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "프로필 변경 과정 중 통신 에러 발생")) }
         )
     }
 
@@ -66,7 +75,7 @@ class UserRepositoryImpl(
                 val user = UserMapper.mapToModel(it.data)
                 emit(DataResourceResult.Success(user))
             },
-            onFailure = { emit(DataResourceResult.Failure(it)) }
+            onFailure = { emit(DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "유저 로드 과정 중 통신 에러 발생"))) }
         )
     }
 }

@@ -1,5 +1,6 @@
 package com.paykidscompose.common.usecase.allowance.expense
 
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.allowance.AllowanceChartCategoryModel
 import com.paykidscompose.common.repositories.ExpenseAllowanceRepository
 import com.paykidscompose.common.result.DataResourceResult
@@ -15,7 +16,7 @@ class GetExpenseMonthAllCategoryUseCase(
         return if (params != null) {
             repository.getExpenseMonthAllCategory(params.year, params.month)
         } else {
-            flowOf(DataResourceResult.Failure(IllegalArgumentException("월별 카테고리를 조회하려면 연도와 월 정보를 정확히 입력해야 합니다.")))
+            flowOf(DataResourceResult.Failure(PayKidsException.ToastException(code = -1,"월별 카테고리를 조회하려면 연도와 월 정보를 정확히 입력해야 합니다.")))
         }
     }
 

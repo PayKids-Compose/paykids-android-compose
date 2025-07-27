@@ -6,12 +6,14 @@ import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.user.DeleteUserUseCase
 import com.paykidscompose.common.usecase.user.GetUserUseCase
-import com.paykidscompose.common.usecase.user.SaveNicknameUseCase
-import com.paykidscompose.common.usecase.user.SaveNicknameUseCase.Params
+import com.paykidscompose.common.usecase.user.ReplaceNicknameUseCase
+import com.paykidscompose.presentation.base.UIEvent
 import com.paykidscompose.presentation.base.UIState
 import com.paykidscompose.presentation.model.MyInfoUIModel
 import com.paykidscompose.presentation.model.MyInfoUIModelMapper
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
@@ -19,11 +21,14 @@ import kotlinx.coroutines.launch
 
 class MyInfoViewModel(
     private val getUserUseCase: GetUserUseCase,
-    private val saveNicknameUseCase: SaveNicknameUseCase, // ReplaceNicknameUseCase 타입으로 바꾸기
+    private val replaceNicknameUseCase: ReplaceNicknameUseCase,
     private val deleteUserUseCase: DeleteUserUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(MyInfoUIState())
     val uiState = _uiState.asStateFlow()
+
+    private val _uiEvent = MutableSharedFlow<UIEvent>()
+    val uiEvent = _uiEvent.asSharedFlow()
 
     fun load() {
         if (_uiState.value.isLoading) return
@@ -56,9 +61,7 @@ class MyInfoViewModel(
                         _uiState.update {
                             it.copy(
                                 isLoading = false,
-                                error = PayKidsException.SnackBarException(
-                                    message = result.exception.message ?: "유저 정보를 불러오지 못했습니다."
-                                )
+                                error = result.exception
                             )
                         }
                     }
@@ -77,24 +80,28 @@ class MyInfoViewModel(
         }
     }
 
-    fun saveNickname() {
+    fun replaceNickname() {
+        _uiState.update {
+            it.copy(error = null)
+        }
+
         val nickname = _uiState.value.myInfo?.nickname ?: ""
 
         viewModelScope.launch {
-            when (val result = saveNicknameUseCase(Params(nickname))) {
+            when (val result = replaceNicknameUseCase(ReplaceNicknameUseCase.Params(nickname))) {
                 is DataResourceResult.Success -> {
                     _uiState.update {
                         it.copy(isLoading = false)
                     }
+
+                    _uiEvent.emit(UIEvent.SuccessShowToast("닉네임이 성공적으로 수정되었습니다.."))
                 }
 
                 is DataResourceResult.Failure -> {
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            error = PayKidsException.SnackBarException(
-                                message = result.exception.message ?: "닉네임 저장 과정에 오류가 발생했습니다."
-                            )
+                            error = result.exception
                         )
                     }
                 }
@@ -117,18 +124,34 @@ class MyInfoViewModel(
     }
 
     fun confirmPopupDialog() {
+        _uiState.update {
+            it.copy(error = null)
+        }
 
         viewModelScope.launch {
             when (val result = deleteUserUseCase()) {
-                DataResourceResult.DummyConstructor -> {}
-                is DataResourceResult.Failure -> {}
-                DataResourceResult.Loading -> {}
-                is DataResourceResult.Success -> {}
+                is DataResourceResult.Success -> {
+                    _uiState.update {
+                        it.copy(showPopupDialog = false)
+                    }
+
+                    _uiEvent.emit(UIEvent.SuccessShowToast("회원탈퇴가 정상적으로 되었습니다."))
+                }
+
+                is DataResourceResult.Failure -> {
+                    _uiState.update {
+                        it.copy(error = result.exception, showPopupDialog = false)
+                    }
+                }
+
+                DataResourceResult.DummyConstructor, DataResourceResult.Loading -> {}
             }
         }
+    }
 
+    fun clearError() {
         _uiState.update {
-            it.copy(showPopupDialog = false, isDeleteUserSuccess = true)
+            it.copy(error = null)
         }
     }
 }
@@ -137,6 +160,5 @@ data class MyInfoUIState(
     override val isLoading: Boolean = false,
     override val error: PayKidsException? = null,
     val myInfo: MyInfoUIModel? = null,
-    val showPopupDialog: Boolean = false,
-    val isDeleteUserSuccess: Boolean = false
+    val showPopupDialog: Boolean = false
 ) : UIState()

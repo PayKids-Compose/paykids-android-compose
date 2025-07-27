@@ -39,6 +39,7 @@ class MainActivity : ComponentActivity() {
                     provider.getUserUseCase,
                     provider.deleteUserUseCase,
                     provider.logoutUseCase,
+                    provider.replaceNicknameUseCase
                 )
             }
         }

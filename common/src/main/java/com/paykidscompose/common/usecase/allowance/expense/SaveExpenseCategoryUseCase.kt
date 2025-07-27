@@ -1,5 +1,6 @@
 package com.paykidscompose.common.usecase.allowance.expense
 
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.repositories.ExpenseCategoryRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.SuspendUseCase
@@ -12,7 +13,7 @@ class SaveExpenseCategoryUseCase(
         return if (params != null) {
             repository.saveExpenseCategory(params.category)
         } else {
-            DataResourceResult.Failure(IllegalArgumentException("저장할 소비 카테고리를 제대로 입력하세요."))
+            DataResourceResult.Failure(PayKidsException.ToastException(code = -1,"저장할 소비 카테고리를 제대로 입력하세요."))
         }
     }
 

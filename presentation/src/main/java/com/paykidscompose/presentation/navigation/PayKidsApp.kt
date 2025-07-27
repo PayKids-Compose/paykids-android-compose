@@ -18,6 +18,7 @@ import com.paykidscompose.common.usecase.authentication.LoginUseCase
 import com.paykidscompose.common.usecase.authentication.LogoutUseCase
 import com.paykidscompose.common.usecase.user.DeleteUserUseCase
 import com.paykidscompose.common.usecase.user.GetUserUseCase
+import com.paykidscompose.common.usecase.user.ReplaceNicknameUseCase
 import com.paykidscompose.common.usecase.user.SaveNicknameUseCase
 import com.paykidscompose.presentation.factory.LoginNicknameViewModelFactory
 import com.paykidscompose.presentation.factory.LoginViewModelFactory
@@ -57,7 +58,8 @@ fun PayKidsApp(
     saveNicknameUseCase: SaveNicknameUseCase,
     getUserUseCase: GetUserUseCase,
     deleteUserUseCase: DeleteUserUseCase,
-    logoutUseCase: LogoutUseCase
+    logoutUseCase: LogoutUseCase,
+    replaceNicknameUseCase: ReplaceNicknameUseCase
 ) {
     val navController: NavHostController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -208,7 +210,7 @@ fun PayKidsApp(
                 val viewModel: MyInfoViewModel = viewModel(
                     viewModelStoreOwner = it,
                     factory = MyInfoViewModelFactory(
-                        getUserUseCase, saveNicknameUseCase, deleteUserUseCase
+                        getUserUseCase, replaceNicknameUseCase, deleteUserUseCase
                     )
                 )
                 MyInfo(

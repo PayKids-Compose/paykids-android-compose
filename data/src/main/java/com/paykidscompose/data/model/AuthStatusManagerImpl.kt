@@ -6,7 +6,6 @@ import com.paykidscompose.data.database.PayKidsPreference
 import com.paykidscompose.data.util.ACCESS_TOKEN
 import com.paykidscompose.data.util.USER_REGISTERED
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.callbackFlow
@@ -35,15 +34,9 @@ object AuthStatusManagerImpl : AuthStatusManager() {
     }
 
     override fun getIsRegistered(): Flow<Boolean> = callbackFlow {
-        PayKidsPreference.getInstance().getBoolean(USER_REGISTERED, false)
-            .let {
-                send(it)
-            }
+        send(preference.getBoolean(USER_REGISTERED, false))
         val job = registeredFlow.onEach { key ->
-            PayKidsPreference.getInstance().getBoolean(USER_REGISTERED, false)
-                .let {
-                    send(it)
-                }
+            send(preference.getBoolean(USER_REGISTERED, false))
         }
             .launchIn(this)
         awaitClose {
@@ -52,15 +45,9 @@ object AuthStatusManagerImpl : AuthStatusManager() {
     }
 
     override fun getToken(): Flow<String> = callbackFlow {
-        PayKidsPreference.getInstance().getString(ACCESS_TOKEN, null)
-            .let {
-                trySendBlocking(it ?: "")
-            }
+        send(preference.getString(ACCESS_TOKEN, null) ?: "")
         val job = tokenFlow.onEach { key ->
-            PayKidsPreference.getInstance().getString(ACCESS_TOKEN, null)
-                .let {
-                    send(it ?: "")
-                }
+            send(preference.getString(ACCESS_TOKEN, null) ?: "")
         }
             .launchIn(this)
         awaitClose {
