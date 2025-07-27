@@ -21,6 +21,7 @@ import com.paykidscompose.common.usecase.quiz.GetStageNameUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageToGoUseCase
 import com.paykidscompose.common.usecase.user.DeleteUserUseCase
 import com.paykidscompose.common.usecase.user.GetUserUseCase
+import com.paykidscompose.common.usecase.user.ReplaceNicknameUseCase
 import com.paykidscompose.common.usecase.user.SaveNicknameUseCase
 import com.paykidscompose.presentation.factory.HomeViewModelFactory
 import com.paykidscompose.presentation.factory.LoginNicknameViewModelFactory
@@ -63,6 +64,7 @@ fun PayKidsApp(
     getUserUseCase: GetUserUseCase,
     deleteUserUseCase: DeleteUserUseCase,
     logoutUseCase: LogoutUseCase,
+    replaceNicknameUseCase: ReplaceNicknameUseCase
     getStageCountUseCase: GetStageCountUseCase,
     getStageToGoUseCase: GetStageToGoUseCase,
     getStageNameUseCase: GetStageNameUseCase
@@ -220,7 +222,7 @@ fun PayKidsApp(
                 val viewModel: MyInfoViewModel = viewModel(
                     viewModelStoreOwner = it,
                     factory = MyInfoViewModelFactory(
-                        getUserUseCase, saveNicknameUseCase, deleteUserUseCase
+                        getUserUseCase, replaceNicknameUseCase, deleteUserUseCase
                     )
                 )
                 MyInfo(

@@ -122,6 +122,7 @@ fun OutlineInputField(
     onTextChange: (String) -> Unit,
     startPadding: Dp,
     modifier: Modifier = Modifier,
+    readOnly: Boolean = false,
     outlineColor: Color = Gray6,
     backgroundColor: Color = Color.Unspecified,
     hint: String = "",
@@ -146,6 +147,7 @@ fun OutlineInputField(
             .padding(start = startPadding).then(modifier),
         textStyle = style.copy(color = textColor),
         singleLine = singleLine,
+        readOnly = readOnly,
         enabled = enabled,
         decorationBox = { innerTextField ->
             Box(

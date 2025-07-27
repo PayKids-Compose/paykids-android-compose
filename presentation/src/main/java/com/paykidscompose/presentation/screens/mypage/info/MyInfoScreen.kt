@@ -1,6 +1,6 @@
 package com.paykidscompose.presentation.screens.mypage.info
 
-import android.app.Activity
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -34,7 +34,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.presentation.R
+import com.paykidscompose.presentation.base.UIEvent
 import com.paykidscompose.presentation.model.MyInfoUIModel
 import com.paykidscompose.presentation.screens.mypage.section.MyInfoTopBar
 import com.paykidscompose.presentation.ui.components.CustomCard
@@ -93,12 +95,37 @@ fun MyInfo(
         )
     }
 
-    LaunchedEffect(true) {
+    LaunchedEffect(Unit) {
         viewModel.load()
     }
 
-    LaunchedEffect(uiState.isDeleteUserSuccess) {
-        if (uiState.isDeleteUserSuccess) (context as? Activity)?.finishAffinity()
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is UIEvent.SuccessShowToast -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let {
+            when (it) {
+                is PayKidsException.ToastException -> {
+                    Toast.makeText(
+                        context,
+                        it.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                is PayKidsException.SnackBarException -> {
+                }
+            }
+
+            viewModel.clearError()
+        }
     }
 
     when {
@@ -106,18 +133,14 @@ fun MyInfo(
             ScreenLoading()
         }
 
-        uiState.error != null -> {
-        }
-
         uiState.myInfo != null -> {
             MyInfoScreen(
                 uiModel = uiState.myInfo!!,
                 onNickname = { viewModel.updateNickname(it) },
-                onSaveNicknameClick = { viewModel.saveNickname() },
+                onSaveNicknameClick = { viewModel.replaceNickname() },
                 onBackClick = onBackClick,
                 onPopupDialog = { viewModel.togglePopupDialog() }
             )
-
         }
     }
 }
@@ -222,7 +245,7 @@ fun MyInfoEdit(
 
         Spacer(modifier = Modifier.height(MyInfoScreenSpacer20))
 
-        EmailEdit(uiModel) { }
+        EmailEdit(uiModel)
 
         Spacer(modifier = Modifier.weight(1f))
 
@@ -288,8 +311,7 @@ fun NicknameEdit(
 
 @Composable
 fun EmailEdit(
-    uiModel: MyInfoUIModel,
-    onEmail: (String) -> Unit
+    uiModel: MyInfoUIModel
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -305,7 +327,8 @@ fun EmailEdit(
 
         OutlineInputField(
             uiModel.email,
-            onEmail,
+            {},
+            readOnly = true,
             modifier = Modifier.height(OutlineHeight),
             hint = stringResource(R.string.text_email_hint),
             startPadding = MyInfoScreenEmailStartPadding

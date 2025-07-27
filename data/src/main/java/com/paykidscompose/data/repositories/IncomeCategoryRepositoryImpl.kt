@@ -1,5 +1,6 @@
 package com.paykidscompose.data.repositories
 
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.allowance.CategoryModel
 import com.paykidscompose.common.repositories.IncomeCategoryRepository
 import com.paykidscompose.common.result.DataResourceResult
@@ -18,7 +19,7 @@ class IncomeCategoryRepositoryImpl(
             incomeCategoryApiService.deleteIncomeCategory(category)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(it) }
+            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
         )
     }
 
@@ -27,7 +28,7 @@ class IncomeCategoryRepositoryImpl(
             incomeCategoryApiService.saveIncomeCategory(category)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(it) }
+            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
         )
     }
 
@@ -42,7 +43,7 @@ class IncomeCategoryRepositoryImpl(
                 }
                 emit(DataResourceResult.Success(models))
             },
-            onFailure = { emit(DataResourceResult.Failure(it)) }
+            onFailure = { emit(DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: ""))) }
         )
     }
 }

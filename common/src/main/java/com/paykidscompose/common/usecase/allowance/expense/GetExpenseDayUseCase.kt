@@ -1,5 +1,6 @@
 package com.paykidscompose.common.usecase.allowance.expense
 
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.allowance.AllowanceChartModel
 import com.paykidscompose.common.repositories.ExpenseAllowanceRepository
 import com.paykidscompose.common.result.DataResourceResult
@@ -16,7 +17,7 @@ class GetExpenseDayUseCase(
         return if (params != null) {
             repository.getExpenseDay(params.localDate)
         } else {
-            flowOf(DataResourceResult.Failure(IllegalArgumentException("일별 소비 데이터를 조회하려면 날짜 정보를 정확히 입력해야 합니다.")))
+            flowOf(DataResourceResult.Failure(PayKidsException.ToastException(code = -1,"일별 소비 데이터를 조회하려면 날짜 정보를 정확히 입력해야 합니다.")))
         }
     }
 

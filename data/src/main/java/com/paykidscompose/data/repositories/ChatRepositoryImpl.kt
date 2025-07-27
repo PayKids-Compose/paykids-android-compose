@@ -1,5 +1,6 @@
 package com.paykidscompose.data.repositories
 
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.ChatResponseModel
 import com.paykidscompose.common.repositories.ChatRepository
 import com.paykidscompose.common.result.DataResourceResult
@@ -16,7 +17,7 @@ class ChatRepositoryImpl(private val chatApiService: ChatApiService) :
             chatApiService.getChatCount()
         }.fold(
             onSuccess = { DataResourceResult.Success(it) },
-            onFailure = { DataResourceResult.Failure(it) }
+            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
         )
     }
 
@@ -27,7 +28,7 @@ class ChatRepositoryImpl(private val chatApiService: ChatApiService) :
                 chatApiService.getChatResponse(prompt)
             }.fold(
                 onSuccess = { emit(DataResourceResult.Success(ChatResponseMapper.mapToModel(it))) },
-                onFailure = { emit(DataResourceResult.Failure(it)) }
+                onFailure = { emit(DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: ""))) }
             )
         }
 }

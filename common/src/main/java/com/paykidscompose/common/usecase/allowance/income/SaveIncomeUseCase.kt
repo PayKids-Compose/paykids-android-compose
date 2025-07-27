@@ -1,5 +1,6 @@
 package com.paykidscompose.common.usecase.allowance.income
 
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.allowance.AllowanceChartModel
 import com.paykidscompose.common.repositories.IncomeAllowanceRepository
 import com.paykidscompose.common.result.DataResourceResult
@@ -13,7 +14,7 @@ class SaveIncomeUseCase(
         return if (params != null) {
             repository.saveIncome(params.allowanceChart)
         } else {
-            DataResourceResult.Failure(IllegalArgumentException("저장할 수입 정보가 유효하지 않습니다."))
+            DataResourceResult.Failure(PayKidsException.ToastException(code = -1,"저장할 수입 정보가 유효하지 않습니다."))
         }
     }
 

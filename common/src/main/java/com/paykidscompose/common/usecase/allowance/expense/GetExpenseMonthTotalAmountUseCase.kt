@@ -1,5 +1,6 @@
 package com.paykidscompose.common.usecase.allowance.expense
 
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.repositories.ExpenseAllowanceRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.SuspendUseCase
@@ -12,7 +13,7 @@ class GetExpenseMonthTotalAmountUseCase(
         return if (params != null) {
             expenseAllowanceRepository.getExpenseMonthTotalAmount(params.year, params.month)
         } else {
-            DataResourceResult.Failure(IllegalArgumentException("조회할 날짜 정보를 입력해주세요. "))
+            DataResourceResult.Failure(PayKidsException.ToastException(code = -1,"조회할 날짜 정보를 입력해주세요. "))
         }
     }
 
