@@ -5,8 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.authentication.LoginUseCase
+import com.paykidscompose.presentation.base.UIEvent
 import com.paykidscompose.presentation.base.UIState
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -18,6 +21,9 @@ class LoginViewModel(
     private val _uiState = MutableStateFlow(LoginUIState())
     val uiState = _uiState.asStateFlow()
 
+    private val _uiEvent = MutableSharedFlow<UIEvent>()
+    val uiEvent = _uiEvent.asSharedFlow()
+
 //    init {
 //        Log.e(TAG, "뷰모델 생성!!!!!!!")
 //    }
@@ -28,7 +34,7 @@ class LoginViewModel(
 //    }
 
     fun kakaoLogin() {
-        if (_uiState.value.isLoading || _uiState.value.isLoginSuccess) return
+        if (_uiState.value.isLoading) return
 
         _uiState.update {
             it.copy(isLoading = true, error = null)
@@ -38,22 +44,26 @@ class LoginViewModel(
             when (val result = loginUseCase()) {
                 is DataResourceResult.Success -> {
                     _uiState.update {
-                        it.copy(isLoading = false, isLoginSuccess = true)
+                        it.copy(isLoading = false)
                     }
+                    _uiEvent.emit(UIEvent.SuccessShowToast("카카오 로그인 성공!!"))
                 }
 
                 is DataResourceResult.Failure -> {
                     _uiState.update {
-                        // 에러는 이렇게 사용 하면 안되고 리포지토리랑 usecase 에서 throwable를 던지는 것을 SnackBarException으로 던지고 메시지도 사용자에게 보여줄 수 있는 메시지로 띄우기.
-                        // it.copy(isLoading = false, error = PayKidsException.SnackBarException(message = result.exception.message))
-                        it.copy(isLoading = false, error = PayKidsException.SnackBarException(message = ""))
+                        it.copy(isLoading = false, error = result.exception)
                     }
                 }
 
                 DataResourceResult.DummyConstructor, DataResourceResult.Loading -> {}
             }
         }
+    }
 
+    fun clearError() {
+        _uiState.update {
+            it.copy(error = null)
+        }
     }
 
     companion object {
@@ -64,7 +74,5 @@ class LoginViewModel(
 
 data class LoginUIState(
     override val isLoading: Boolean = false,
-    override val error: PayKidsException? = null,
-    val isRegistered: Boolean = false,
-    val isLoginSuccess: Boolean = false
+    override val error: PayKidsException? = null
 ) : UIState()
