@@ -1,5 +1,6 @@
 package com.paykidscompose.presentation.screens.login.nickname
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,18 +11,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.presentation.R
+import com.paykidscompose.presentation.base.UIEvent
 import com.paykidscompose.presentation.model.LoginNicknameUIModel
 import com.paykidscompose.presentation.ui.components.DecisionButton
 import com.paykidscompose.presentation.ui.components.InfoText
-import com.paykidscompose.presentation.ui.components.ScreenError
 import com.paykidscompose.presentation.ui.components.ScreenLoading
 import com.paykidscompose.presentation.ui.components.TitleText
 import com.paykidscompose.presentation.ui.components.UnderlineInputField
@@ -33,17 +36,40 @@ import com.paykidscompose.presentation.ui.theme.NicknameScreenTopPadding
 import com.paykidscompose.presentation.ui.theme.PayKidsComposeTheme
 import com.paykidscompose.presentation.ui.theme.StartAndEndPadding
 import com.paykidscompose.presentation.ui.theme.TitleAndFieldSpacer
+import kotlinx.coroutines.flow.collectLatest
 
 // 스플래시 이후 로그인 화면입니다.
 @Composable
 fun Nickname(
-        viewModel: LoginNicknameViewModel = viewModel(),
+    viewModel: LoginNicknameViewModel = viewModel(),
     onConfirmClick: () -> Unit = {}
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(uiState.isSaveSuccess) {
-        if (uiState.isSaveSuccess) onConfirmClick()
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collectLatest { event ->
+            when (event) {
+                is UIEvent.SuccessShowToast -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let {
+            when (it) {
+                is PayKidsException.DialogException -> {}
+                is PayKidsException.SnackBarException -> {}
+                is PayKidsException.ToastException -> {
+                    Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            viewModel.clearError()
+        }
     }
 
     when {
@@ -51,13 +77,9 @@ fun Nickname(
             ScreenLoading()
         }
 
-        uiState.error != null -> {
-            ScreenError(message = uiState.error?.message!!) {  }
-        }
-
-        else -> {
+        uiState.uiModel != null -> {
             NicknameScreen(
-                uiModel = uiState.uiModel,
+                uiModel = uiState.uiModel!!,
                 onSaveNickname = { viewModel.saveNickname() },
                 onNicknameChange = { viewModel.updateNicknameInput(it) }
             )
