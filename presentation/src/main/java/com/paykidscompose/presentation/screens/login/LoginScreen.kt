@@ -1,5 +1,6 @@
 package com.paykidscompose.presentation.screens.login
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,12 +19,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.presentation.R
+import com.paykidscompose.presentation.base.UIEvent
 import com.paykidscompose.presentation.ui.components.InfoText
 import com.paykidscompose.presentation.ui.components.ScreenLoading
 import com.paykidscompose.presentation.ui.theme.Black
@@ -38,27 +42,50 @@ import com.paykidscompose.presentation.ui.theme.PayKidsComposeTheme
 import com.paykidscompose.presentation.ui.theme.Shape5
 import com.paykidscompose.presentation.ui.theme.StartAndEndPadding
 import com.paykidscompose.presentation.ui.theme.Yellow
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun Login(
-    loginViewModel: LoginViewModel = viewModel(),
+    viewModel: LoginViewModel = viewModel(),
     onNavigateHome: () -> Unit = {},
     onLoginSuccess: () -> Unit = {} // 뷰 모델에서 이벤트 처리하기
 ) {
-    val uiState by loginViewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collectLatest { event ->
+            when (event) {
+                is UIEvent.SuccessShowToast -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let {
+            when (it) {
+                is PayKidsException.DialogException -> {}
+                is PayKidsException.SnackBarException -> {}
+                is PayKidsException.ToastException -> {
+                    Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            viewModel.clearError()
+        }
+    }
 
     when {
         uiState.isLoading -> {
             ScreenLoading()
         }
 
-        uiState.error != null -> {
-
-        }
-
         else -> {
             LoginScreen(
-                onKakaoClick = { loginViewModel.kakaoLogin() }
+                onKakaoClick = { viewModel.kakaoLogin() }
             )
         }
     }
