@@ -76,6 +76,7 @@ import com.paykidscompose.presentation.ui.theme.MyPageNicknameTextStyle
 import com.paykidscompose.presentation.ui.theme.OutlineHeight
 import com.paykidscompose.presentation.ui.theme.Red
 import com.paykidscompose.presentation.ui.theme.White
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun MyInfo(
@@ -100,7 +101,7 @@ fun MyInfo(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.uiEvent.collect { event ->
+        viewModel.uiEvent.collectLatest { event ->
             when (event) {
                 is UIEvent.SuccessShowToast -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
