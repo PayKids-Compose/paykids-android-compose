@@ -53,7 +53,6 @@ class MyPageViewModel(
                                 error = null
                             )
                         }
-                        _uiEvent.emit(UIEvent.SuccessShowToast("유저 정보를 정상적으로 가져왔습니다."))
                     }
 
                     is DataResourceResult.Failure -> {
