@@ -51,7 +51,7 @@ class MyInfoViewModel(
                         _uiState.update {
                             it.copy(
                                 isLoading = false,
-                                myInfo = uiModel,
+                                uiModel = uiModel,
                                 error = null
                             )
                         }
@@ -75,7 +75,7 @@ class MyInfoViewModel(
     fun updateNickname(nickname: String) {
         _uiState.update {
             it.copy(
-                myInfo = it.myInfo?.copy(nickname = nickname)
+                uiModel = it.uiModel?.copy(nickname = nickname)
             )
         }
     }
@@ -85,7 +85,7 @@ class MyInfoViewModel(
             it.copy(error = null)
         }
 
-        val nickname = _uiState.value.myInfo?.nickname ?: ""
+        val nickname = _uiState.value.uiModel?.nickname ?: ""
 
         viewModelScope.launch {
             when (val result = replaceNicknameUseCase(ReplaceNicknameUseCase.Params(nickname))) {
@@ -124,15 +124,11 @@ class MyInfoViewModel(
     }
 
     fun confirmPopupDialog() {
-        _uiState.update {
-            it.copy(error = null)
-        }
-
         viewModelScope.launch {
             when (val result = deleteUserUseCase()) {
                 is DataResourceResult.Success -> {
                     _uiState.update {
-                        it.copy(showPopupDialog = false)
+                        it.copy(uiModel = null, showPopupDialog = false)
                     }
 
                     _uiEvent.emit(UIEvent.SuccessShowToast("회원탈퇴가 정상적으로 되었습니다."))
@@ -159,6 +155,6 @@ class MyInfoViewModel(
 data class MyInfoUIState(
     override val isLoading: Boolean = false,
     override val error: PayKidsException? = null,
-    val myInfo: MyInfoUIModel? = null,
+    val uiModel: MyInfoUIModel? = null,
     val showPopupDialog: Boolean = false
 ) : UIState()
