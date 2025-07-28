@@ -137,9 +137,9 @@ fun MyInfo(
             ScreenLoading()
         }
 
-        uiState.myInfo != null -> {
+        uiState.uiModel != null -> {
             MyInfoScreen(
-                uiModel = uiState.myInfo!!,
+                uiModel = uiState.uiModel!!,
                 onNickname = { viewModel.updateNickname(it) },
                 onSaveNicknameClick = { viewModel.replaceNickname() },
                 onBackClick = onBackClick,

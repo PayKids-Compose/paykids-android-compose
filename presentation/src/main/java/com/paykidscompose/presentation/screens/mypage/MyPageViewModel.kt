@@ -49,7 +49,7 @@ class MyPageViewModel(
                         _uiState.update {
                             it.copy(
                                 isLoading = false,
-                                myPage = uiModel,
+                                uiModel = uiModel,
                                 error = null
                             )
                         }
@@ -79,15 +79,11 @@ class MyPageViewModel(
     }
 
     fun confirmLogout() {
-        if (_uiState.value.isLogoutSuccess) return
-
-        _uiState.update { it.copy(showLogoutDialog = false) }
-
         viewModelScope.launch {
             when (val result = logoutUseCase()) {
                 is DataResourceResult.Success -> {
                     _uiState.update {
-                        it.copy(isLogoutSuccess = true)
+                        it.copy(uiModel = null, showLogoutDialog = false)
                     }
                     _uiEvent.emit(UIEvent.SuccessShowToast("로그아웃 되었습니다!"))
                 }
@@ -95,7 +91,8 @@ class MyPageViewModel(
                 is DataResourceResult.Failure -> {
                     _uiState.update {
                         it.copy(
-                            error = result.exception
+                            error = result.exception,
+                            showLogoutDialog = false
                         )
                     }
                 }
@@ -115,7 +112,6 @@ class MyPageViewModel(
 data class MyPageUIState(
     override val isLoading: Boolean = false,
     override val error: PayKidsException? = null,
-    val myPage: MyPageUIModel? = null,
-    val isLogoutSuccess: Boolean = false,
+    val uiModel: MyPageUIModel? = null,
     val showLogoutDialog: Boolean = false
 ) : UIState()

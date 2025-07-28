@@ -104,9 +104,9 @@ fun MyPage(
             ScreenLoading()
         }
 
-        uiState.myPage != null -> {
+        uiState.uiModel != null -> {
             MyPageScreen(
-                uiModel = uiState.myPage!!,
+                uiModel = uiState.uiModel!!,
                 onClickMyInfo = onClickMyInfo,
                 onClickTerms = onClickTerms,
                 onClickAppVersion = onClickAppVersion,
