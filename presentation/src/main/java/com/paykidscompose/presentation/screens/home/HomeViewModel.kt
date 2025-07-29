@@ -119,6 +119,12 @@ class HomeViewModel(
         loadStageTitle(index + 1)
     }
 
+    fun clearError() {
+        _uiState.update {
+            it.copy(error = null)
+        }
+    }
+
     companion object {
         private const val TAG = "HomeViewModel"
     }
