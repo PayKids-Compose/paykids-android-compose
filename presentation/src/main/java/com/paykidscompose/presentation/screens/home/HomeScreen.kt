@@ -1,5 +1,6 @@
 package com.paykidscompose.presentation.screens.home
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -54,11 +55,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.screens.home.constants.StageFirstItemOffset
 import com.paykidscompose.presentation.screens.home.constants.StageOffsetPattern
 import com.paykidscompose.presentation.screens.home.constants.stageImageSet
 import com.paykidscompose.presentation.ui.components.ImageTooltip
+import com.paykidscompose.presentation.ui.components.ScreenLoading
 import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.CardShadowElevation
 import com.paykidscompose.presentation.ui.theme.Gray2
@@ -89,22 +92,51 @@ fun Home(
 ) {
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
 
+    val context = LocalContext.current
+
+    val tooltipOffset = remember { mutableStateOf<Offset?>(null) }
+
     LaunchedEffect(Unit) {
         homeViewModel.loadAllData()
     }
 
-    val tooltipOffset = remember { mutableStateOf<Offset?>(null) }
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let {
+            when (it) {
+                is PayKidsException.SnackBarException -> {
+                }
 
-    HomeScreen(
-        selectedStageIndex = uiState.selectedStageIndex,
-        onStageSelected = homeViewModel::onStageSelected,
-        tooltipOffset = tooltipOffset.value,
-        onTooltipOffsetChange = { tooltipOffset.value = it },
-        onNavigateToQuiz = onNavigateToQuiz,
-        totalStageCount = uiState.totalStageCount,
-        unlockedStageCount = uiState.unlockedStageNumber,
-        stageTitle = uiState.stageTitle
-    )
+                is PayKidsException.DialogException -> {
+                }
+
+                is PayKidsException.ToastException -> {
+                    Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            homeViewModel.clearError()
+        }
+    }
+
+    when {
+        uiState.isLoading -> {
+            ScreenLoading()
+        }
+
+        else -> {
+            HomeScreen(
+                selectedStageIndex = uiState.selectedStageIndex,
+                onStageSelected = homeViewModel::onStageSelected,
+                tooltipOffset = tooltipOffset.value,
+                onTooltipOffsetChange = { tooltipOffset.value = it },
+                onNavigateToQuiz = onNavigateToQuiz,
+                totalStageCount = uiState.totalStageCount,
+                unlockedStageCount = uiState.unlockedStageNumber,
+                stageTitle = uiState.stageTitle
+            )
+        }
+    }
+
 }
 
 @Composable
