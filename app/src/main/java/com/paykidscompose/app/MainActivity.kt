@@ -42,7 +42,10 @@ class MainActivity : ComponentActivity() {
                     provider.replaceNicknameUseCase,
                     provider.getStageCountUseCase,
                     provider.getStageToGoUseCase,
-                    provider.getStageNameUseCase
+                    provider.getStageNameUseCase,
+                    provider.getAllQuizzesUseCase,
+                    provider.getCheckAnswerUseCase,
+                    provider.getCheckStageUseCase
                 )
             }
         }

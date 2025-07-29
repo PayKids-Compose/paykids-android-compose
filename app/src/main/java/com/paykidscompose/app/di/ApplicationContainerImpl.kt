@@ -4,6 +4,10 @@ import android.content.Context
 import com.paykidscompose.common.di.ApplicationContainer
 import com.paykidscompose.common.usecase.authentication.LoginUseCase
 import com.paykidscompose.common.usecase.authentication.LogoutUseCase
+import com.paykidscompose.common.usecase.quiz.GetAllQuizzesUseCase
+import com.paykidscompose.common.usecase.quiz.GetCheckAnswerUseCase
+import com.paykidscompose.common.usecase.quiz.GetCheckStageUseCase
+import com.paykidscompose.common.usecase.quiz.GetQuizUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageCountUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageNameUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageToGoUseCase
@@ -44,4 +48,9 @@ class ApplicationContainerImpl(
     override val getStageCountUseCase: GetStageCountUseCase = GetStageCountUseCase(quizRepository)
     override val getStageToGoUseCase: GetStageToGoUseCase = GetStageToGoUseCase(quizRepository)
     override val getStageNameUseCase: GetStageNameUseCase = GetStageNameUseCase(quizRepository)
+
+    override val getQuizUseCase: GetQuizUseCase = GetQuizUseCase(quizRepository)
+    override val getAllQuizzesUseCase: GetAllQuizzesUseCase = GetAllQuizzesUseCase(getQuizUseCase)
+    override val getCheckAnswerUseCase: GetCheckAnswerUseCase = GetCheckAnswerUseCase(quizRepository)
+    override val getCheckStageUseCase: GetCheckStageUseCase = GetCheckStageUseCase(quizRepository)
 }
