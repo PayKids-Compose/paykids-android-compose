@@ -1,12 +1,9 @@
 package com.paykidscompose.presentation.navigation
 
 import android.util.Log
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,6 +19,9 @@ import androidx.navigation.toRoute
 import com.paykidscompose.common.enums.EntryPoint
 import com.paykidscompose.common.usecase.authentication.LoginUseCase
 import com.paykidscompose.common.usecase.authentication.LogoutUseCase
+import com.paykidscompose.common.usecase.quiz.GetAllQuizzesUseCase
+import com.paykidscompose.common.usecase.quiz.GetCheckAnswerUseCase
+import com.paykidscompose.common.usecase.quiz.GetCheckStageUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageCountUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageNameUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageToGoUseCase
@@ -34,6 +34,7 @@ import com.paykidscompose.presentation.factory.LoginNicknameViewModelFactory
 import com.paykidscompose.presentation.factory.LoginViewModelFactory
 import com.paykidscompose.presentation.factory.MyInfoViewModelFactory
 import com.paykidscompose.presentation.factory.MyPageViewModelFactory
+import com.paykidscompose.presentation.factory.QuizViewModelFactory
 import com.paykidscompose.presentation.navigation.route.AllowanceDiaryNavigationRoute
 import com.paykidscompose.presentation.navigation.route.EntryNavigationRoute
 import com.paykidscompose.presentation.navigation.route.MyPageNavigationRoute
@@ -58,6 +59,7 @@ import com.paykidscompose.presentation.screens.quest.QuestAndAchievement
 import com.paykidscompose.presentation.screens.quiz.Quiz
 import com.paykidscompose.presentation.screens.quiz.QuizClear
 import com.paykidscompose.presentation.screens.quiz.QuizEntry
+import com.paykidscompose.presentation.screens.quiz.QuizViewModel
 import com.paykidscompose.presentation.screens.study.Study
 import com.paykidscompose.presentation.ui.components.AppBottomBar
 
@@ -73,7 +75,10 @@ fun PayKidsApp(
     replaceNicknameUseCase: ReplaceNicknameUseCase,
     getStageCountUseCase: GetStageCountUseCase,
     getStageToGoUseCase: GetStageToGoUseCase,
-    getStageNameUseCase: GetStageNameUseCase
+    getStageNameUseCase: GetStageNameUseCase,
+    getAllQuizzesUseCase: GetAllQuizzesUseCase,
+    getCheckAnswerUseCase: GetCheckAnswerUseCase,
+    getCheckStageUseCase: GetCheckStageUseCase
 ) {
     val navController: NavHostController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -174,8 +179,18 @@ fun PayKidsApp(
                 val targetRoute = backStack.toRoute<QuizNavigationRoute.QuizRoute>()
                 val stageNumber = targetRoute.stageNumber
 
+                val viewModel: QuizViewModel = viewModel(
+                    viewModelStoreOwner = backStack,
+                    factory = QuizViewModelFactory(
+                        getAllQuizzesUseCase,
+                        getCheckAnswerUseCase,
+                        getCheckStageUseCase
+                    )
+                )
+
                 Quiz(
                     stageNumber = stageNumber,
+                    quizViewModel = viewModel,
                     onBackClick = {
                         navController.popBackStack()
                     },
