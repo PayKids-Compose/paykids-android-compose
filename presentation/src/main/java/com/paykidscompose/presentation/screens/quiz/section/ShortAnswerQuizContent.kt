@@ -35,10 +35,9 @@ fun ShortAnswerQuizContent(
     userInput: String,
     answer: String,
     onUserInputChange: (String) -> Unit,
-    onConfirmAnswer: (Boolean) -> Unit
+    onConfirmAnswer: (String) -> Unit
 ) {
     var isSubmitted by remember { mutableStateOf(false) }
-    val isCorrectAnswer = userInput.trim() == answer.trim()
 
     OutlineInputField(
         text = userInput,
@@ -70,10 +69,7 @@ fun ShortAnswerQuizContent(
 
     DecisionButton(
         text = stringResource(R.string.text_confirm_nickname), onClick = {
-            if (!isSubmitted) {
-                onConfirmAnswer(isCorrectAnswer)
-                isSubmitted = true
-            }
+            onConfirmAnswer(userInput)
         },
         enabled = !isSubmitted, backgroundColor = if (isSubmitted) Gray2 else Blue2
     )
