@@ -1,5 +1,6 @@
 package com.paykidscompose.presentation.screens.quiz
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -28,6 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.paykidscompose.common.enums.QuizClearType
 import com.paykidscompose.common.enums.QuizType
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.model.QuizUIModel
 import com.paykidscompose.presentation.model.type.QuizResultType
@@ -37,7 +40,6 @@ import com.paykidscompose.presentation.screens.quiz.section.ShortAnswerQuizConte
 import com.paykidscompose.presentation.screens.quiz.section.TextChoiceQuizContent
 import com.paykidscompose.presentation.ui.components.PopupDialog
 import com.paykidscompose.presentation.ui.components.QuizResultCard
-import com.paykidscompose.presentation.ui.components.ScreenError
 import com.paykidscompose.presentation.ui.components.ScreenLoading
 import com.paykidscompose.presentation.ui.components.util.PopupType
 import com.paykidscompose.presentation.ui.theme.Black
@@ -60,34 +62,49 @@ fun Quiz(
 ) {
     var showDialog by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableStateOf<Int?>(null) }
-    var isCorrect by remember { mutableStateOf(QuizResultType.DEFAULT) }
     var userInput by remember { mutableStateOf("") }
 
     val uiState by quizViewModel.uiState.collectAsStateWithLifecycle()
 
+    val context = LocalContext.current
+
     LaunchedEffect(Unit) {
-        quizViewModel.loadQuiz(stageNumber)
+        quizViewModel.loadQuizzes(stageNumber)
+    }
+
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let {
+            when (it) {
+                is PayKidsException.SnackBarException -> {
+                }
+
+                is PayKidsException.DialogException -> {
+                }
+
+                is PayKidsException.ToastException -> {
+                    Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            quizViewModel.clearError()
+        }
     }
 
     when {
         uiState.isLoading -> {
             ScreenLoading()
         }
-        uiState.error != null -> {
-            ScreenError {
-                quizViewModel.loadQuiz(stageNumber)
-            }
-        }
+
         uiState.currentQuiz != null -> {
             QuizScreen(
+                quizViewModel = quizViewModel,
                 currentQuiz = uiState.currentQuiz!!,
                 isLastQuiz = quizViewModel.isLastQuiz(),
                 showDialog = showDialog,
                 onShowDialogChange = { showDialog = it },
                 selectedIndex = selectedIndex,
                 onSelectedIndexChange = { selectedIndex = it },
-                isCorrect = isCorrect,
-                onCorrectChange = { isCorrect = it },
+                isCorrect = uiState.quizResultType,
                 userInput = userInput,
                 onUserInputChange = { userInput = it },
                 quizNumber = uiState.currentIndex + 1,
@@ -102,6 +119,7 @@ fun Quiz(
 
 @Composable
 fun QuizScreen(
+    quizViewModel: QuizViewModel,
     currentQuiz: QuizUIModel,
     isLastQuiz: Boolean,
     showDialog: Boolean,
@@ -109,7 +127,6 @@ fun QuizScreen(
     selectedIndex: Int?,
     onSelectedIndexChange: (Int?) -> Unit,
     isCorrect: QuizResultType,
-    onCorrectChange: (QuizResultType) -> Unit,
     userInput: String,
     onUserInputChange: (String) -> Unit,
     quizNumber: Int,
@@ -139,11 +156,12 @@ fun QuizScreen(
         if (isCorrect != QuizResultType.DEFAULT) {
             delay(2000L)
             if (isLastQuiz) {
-                onConfirmClick(QuizClearType.ALL_CLEAR)
+                quizViewModel.checkClearStage { clearType ->
+                    onConfirmClick(clearType)
+                }
             } else {
                 onNextQuiz()
                 onSelectedIndexChange(null)
-                onCorrectChange(QuizResultType.DEFAULT)
                 onUserInputChange("")
             }
         }
@@ -183,7 +201,11 @@ fun QuizScreen(
                     textAlign = TextAlign.Center
                 )
 
-                if (currentQuiz.quizType !in listOf(QuizType.TEXT_CHOICE_IMAGE, QuizType.SHORT_ANSWER_IMAGE)) {
+                if (currentQuiz.quizType !in listOf(
+                        QuizType.TEXT_CHOICE_IMAGE,
+                        QuizType.SHORT_ANSWER_IMAGE
+                    )
+                ) {
                     if (isCorrect != QuizResultType.DEFAULT) {
                         Spacer(modifier = Modifier.height(QuizResultCardSpacer))
                         QuizResultCard(isCorrect = isCorrect == QuizResultType.CORRECT)
@@ -196,7 +218,7 @@ fun QuizScreen(
                 when (currentQuiz.quizType) {
                     QuizType.IMAGE_CHOICE -> {
                         val imageChoices = currentQuiz.imageUrl?.mapIndexed { index, imageUrl ->
-                            val label = currentQuiz.choices?.getOrNull(index)?: ""
+                            val label = currentQuiz.choices?.getOrNull(index) ?: ""
                             imageUrl to label
                         } ?: emptyList()
 
@@ -207,18 +229,26 @@ fun QuizScreen(
                             isCorrect = isCorrect,
                             onChoiceClick = { index ->
                                 onSelectedIndexChange(index)
-                                val isRight = index == (currentQuiz.answer[0] - 'A')
-                                onCorrectChange(if (isRight) QuizResultType.CORRECT else QuizResultType.WRONG)
+                                quizViewModel.checkAnswer(
+                                    selectedAnswer = ('A' + index).toString()
+                                )
                             }
                         )
                     }
 
                     QuizType.TEXT_CHOICE, QuizType.TEXT_CHOICE_IMAGE -> {
-                        val textChoices = currentQuiz.choices?: emptyList()
+                        val textChoices = currentQuiz.choices ?: emptyList()
 
                         if (currentQuiz.quizType == QuizType.TEXT_CHOICE_IMAGE) {
-                            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                                Spacer(modifier = Modifier.height(QuizResultCardTextChoiceImageSmallSpacer))
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Spacer(
+                                    modifier = Modifier.height(
+                                        QuizResultCardTextChoiceImageSmallSpacer
+                                    )
+                                )
 
                                 Box(modifier = Modifier.fillMaxWidth()) {
                                     AsyncImage(
@@ -248,16 +278,24 @@ fun QuizScreen(
                             isCorrect = isCorrect,
                             onChoiceClick = { index ->
                                 onSelectedIndexChange(index)
-                                val isRight = index == (currentQuiz.answer[0] - 'A')
-                                onCorrectChange(if (isRight) QuizResultType.CORRECT else QuizResultType.WRONG)
+                                quizViewModel.checkAnswer(
+                                    selectedAnswer = ('A' + index).toString()
+                                )
                             }
                         )
                     }
 
                     QuizType.SHORT_ANSWER, QuizType.SHORT_ANSWER_IMAGE -> {
                         if (currentQuiz.quizType == QuizType.SHORT_ANSWER_IMAGE) {
-                            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                                Spacer(modifier = Modifier.height(QuizResultCardTextChoiceImageSmallSpacer))
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Spacer(
+                                    modifier = Modifier.height(
+                                        QuizResultCardTextChoiceImageSmallSpacer
+                                    )
+                                )
                                 Box(modifier = Modifier.fillMaxWidth()) {
                                     AsyncImage(
                                         model = currentQuiz.imageUrl?.first(),
@@ -284,8 +322,10 @@ fun QuizScreen(
                             userInput = userInput,
                             answer = currentQuiz.answer,
                             onUserInputChange = onUserInputChange,
-                            onConfirmAnswer = { isCorrectAnswer ->
-                                onCorrectChange(if (isCorrectAnswer) QuizResultType.CORRECT else QuizResultType.WRONG)
+                            onConfirmAnswer = {
+                                quizViewModel.checkAnswer(
+                                    selectedAnswer = userInput
+                                )
                             }
                         )
                     }
