@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-object AuthStatusManagerImpl : AuthStatusManager() {
+object AuthStatusManagerImpl : AuthStatusManager {
     private val preference = PayKidsPreference.getInstance()
     private val registeredFlow = MutableSharedFlow<Boolean>(replay = 1)
     private val tokenFlow = MutableSharedFlow<String>(replay = 1)
