@@ -17,7 +17,7 @@ object QuizUIModelMapper: ModelMapper<QuizModel, QuizUIModel> {
             question = model.question,
             choices = model.choices.toSortedMap().values.toList(),
             answer = model.answer,
-            imageUrl = model.choices.toSortedMap().values.toList(),
+            imageUrl = model.imageURL.toSortedMap().values.toList(),
             totalCount = model.count
         )
     }
