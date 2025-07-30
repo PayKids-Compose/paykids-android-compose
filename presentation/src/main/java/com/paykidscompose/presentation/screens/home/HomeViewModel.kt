@@ -24,74 +24,63 @@ class HomeViewModel(
     val uiState = _uiState.asStateFlow()
 
     fun loadAllData() {
-        if (_uiState.value.isLoading) return
-        loadTotalStageCount()
-        loadUnlockedStageNumber()
-        _uiState.update {
-            it.copy(isLoading = false, error = null)
-        }
-    }
-
-    private fun loadTotalStageCount() {
-        _uiState.update {
-            it.copy(isLoading = true, error = null)
-        }
-
         viewModelScope.launch {
-            when (val result = getStageCountUseCase()) {
-                is DataResourceResult.Success -> {
-                    _uiState.update {
-                        it.copy(totalStageCount = result.data, error = null)
-                    }
-                    Log.d(TAG, "전체 스테이지 개수: ${result.data}")
-                }
-
-                is DataResourceResult.Failure -> {
-                    _uiState.update {
-                        it.copy(error = result.exception)
-                    }
-                    Log.d(TAG, "error: ${result.exception.message}")
-                }
-
-                DataResourceResult.Loading -> {}
-                DataResourceResult.DummyConstructor -> {}
+            loadTotalStageCount()
+            loadUnlockedStageNumber()
+            _uiState.update {
+                it.copy(isLoading = false, error = null)
             }
         }
     }
 
-    private fun loadUnlockedStageNumber() {
-        _uiState.update {
-            it.copy(isLoading = true, error = null)
-        }
-
-        viewModelScope.launch {
-            when (val result = getStageToGoUseCase()) {
-                is DataResourceResult.Success -> {
-                    _uiState.update {
-                        it.copy(unlockedStageNumber = result.data, selectedStageIndex = result.data - 1, error = null)
-                    }
-                    Log.d(TAG, "해금된 스테이지 번호: ${result.data}")
-                    loadStageTitle(result.data) // 해금된 스테이지 번호로 스테이지 이름 로드
+    private suspend fun loadTotalStageCount() {
+        when (val result = getStageCountUseCase()) {
+            is DataResourceResult.Success -> {
+                _uiState.update {
+                    it.copy(totalStageCount = result.data, error = null)
                 }
-
-                is DataResourceResult.Failure -> {
-                    _uiState.update {
-                        it.copy(error = result.exception)
-                    }
-                    Log.d(TAG, "error: ${result.exception.message}")
-                }
-
-                DataResourceResult.Loading -> {}
-                DataResourceResult.DummyConstructor -> {}
+                Log.d(TAG, "전체 스테이지 개수: ${result.data}")
             }
+
+            is DataResourceResult.Failure -> {
+                _uiState.update {
+                    it.copy(error = result.exception)
+                }
+                Log.d(TAG, "error: ${result.exception.message}")
+            }
+
+            DataResourceResult.Loading -> {}
+            DataResourceResult.DummyConstructor -> {}
+        }
+    }
+
+    private suspend fun loadUnlockedStageNumber() {
+        when (val result = getStageToGoUseCase()) {
+            is DataResourceResult.Success -> {
+                _uiState.update {
+                    it.copy(
+                        unlockedStageNumber = result.data,
+                        selectedStageIndex = result.data - 1,
+                        error = null
+                    )
+                }
+                Log.d(TAG, "해금된 스테이지 번호: ${result.data}")
+                loadStageTitle(result.data) // 해금된 스테이지 번호로 스테이지 이름 로드
+            }
+
+            is DataResourceResult.Failure -> {
+                _uiState.update {
+                    it.copy(error = result.exception)
+                }
+                Log.d(TAG, "error: ${result.exception.message}")
+            }
+
+            DataResourceResult.Loading -> {}
+            DataResourceResult.DummyConstructor -> {}
         }
     }
 
     private fun loadStageTitle(stageNumber: Int) {
-        _uiState.update {
-            it.copy(isLoading = true, error = null)
-        }
-
         viewModelScope.launch {
             when (val result = getStageNameUseCase(Params(stageNumber))) {
                 is DataResourceResult.Success -> {
@@ -115,8 +104,14 @@ class HomeViewModel(
     }
 
     fun onStageSelected(index: Int) {
+        _uiState.update {
+            it.copy(isLoading = true, error = null)
+        }
         _uiState.update { it.copy(selectedStageIndex = index) }
         loadStageTitle(index + 1)
+        _uiState.update {
+            it.copy(isLoading = false, error = null)
+        }
     }
 
     fun clearError() {
@@ -131,7 +126,7 @@ class HomeViewModel(
 }
 
 data class HomeUiState(
-    override val isLoading: Boolean = false,
+    override val isLoading: Boolean = true,
     override val error: PayKidsException? = null,
     val totalStageCount: Int = 0,
     val unlockedStageNumber: Int = 0,

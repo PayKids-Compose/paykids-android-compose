@@ -207,11 +207,12 @@ fun PayKidsApp(
                 QuizClear(
                     clearType = clearType,
                     onExitClick = {
-                        navController.navigate(TabNavigationRoute.HomeRoute) {
-                            popUpTo(navController.graph.findStartDestination().id)
-                            launchSingleTop = true
-                            // 백스택 맨 위에가 홈이라면 기존 화면을 재사용하기 위해서 넣음.
-                        }
+//                        navController.navigate(TabNavigationRoute.HomeRoute) {
+//                            popUpTo(navController.graph.findStartDestination().id)
+//                            launchSingleTop = true
+//                            // 백스택 맨 위에가 홈이라면 기존 화면을 재사용하기 위해서 넣음.
+//                        }
+                        navController.popBackStack(TabNavigationRoute.HomeRoute, inclusive = false)
                     }
                 )
             }
@@ -223,7 +224,7 @@ fun PayKidsApp(
                 Study(
                     stageNumber = stageNumber,
                     onBackClick = {
-                        navController.popBackStack()
+                        navController.navigateUp()
                     }
                 )
             }
