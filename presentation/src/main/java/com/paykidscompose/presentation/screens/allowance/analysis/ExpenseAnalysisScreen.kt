@@ -41,6 +41,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.paykidscompose.common.enums.AllowanceType
+import com.paykidscompose.common.util.MonthFormatter
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.AllowanceChartDTO
 import com.paykidscompose.presentation.ui.components.AllowanceInputDialog
@@ -92,7 +93,6 @@ import com.paykidscompose.presentation.ui.theme.Gray9
 import com.paykidscompose.presentation.ui.theme.MyPageCardShadowColor
 import com.paykidscompose.presentation.ui.theme.White
 import com.paykidscompose.presentation.ui.theme.White2
-import com.paykidscompose.presentation.util.MonthFormatter
 import com.paykidscompose.presentation.util.formatAmount
 import java.time.LocalDate
 

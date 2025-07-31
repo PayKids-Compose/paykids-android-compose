@@ -1,5 +1,6 @@
 package com.paykidscompose.presentation.screens.allowance
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -24,7 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -32,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -40,11 +42,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.paykidscompose.common.exception.PayKidsException
+import com.paykidscompose.common.util.MonthFormatter
+import com.paykidscompose.common.util.today
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.model.AllowanceDiaryUIModel
+import com.paykidscompose.presentation.model.allowance.AllowanceChartUIModel
 import com.paykidscompose.presentation.ui.components.AllowanceInputDialog
-import com.paykidscompose.presentation.ui.components.ScreenError
 import com.paykidscompose.presentation.ui.components.ScreenLoading
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryCalendarDayTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryCalendarIncomeConsumeTextStyle
@@ -87,7 +92,6 @@ import com.paykidscompose.presentation.ui.theme.Gray8
 import com.paykidscompose.presentation.ui.theme.MyPageCardShadowColor
 import com.paykidscompose.presentation.ui.theme.Red
 import com.paykidscompose.presentation.ui.theme.White
-import com.paykidscompose.presentation.util.MonthFormatter
 import com.paykidscompose.presentation.util.formatAmount
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -98,30 +102,61 @@ fun AllowanceDiary(
     viewModel: AllowanceDiaryViewModel = viewModel(),
     onCategoryExpense: () -> Unit = {}
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    if (uiState.showInputDialog) {
+    val context = LocalContext.current
+
+    if (uiState.showAddDialog) {
         AllowanceInputDialog(
             onSelect = {},
-            onCancelClick = { viewModel.setShowDialog(false) }
-        ) { viewModel.setShowDialog(false) }
+            onCancelClick = { viewModel.onDismissAddDialog() }
+        ) { viewModel.onDismissAddDialog() }
     }
 
-    when{
+    if (uiState.showReplaceDialog) {
+        AllowanceInputDialog(
+            onSelect = {},
+            onCancelClick = { viewModel.onDismissReplaceDialog() }
+        ) { viewModel.onDismissReplaceDialog() }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.load()
+    }
+
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let {
+            when (it) {
+                is PayKidsException.DialogException -> {
+
+                }
+
+                is PayKidsException.SnackBarException -> {
+
+                }
+
+                is PayKidsException.ToastException -> {
+                    Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            viewModel.clearError()
+        }
+    }
+
+    when {
         uiState.isLoading -> {
             ScreenLoading()
         }
-        uiState.error != null -> {
-            ScreenError { viewModel.calculateAll() }
-        }
+
         else -> {
             AllowanceDiaryScreen(
                 uiState = uiState,
                 onPrevMonth = { viewModel.onPrevMonth() },
                 onNextMonth = { viewModel.onNextMonth() },
-                onDateSelected = { viewModel.onDateSelected(it) },
-                onAddClick = { viewModel.setShowDialog(true) },
-                onShowDialog = { viewModel.setShowDialog(true) },
+                onDateSelected = { viewModel.onSelectedDate(it) },
+                onAddClick = { viewModel.onAddDialog() },
+                onShowDialog = { viewModel.onAddDialog() },
                 onCategoryExpense = onCategoryExpense
             )
         }
@@ -138,9 +173,6 @@ fun AllowanceDiaryScreen(
     onShowDialog: (Boolean) -> Unit,
     onCategoryExpense: () -> Unit = {},
 ) {
-    val maxCategory = uiState.maxExpenseCategoryAndAmount?.first ?: ""
-    val maxAmount = uiState.maxExpenseCategoryAndAmount?.second ?: 0
-
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -171,7 +203,7 @@ fun AllowanceDiaryScreen(
                 Text(
                     stringResource(
                         R.string.text_month_total_consume,
-                        formatAmount(uiState.totalExpense)
+                        uiState.uiModel.headerTotalExpense
                     ),
                     style = AllowanceDiaryTitleExpenseTextStyle
                         .copy(color = Black)
@@ -203,14 +235,14 @@ fun AllowanceDiaryScreen(
                         ),
                     contentAlignment = Alignment.CenterStart,
                 ) {
-                    if (maxCategory.isNotEmpty() && maxAmount > 0) {
+                    if (uiState.uiModel.mostCategoryExpense != null) {
                         Text(
                             buildAnnotatedString {
                                 withStyle(SpanStyle(color = Black)) {
                                     append(uiState.currentMonth.format(DateTimeFormatter.ofPattern("M월 달 ")))
                                 }
                                 withStyle(SpanStyle(color = Blue1)) {
-                                    append(maxCategory)
+                                    append(uiState.uiModel.mostCategoryExpense.category)
                                 }
                                 withStyle(SpanStyle(color = Black)) {
                                     append(stringResource(R.string.text_month_most_consume2))
@@ -223,7 +255,7 @@ fun AllowanceDiaryScreen(
                             modifier = Modifier.align(Alignment.CenterEnd)
                         ) {
                             Text(
-                                text = formatAmount(maxAmount),
+                                text = formatAmount(uiState.uiModel.mostCategoryExpense.amount),
                                 modifier = Modifier.weight(1f, fill = false),
                                 maxLines = 1,
                                 textAlign = TextAlign.End,
@@ -272,7 +304,7 @@ fun AllowanceDiaryScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     CalendarGrid(
-                        dailySummary = uiState.dailySummary,
+                        dailySummary = uiState.uiModel.monthlyDailyAmounts,
                         month = uiState.currentMonth,
                         selectedDate = uiState.selectedDate,
                         onDateSelected = onDateSelected
@@ -298,8 +330,8 @@ fun AllowanceDiaryScreen(
             Spacer(Modifier.height(AllowanceDiaryScreenSpacer8))
         }
 
-        items(uiState.selectedUIModels) { item ->
-            TransactionItem(item, uiState.showInputDialog, onShowDialog )
+        items(uiState.uiModel.selectedDayTransactions) { item ->
+            TransactionItem(item, uiState.showReplaceDialog, onShowDialog)
             Spacer(Modifier.height(AllowanceDiaryScreenSpacer8))
         }
     }
@@ -412,7 +444,7 @@ fun CalendarGrid(
                     } else {
                         val date = month.withDayOfMonth(day)
                         val isSelected = date == selectedDate
-                        val isToday = date == LocalDate.now()
+                        val isToday = date == today
                         val (income, expense) = dailySummary[date] ?: Pair(0, 0)
 
                         Box(
@@ -481,7 +513,7 @@ fun CalendarGrid(
 
 @Composable
 fun TransactionItem(
-    item: AllowanceDiaryUIModel,
+    item: AllowanceChartUIModel,
     showInputDialog: Boolean,
     onShowDialog: (Boolean) -> Unit
 ) {
