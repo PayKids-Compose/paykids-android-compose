@@ -45,7 +45,17 @@ class MainActivity : ComponentActivity() {
                     provider.getStageNameUseCase,
                     provider.getAllQuizzesUseCase,
                     provider.getCheckAnswerUseCase,
-                    provider.getCheckStageUseCase
+                    provider.getCheckStageUseCase,
+                    provider.getExpenseMonthTotalAmountUseCase,
+                    provider.getExpenseMonthMostCategoryUseCase,
+                    provider.getExpenseMonthDailyAmountUseCase,
+                    provider.getIncomeMonthDailyAmountUseCase,
+                    provider.getExpenseDayUseCase,
+                    provider.getIncomeDayUseCase,
+                    provider.saveExpenseUseCase,
+                    provider.saveIncomeUseCase,
+                    provider.replaceExpenseUseCase,
+                    provider.replaceIncomeUseCase
                 )
             }
         }
