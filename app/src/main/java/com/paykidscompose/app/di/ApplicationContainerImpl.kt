@@ -70,7 +70,7 @@ class ApplicationContainerImpl(
     override val getStageNameUseCase: GetStageNameUseCase = GetStageNameUseCase(quizRepository)
 
     override val getQuizUseCase: GetQuizUseCase = GetQuizUseCase(quizRepository)
-    override val getAllQuizzesUseCase: GetAllQuizzesUseCase = GetAllQuizzesUseCase(getQuizUseCase)
+    override val getAllQuizzesUseCase: GetAllQuizzesUseCase = GetAllQuizzesUseCase(quizRepository)
     override val getCheckAnswerUseCase: GetCheckAnswerUseCase = GetCheckAnswerUseCase(quizRepository)
     override val getCheckStageUseCase: GetCheckStageUseCase = GetCheckStageUseCase(quizRepository)
 
