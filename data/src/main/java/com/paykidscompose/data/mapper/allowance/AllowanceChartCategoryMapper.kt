@@ -10,7 +10,7 @@ object AllowanceChartCategoryMapper : ModelMapper<AllowanceChartCategoryModel, A
         return AllowanceChartCategoryModel(
             type = AllowanceType.valueOf(layerModel.allowanceType),
             category = layerModel.category,
-            percent = layerModel.percent.toInt(),
+            percent = layerModel.percent?.toInt() ?: 0,
             amount = layerModel.amount
         )
     }
