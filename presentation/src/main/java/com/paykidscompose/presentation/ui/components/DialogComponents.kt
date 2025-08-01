@@ -92,6 +92,7 @@ import com.paykidscompose.presentation.ui.theme.AllowanceInputToggleTextStyle
 import com.paykidscompose.presentation.ui.theme.Black
 import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.Gray1
+import com.paykidscompose.presentation.ui.theme.Gray2
 import com.paykidscompose.presentation.ui.theme.Gray5
 import com.paykidscompose.presentation.ui.theme.Gray6
 import com.paykidscompose.presentation.ui.theme.Gray7
@@ -163,6 +164,22 @@ fun PopupDialog(
                 Spacer(modifier = Modifier.height(PopupDialogSpacer20))
 
                 when (popupType) {
+                    PopupType.ERROR -> {
+                        Button(
+                            onClick = onConfirmClick,
+                            shape = RoundedCornerShape(PopupDialogButtonShape),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Gray2, // 버튼 배경색상
+                                contentColor = White, // 버튼 텍스트 색상
+                            )
+                        ) {
+                            Text(
+                                text = stringResource(R.string.dialog_error),
+                                style = PopupDialogButtonTextStyle
+                            )
+                        }
+                    }
+
                     PopupType.LOGOUT -> {
                         Row(
                             modifier = Modifier
@@ -791,6 +808,12 @@ private fun DateInputItem( // 여기도 문자열 말고 LocalDate로 수정 예
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun ErrorPreview() {
+    PopupDialog("이것은 테스트 팝업입니다.", "", PopupType.ERROR, {}, {})
 }
 
 @Preview
