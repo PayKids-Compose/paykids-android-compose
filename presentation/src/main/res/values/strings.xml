@@ -90,6 +90,9 @@ z   <string name="text_quiz_number">%1$d/%2$d</string>
     <string name="dialog_withdraw_confirm">회원 탈퇴</string>
     <string name="dialog_cancel">취소</string>
 
+    <!-- 에러 다이얼로그 -->
+    <string name="dialog_error">다시 시도</string>
+
     <!-- 용돈 일기 페이지 -->
     <string name="text_month_total_consume">%s원 사용 중</string>
     <string name="text_month_most_consume">%d월 달 %s에서 소비를 많이 했어요</string>
