@@ -12,5 +12,5 @@ interface QuizRepository {
     suspend fun getCheckStage(stage: Int): DataResourceResult<QuizClearedModel>
     suspend fun getCheckAnswer(stage: Int, number: Int, answer: String): DataResourceResult<Boolean>
     fun getQuiz(stage: Int, number: Int): Flow<DataResourceResult<QuizModel>>
-    fun getIncorrectQuizList(stage: Int): Flow<DataResourceResult<List<Int>>>
+    fun getWrongAnswerQuizNumbers(stage: Int): Flow<DataResourceResult<List<Int>>>
 }

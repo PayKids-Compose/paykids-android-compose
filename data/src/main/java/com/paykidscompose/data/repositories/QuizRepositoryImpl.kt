@@ -7,7 +7,6 @@ import com.paykidscompose.common.repositories.QuizRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.data.mapper.quiz.QuizClearedMapper
 import com.paykidscompose.data.mapper.quiz.QuizMapper
-import com.paykidscompose.data.network.NetworkModule
 import com.paykidscompose.data.network.service.QuizApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -69,7 +68,7 @@ class QuizRepositoryImpl(private val quizApiService: QuizApiService):
         )
     }
 
-    override fun getIncorrectQuizList(stage: Int): Flow<DataResourceResult<List<Int>>> = flow {
+    override fun getWrongAnswerQuizNumbers(stage: Int): Flow<DataResourceResult<List<Int>>> = flow {
         emit(DataResourceResult.Loading)
         runCatching {
             quizApiService.getIncorrectQuizList(stage)
