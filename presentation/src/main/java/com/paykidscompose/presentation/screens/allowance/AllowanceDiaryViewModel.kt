@@ -24,8 +24,8 @@ import com.paykidscompose.presentation.model.allowance.AllowanceDiaryUIModel
 import com.paykidscompose.presentation.util.formatAmount
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -153,40 +153,51 @@ class AllowanceDiaryViewModel(
             it.copy(isLoading = true)
         }
 
-        val result = getExpenseMonthMostCategoryUseCase(
+        getExpenseMonthMostCategoryUseCase(
             GetExpenseMonthMostCategoryUseCase.Params(
                 _uiState.value.currentMonth.year,
                 _uiState.value.currentMonth.monthValue
             )
-        ).first()
-
-        when (result) {
-            is DataResourceResult.Success -> {
-                val mostCategoryExpense = result.data.first()
-                val layerModel = AllowanceChartCategoryUIModelMapper.mapToLayerModel(mostCategoryExpense)
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        uiModel = it.uiModel.copy(
-                            mostCategoryExpense = layerModel
-                        )
-                    )
+        ).collectLatest { result ->
+            when (result) {
+                is DataResourceResult.Success -> {
+                    if(result.data.isNotEmpty()) {
+                        val mostCategoryExpense = result.data.first()
+                        val layerModel =
+                            AllowanceChartCategoryUIModelMapper.mapToLayerModel(mostCategoryExpense)
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                uiModel = it.uiModel.copy(
+                                    mostCategoryExpense = layerModel
+                                )
+                            )
+                        }
+                    } else {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                uiModel = it.uiModel.copy(
+                                    mostCategoryExpense = null
+                                )
+                            )
+                        }
+                    }
                 }
-            }
 
-            is DataResourceResult.Failure -> {
-                _uiState.update {
-                    it.copy(isLoading = false, error = result.exception)
+                is DataResourceResult.Failure -> {
+                    _uiState.update {
+                        it.copy(isLoading = false, error = result.exception)
+                    }
                 }
-            }
 
-            DataResourceResult.DummyConstructor, DataResourceResult.Loading -> {
-                _uiState.update {
-                    it.copy(isLoading = true)
+                DataResourceResult.DummyConstructor, DataResourceResult.Loading -> {
+                    _uiState.update {
+                        it.copy(isLoading = true)
+                    }
                 }
             }
         }
-
     }
 
     private suspend fun getMonthDailyAmounts() {

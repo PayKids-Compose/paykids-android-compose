@@ -445,7 +445,7 @@ fun CalendarGrid(
                         val date = month.withDayOfMonth(day)
                         val isSelected = date == selectedDate
                         val isToday = date == today
-                        val (income, expense) = dailySummary[date] ?: Pair(0, 0)
+                        val (expense, income) = dailySummary[date] ?: Pair(0, 0)
 
                         Box(
                             modifier = Modifier

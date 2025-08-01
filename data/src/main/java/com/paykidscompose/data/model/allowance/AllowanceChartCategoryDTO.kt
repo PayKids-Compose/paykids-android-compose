@@ -12,7 +12,7 @@ data class AllowanceChartCategoryDTO(
     val category: String,
 
     @Json(name = "percent")
-    val percent: String,
+    val percent: String?,
 
     @Json(name = "amount")
     val amount: Int
