@@ -108,6 +108,7 @@ fun AllowanceInputDialog(
     chartUIModel: AllowanceChartUIModel,
     expenseCategories: List<CategoryUIModel> = emptyList(),
     incomeCategories: List<CategoryUIModel> = emptyList(),
+    isReplace: Boolean = false,
     onCancelClick: () -> Unit,
     onConfirmClick: (AllowanceChartUIModel) -> Unit
 ) {
@@ -123,7 +124,9 @@ fun AllowanceInputDialog(
     var selectedCategory by remember { mutableStateOf(chartUIModel.category) }
 
     val onSelectType = { type: AllowanceType ->
-        selectType = type
+        if(!isReplace) {
+            selectType = type
+        }
     }
 
     val onPrevYear = {
