@@ -56,6 +56,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun Quiz(
     stageNumber: Int,
+    isWrongAnswerNote: Boolean,
     quizViewModel: QuizViewModel = viewModel(),
     onBackClick: () -> Unit,
     onConfirmClick: (QuizClearType) -> Unit
@@ -68,8 +69,12 @@ fun Quiz(
 
     val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
-        quizViewModel.loadQuizzes(stageNumber)
+    LaunchedEffect(stageNumber, isWrongAnswerNote) {
+        if (!isWrongAnswerNote) {
+            quizViewModel.loadQuizzes(stageNumber)
+        } else {
+            quizViewModel.loadWrongAnswerQuizzes(stageNumber)
+        }
     }
 
     LaunchedEffect(uiState.error) {
@@ -107,7 +112,7 @@ fun Quiz(
                 isCorrect = uiState.quizResultType,
                 userInput = userInput,
                 onUserInputChange = { userInput = it },
-                quizNumber = uiState.currentIndex + 1,
+                quizNumber = uiState.currentQuiz!!.number,
                 totalCount = uiState.totalCount,
                 onBackClick = onBackClick,
                 onConfirmClick = onConfirmClick,
