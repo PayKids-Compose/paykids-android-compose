@@ -8,8 +8,8 @@ import com.paykidscompose.common.usecase.authentication.LogoutUseCase
 import com.paykidscompose.common.usecase.user.GetUserUseCase
 import com.paykidscompose.presentation.base.UIEvent
 import com.paykidscompose.presentation.base.UIState
+import com.paykidscompose.presentation.mapper.my.MyPageUIModelMapper
 import com.paykidscompose.presentation.model.MyPageUIModel
-import com.paykidscompose.presentation.model.MyPageUIModelMapper
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
