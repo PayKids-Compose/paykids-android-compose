@@ -17,12 +17,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.paykidscompose.common.enums.EntryPoint
+import com.paykidscompose.common.usecase.allowance.expense.GetExpenseCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseDayUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthDailyAmountUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthMostCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthTotalAmountUseCase
 import com.paykidscompose.common.usecase.allowance.expense.ReplaceExpenseUseCase
 import com.paykidscompose.common.usecase.allowance.expense.SaveExpenseUseCase
+import com.paykidscompose.common.usecase.allowance.income.GetIncomeCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeDayUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthDailyAmountUseCase
 import com.paykidscompose.common.usecase.allowance.income.ReplaceIncomeUseCase
@@ -97,6 +99,8 @@ fun PayKidsApp(
     getIncomeMonthDailyAmountUseCase: GetIncomeMonthDailyAmountUseCase,
     getExpenseDayUseCase: GetExpenseDayUseCase,
     getIncomeDayUseCase: GetIncomeDayUseCase,
+    getExpenseCategoryListUseCase: GetExpenseCategoryListUseCase,
+    getIncomeCategoryListUseCase: GetIncomeCategoryListUseCase,
     saveExpenseUseCase: SaveExpenseUseCase,
     saveIncomeUseCase: SaveIncomeUseCase,
     replaceExpenseUseCase: ReplaceExpenseUseCase,
@@ -303,6 +307,8 @@ fun PayKidsApp(
                         getIncomeMonthDailyAmountUseCase,
                         getExpenseDayUseCase,
                         getIncomeDayUseCase,
+                        getExpenseCategoryListUseCase,
+                        getIncomeCategoryListUseCase,
                         saveExpenseUseCase,
                         saveIncomeUseCase,
                         replaceExpenseUseCase,

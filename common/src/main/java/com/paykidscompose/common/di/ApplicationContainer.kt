@@ -1,11 +1,13 @@
 package com.paykidscompose.common.di
 
+import com.paykidscompose.common.usecase.allowance.expense.GetExpenseCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseDayUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthDailyAmountUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthMostCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthTotalAmountUseCase
 import com.paykidscompose.common.usecase.allowance.expense.ReplaceExpenseUseCase
 import com.paykidscompose.common.usecase.allowance.expense.SaveExpenseUseCase
+import com.paykidscompose.common.usecase.allowance.income.GetIncomeCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeDayUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthDailyAmountUseCase
 import com.paykidscompose.common.usecase.allowance.income.ReplaceIncomeUseCase
@@ -44,6 +46,8 @@ interface ApplicationContainer {
     val getIncomeMonthDailyAmountUseCase: GetIncomeMonthDailyAmountUseCase
     val getExpenseDayUseCase: GetExpenseDayUseCase
     val getIncomeDayUseCase: GetIncomeDayUseCase
+    val getExpenseCategoryListUseCase: GetExpenseCategoryListUseCase
+    val getIncomeCategoryListUseCase: GetIncomeCategoryListUseCase
     val saveExpenseUseCase: SaveExpenseUseCase
     val saveIncomeUseCase: SaveIncomeUseCase
     val replaceExpenseUseCase: ReplaceExpenseUseCase

@@ -30,7 +30,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.ui.components.AllowanceInputDialog
 import com.paykidscompose.presentation.ui.theme.Black
 import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.CategoryDetailItemAddTextStyle
@@ -97,15 +96,15 @@ fun CategoryDetailScreen(
     details: List<DetailTestModel>
 ) {
     if (showDialog) {
-        AllowanceInputDialog(
-            onSelect = {},
-            onCancelClick = {
-                onDialog(!showDialog)
-            },
-            onConfirmClick = {
-                onDialog(!showDialog)
-            }
-        )
+//        AllowanceInputDialog(
+//            onSelect = {},
+//            onCancelClick = {
+//                onDialog(!showDialog)
+//            },
+//            onConfirmClick = {
+//                onDialog(!showDialog)
+//            }
+//        )
     }
 
     Column(

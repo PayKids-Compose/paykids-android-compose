@@ -44,10 +44,12 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.paykidscompose.common.enums.AllowanceType
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.util.MonthFormatter
 import com.paykidscompose.common.util.today
 import com.paykidscompose.presentation.R
+import com.paykidscompose.presentation.base.UIEvent
 import com.paykidscompose.presentation.model.allowance.AllowanceChartUIModel
 import com.paykidscompose.presentation.ui.components.AllowanceInputDialog
 import com.paykidscompose.presentation.ui.components.ScreenLoading
@@ -93,6 +95,7 @@ import com.paykidscompose.presentation.ui.theme.MyPageCardShadowColor
 import com.paykidscompose.presentation.ui.theme.Red
 import com.paykidscompose.presentation.ui.theme.White
 import com.paykidscompose.presentation.util.formatAmount
+import kotlinx.coroutines.flow.collectLatest
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlin.math.ceil
@@ -108,20 +111,44 @@ fun AllowanceDiary(
 
     if (uiState.showAddDialog) {
         AllowanceInputDialog(
-            onSelect = {},
+            chartUIModel = AllowanceChartUIModel(
+                id = 0, // id는 서버에서 자체적으로 처리함.
+                date = today,
+                type = AllowanceType.EXPENSE,
+                category = uiState.uiModel.expenseCategories.first().title,
+                amountFormatted = "",
+                amount = 0,
+                memo = ""
+            ),
+            expenseCategories = uiState.uiModel.expenseCategories,
+            incomeCategories = uiState.uiModel.incomeCategories,
             onCancelClick = { viewModel.onDismissAddDialog() }
-        ) { viewModel.onDismissAddDialog() }
+        ) { viewModel.onConfirmAddDialog(it) }
     }
 
-    if (uiState.showReplaceDialog) {
+    if (uiState.showReplaceDialog && uiState.uiModel.selectedTransaction != null) {
         AllowanceInputDialog(
-            onSelect = {},
+            chartUIModel = uiState.uiModel.selectedTransaction!!,
+            expenseCategories = uiState.uiModel.expenseCategories,
+            incomeCategories = uiState.uiModel.incomeCategories,
             onCancelClick = { viewModel.onDismissReplaceDialog() }
-        ) { viewModel.onDismissReplaceDialog() }
+        ) { viewModel.onConfirmReplaceDialog(it) }
     }
 
     LaunchedEffect(Unit) {
         viewModel.load()
+        viewModel.getExpenseCategoryList()
+        viewModel.getIncomeCategoryList()
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collectLatest { event ->
+            when (event) {
+                is UIEvent.SuccessShowToast -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     LaunchedEffect(uiState.error) {
@@ -155,8 +182,8 @@ fun AllowanceDiary(
                 onPrevMonth = { viewModel.onPrevMonth() },
                 onNextMonth = { viewModel.onNextMonth() },
                 onDateSelected = { viewModel.onSelectedDate(it) },
-                onAddClick = { viewModel.onAddDialog() },
-                onShowDialog = { viewModel.onAddDialog() },
+                onShowAddDialog = { viewModel.onAddDialog() },
+                onShowReplaceDialog = { viewModel.onReplaceDialog(it) },
                 onCategoryExpense = onCategoryExpense
             )
         }
@@ -169,8 +196,8 @@ fun AllowanceDiaryScreen(
     onPrevMonth: () -> Unit,
     onNextMonth: () -> Unit,
     onDateSelected: (LocalDate) -> Unit,
-    onAddClick: () -> Unit,
-    onShowDialog: (Boolean) -> Unit,
+    onShowAddDialog: () -> Unit,
+    onShowReplaceDialog: (AllowanceChartUIModel) -> Unit,
     onCategoryExpense: () -> Unit = {},
 ) {
     LazyColumn(
@@ -191,7 +218,7 @@ fun AllowanceDiaryScreen(
                 onPrev = { onPrevMonth() },
                 onNext = { onNextMonth() },
                 onAddClick = {
-                    onAddClick()
+                    onShowAddDialog()
                 }
             )
 
@@ -331,7 +358,7 @@ fun AllowanceDiaryScreen(
         }
 
         items(uiState.uiModel.selectedDayTransactions) { item ->
-            TransactionItem(item, uiState.showReplaceDialog, onShowDialog)
+            TransactionItem(item, onShowReplaceDialog)
             Spacer(Modifier.height(AllowanceDiaryScreenSpacer8))
         }
     }
@@ -485,21 +512,23 @@ fun CalendarGrid(
 
                                 if (income > 0) {
                                     Text(
-                                        "+$income",
+                                        "+${formatAmount(income)}",
                                         style = AllowanceDiaryCalendarIncomeConsumeTextStyle.copy(
                                             color = Blue1
                                         ),
-                                        maxLines = 1
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
                                     )
                                 }
 
                                 if (expense > 0) {
                                     Text(
-                                        "-$expense",
+                                        "-${formatAmount(expense)}",
                                         style = AllowanceDiaryCalendarIncomeConsumeTextStyle.copy(
                                             color = Red
                                         ),
-                                        maxLines = 1
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
                                     )
                                 }
                             }
@@ -514,8 +543,7 @@ fun CalendarGrid(
 @Composable
 fun TransactionItem(
     item: AllowanceChartUIModel,
-    showInputDialog: Boolean,
-    onShowDialog: (Boolean) -> Unit
+    onItemSelected: (AllowanceChartUIModel) -> Unit
 ) {
 
     Box(
@@ -523,7 +551,7 @@ fun TransactionItem(
             .fillMaxWidth()
             .clickable(
                 onClick = {
-                    onShowDialog(!showInputDialog)
+                    onItemSelected(item)
                 }
             )
             .shadow(
