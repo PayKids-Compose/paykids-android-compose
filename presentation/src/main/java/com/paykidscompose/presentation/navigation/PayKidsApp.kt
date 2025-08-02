@@ -35,6 +35,7 @@ import com.paykidscompose.common.usecase.quiz.GetCheckStageUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageCountUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageNameUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageToGoUseCase
+import com.paykidscompose.common.usecase.quiz.GetWrongAnswerStatusUseCase
 import com.paykidscompose.common.usecase.quiz.GetWrongAnswerQuizzesUseCase
 import com.paykidscompose.common.usecase.user.DeleteUserUseCase
 import com.paykidscompose.common.usecase.user.GetUserUseCase
@@ -46,6 +47,7 @@ import com.paykidscompose.presentation.factory.LoginNicknameViewModelFactory
 import com.paykidscompose.presentation.factory.LoginViewModelFactory
 import com.paykidscompose.presentation.factory.MyInfoViewModelFactory
 import com.paykidscompose.presentation.factory.MyPageViewModelFactory
+import com.paykidscompose.presentation.factory.QuizEntryViewModelFactory
 import com.paykidscompose.presentation.factory.QuizViewModelFactory
 import com.paykidscompose.presentation.navigation.route.AllowanceDiaryNavigationRoute
 import com.paykidscompose.presentation.navigation.route.EntryNavigationRoute
@@ -72,6 +74,7 @@ import com.paykidscompose.presentation.screens.quest.QuestAndAchievement
 import com.paykidscompose.presentation.screens.quiz.Quiz
 import com.paykidscompose.presentation.screens.quiz.QuizClear
 import com.paykidscompose.presentation.screens.quiz.QuizEntry
+import com.paykidscompose.presentation.screens.quiz.QuizEntryViewModel
 import com.paykidscompose.presentation.screens.quiz.QuizViewModel
 import com.paykidscompose.presentation.screens.study.Study
 import com.paykidscompose.presentation.ui.components.AppBottomBar
@@ -91,6 +94,7 @@ fun PayKidsApp(
     getStageNameUseCase: GetStageNameUseCase,
     getAllQuizzesUseCase: GetAllQuizzesUseCase,
     getWrongAnswerUseCase: GetWrongAnswerQuizzesUseCase,
+    getWrongAnswerStatusUseCase: GetWrongAnswerStatusUseCase,
     getCheckAnswerUseCase: GetCheckAnswerUseCase,
     getCheckStageUseCase: GetCheckStageUseCase,
     getExpenseMonthTotalAmountUseCase: GetExpenseMonthTotalAmountUseCase,
@@ -184,9 +188,15 @@ fun PayKidsApp(
                 val stageNumber = targetRoute.stageNumber
                 val stageTitle = targetRoute.stageTitle
 
+                val viewModel: QuizEntryViewModel = viewModel(
+                    viewModelStoreOwner = backStack,
+                    factory = QuizEntryViewModelFactory(getWrongAnswerStatusUseCase)
+                )
+
                 QuizEntry(
                     stageNumber = stageNumber,
                     stageTitle = stageTitle,
+                    quizEntryViewModel = viewModel,
                     onQuiz = {
                         navController.navigate(QuizNavigationRoute.QuizRoute(stageNumber, false))
                     },

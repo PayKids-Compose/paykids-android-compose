@@ -28,8 +28,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
+import com.paykidscompose.common.model.WrongAnswerNoteStatus
 import com.paykidscompose.presentation.R
+import com.paykidscompose.presentation.model.type.QuizEntryDialogType
 import com.paykidscompose.presentation.ui.components.DecisionButton
 import com.paykidscompose.presentation.ui.components.PopupDialog
 import com.paykidscompose.presentation.ui.components.util.PopupType
@@ -57,19 +60,23 @@ import com.paykidscompose.presentation.ui.theme.White
 fun QuizEntry(
     stageNumber: Int,
     stageTitle: String,
-    onShowDialogChange: (Boolean) -> Unit = {},
+    quizEntryViewModel: QuizEntryViewModel = viewModel(),
     onQuiz: (Int) -> Unit = {},
     onWrongNote: (Int) -> Unit = {},
     onStudyClick: () -> Unit = {},
     onBackClick: () -> Unit = {}
 ) {
     var showDialog by remember { mutableStateOf(false) }
+    var showDialogType by remember { mutableStateOf<QuizEntryDialogType?>(null) }
 
     QuizEntryScreen(
         stageNumber = stageNumber,
         stageTitle = stageTitle,
+        quizEntryViewModel = quizEntryViewModel,
         showDialog = showDialog,
-        onShowDialogChange = onShowDialogChange,
+        showDialogType = showDialogType,
+        onShowDialogChange = { showDialog = it },
+        onShowDialogTypeChange = { showDialogType = it },
         onQuiz = onQuiz,
         onWrongNote = onWrongNote,
         onStudyClick = onStudyClick,
@@ -81,8 +88,11 @@ fun QuizEntry(
 fun QuizEntryScreen(
     stageNumber: Int,
     stageTitle: String,
+    quizEntryViewModel: QuizEntryViewModel,
     showDialog: Boolean,
+    showDialogType: QuizEntryDialogType?,
     onShowDialogChange: (Boolean) -> Unit,
+    onShowDialogTypeChange: (QuizEntryDialogType?) -> Unit,
     onQuiz: (Int) -> Unit = {},
     onWrongNote: (Int) -> Unit = {},
     onStudyClick: () -> Unit = {},
@@ -92,11 +102,20 @@ fun QuizEntryScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         if (showDialog) {
+            val dialogText = when (showDialogType) {
+                QuizEntryDialogType.AllCorrect -> stringResource(R.string.dialog_all_correct)
+                QuizEntryDialogType.NoAttempt -> stringResource(R.string.dialog_incorrect_nothing)
+                else -> ""
+            }
+
             PopupDialog(
-                title = stringResource(R.string.dialog_incorrect_nothing),
+                title = dialogText,
                 popupType = PopupType.INCORRECT_ANSWER_NOTE_ERROR,
                 onCancelClick = { onShowDialogChange(false) },
-                onConfirmClick = { onShowDialogChange(false) },
+                onConfirmClick = {
+                    onShowDialogChange(false)
+                    onQuiz(stageNumber)
+                },
                 description = ""
             )
         }
@@ -180,8 +199,24 @@ fun QuizEntryScreen(
             DecisionButton( // 오답노트 풀기
                 text = stringResource(R.string.text_btn_review),
                 onClick = {
-                    onWrongNote(stageNumber)
-                    onShowDialogChange(true)
+                    quizEntryViewModel.checkWrongAnswerStatus(
+                        stageNumber,
+                        onNavigateToWrongNote = { onWrongNote(stageNumber) },
+                        onShowDialog = { status ->
+                            when (status) {
+                                WrongAnswerNoteStatus.AllCorrect -> { // 전부 맞힌 경우(All Clear or 복습)
+                                    onShowDialogTypeChange(QuizEntryDialogType.AllCorrect)
+                                }
+
+                                WrongAnswerNoteStatus.NoAttempt -> { // 아직 퀴즈를 푼 적 없는 경우
+                                    onShowDialogTypeChange(QuizEntryDialogType.NoAttempt)
+                                }
+
+                                else -> Unit
+                            }
+                            onShowDialogChange(true)
+                        }
+                    )
                 },
                 backgroundColor = White,
                 contentColor = Blue1,
