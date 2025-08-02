@@ -44,7 +44,6 @@ import com.paykidscompose.common.enums.AllowanceType
 import com.paykidscompose.common.util.MonthFormatter
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.AllowanceChartDTO
-import com.paykidscompose.presentation.ui.components.AllowanceInputDialog
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryHeadMonthTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenCardShape
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenHeadIconSize
@@ -105,7 +104,7 @@ fun ExpenseAnalysis(
             LocalDate.now()
         )
     }
-    var selectedAllowanceType by remember { mutableStateOf(AllowanceType.EXPENSE)}
+    var selectedAllowanceType by remember { mutableStateOf(AllowanceType.EXPENSE) }
 
     val onSelectAllowanceType = { type: AllowanceType ->
         selectedAllowanceType = type
@@ -122,10 +121,10 @@ fun ExpenseAnalysis(
     }
 
     if (showInputDialog) {
-        AllowanceInputDialog(
-            onSelect = {},
-            onCancelClick = { showInputDialog = false }
-        ) { showInputDialog = false }
+//        AllowanceInputDialog(
+//            onSelect = {},
+//            onCancelClick = { showInputDialog = false }
+//        ) { showInputDialog = false }
     }
 
 
@@ -322,8 +321,10 @@ fun ExpenseAnalysisScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             items(data) {
-                AnalysisItem(it.name, it.amount,
-                    "${(it.percent * 100).toInt()}%", onCategoryCard)
+                AnalysisItem(
+                    it.name, it.amount,
+                    "${(it.percent * 100).toInt()}%", onCategoryCard
+                )
                 Spacer(Modifier.height(AnalysisScreenSpacer8))
             }
 

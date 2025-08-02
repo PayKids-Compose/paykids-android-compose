@@ -2,12 +2,14 @@ package com.paykidscompose.app.di
 
 import android.content.Context
 import com.paykidscompose.common.di.ApplicationContainer
+import com.paykidscompose.common.usecase.allowance.expense.GetExpenseCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseDayUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthDailyAmountUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthMostCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthTotalAmountUseCase
 import com.paykidscompose.common.usecase.allowance.expense.ReplaceExpenseUseCase
 import com.paykidscompose.common.usecase.allowance.expense.SaveExpenseUseCase
+import com.paykidscompose.common.usecase.allowance.income.GetIncomeCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeDayUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthDailyAmountUseCase
 import com.paykidscompose.common.usecase.allowance.income.ReplaceIncomeUseCase
@@ -29,7 +31,9 @@ import com.paykidscompose.data.network.NetworkModule
 import com.paykidscompose.data.network.service.authentication.KakaoLoginService
 import com.paykidscompose.data.repositories.AuthRepositoryImpl
 import com.paykidscompose.data.repositories.ExpenseAllowanceRepositoryImpl
+import com.paykidscompose.data.repositories.ExpenseCategoryRepositoryImpl
 import com.paykidscompose.data.repositories.IncomeAllowanceRepositoryImpl
+import com.paykidscompose.data.repositories.IncomeCategoryRepositoryImpl
 import com.paykidscompose.data.repositories.QuizRepositoryImpl
 import com.paykidscompose.data.repositories.UserRepositoryImpl
 
@@ -58,6 +62,14 @@ class ApplicationContainerImpl(
         NetworkModule.provideIncomeApiService()
     )
 
+    private val expenseCategoryRepository = ExpenseCategoryRepositoryImpl(
+        NetworkModule.provideExpenseCategoryApiService()
+    )
+
+    private val incomeCategoryRepository = IncomeCategoryRepositoryImpl(
+        NetworkModule.provideIncomeCategoryApiService()
+    )
+
     override val loginUseCase: LoginUseCase = LoginUseCase(authRepository)
     override val saveNicknameUseCase: SaveNicknameUseCase = SaveNicknameUseCase(userRepository)
     override val getUserUseCase: GetUserUseCase = GetUserUseCase(userRepository)
@@ -82,11 +94,18 @@ class ApplicationContainerImpl(
         GetExpenseMonthDailyAmountUseCase(expenseAllowanceRepository)
     override val getIncomeMonthDailyAmountUseCase: GetIncomeMonthDailyAmountUseCase =
         GetIncomeMonthDailyAmountUseCase(incomeAllowanceRepository)
-    override val getExpenseDayUseCase: GetExpenseDayUseCase = GetExpenseDayUseCase(expenseAllowanceRepository)
-    override val getIncomeDayUseCase: GetIncomeDayUseCase = GetIncomeDayUseCase(incomeAllowanceRepository)
+    override val getExpenseDayUseCase: GetExpenseDayUseCase =
+        GetExpenseDayUseCase(expenseAllowanceRepository)
+    override val getIncomeDayUseCase: GetIncomeDayUseCase =
+        GetIncomeDayUseCase(incomeAllowanceRepository)
+    override val getExpenseCategoryListUseCase: GetExpenseCategoryListUseCase =
+        GetExpenseCategoryListUseCase(expenseCategoryRepository)
+    override val getIncomeCategoryListUseCase: GetIncomeCategoryListUseCase =
+        GetIncomeCategoryListUseCase(incomeCategoryRepository)
     override val saveExpenseUseCase: SaveExpenseUseCase = SaveExpenseUseCase(expenseAllowanceRepository)
     override val saveIncomeUseCase: SaveIncomeUseCase = SaveIncomeUseCase(incomeAllowanceRepository)
     override val replaceExpenseUseCase: ReplaceExpenseUseCase =
         ReplaceExpenseUseCase(expenseAllowanceRepository)
-    override val replaceIncomeUseCase: ReplaceIncomeUseCase = ReplaceIncomeUseCase(incomeAllowanceRepository)
+    override val replaceIncomeUseCase: ReplaceIncomeUseCase =
+        ReplaceIncomeUseCase(incomeAllowanceRepository)
 }
