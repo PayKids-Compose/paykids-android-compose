@@ -21,6 +21,7 @@ import com.paykidscompose.common.usecase.quiz.GetQuizUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageCountUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageNameUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageToGoUseCase
+import com.paykidscompose.common.usecase.quiz.GetWrongAnswerStatusUseCase
 import com.paykidscompose.common.usecase.quiz.GetWrongAnswerQuizzesUseCase
 import com.paykidscompose.common.usecase.user.DeleteUserUseCase
 import com.paykidscompose.common.usecase.user.GetUserUseCase
@@ -72,7 +73,10 @@ class ApplicationContainerImpl(
 
     override val getQuizUseCase: GetQuizUseCase = GetQuizUseCase(quizRepository)
     override val getAllQuizzesUseCase: GetAllQuizzesUseCase = GetAllQuizzesUseCase(quizRepository)
-    override val getWrongAnswerQuizzesUseCase: GetWrongAnswerQuizzesUseCase = GetWrongAnswerQuizzesUseCase(quizRepository)
+    override val getWrongAnswerQuizzesUseCase: GetWrongAnswerQuizzesUseCase =
+        GetWrongAnswerQuizzesUseCase(quizRepository)
+    override val getWrongAnswerStatusUseCase: GetWrongAnswerStatusUseCase =
+        GetWrongAnswerStatusUseCase(quizRepository)
     override val getCheckAnswerUseCase: GetCheckAnswerUseCase = GetCheckAnswerUseCase(quizRepository)
     override val getCheckStageUseCase: GetCheckStageUseCase = GetCheckStageUseCase(quizRepository)
 
