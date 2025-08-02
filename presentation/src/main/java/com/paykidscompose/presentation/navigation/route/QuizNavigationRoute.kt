@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed interface QuizNavigationRoute: NavigationRoute {
     @Serializable
-    data class QuizRoute(val stageNumber: Int): QuizNavigationRoute
+     data class QuizRoute(val stageNumber: Int, val isWrongAnswerNote: Boolean): QuizNavigationRoute
 
     @Serializable
     data class QuizEntryRoute(val stageNumber: Int, val stageTitle: String): QuizNavigationRoute
