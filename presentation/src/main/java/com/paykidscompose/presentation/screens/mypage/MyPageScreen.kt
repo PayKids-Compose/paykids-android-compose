@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -124,9 +126,11 @@ fun MyPageScreen(
     onClickAppVersion: () -> Unit = {},
     onLogoutClick: () -> Unit = {}
 ) {
-
+    val scrollState = rememberScrollState()
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)
     ) {
         MyPageTopBar()
 
@@ -190,6 +194,9 @@ fun MyPageScreen(
                     onItemClick = onLogoutClick
                 )
             }
+
+            Spacer(Modifier.height(MyPageDefaultScreenSpacer50))
+
         }
     }
 }
