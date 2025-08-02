@@ -1,7 +1,7 @@
 package com.paykidscompose.common.repositories
 
-import com.paykidscompose.common.model.QuizClearedModel
-import com.paykidscompose.common.model.QuizModel
+import com.paykidscompose.common.model.quiz.QuizClearedModel
+import com.paykidscompose.common.model.quiz.QuizModel
 import com.paykidscompose.common.result.DataResourceResult
 import kotlinx.coroutines.flow.Flow
 

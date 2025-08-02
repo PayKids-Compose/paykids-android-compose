@@ -3,7 +3,7 @@ package com.paykidscompose.presentation.screens.quiz
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.paykidscompose.common.exception.PayKidsException
-import com.paykidscompose.common.model.WrongAnswerNoteStatus
+import com.paykidscompose.common.model.quiz.WrongAnswerNoteStatus
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.quiz.GetWrongAnswerStatusUseCase
 import com.paykidscompose.presentation.base.UIState

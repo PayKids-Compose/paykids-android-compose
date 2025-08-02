@@ -30,7 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
-import com.paykidscompose.common.model.WrongAnswerNoteStatus
+import com.paykidscompose.common.model.quiz.WrongAnswerNoteStatus
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.model.type.QuizEntryDialogType
 import com.paykidscompose.presentation.ui.components.DecisionButton

@@ -1,4 +1,4 @@
-package com.paykidscompose.common.model
+package com.paykidscompose.common.model.quiz
 
 sealed class WrongAnswerNoteStatus {
     object NoAttempt : WrongAnswerNoteStatus()

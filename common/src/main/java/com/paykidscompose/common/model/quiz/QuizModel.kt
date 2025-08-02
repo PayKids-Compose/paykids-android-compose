@@ -1,6 +1,7 @@
-package com.paykidscompose.common.model
+package com.paykidscompose.common.model.quiz
 
 import com.paykidscompose.common.enums.QuizType
+import com.paykidscompose.common.model.Model
 
 data class QuizModel (
     val id: Long,

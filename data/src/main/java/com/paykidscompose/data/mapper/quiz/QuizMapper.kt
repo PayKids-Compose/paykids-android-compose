@@ -2,7 +2,7 @@ package com.paykidscompose.data.mapper.quiz
 
 import com.paykidscompose.common.enums.QuizType
 import com.paykidscompose.common.mapper.ModelMapper
-import com.paykidscompose.common.model.QuizModel
+import com.paykidscompose.common.model.quiz.QuizModel
 import com.paykidscompose.data.model.quiz.QuizDTO
 
 object QuizMapper : ModelMapper<QuizModel, QuizDTO> {

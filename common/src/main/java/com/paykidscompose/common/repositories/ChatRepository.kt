@@ -1,6 +1,6 @@
 package com.paykidscompose.common.repositories
 
-import com.paykidscompose.common.model.ChatResponseModel
+import com.paykidscompose.common.model.study.ChatResponseModel
 import com.paykidscompose.common.result.DataResourceResult
 import kotlinx.coroutines.flow.Flow
 

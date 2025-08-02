@@ -1,7 +1,7 @@
 package com.paykidscompose.common.usecase.quiz
 
 import com.paykidscompose.common.exception.PayKidsException
-import com.paykidscompose.common.model.QuizModel
+import com.paykidscompose.common.model.quiz.QuizModel
 import com.paykidscompose.common.repositories.QuizRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.FlowUseCase

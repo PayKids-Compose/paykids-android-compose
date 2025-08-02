@@ -1,7 +1,7 @@
 package com.paykidscompose.presentation.mapper.quiz
 
 import com.paykidscompose.common.mapper.ModelMapper
-import com.paykidscompose.common.model.QuizModel
+import com.paykidscompose.common.model.quiz.QuizModel
 import com.paykidscompose.presentation.model.QuizUIModel
 
 object QuizUIModelMapper: ModelMapper<QuizModel, QuizUIModel> {
