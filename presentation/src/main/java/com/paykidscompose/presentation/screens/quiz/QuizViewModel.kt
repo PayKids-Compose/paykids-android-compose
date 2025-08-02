@@ -9,6 +9,7 @@ import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.quiz.GetAllQuizzesUseCase
 import com.paykidscompose.common.usecase.quiz.GetCheckAnswerUseCase
 import com.paykidscompose.common.usecase.quiz.GetCheckStageUseCase
+import com.paykidscompose.common.usecase.quiz.GetWrongAnswerQuizzesUseCase
 import com.paykidscompose.presentation.base.UIState
 import com.paykidscompose.presentation.mapper.quiz.QuizClearedUIModelMapper
 import com.paykidscompose.presentation.mapper.quiz.QuizUIModelMapper
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
 
 class QuizViewModel(
     private val getAllQuizzesUseCase: GetAllQuizzesUseCase,
+    private val getWrongAnswerQuizzesUseCase: GetWrongAnswerQuizzesUseCase,
     private val getCheckAnswerUseCase: GetCheckAnswerUseCase,
     private val getCheckStageUseCase: GetCheckStageUseCase
 ) : ViewModel() {
@@ -56,6 +58,40 @@ class QuizViewModel(
                                 )
                             }
                             Log.d(TAG, "퀴즈 불러오기 실패: ${result.exception}")
+                        }
+
+                        DataResourceResult.Loading -> {}
+                        DataResourceResult.DummyConstructor -> {}
+                    }
+                }
+        }
+    }
+
+    fun loadWrongAnswerQuizzes(stageNumber: Int) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true, error = null) }
+
+            getWrongAnswerQuizzesUseCase(GetWrongAnswerQuizzesUseCase.Params(stageNumber))
+                .collect { result ->
+                    when (result) {
+                        is DataResourceResult.Success -> {
+                            val quizzes = result.data.map { QuizUIModelMapper.mapToLayerModel(it) }.toMutableList()
+                            _uiState.update {
+                                it.copy(
+                                    isLoading = false,
+                                    quizzes = quizzes,
+                                    currentIndex = 0,
+                                    totalCount = quizzes.firstOrNull()?.totalCount ?: quizzes.size
+                                )
+                            }
+                            Log.d(TAG, "오답 퀴즈 불러오기 성공: ${quizzes.size}개")
+                        }
+
+                        is DataResourceResult.Failure -> {
+                            _uiState.update {
+                                it.copy(isLoading = false, error = result.exception)
+                            }
+                            Log.d(TAG, "오답 퀴즈 불러오기 실패: ${result.exception}")
                         }
 
                         DataResourceResult.Loading -> {}
