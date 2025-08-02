@@ -44,6 +44,7 @@ class MainActivity : ComponentActivity() {
                     provider.getStageToGoUseCase,
                     provider.getStageNameUseCase,
                     provider.getAllQuizzesUseCase,
+                    provider.getWrongAnswerQuizzesUseCase,
                     provider.getCheckAnswerUseCase,
                     provider.getCheckStageUseCase,
                     provider.getExpenseMonthTotalAmountUseCase,
