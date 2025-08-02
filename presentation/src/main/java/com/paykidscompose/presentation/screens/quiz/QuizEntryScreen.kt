@@ -59,6 +59,7 @@ fun QuizEntry(
     stageTitle: String,
     onShowDialogChange: (Boolean) -> Unit = {},
     onQuiz: (Int) -> Unit = {},
+    onWrongNote: (Int) -> Unit = {},
     onStudyClick: () -> Unit = {},
     onBackClick: () -> Unit = {}
 ) {
@@ -70,6 +71,7 @@ fun QuizEntry(
         showDialog = showDialog,
         onShowDialogChange = onShowDialogChange,
         onQuiz = onQuiz,
+        onWrongNote = onWrongNote,
         onStudyClick = onStudyClick,
         onBackClick = onBackClick
     )
@@ -82,11 +84,10 @@ fun QuizEntryScreen(
     showDialog: Boolean,
     onShowDialogChange: (Boolean) -> Unit,
     onQuiz: (Int) -> Unit = {},
+    onWrongNote: (Int) -> Unit = {},
     onStudyClick: () -> Unit = {},
     onBackClick: () -> Unit = {}
 ) {
-    //val stageTitle = getStageTitle(stageNumber - 1)
-
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -179,6 +180,7 @@ fun QuizEntryScreen(
             DecisionButton( // 오답노트 풀기
                 text = stringResource(R.string.text_btn_review),
                 onClick = {
+                    onWrongNote(stageNumber)
                     onShowDialogChange(true)
                 },
                 backgroundColor = White,
