@@ -35,6 +35,7 @@ import com.paykidscompose.common.usecase.quiz.GetCheckStageUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageCountUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageNameUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageToGoUseCase
+import com.paykidscompose.common.usecase.quiz.GetWrongAnswerQuizzesUseCase
 import com.paykidscompose.common.usecase.user.DeleteUserUseCase
 import com.paykidscompose.common.usecase.user.GetUserUseCase
 import com.paykidscompose.common.usecase.user.ReplaceNicknameUseCase
@@ -89,6 +90,7 @@ fun PayKidsApp(
     getStageToGoUseCase: GetStageToGoUseCase,
     getStageNameUseCase: GetStageNameUseCase,
     getAllQuizzesUseCase: GetAllQuizzesUseCase,
+    getWrongAnswerUseCase: GetWrongAnswerQuizzesUseCase,
     getCheckAnswerUseCase: GetCheckAnswerUseCase,
     getCheckStageUseCase: GetCheckStageUseCase,
     getExpenseMonthTotalAmountUseCase: GetExpenseMonthTotalAmountUseCase,
@@ -186,7 +188,10 @@ fun PayKidsApp(
                     stageNumber = stageNumber,
                     stageTitle = stageTitle,
                     onQuiz = {
-                        navController.navigate(QuizNavigationRoute.QuizRoute(stageNumber))
+                        navController.navigate(QuizNavigationRoute.QuizRoute(stageNumber, false))
+                    },
+                    onWrongNote = {
+                        navController.navigate(QuizNavigationRoute.QuizRoute(stageNumber, true))
                     },
                     onStudyClick = {
                         navController.navigate(QuizNavigationRoute.StudyRoute(stageNumber))
@@ -200,11 +205,13 @@ fun PayKidsApp(
             composable<QuizNavigationRoute.QuizRoute> { backStack ->
                 val targetRoute = backStack.toRoute<QuizNavigationRoute.QuizRoute>()
                 val stageNumber = targetRoute.stageNumber
+                val isWrongAnswerNote = targetRoute.isWrongAnswerNote
 
                 val viewModel: QuizViewModel = viewModel(
                     viewModelStoreOwner = backStack,
                     factory = QuizViewModelFactory(
                         getAllQuizzesUseCase,
+                        getWrongAnswerUseCase,
                         getCheckAnswerUseCase,
                         getCheckStageUseCase
                     )
@@ -212,6 +219,7 @@ fun PayKidsApp(
 
                 Quiz(
                     stageNumber = stageNumber,
+                    isWrongAnswerNote = isWrongAnswerNote,
                     quizViewModel = viewModel,
                     onBackClick = {
                         navController.popBackStack()
