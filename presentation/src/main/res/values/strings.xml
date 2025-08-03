@@ -95,6 +95,7 @@ z   <string name="text_quiz_number">%1$d/%2$d</string>
 
     <!-- 용돈 일기 페이지 -->
     <string name="text_month_total_consume">%s원 사용 중</string>
+    <string name="text_month_total_income">%s원 확보 중</string>
     <string name="text_month_most_consume">%d월 달 %s에서 소비를 많이 했어요</string>
     <string name="text_category_consume">에서 %s원 사용 중</string>
     <string name="text_month_most_consume2">에서 소비를 많이 했어요</string>
@@ -126,6 +127,8 @@ z   <string name="text_quiz_number">%1$d/%2$d</string>
     <string name="text_delete_category">카테고리 삭제</string>
     <string name="text_add_category">+ 추가하기</string>
     <string name="text_delete">삭제하기</string>
+    <string name="text_cancel">취소</string>
+    <string name="analysis_text_save">저장</string>
 
     <!-- 퀘스트 페이지 -->
     <string name="text_tab_quest">퀘스트</string>

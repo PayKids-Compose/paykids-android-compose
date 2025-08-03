@@ -31,6 +31,7 @@ class MainActivity : ComponentActivity() {
                     ) ?: EntryPoint.LOGIN.name
                 )
             )
+
             PayKidsComposeTheme {
                 PayKidsApp(
                     loginStatus,
@@ -59,7 +60,14 @@ class MainActivity : ComponentActivity() {
                     provider.saveExpenseUseCase,
                     provider.saveIncomeUseCase,
                     provider.replaceExpenseUseCase,
-                    provider.replaceIncomeUseCase
+                    provider.replaceIncomeUseCase,
+                    provider.getIncomeMonthTotalAmountUseCase,
+                    provider.getExpenseMonthAllCategoryUseCase,
+                    provider.getIncomeMonthAllCategoryUseCase,
+                    provider.deleteExpenseCategoryUseCase,
+                    provider.deleteIncomeCategoryUseCase,
+                    provider.saveExpenseCategoryUseCase,
+                    provider.saveIncomeCategoryUseCase
                 )
             }
         }

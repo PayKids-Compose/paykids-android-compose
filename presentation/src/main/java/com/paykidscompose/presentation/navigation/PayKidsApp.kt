@@ -17,17 +17,24 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.paykidscompose.common.enums.EntryPoint
+import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseDayUseCase
+import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthAllCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthDailyAmountUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthMostCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthTotalAmountUseCase
 import com.paykidscompose.common.usecase.allowance.expense.ReplaceExpenseUseCase
+import com.paykidscompose.common.usecase.allowance.expense.SaveExpenseCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.SaveExpenseUseCase
+import com.paykidscompose.common.usecase.allowance.income.DeleteIncomeCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeDayUseCase
+import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthAllCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthDailyAmountUseCase
+import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthTotalAmountUseCase
 import com.paykidscompose.common.usecase.allowance.income.ReplaceIncomeUseCase
+import com.paykidscompose.common.usecase.allowance.income.SaveIncomeCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.income.SaveIncomeUseCase
 import com.paykidscompose.common.usecase.authentication.LoginUseCase
 import com.paykidscompose.common.usecase.authentication.LogoutUseCase
@@ -37,8 +44,8 @@ import com.paykidscompose.common.usecase.quiz.GetCheckStageUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageCountUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageNameUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageToGoUseCase
-import com.paykidscompose.common.usecase.quiz.GetWrongAnswerStatusUseCase
 import com.paykidscompose.common.usecase.quiz.GetWrongAnswerQuizzesUseCase
+import com.paykidscompose.common.usecase.quiz.GetWrongAnswerStatusUseCase
 import com.paykidscompose.common.usecase.user.DeleteUserUseCase
 import com.paykidscompose.common.usecase.user.GetUserUseCase
 import com.paykidscompose.common.usecase.user.ReplaceNicknameUseCase
@@ -51,6 +58,7 @@ import com.paykidscompose.presentation.factory.MyInfoViewModelFactory
 import com.paykidscompose.presentation.factory.MyPageViewModelFactory
 import com.paykidscompose.presentation.factory.QuizEntryViewModelFactory
 import com.paykidscompose.presentation.factory.QuizViewModelFactory
+import com.paykidscompose.presentation.factory.TransactionAnalysisViewModelFactory
 import com.paykidscompose.presentation.navigation.route.AllowanceDiaryNavigationRoute
 import com.paykidscompose.presentation.navigation.route.EntryNavigationRoute
 import com.paykidscompose.presentation.navigation.route.MyPageNavigationRoute
@@ -59,7 +67,8 @@ import com.paykidscompose.presentation.navigation.route.TabNavigationRoute
 import com.paykidscompose.presentation.screens.PayKidsScaffold
 import com.paykidscompose.presentation.screens.allowance.AllowanceDiary
 import com.paykidscompose.presentation.screens.allowance.AllowanceDiaryViewModel
-import com.paykidscompose.presentation.screens.allowance.analysis.ExpenseAnalysis
+import com.paykidscompose.presentation.screens.allowance.analysis.TransactionAnalysis
+import com.paykidscompose.presentation.screens.allowance.analysis.TransactionAnalysisViewModel
 import com.paykidscompose.presentation.screens.allowance.detail.CategoryDetail
 import com.paykidscompose.presentation.screens.home.Home
 import com.paykidscompose.presentation.screens.home.HomeViewModel
@@ -110,7 +119,14 @@ fun PayKidsApp(
     saveExpenseUseCase: SaveExpenseUseCase,
     saveIncomeUseCase: SaveIncomeUseCase,
     replaceExpenseUseCase: ReplaceExpenseUseCase,
-    replaceIncomeUseCase: ReplaceIncomeUseCase
+    replaceIncomeUseCase: ReplaceIncomeUseCase,
+    getIncomeMonthTotalAmountUseCase: GetIncomeMonthTotalAmountUseCase,
+    getExpenseMonthAllCategoryUseCase: GetExpenseMonthAllCategoryUseCase,
+    getIncomeMonthAllCategoryUseCase: GetIncomeMonthAllCategoryUseCase,
+    deleteExpenseCategoryUseCase: DeleteExpenseCategoryUseCase,
+    deleteIncomeCategoryUseCase: DeleteIncomeCategoryUseCase,
+    saveExpenseCategoryUseCase: SaveExpenseCategoryUseCase,
+    saveIncomeCategoryUseCase: SaveIncomeCategoryUseCase
 ) {
     val navController: NavHostController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -342,7 +358,24 @@ fun PayKidsApp(
             }
 
             composable<AllowanceDiaryNavigationRoute.ExpenseAnalysisRoute> {
-                ExpenseAnalysis(
+                val viewModel: TransactionAnalysisViewModel = viewModel(
+                    viewModelStoreOwner = it,
+                    factory = TransactionAnalysisViewModelFactory(
+                        getExpenseMonthTotalAmountUseCase,
+                        getIncomeMonthTotalAmountUseCase,
+                        getExpenseMonthAllCategoryUseCase,
+                        getIncomeMonthAllCategoryUseCase,
+                        getExpenseCategoryListUseCase,
+                        getIncomeCategoryListUseCase,
+                        deleteExpenseCategoryUseCase,
+                        deleteIncomeCategoryUseCase,
+                        saveExpenseCategoryUseCase,
+                        saveIncomeCategoryUseCase
+                    )
+                )
+
+                TransactionAnalysis(
+                    viewModel = viewModel,
                     onCategoryCard = {
                         navController.navigate(AllowanceDiaryNavigationRoute.CategoryDetailRoute)
                     }

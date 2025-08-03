@@ -10,10 +10,10 @@ class SaveIncomeCategoryUseCase(
 ) : SuspendUseCase<SaveIncomeCategoryUseCase.Params, DataResourceResult<Boolean>>() {
 
     override suspend fun execute(params: Params?): DataResourceResult<Boolean> {
-        return if (params != null) {
+        return if (params != null && params.category.length >= 1 && params.category.length <= 5) {
             repository.saveIncomeCategory(params.category)
         } else {
-            DataResourceResult.Failure(PayKidsException.ToastException(code = -1,"저장할 수입 카테고리를 제대로 입력하세요."))
+            DataResourceResult.Failure(PayKidsException.ToastException(code = -1,"카테고리는 1자 이상 5자 이하로 입력해주세요!"))
         }
     }
 
