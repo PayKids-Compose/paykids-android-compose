@@ -155,7 +155,7 @@ class TransactionAnalysisViewModel(
                 }
             }
 
-            DataResourceResult.DummyConstructor, DataResourceResult.Loading -> TODO()
+            DataResourceResult.DummyConstructor, DataResourceResult.Loading -> {}
         }
     }
 
@@ -192,7 +192,7 @@ class TransactionAnalysisViewModel(
                 }
             }
 
-            DataResourceResult.DummyConstructor, DataResourceResult.Loading -> TODO()
+            DataResourceResult.DummyConstructor, DataResourceResult.Loading -> {}
         }
     }
 

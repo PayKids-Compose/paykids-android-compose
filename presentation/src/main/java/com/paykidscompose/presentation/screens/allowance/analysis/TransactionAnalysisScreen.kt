@@ -297,7 +297,11 @@ fun TransactionAnalysisScreen(
         Spacer(Modifier.height(AnalysisScreenSpacer34))
 
         Text(
-            stringResource(R.string.text_month_total_consume, formatAmount(totalAmount)),
+            if (selected == AllowanceType.EXPENSE) stringResource(
+                R.string.text_month_total_consume,
+                formatAmount(totalAmount)
+            )
+            else stringResource(R.string.text_month_total_income, formatAmount(totalAmount)),
             style = AllowanceDiaryTitleExpenseTextStyle
                 .copy(color = Black)
         )
@@ -340,6 +344,13 @@ fun TransactionAnalysisScreen(
                     "${it.percent}%", onCategoryCard
                 )
                 Spacer(Modifier.height(AnalysisScreenSpacer8))
+            }
+
+            if (transactionList.isEmpty()) {
+                item {
+                    AnalysisItem("기타", 0, "0%", onCategoryCard)
+                    Spacer(Modifier.height(AnalysisScreenSpacer8))
+                }
             }
 
             item {
