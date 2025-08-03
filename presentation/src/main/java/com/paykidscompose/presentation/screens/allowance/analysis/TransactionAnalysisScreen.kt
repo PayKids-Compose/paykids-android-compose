@@ -27,7 +27,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -143,13 +146,19 @@ fun TransactionAnalysis(
         else -> {
             TransactionAnalysisScreen(
                 uiState.uiModel.transactionList,
+                uiState.isAddCategory,
+                uiState.category,
                 uiState.totalAmount,
-                onCategoryCard,
                 uiState.currentMonth,
                 uiState.selectedType,
+                { viewModel.inputCategory(it) },
+                { viewModel.onAddClick() },
+                onCategoryCard,
                 { viewModel.onPrevMonth() },
                 { viewModel.onNextMonth() },
-                { viewModel.onAllowanceTypeSelected(it) }
+                { viewModel.onAllowanceTypeSelected(it) },
+                { viewModel.cancelAddCategory() },
+                { viewModel.confirmAddCategory() }
             )
         }
     }
@@ -158,13 +167,19 @@ fun TransactionAnalysis(
 @Composable
 fun TransactionAnalysisScreen(
     transactionList: List<AllowanceChartCategoryUIModel>,
+    isAddCategory: Boolean,
+    category: String,
     totalAmount: Int,
-    onCategoryCard: () -> Unit,
     month: LocalDate,
     selected: AllowanceType,
+    inputCategory: (String) -> Unit,
+    onAddClick: () -> Unit,
+    onCategoryCard: () -> Unit,
     onPrevMonth: () -> Unit,
     onNextMonth: () -> Unit,
     onSelect: (AllowanceType) -> Unit,
+    cancelAddCategory: () -> Unit,
+    confirmAddCategory: () -> Unit
 ) {
     val progressBarUIModels = remember(transactionList) {
         assignColorsToCategories(transactionList)
@@ -346,6 +361,17 @@ fun TransactionAnalysisScreen(
                 Spacer(Modifier.height(AnalysisScreenSpacer8))
             }
 
+            if (isAddCategory) {
+                item {
+                    AddCategoryItem(
+                        category,
+                        inputCategory,
+                        cancelAddCategory,
+                        confirmAddCategory
+                    )
+                }
+            }
+
             if (transactionList.isEmpty()) {
                 item {
                     AnalysisItem("기타", 0, "0%", onCategoryCard)
@@ -355,7 +381,7 @@ fun TransactionAnalysisScreen(
 
             item {
                 Button(
-                    onClick = {},
+                    onClick = { onAddClick() },
                     shape = RoundedCornerShape(AnalysisScreenShape10),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = White2,
@@ -383,7 +409,7 @@ fun TransactionAnalysisScreen(
 }
 
 @Composable
-fun AnalysisItem(
+private fun AnalysisItem(
     category: String,
     amount: Int,
     percent: String,
@@ -432,6 +458,84 @@ fun AnalysisItem(
                 percent,
                 style = ExpenseAnalysisItemPercentTextStyle.copy(color = Gray1)
             )
+        }
+    }
+}
+
+@Composable
+private fun AddCategoryItem(
+    category: String,
+    inputCategory: (String) -> Unit,
+    cancelAddCategory: () -> Unit,
+    confirmAddCategory: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(
+                onClick = {
+                }
+            )
+            .shadow(
+                elevation = CustomCardShadow,
+                shape = RoundedCornerShape(AllowanceDiaryScreenCardShape),
+                ambientColor = MyPageCardShadowColor,
+                spotColor = MyPageCardShadowColor
+            )
+            .background(
+                White, shape = RoundedCornerShape(AllowanceDiaryScreenCardShape)
+            )
+            .padding(
+                start = AllowanceDiaryScreenTransactionStartEndPadding,
+                end = AllowanceDiaryScreenTransactionStartEndPadding,
+                top = AllowanceDiaryScreenTransactionTopBottomPadding,
+                bottom = AllowanceDiaryScreenTransactionTopBottomPadding
+            ),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            OutlinedTextField(
+                value = category,
+                onValueChange = {
+                    if (it.length <= 5) inputCategory(it)
+                },
+                textStyle = ExpenseAnalysisItemCategoryTextStyle.copy(color = Blue1),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = Gray6,
+                    unfocusedContainerColor = Gray6,
+                    unfocusedBorderColor = Color.Transparent,
+                    focusedBorderColor = Color.Transparent
+                ),
+                singleLine = true
+            )
+
+            Spacer(modifier = Modifier.width(AnalysisScreenSpacer8))
+
+            Column(
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.SpaceAround
+            ) {
+                TextButton(
+                    onClick = { confirmAddCategory() }
+                ) {
+                    Text(
+                        stringResource(R.string.analysis_text_save),
+                        style = ExpenseAnalysisProgressBarNameTextStyle.copy(color = Gray7)
+                    )
+                }
+
+                TextButton(
+                    onClick = { cancelAddCategory() }
+                ) {
+                    Text(
+                        stringResource(R.string.text_cancel),
+                        style = ExpenseAnalysisProgressBarNameTextStyle.copy(color = Gray1)
+                    )
+                }
+            }
         }
     }
 }

@@ -122,6 +122,118 @@ class TransactionAnalysisViewModel(
         }
     }
 
+    fun inputCategory(category: String) {
+        _uiState.update {
+            it.copy(
+                category = category
+            )
+        }
+    }
+
+    fun onAddClick() {
+        _uiState.update {
+            it.copy(
+                isAddCategory = true
+            )
+        }
+    }
+
+    fun cancelAddCategory() {
+        _uiState.update {
+            it.copy(
+                isAddCategory = false,
+                category = ""
+            )
+        }
+    }
+
+    fun confirmAddCategory() {
+        when (_uiState.value.selectedType) {
+            AllowanceType.INCOME -> {
+                saveIncomeCategory()
+            }
+            AllowanceType.EXPENSE -> {
+                saveExpenseCategory()
+            }
+        }
+    }
+
+    private fun saveExpenseCategory() {
+        if(!_uiState.value.isAddCategory) return
+
+        viewModelScope.launch {
+            val result = saveExpenseCategoryUseCase(
+                SaveExpenseCategoryUseCase.Params(
+                    _uiState.value.category
+                )
+            )
+
+            when (result) {
+                is DataResourceResult.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            isAddCategory = false,
+                            category = ""
+                        )
+                    }
+
+                    _uiEvent.emit(UIEvent.SuccessShowToast("소비 카테고리를 저장했습니다!"))
+                }
+
+                is DataResourceResult.Failure -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            error = result.exception,
+                            category = "",
+                            isAddCategory = false
+                        )
+                    }
+                }
+
+                DataResourceResult.DummyConstructor, DataResourceResult.Loading -> {}
+            }
+        }
+    }
+
+    private fun saveIncomeCategory() {
+        if(!_uiState.value.isAddCategory) return
+
+        viewModelScope.launch {
+            val result = saveIncomeCategoryUseCase(
+                SaveIncomeCategoryUseCase.Params(
+                    _uiState.value.category
+                )
+            )
+
+            when (result) {
+                is DataResourceResult.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            isAddCategory = false,
+                            category = ""
+                        )
+                    }
+
+                    _uiEvent.emit(UIEvent.SuccessShowToast("수입 카테고리를 저장했습니다!"))
+                }
+
+                is DataResourceResult.Failure -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            error = result.exception,
+                            category = "",
+                            isAddCategory = false
+                        )
+                    }
+                }
+
+                DataResourceResult.DummyConstructor, DataResourceResult.Loading -> {}
+            }
+        }
+    }
+
     private suspend fun getExpenseMonthTotalAmount() {
         _uiState.update {
             it.copy(
@@ -309,5 +421,7 @@ data class TransactionAnalysisUIState(
     val currentMonth: LocalDate = today.withDayOfMonth(1),
     val uiModel: TransactionAnalysisUIModel,
     val totalAmount: Int = 0,
+    val isAddCategory: Boolean = false,
+    val category: String = "",
     val selectedType: AllowanceType = AllowanceType.EXPENSE
 ) : UIState()
