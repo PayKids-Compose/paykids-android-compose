@@ -93,6 +93,54 @@ class TransactionAnalysisViewModel(
         load()
     }
 
+    fun enterDeleteMode() {
+        _uiState.update {
+            it.copy(
+                isDeleteMode = true
+            )
+        }
+    }
+
+    fun exitDeleteMode() {
+        if(_uiState.value.selectedCategoryForDelete.isNotEmpty()) {
+            viewModelScope.launch {
+                when (_uiState.value.selectedType) {
+                    AllowanceType.INCOME -> {
+                        deleteIncomeCategory()
+                        getIncomeMonthTotalAmount()
+                        getIncomeAllCategoryForMonth()
+                    }
+
+                    AllowanceType.EXPENSE -> {
+                        deleteExpenseCategory()
+                        getExpenseMonthTotalAmount()
+                        getExpenseAllCategoryForMonth()
+                    }
+                }
+            }
+        }
+
+        _uiState.update {
+            it.copy(
+                isDeleteMode = false,
+                selectedCategoryForDelete = emptyList()
+            )
+        }
+    }
+
+    fun onToggleCategorySelection(category: String) {
+        _uiState.update {
+            val current = it.selectedCategoryForDelete
+            val updated = if (category in current) {
+                current - category
+            } else {
+                current + category
+            }
+
+            it.copy(selectedCategoryForDelete = updated)
+        }
+    }
+
     fun inputCategory(category: String) {
         _uiState.update {
             it.copy(
@@ -130,6 +178,82 @@ class TransactionAnalysisViewModel(
         }
 
         load()
+    }
+
+    private suspend fun deleteExpenseCategory() {
+        if (!_uiState.value.isDeleteMode || _uiState.value.selectedCategoryForDelete.isEmpty()) return
+
+        _uiState.value.selectedCategoryForDelete.forEach { category ->
+            val result = deleteExpenseCategoryUseCase(
+                DeleteExpenseCategoryUseCase.Params(
+                    category
+                )
+            )
+
+            when (result) {
+                is DataResourceResult.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            selectedCategoryForDelete = it.selectedCategoryForDelete - category
+                        )
+                    }
+
+                    _uiEvent.emit(UIEvent.SuccessShowToast("$category 카테고리를 삭제했습니다!"))
+                }
+
+                is DataResourceResult.Failure -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            error = result.exception
+                        )
+                    }
+                }
+
+                DataResourceResult.DummyConstructor, DataResourceResult.Loading -> {}
+
+            }
+
+
+        }
+    }
+
+    private suspend fun deleteIncomeCategory() {
+        if (!_uiState.value.isDeleteMode || _uiState.value.selectedCategoryForDelete.isEmpty()) return
+
+        _uiState.value.selectedCategoryForDelete.forEach { category ->
+            val result = deleteIncomeCategoryUseCase(
+                DeleteIncomeCategoryUseCase.Params(
+                    category
+                )
+            )
+
+            when (result) {
+                is DataResourceResult.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            selectedCategoryForDelete = it.selectedCategoryForDelete - category
+                        )
+                    }
+
+                    _uiEvent.emit(UIEvent.SuccessShowToast("$category 카테고리를 삭제했습니다!"))
+                }
+
+                is DataResourceResult.Failure -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            error = result.exception
+                        )
+                    }
+                }
+
+                DataResourceResult.DummyConstructor, DataResourceResult.Loading -> {}
+
+            }
+
+
+        }
     }
 
     private fun saveExpenseCategory() {
@@ -442,6 +566,8 @@ data class TransactionAnalysisUIState(
     val uiModel: TransactionAnalysisUIModel,
     val totalAmount: Int = 0,
     val isAddCategory: Boolean = false,
+    val isDeleteMode: Boolean = false,
     val category: String = "",
-    val selectedType: AllowanceType = AllowanceType.EXPENSE
+    val selectedType: AllowanceType = AllowanceType.EXPENSE,
+    val selectedCategoryForDelete: List<String> = emptyList()
 ) : UIState()

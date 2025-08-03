@@ -1,6 +1,7 @@
 package com.paykidscompose.presentation.screens.allowance.analysis
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -44,6 +45,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paykidscompose.common.enums.AllowanceType
@@ -159,18 +161,23 @@ fun TransactionAnalysis(
             TransactionAnalysisScreen(
                 uiState.uiModel.transactionList,
                 uiState.isAddCategory,
+                uiState.isDeleteMode,
+                uiState.selectedCategoryForDelete,
                 uiState.category,
                 uiState.totalAmount,
                 uiState.currentMonth,
                 uiState.selectedType,
                 { viewModel.inputCategory(it) },
+                { viewModel.onToggleCategorySelection(it) },
                 { viewModel.onAddClick() },
                 onCategoryCard,
                 { viewModel.onPrevMonth() },
                 { viewModel.onNextMonth() },
                 { viewModel.onAllowanceTypeSelected(it) },
                 { viewModel.cancelAddCategory() },
-                { viewModel.confirmAddCategory() }
+                { viewModel.confirmAddCategory() },
+                { viewModel.enterDeleteMode() },
+                { viewModel.exitDeleteMode() }
             )
         }
     }
@@ -180,18 +187,23 @@ fun TransactionAnalysis(
 fun TransactionAnalysisScreen(
     transactionList: List<AllowanceChartCategoryUIModel>,
     isAddCategory: Boolean,
+    isDeleteMode: Boolean,
+    selectedCategoryForDelete: List<String>,
     category: String,
     totalAmount: Int,
     month: LocalDate,
     selected: AllowanceType,
     inputCategory: (String) -> Unit,
+    onToggleCategorySelection: (String) -> Unit,
     onAddClick: () -> Unit,
     onCategoryCard: () -> Unit,
     onPrevMonth: () -> Unit,
     onNextMonth: () -> Unit,
     onSelect: (AllowanceType) -> Unit,
     cancelAddCategory: () -> Unit,
-    confirmAddCategory: () -> Unit
+    confirmAddCategory: () -> Unit,
+    enterDeleteMode: () -> Unit,
+    exitDeleteMode: () -> Unit
 ) {
     val progressBarUIModels = remember(transactionList) {
         assignColorsToCategories(transactionList)
@@ -345,7 +357,12 @@ fun TransactionAnalysisScreen(
         Spacer(Modifier.height(AnalysisScreenSpacer34))
 
         Button(
-            onClick = {},
+            onClick = {
+                if (!isDeleteMode)
+                    enterDeleteMode()
+                else
+                    exitDeleteMode()
+            },
             shape = RoundedCornerShape(AnalysisScreenShape5),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Gray7,
@@ -368,8 +385,17 @@ fun TransactionAnalysisScreen(
             items(transactionList) {
                 AnalysisItem(
                     it.category, it.amount,
-                    "${it.percent}%", onCategoryCard
-                )
+                    "${it.percent}%",
+                    isDeleteMode,
+                    selectedCategoryForDelete.contains(it.category)
+                ) {
+                    if (isDeleteMode) {
+                        onToggleCategorySelection(it.category)
+                    } else {
+                        onCategoryCard()
+                    }
+                }
+
                 Spacer(Modifier.height(AnalysisScreenSpacer8))
             }
 
@@ -418,6 +444,8 @@ private fun AnalysisItem(
     category: String,
     amount: Int,
     percent: String,
+    isDeleteMode: Boolean,
+    isSelected: Boolean,
     onCategoryCard: () -> Unit
 ) {
     Box(
@@ -454,15 +482,26 @@ private fun AnalysisItem(
                 style = ExpenseAnalysisItemCategoryTextStyle.copy(color = Blue1)
             )
 
-            Text(
-                formatAmount(amount),
-                style = ExpenseAnalysisItemAmountTextStyle.copy(color = Black)
-            )
+            if (isDeleteMode) {
+                Image(
+                    painter = painterResource(
+                        if (isSelected) R.drawable.ic_checkbox_checked else R.drawable.ic_checkbox_unchecked
+                    ),
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp)
+                )
+            } else {
+                Text(
+                    formatAmount(amount),
+                    style = ExpenseAnalysisItemAmountTextStyle.copy(color = Black)
+                )
 
-            Text(
-                percent,
-                style = ExpenseAnalysisItemPercentTextStyle.copy(color = Gray1)
-            )
+                Text(
+                    percent,
+                    style = ExpenseAnalysisItemPercentTextStyle.copy(color = Gray1)
+                )
+            }
+
         }
     }
 }
