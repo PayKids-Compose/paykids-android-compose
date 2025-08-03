@@ -1,16 +1,23 @@
 package com.paykidscompose.common.di
 
+import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseDayUseCase
+import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthAllCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthDailyAmountUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthMostCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthTotalAmountUseCase
 import com.paykidscompose.common.usecase.allowance.expense.ReplaceExpenseUseCase
+import com.paykidscompose.common.usecase.allowance.expense.SaveExpenseCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.SaveExpenseUseCase
+import com.paykidscompose.common.usecase.allowance.income.DeleteIncomeCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeDayUseCase
+import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthAllCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthDailyAmountUseCase
+import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthTotalAmountUseCase
 import com.paykidscompose.common.usecase.allowance.income.ReplaceIncomeUseCase
+import com.paykidscompose.common.usecase.allowance.income.SaveIncomeCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.income.SaveIncomeUseCase
 import com.paykidscompose.common.usecase.authentication.LoginUseCase
 import com.paykidscompose.common.usecase.authentication.LogoutUseCase
@@ -21,8 +28,8 @@ import com.paykidscompose.common.usecase.quiz.GetQuizUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageCountUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageNameUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageToGoUseCase
-import com.paykidscompose.common.usecase.quiz.GetWrongAnswerStatusUseCase
 import com.paykidscompose.common.usecase.quiz.GetWrongAnswerQuizzesUseCase
+import com.paykidscompose.common.usecase.quiz.GetWrongAnswerStatusUseCase
 import com.paykidscompose.common.usecase.user.DeleteUserUseCase
 import com.paykidscompose.common.usecase.user.GetUserUseCase
 import com.paykidscompose.common.usecase.user.ReplaceNicknameUseCase
@@ -45,6 +52,9 @@ interface ApplicationContainer {
     val getCheckAnswerUseCase: GetCheckAnswerUseCase
     val getCheckStageUseCase: GetCheckStageUseCase
     val getExpenseMonthTotalAmountUseCase: GetExpenseMonthTotalAmountUseCase
+    val getIncomeMonthTotalAmountUseCase: GetIncomeMonthTotalAmountUseCase
+    val getExpenseMonthAllCategoryUseCase: GetExpenseMonthAllCategoryUseCase
+    val getIncomeMonthAllCategoryUseCase: GetIncomeMonthAllCategoryUseCase
     val getExpenseMonthMostCategoryUseCase: GetExpenseMonthMostCategoryUseCase
     val getExpenseMonthDailyAmountUseCase: GetExpenseMonthDailyAmountUseCase
     val getIncomeMonthDailyAmountUseCase: GetIncomeMonthDailyAmountUseCase
@@ -54,6 +64,10 @@ interface ApplicationContainer {
     val getIncomeCategoryListUseCase: GetIncomeCategoryListUseCase
     val saveExpenseUseCase: SaveExpenseUseCase
     val saveIncomeUseCase: SaveIncomeUseCase
+    val saveExpenseCategoryUseCase: SaveExpenseCategoryUseCase
+    val saveIncomeCategoryUseCase: SaveIncomeCategoryUseCase
     val replaceExpenseUseCase: ReplaceExpenseUseCase
     val replaceIncomeUseCase: ReplaceIncomeUseCase
+    val deleteExpenseCategoryUseCase: DeleteExpenseCategoryUseCase
+    val deleteIncomeCategoryUseCase: DeleteIncomeCategoryUseCase
 }

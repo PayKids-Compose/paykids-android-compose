@@ -7,10 +7,14 @@ import com.paykidscompose.data.model.allowance.AllowanceChartCategoryDTO
 
 object AllowanceChartCategoryMapper : ModelMapper<AllowanceChartCategoryModel, AllowanceChartCategoryDTO> {
     override fun mapToModel(layerModel: AllowanceChartCategoryDTO): AllowanceChartCategoryModel {
+
         return AllowanceChartCategoryModel(
             type = AllowanceType.valueOf(layerModel.allowanceType),
             category = layerModel.category,
-            percent = layerModel.percent?.toInt() ?: 0,
+            percent = layerModel.percent
+                ?.replace("%", "")
+                ?.toFloat()
+                ?.toInt() ?: 0,
             amount = layerModel.amount
         )
     }

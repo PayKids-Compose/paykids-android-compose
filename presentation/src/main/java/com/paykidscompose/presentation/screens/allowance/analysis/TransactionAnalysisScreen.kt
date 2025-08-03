@@ -1,5 +1,6 @@
 package com.paykidscompose.presentation.screens.allowance.analysis
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -28,22 +29,27 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paykidscompose.common.enums.AllowanceType
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.util.MonthFormatter
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.dummy.AllowanceChartDTO
+import com.paykidscompose.presentation.model.allowance.AllowanceChartCategoryUIModel
+import com.paykidscompose.presentation.model.allowance.CategoryProgressBarUIModel
+import com.paykidscompose.presentation.ui.components.ScreenLoading
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryHeadMonthTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenCardShape
 import com.paykidscompose.presentation.ui.theme.AllowanceDiaryScreenHeadIconSize
@@ -92,69 +98,77 @@ import com.paykidscompose.presentation.ui.theme.Gray9
 import com.paykidscompose.presentation.ui.theme.MyPageCardShadowColor
 import com.paykidscompose.presentation.ui.theme.White
 import com.paykidscompose.presentation.ui.theme.White2
+import com.paykidscompose.presentation.util.assignColorsToCategories
 import com.paykidscompose.presentation.util.formatAmount
 import java.time.LocalDate
 
 @Composable
-fun ExpenseAnalysis(
+fun TransactionAnalysis(
+    viewModel: TransactionAnalysisViewModel = viewModel(),
     onCategoryCard: () -> Unit = {}
 ) {
-    var currentMonth by remember {
-        mutableStateOf(
-            LocalDate.now()
-        )
-    }
-    var selectedAllowanceType by remember { mutableStateOf(AllowanceType.EXPENSE) }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val onSelectAllowanceType = { type: AllowanceType ->
-        selectedAllowanceType = type
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.load()
     }
 
-    val onMonth = { month: LocalDate ->
-        currentMonth = month
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let {
+            when (it) {
+                is PayKidsException.DialogException -> {
+
+                }
+
+                is PayKidsException.SnackBarException -> {
+
+                }
+
+                is PayKidsException.ToastException -> {
+                    Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            viewModel.clearError()
+        }
     }
 
-    var showInputDialog by remember { mutableStateOf(false) }
+    when {
+        uiState.isLoading -> {
+            ScreenLoading()
+        }
 
-    val onShowDialog = { value: Boolean ->
-        showInputDialog = value
+        else -> {
+            TransactionAnalysisScreen(
+                uiState.uiModel.transactionList,
+                uiState.totalAmount,
+                onCategoryCard,
+                uiState.currentMonth,
+                uiState.selectedType,
+                { viewModel.onPrevMonth() },
+                { viewModel.onNextMonth() },
+                { viewModel.onAllowanceTypeSelected(it) }
+            )
+        }
     }
-
-    if (showInputDialog) {
-//        AllowanceInputDialog(
-//            onSelect = {},
-//            onCancelClick = { showInputDialog = false }
-//        ) { showInputDialog = false }
-    }
-
-
-    ExpenseAnalysisScreen(
-        onCategoryCard,
-        currentMonth,
-        selectedAllowanceType,
-        onMonth,
-        onSelectAllowanceType
-    )
 }
 
 @Composable
-fun ExpenseAnalysisScreen(
+fun TransactionAnalysisScreen(
+    transactionList: List<AllowanceChartCategoryUIModel>,
+    totalAmount: Int,
     onCategoryCard: () -> Unit,
     month: LocalDate,
     selected: AllowanceType,
-    onMonth: (LocalDate) -> Unit,
+    onPrevMonth: () -> Unit,
+    onNextMonth: () -> Unit,
     onSelect: (AllowanceType) -> Unit,
 ) {
-    val data = calculateCategoryStats(
-        listOf(
-            AllowanceChartDTO(1, "2025-06-01", AllowanceType.EXPENSE, "편의점", 3000, "음료"),
-            AllowanceChartDTO(2, "2025-06-02", AllowanceType.EXPENSE, "식비", 12000, "점심"),
-            AllowanceChartDTO(3, "2025-06-03", AllowanceType.EXPENSE, "편의점", 2000, "간식"),
-            AllowanceChartDTO(4, "2025-06-04", AllowanceType.EXPENSE, "식비", 10000, "저녁"),
-            AllowanceChartDTO(5, "2025-06-05", AllowanceType.EXPENSE, "기타", 10000, "저녁")
-        )
-    )
-
+    val progressBarUIModels = remember(transactionList) {
+        assignColorsToCategories(transactionList)
+    }
 
     Column(
         modifier = Modifier
@@ -173,7 +187,7 @@ fun ExpenseAnalysisScreen(
         ) {
             IconButton(
                 onClick = {
-                    onMonth(month.minusMonths(1))
+                    onPrevMonth()
                 },
                 modifier = Modifier.size(AllowanceDiaryScreenHeadIconSize)
             ) {
@@ -190,7 +204,7 @@ fun ExpenseAnalysisScreen(
 
             IconButton(
                 onClick = {
-                    onMonth(month.plusMonths(1))
+                    onNextMonth()
                 },
                 modifier = Modifier.size(AllowanceDiaryScreenHeadIconSize)
             ) {
@@ -283,7 +297,7 @@ fun ExpenseAnalysisScreen(
         Spacer(Modifier.height(AnalysisScreenSpacer34))
 
         Text(
-            stringResource(R.string.text_month_total_consume, formatAmount(150000)),
+            stringResource(R.string.text_month_total_consume, formatAmount(totalAmount)),
             style = AllowanceDiaryTitleExpenseTextStyle
                 .copy(color = Black)
         )
@@ -294,7 +308,7 @@ fun ExpenseAnalysisScreen(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            CategoryProgressBar(data)
+            CategoryProgressBar(progressBarUIModels)
         }
 
         Spacer(Modifier.height(AnalysisScreenSpacer34))
@@ -320,21 +334,15 @@ fun ExpenseAnalysisScreen(
         LazyColumn(
             modifier = Modifier.fillMaxWidth()
         ) {
-            items(data) {
+            items(transactionList) {
                 AnalysisItem(
-                    it.name, it.amount,
-                    "${(it.percent * 100).toInt()}%", onCategoryCard
+                    it.category, it.amount,
+                    "${it.percent}%", onCategoryCard
                 )
                 Spacer(Modifier.height(AnalysisScreenSpacer8))
             }
 
             item {
-                AnalysisItem("기타", 0, "0%", onCategoryCard)
-                Spacer(Modifier.height(AnalysisScreenSpacer8))
-            }
-
-            item {
-
                 Button(
                     onClick = {},
                     shape = RoundedCornerShape(AnalysisScreenShape10),
@@ -370,13 +378,11 @@ fun AnalysisItem(
     percent: String,
     onCategoryCard: () -> Unit
 ) {
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(
                 onClick = {
-                    // CategoryDetailScreen으로 이동
                     onCategoryCard()
                 }
             )
@@ -421,9 +427,8 @@ fun AnalysisItem(
 
 
 @Composable
-private fun CategoryProgressBar(stats: List<CategoryStat>) {
+private fun CategoryProgressBar(progressBarUIModels: List<CategoryProgressBarUIModel>) {
     Column {
-        // ProgressBar 스타일 박스
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -432,12 +437,12 @@ private fun CategoryProgressBar(stats: List<CategoryStat>) {
                 .border(AnalysisScreenBorderWidth1, Gray6, RoundedCornerShape(AnalysisScreenShape100))
         ) {
             Row(Modifier.fillMaxSize()) {
-                stats.forEach { stat ->
+                progressBarUIModels.forEach { item ->
                     Box(
                         modifier = Modifier
-                            .weight(stat.percent)
+                            .weight(item.percent)
                             .fillMaxHeight()
-                            .background(stat.color)
+                            .background(item.color)
                     )
                 }
             }
@@ -450,18 +455,18 @@ private fun CategoryProgressBar(stats: List<CategoryStat>) {
             horizontalArrangement = Arrangement.spacedBy(AnalysisScreenProgressBarSpace),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            stats.forEach { stat ->
+            progressBarUIModels.forEach { item ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Box(
                         modifier = Modifier
                             .size(AnalysisScreenProgressBarSize)
-                            .background(stat.color, shape = CircleShape)
+                            .background(item.color, shape = CircleShape)
                     )
                     Spacer(Modifier.width(AnalysisScreenShape4))
                     Text(
-                        text = stat.name,
+                        text = item.name,
                         style = ExpenseAnalysisProgressBarNameTextStyle
                     )
                 }
@@ -470,42 +475,8 @@ private fun CategoryProgressBar(stats: List<CategoryStat>) {
     }
 }
 
-private data class CategoryStat(
-    val name: String,
-    val amount: Int,
-    val percent: Float,
-    val color: Color
-)
-
-private val categoryColors = mapOf(
-    "편의점" to Color(0xFF1976D2),
-    "식비" to Color(0xFF4FC3F7),
-    "교통비" to Color(0xFF64B5F6),
-    "문화생활" to Color(0xFFBA68C8),
-    "기타" to Color.Gray
-)
-
-private fun calculateCategoryStats(data: List<AllowanceChartDTO>): List<CategoryStat> {
-    val expenses = data.filter { it.allowanceType == AllowanceType.EXPENSE }
-
-    val total = expenses.sumOf { it.amount }
-    if (total == 0) return emptyList()
-
-    return expenses
-        .groupBy { it.category }
-        .map { (category, items) ->
-            val sum = items.sumOf { it.amount }
-            CategoryStat(
-                name = category,
-                amount = sum,
-                percent = sum.toFloat() / total,
-                color = categoryColors[category] ?: categoryColors["기타"]!!
-            )
-        }
-}
-
 @Preview
 @Composable
 fun AnalysisScreenPreview() {
-    ExpenseAnalysis()
+    TransactionAnalysis()
 }
