@@ -50,6 +50,7 @@ import com.paykidscompose.common.enums.AllowanceType
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.util.MonthFormatter
 import com.paykidscompose.presentation.R
+import com.paykidscompose.presentation.base.UIEvent
 import com.paykidscompose.presentation.model.allowance.AllowanceChartCategoryUIModel
 import com.paykidscompose.presentation.model.allowance.CategoryProgressBarUIModel
 import com.paykidscompose.presentation.ui.components.ScreenLoading
@@ -103,6 +104,7 @@ import com.paykidscompose.presentation.ui.theme.White
 import com.paykidscompose.presentation.ui.theme.White2
 import com.paykidscompose.presentation.util.assignColorsToCategories
 import com.paykidscompose.presentation.util.formatAmount
+import kotlinx.coroutines.flow.collectLatest
 import java.time.LocalDate
 
 @Composable
@@ -116,6 +118,16 @@ fun TransactionAnalysis(
 
     LaunchedEffect(Unit) {
         viewModel.load()
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collectLatest { event ->
+            when (event) {
+                is UIEvent.SuccessShowToast -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     LaunchedEffect(uiState.error) {
@@ -372,13 +384,6 @@ fun TransactionAnalysisScreen(
                 }
             }
 
-            if (transactionList.isEmpty()) {
-                item {
-                    AnalysisItem("기타", 0, "0%", onCategoryCard)
-                    Spacer(Modifier.height(AnalysisScreenSpacer8))
-                }
-            }
-
             item {
                 Button(
                     onClick = { onAddClick() },
@@ -543,6 +548,8 @@ private fun AddCategoryItem(
 
 @Composable
 private fun CategoryProgressBar(progressBarUIModels: List<CategoryProgressBarUIModel>) {
+    val totalPercent = progressBarUIModels.sumOf { it.percent.toDouble() }
+
     Column {
         Box(
             modifier = Modifier
@@ -552,13 +559,23 @@ private fun CategoryProgressBar(progressBarUIModels: List<CategoryProgressBarUIM
                 .border(AnalysisScreenBorderWidth1, Gray6, RoundedCornerShape(AnalysisScreenShape100))
         ) {
             Row(Modifier.fillMaxSize()) {
-                progressBarUIModels.forEach { item ->
+                if (totalPercent == 0.0) {
                     Box(
                         modifier = Modifier
-                            .weight(item.percent)
                             .fillMaxHeight()
-                            .background(item.color)
+                            .background(White)
                     )
+                } else {
+                    progressBarUIModels.forEach { item ->
+                        if (item.percent > 0f) {
+                            Box(
+                                modifier = Modifier
+                                    .weight(item.percent)
+                                    .fillMaxHeight()
+                                    .background(item.color)
+                            )
+                        }
+                    }
                 }
             }
         }

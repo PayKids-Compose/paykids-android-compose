@@ -365,6 +365,8 @@ fun PayKidsApp(
                         getIncomeMonthTotalAmountUseCase,
                         getExpenseMonthAllCategoryUseCase,
                         getIncomeMonthAllCategoryUseCase,
+                        getExpenseCategoryListUseCase,
+                        getIncomeCategoryListUseCase,
                         deleteExpenseCategoryUseCase,
                         deleteIncomeCategoryUseCase,
                         saveExpenseCategoryUseCase,
