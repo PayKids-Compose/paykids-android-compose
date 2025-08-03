@@ -1,4 +1,4 @@
-package com.paykidscompose.presentation.screens.quiz
+package com.paykidscompose.presentation.screens.quiz.entry
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

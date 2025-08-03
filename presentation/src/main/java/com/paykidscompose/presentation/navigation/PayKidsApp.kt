@@ -83,9 +83,9 @@ import com.paykidscompose.presentation.screens.mypage.info.MyInfoViewModel
 import com.paykidscompose.presentation.screens.mypage.terms.TermsPolicyScreen
 import com.paykidscompose.presentation.screens.quest.QuestAndAchievement
 import com.paykidscompose.presentation.screens.quiz.Quiz
-import com.paykidscompose.presentation.screens.quiz.QuizClear
-import com.paykidscompose.presentation.screens.quiz.QuizEntry
-import com.paykidscompose.presentation.screens.quiz.QuizEntryViewModel
+import com.paykidscompose.presentation.screens.quiz.clear.QuizClear
+import com.paykidscompose.presentation.screens.quiz.entry.QuizEntry
+import com.paykidscompose.presentation.screens.quiz.entry.QuizEntryViewModel
 import com.paykidscompose.presentation.screens.quiz.QuizViewModel
 import com.paykidscompose.presentation.screens.study.Study
 import com.paykidscompose.presentation.ui.components.AppBottomBar

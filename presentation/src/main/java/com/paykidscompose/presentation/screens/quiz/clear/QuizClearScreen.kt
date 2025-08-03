@@ -1,4 +1,4 @@
-package com.paykidscompose.presentation.screens.quiz
+package com.paykidscompose.presentation.screens.quiz.clear
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
