@@ -37,7 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.model.ChatMessageUIModel
+import com.paykidscompose.presentation.model.study.ChatMessageUIModel
 import com.paykidscompose.presentation.screens.study.section.StudyTopBar
 import com.paykidscompose.presentation.ui.components.OutlineInputField
 import com.paykidscompose.presentation.ui.theme.Blue1
