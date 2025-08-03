@@ -2,7 +2,7 @@ package com.paykidscompose.presentation.mapper.quiz
 
 import com.paykidscompose.common.mapper.ModelMapper
 import com.paykidscompose.common.model.quiz.QuizClearedModel
-import com.paykidscompose.presentation.model.QuizClearedUIModel
+import com.paykidscompose.presentation.model.quiz.QuizClearedUIModel
 
 object QuizClearedUIModelMapper: ModelMapper<QuizClearedModel, QuizClearedUIModel> {
     override fun mapToModel(layerModel: QuizClearedUIModel): QuizClearedModel {

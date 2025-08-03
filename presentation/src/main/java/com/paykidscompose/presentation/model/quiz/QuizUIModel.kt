@@ -1,6 +1,7 @@
-package com.paykidscompose.presentation.model
+package com.paykidscompose.presentation.model.quiz
 
 import com.paykidscompose.common.enums.QuizType
+import com.paykidscompose.presentation.model.UIModel
 
 data class QuizUIModel(
     val stage: Int,

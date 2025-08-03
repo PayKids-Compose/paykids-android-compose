@@ -32,7 +32,7 @@ import com.paykidscompose.common.enums.QuizClearType
 import com.paykidscompose.common.enums.QuizType
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.model.QuizUIModel
+import com.paykidscompose.presentation.model.quiz.QuizUIModel
 import com.paykidscompose.presentation.model.type.QuizResultType
 import com.paykidscompose.presentation.screens.quiz.section.ImageQuizContent
 import com.paykidscompose.presentation.screens.quiz.section.QuizTopBar

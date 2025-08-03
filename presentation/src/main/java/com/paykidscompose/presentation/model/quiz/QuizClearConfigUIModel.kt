@@ -1,9 +1,10 @@
-package com.paykidscompose.presentation.model
+package com.paykidscompose.presentation.model.quiz
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import com.paykidscompose.presentation.R
 import com.paykidscompose.common.enums.QuizClearType
+import com.paykidscompose.presentation.model.UIModel
 import com.paykidscompose.presentation.ui.theme.Gray10
 import com.paykidscompose.presentation.ui.theme.Gray8
 import com.paykidscompose.presentation.ui.theme.Purple

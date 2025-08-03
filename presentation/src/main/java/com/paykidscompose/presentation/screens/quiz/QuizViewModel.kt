@@ -13,7 +13,7 @@ import com.paykidscompose.common.usecase.quiz.GetWrongAnswerQuizzesUseCase
 import com.paykidscompose.presentation.base.UIState
 import com.paykidscompose.presentation.mapper.quiz.QuizClearedUIModelMapper
 import com.paykidscompose.presentation.mapper.quiz.QuizUIModelMapper
-import com.paykidscompose.presentation.model.QuizUIModel
+import com.paykidscompose.presentation.model.quiz.QuizUIModel
 import com.paykidscompose.presentation.model.type.QuizResultType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
