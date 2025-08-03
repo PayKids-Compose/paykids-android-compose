@@ -1,7 +1,7 @@
 package com.paykidscompose.data.mapper.study
 
 import com.paykidscompose.common.mapper.ModelMapper
-import com.paykidscompose.common.model.ChatResponseModel
+import com.paykidscompose.common.model.study.ChatResponseModel
 import com.paykidscompose.data.model.study.ChatResponseDTO
 
 object ChatResponseMapper : ModelMapper<ChatResponseModel, ChatResponseDTO> {

@@ -1,4 +1,6 @@
-package com.paykidscompose.common.model
+package com.paykidscompose.common.model.quiz
+
+import com.paykidscompose.common.model.Model
 
 data class QuizClearedModel(
     val message: String,

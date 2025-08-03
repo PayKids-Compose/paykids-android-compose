@@ -1,7 +1,7 @@
 package com.paykidscompose.common.repositories
 
-import com.paykidscompose.common.model.QuizClearedModel
-import com.paykidscompose.common.model.QuizModel
+import com.paykidscompose.common.model.quiz.QuizClearedModel
+import com.paykidscompose.common.model.quiz.QuizModel
 import com.paykidscompose.common.result.DataResourceResult
 import kotlinx.coroutines.flow.Flow
 
@@ -12,5 +12,5 @@ interface QuizRepository {
     suspend fun getCheckStage(stage: Int): DataResourceResult<QuizClearedModel>
     suspend fun getCheckAnswer(stage: Int, number: Int, answer: String): DataResourceResult<Boolean>
     fun getQuiz(stage: Int, number: Int): Flow<DataResourceResult<QuizModel>>
-    fun getIncorrectQuizList(stage: Int): Flow<DataResourceResult<List<Int>>>
+    fun getWrongAnswerQuizNumbers(stage: Int): Flow<DataResourceResult<List<Int>>>
 }
