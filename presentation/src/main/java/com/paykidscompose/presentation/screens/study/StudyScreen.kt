@@ -1,5 +1,6 @@
 package com.paykidscompose.presentation.screens.study
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,23 +24,24 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.model.study.ChatMessageUIModel
 import com.paykidscompose.presentation.screens.study.section.StudyTopBar
 import com.paykidscompose.presentation.ui.components.OutlineInputField
+import com.paykidscompose.presentation.ui.components.ScreenLoading
 import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.Gray1
 import com.paykidscompose.presentation.ui.theme.Gray5
@@ -79,49 +81,61 @@ import com.paykidscompose.presentation.ui.theme.StudyStageNumberBoxTextStyle
 import com.paykidscompose.presentation.ui.theme.StudyStageNumberBoxVerticalPadding
 import com.paykidscompose.presentation.ui.theme.White
 import com.paykidscompose.presentation.ui.theme.White4
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 fun Study(
     stageNumber: Int,
+    studyViewModel: StudyViewModel = viewModel(),
     onBackClick: () -> Unit = {}
 ) {
-    val messages = remember {
-        mutableStateListOf(
-            ChatMessageUIModel("어린이 여러분 돈이란 무엇일까요?\n돈이 뭐냐면 사고 싶은 걸 살 수 있는 거랍니다", isFromGpt = true),
-            ChatMessageUIModel("우와 그렇구나\n돈 없이는 사고 싶은 걸 가질 수 없나요?", isFromGpt = false),
-        )
-    }
+    val uiState by studyViewModel.uiState.collectAsStateWithLifecycle()
+
+    val context = LocalContext.current
+
     val stageNumberText = stringResource(R.string.text_stage_number, stageNumber)
     val userNickname = "닉네임"
-    var userInput by remember { mutableStateOf("") }
 
     val listState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
 
-    StudyScreen(
-        modifier = Modifier
-            .fillMaxSize(),
-        stageNumberText = stageNumberText,
-        userNickname = userNickname,
-        messages = messages,
-        userInput = userInput,
-        onBackClick = onBackClick,
-        onUserInputChange = { userInput = it },
-        onSendClick = {
-            if (userInput.isNotBlank()) {
-                messages.add(ChatMessageUIModel(userInput, isFromGpt = false))
-                userInput = ""
-                coroutineScope.launch {
-                    delay(500)
-                    messages.add(ChatMessageUIModel("GPT 응답 예시", isFromGpt = true))
-                    listState.animateScrollToItem(messages.size - 1)
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let {
+            when (it) {
+                is PayKidsException.SnackBarException -> {
+                }
+
+                is PayKidsException.DialogException -> {
+                }
+
+                is PayKidsException.ToastException -> {
+                    Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                 }
             }
-        },
-        listState = listState
-    )
+
+            studyViewModel.clearError()
+        }
+    }
+
+    when {
+        uiState.isLoading -> {
+            ScreenLoading()
+        }
+        else -> {
+            StudyScreen(
+                modifier = Modifier
+                    .fillMaxSize(),
+                stageNumberText = stageNumberText,
+                userNickname = userNickname,
+                messages = uiState.messages,
+                userInput = uiState.userInput,
+                onBackClick = onBackClick,
+                onUserInputChange = { text -> studyViewModel.onUserInputChange(text) },
+                onSendClick = {
+                    studyViewModel.sendUserInput()
+                },
+                listState = listState
+            )
+        }
+    }
 }
 
 
