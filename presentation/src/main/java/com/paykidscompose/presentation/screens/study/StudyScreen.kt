@@ -93,7 +93,7 @@ fun Study(
     val context = LocalContext.current
 
     val stageNumberText = stringResource(R.string.text_stage_number, stageNumber)
-    val userNickname = "닉네임"
+    val userNickname = uiState.userNickname
 
     val listState = rememberLazyListState()
 
