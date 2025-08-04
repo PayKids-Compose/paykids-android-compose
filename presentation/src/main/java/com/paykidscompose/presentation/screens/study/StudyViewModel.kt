@@ -65,7 +65,7 @@ class StudyViewModel(
                         }
 
                         is DataResourceResult.Failure -> {
-                            _uiState.update { it.copy(error = result.exception) }
+                            _uiState.update { it.copy(error = result.exception, isLoading = false) }
                         }
 
                         DataResourceResult.Loading -> {}
@@ -104,6 +104,7 @@ class StudyViewModel(
                             )
                         }
                     }
+
                     DataResourceResult.Loading -> {}
                     DataResourceResult.DummyConstructor -> {}
                 }
