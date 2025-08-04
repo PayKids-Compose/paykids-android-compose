@@ -129,6 +129,7 @@ z   <string name="text_quiz_number">%1$d/%2$d</string>
     <string name="text_delete">삭제하기</string>
     <string name="text_cancel">취소</string>
     <string name="analysis_text_save">저장</string>
+    <string name="analysis_text_etc">기타</string>
 
     <!-- 퀘스트 페이지 -->
     <string name="text_tab_quest">퀘스트</string>

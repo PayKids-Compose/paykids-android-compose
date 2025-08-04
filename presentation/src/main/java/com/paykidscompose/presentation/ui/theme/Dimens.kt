@@ -286,6 +286,7 @@ val AllowanceInputDialogDateItemStartEndPadding = 8.dp
 val AllowanceInputDialogDateItemTopBottomPadding = 4.dp
 
 // 용돈일기 분석 화면
+val AnalysisScreenCheckImageSize = 20.dp
 val AnalysisScreenStartEndPadding = 17.dp
 val AnalysisScreenTopPadding = 20.dp
 val AnalysisScreenSpacer8 = 8.dp

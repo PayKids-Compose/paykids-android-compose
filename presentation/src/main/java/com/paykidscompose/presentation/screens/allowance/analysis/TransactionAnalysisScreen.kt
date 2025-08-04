@@ -45,7 +45,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paykidscompose.common.enums.AllowanceType
@@ -70,6 +69,7 @@ import com.paykidscompose.presentation.ui.theme.AllowanceInputDialogToggleShadow
 import com.paykidscompose.presentation.ui.theme.AllowanceInputToggleTextStyle
 import com.paykidscompose.presentation.ui.theme.AnalysisScreenAddButtonVertical
 import com.paykidscompose.presentation.ui.theme.AnalysisScreenBorderWidth1
+import com.paykidscompose.presentation.ui.theme.AnalysisScreenCheckImageSize
 import com.paykidscompose.presentation.ui.theme.AnalysisScreenDeleteButtonHorizontal
 import com.paykidscompose.presentation.ui.theme.AnalysisScreenDeleteButtonVertical
 import com.paykidscompose.presentation.ui.theme.AnalysisScreenElevation16
@@ -382,8 +382,11 @@ fun TransactionAnalysisScreen(
         LazyColumn(
             modifier = Modifier.fillMaxWidth()
         ) {
-            items(transactionList) {
+            items(transactionList, key = {
+                "${it.type}_${it.category}"
+            }) {
                 AnalysisItem(
+                    it.category == stringResource(R.string.analysis_text_etc),
                     it.category, it.amount,
                     "${it.percent}%",
                     isDeleteMode,
@@ -441,6 +444,7 @@ fun TransactionAnalysisScreen(
 
 @Composable
 private fun AnalysisItem(
+    isEtcCategory: Boolean = false,
     category: String,
     amount: Int,
     percent: String,
@@ -452,6 +456,7 @@ private fun AnalysisItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(
+                enabled = !(isEtcCategory && isDeleteMode),
                 onClick = {
                     onCategoryCard()
                 }
@@ -483,13 +488,15 @@ private fun AnalysisItem(
             )
 
             if (isDeleteMode) {
-                Image(
-                    painter = painterResource(
-                        if (isSelected) R.drawable.ic_checkbox_checked else R.drawable.ic_checkbox_unchecked
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp)
-                )
+                if (!isEtcCategory) {
+                    Image(
+                        painter = painterResource(
+                            if (isSelected) R.drawable.ic_checkbox_checked else R.drawable.ic_checkbox_unchecked
+                        ),
+                        contentDescription = null,
+                        modifier = Modifier.size(AnalysisScreenCheckImageSize)
+                    )
+                }
             } else {
                 Text(
                     formatAmount(amount),
