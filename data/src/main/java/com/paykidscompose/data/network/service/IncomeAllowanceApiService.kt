@@ -13,7 +13,7 @@ import retrofit2.http.Query
 interface IncomeAllowanceApiService {
     @DELETE("/income/allowance/delete")
     suspend fun deleteIncome(
-        @Query("id") id: Int
+        @Query("id") id: Long
     ): BaseResponse<Boolean>
 
     @GET("/income/allowance/month-total-amount")

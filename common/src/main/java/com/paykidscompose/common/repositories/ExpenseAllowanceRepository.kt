@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
 interface ExpenseAllowanceRepository {
-    suspend fun deleteExpense(id: Int): DataResourceResult<Boolean>
+    suspend fun deleteExpense(id: Long): DataResourceResult<Boolean>
     suspend fun saveExpense(request: AllowanceChartModel): DataResourceResult<Boolean>
     suspend fun replaceExpense(request: AllowanceChartModel): DataResourceResult<Boolean>
     suspend fun getExpenseMonthTotalAmount(year: Int, month: Int): DataResourceResult<Int>

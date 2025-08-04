@@ -131,7 +131,7 @@ fun AllowanceDiary(
             chartUIModel = uiState.uiModel.selectedTransaction!!,
             expenseCategories = uiState.uiModel.expenseCategories,
             incomeCategories = uiState.uiModel.incomeCategories,
-            isReplace = true,
+            isTypeLock = true,
             onCancelClick = { viewModel.onDismissReplaceDialog() }
         ) { viewModel.onConfirmReplaceDialog(it) }
     }

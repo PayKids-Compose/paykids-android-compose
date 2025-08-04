@@ -37,7 +37,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -98,8 +97,6 @@ import com.paykidscompose.presentation.ui.theme.Gray7
 import com.paykidscompose.presentation.ui.theme.PopupDialogCardColumnSize
 import com.paykidscompose.presentation.ui.theme.White
 import com.paykidscompose.presentation.util.formatAmount
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 
 
@@ -108,7 +105,7 @@ fun AllowanceInputDialog(
     chartUIModel: AllowanceChartUIModel,
     expenseCategories: List<CategoryUIModel> = emptyList(),
     incomeCategories: List<CategoryUIModel> = emptyList(),
-    isReplace: Boolean = false,
+    isTypeLock: Boolean = false,
     onCancelClick: () -> Unit,
     onConfirmClick: (AllowanceChartUIModel) -> Unit
 ) {
@@ -124,7 +121,7 @@ fun AllowanceInputDialog(
     var selectedCategory by remember { mutableStateOf(chartUIModel.category) }
 
     val onSelectType = { type: AllowanceType ->
-        if(!isReplace) {
+        if(!isTypeLock) {
             selectType = type
         }
     }
@@ -488,18 +485,18 @@ fun CategoryWheelPicker(
             }
         }
 
-        snapshotFlow { listState.firstVisibleItemIndex }
-            .map { firstIndex ->
-                val centerItemOffset = (listState.layoutInfo.visibleItemsInfo.size / 2)
-                categories.getOrNull(firstIndex + centerItemOffset)
-            }
-            .distinctUntilChanged()
-            .collect { category ->
-                category?.let {
-                    selectedCategory = it
-                    onCategorySelected(it)
-                }
-            }
+//        snapshotFlow { listState.firstVisibleItemIndex }
+//            .map { firstIndex ->
+//                val centerItemOffset = (listState.layoutInfo.visibleItemsInfo.size / 2)
+//                categories.getOrNull(firstIndex + centerItemOffset)
+//            }
+//            .distinctUntilChanged()
+//            .collect { category ->
+//                category?.let {
+//                    selectedCategory = it
+//                    onCategorySelected(it)
+//                }
+//            }
     }
 
     Box(
@@ -624,7 +621,7 @@ private fun DateInputItem( // 여기도 문자열 말고 LocalDate로 수정 예
 fun AllowancePopup() {
     AllowanceInputDialog(
         chartUIModel = AllowanceChartUIModel(
-            id = 0, // id는 서버에서 자체적으로 처리함.
+            id = 0,
             date = today,
             type = AllowanceType.EXPENSE,
             category = "기타",

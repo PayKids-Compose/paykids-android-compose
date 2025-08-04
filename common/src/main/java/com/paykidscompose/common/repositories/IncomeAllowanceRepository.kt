@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
 interface IncomeAllowanceRepository {
-    suspend fun deleteIncome(id: Int): DataResourceResult<Boolean>
+    suspend fun deleteIncome(id: Long): DataResourceResult<Boolean>
     suspend fun saveIncome(request: AllowanceChartModel): DataResourceResult<Boolean>
     suspend fun replaceIncome(request: AllowanceChartModel): DataResourceResult<Boolean>
     suspend fun getIncomeMonthTotalAmount(year: Int, month: Int): DataResourceResult<Int>

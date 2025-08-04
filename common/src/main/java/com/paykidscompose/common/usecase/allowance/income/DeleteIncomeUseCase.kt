@@ -18,6 +18,6 @@ class DeleteIncomeUseCase(
     }
 
     data class Params(
-        val id: Int
+        val id: Long
     )
 }

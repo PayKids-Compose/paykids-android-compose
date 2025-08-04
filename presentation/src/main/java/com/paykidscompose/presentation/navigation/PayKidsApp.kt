@@ -18,9 +18,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.paykidscompose.common.enums.EntryPoint
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseCategoryUseCase
+import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseDayUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthAllCategoryUseCase
+import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthDailyAmountUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthMostCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthTotalAmountUseCase
@@ -28,9 +30,11 @@ import com.paykidscompose.common.usecase.allowance.expense.ReplaceExpenseUseCase
 import com.paykidscompose.common.usecase.allowance.expense.SaveExpenseCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.SaveExpenseUseCase
 import com.paykidscompose.common.usecase.allowance.income.DeleteIncomeCategoryUseCase
+import com.paykidscompose.common.usecase.allowance.income.DeleteIncomeUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeDayUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthAllCategoryUseCase
+import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthDailyAmountUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthTotalAmountUseCase
 import com.paykidscompose.common.usecase.allowance.income.ReplaceIncomeUseCase
@@ -51,6 +55,7 @@ import com.paykidscompose.common.usecase.user.GetUserUseCase
 import com.paykidscompose.common.usecase.user.ReplaceNicknameUseCase
 import com.paykidscompose.common.usecase.user.SaveNicknameUseCase
 import com.paykidscompose.presentation.factory.AllowanceDiaryViewModelFactory
+import com.paykidscompose.presentation.factory.CategoryDetailViewModelFactory
 import com.paykidscompose.presentation.factory.HomeViewModelFactory
 import com.paykidscompose.presentation.factory.LoginNicknameViewModelFactory
 import com.paykidscompose.presentation.factory.LoginViewModelFactory
@@ -70,6 +75,7 @@ import com.paykidscompose.presentation.screens.allowance.AllowanceDiaryViewModel
 import com.paykidscompose.presentation.screens.allowance.analysis.TransactionAnalysis
 import com.paykidscompose.presentation.screens.allowance.analysis.TransactionAnalysisViewModel
 import com.paykidscompose.presentation.screens.allowance.detail.CategoryDetail
+import com.paykidscompose.presentation.screens.allowance.detail.CategoryDetailViewModel
 import com.paykidscompose.presentation.screens.home.Home
 import com.paykidscompose.presentation.screens.home.HomeViewModel
 import com.paykidscompose.presentation.screens.login.Login
@@ -83,10 +89,10 @@ import com.paykidscompose.presentation.screens.mypage.info.MyInfoViewModel
 import com.paykidscompose.presentation.screens.mypage.terms.TermsPolicyScreen
 import com.paykidscompose.presentation.screens.quest.QuestAndAchievement
 import com.paykidscompose.presentation.screens.quiz.Quiz
+import com.paykidscompose.presentation.screens.quiz.QuizViewModel
 import com.paykidscompose.presentation.screens.quiz.clear.QuizClear
 import com.paykidscompose.presentation.screens.quiz.entry.QuizEntry
 import com.paykidscompose.presentation.screens.quiz.entry.QuizEntryViewModel
-import com.paykidscompose.presentation.screens.quiz.QuizViewModel
 import com.paykidscompose.presentation.screens.study.Study
 import com.paykidscompose.presentation.ui.components.AppBottomBar
 
@@ -126,7 +132,11 @@ fun PayKidsApp(
     deleteExpenseCategoryUseCase: DeleteExpenseCategoryUseCase,
     deleteIncomeCategoryUseCase: DeleteIncomeCategoryUseCase,
     saveExpenseCategoryUseCase: SaveExpenseCategoryUseCase,
-    saveIncomeCategoryUseCase: SaveIncomeCategoryUseCase
+    saveIncomeCategoryUseCase: SaveIncomeCategoryUseCase,
+    getExpenseMonthCategoryUseCase: GetExpenseMonthCategoryUseCase,
+    getIncomeMonthCategoryUseCase: GetIncomeMonthCategoryUseCase,
+    deleteExpenseUseCase: DeleteExpenseUseCase,
+    deleteIncomeUseCase: DeleteIncomeUseCase
 ) {
     val navController: NavHostController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -376,14 +386,41 @@ fun PayKidsApp(
 
                 TransactionAnalysis(
                     viewModel = viewModel,
-                    onCategoryCard = {
-                        navController.navigate(AllowanceDiaryNavigationRoute.CategoryDetailRoute)
+                    onCategoryCard = { year, month, category, type ->
+                        navController.navigate(
+                            AllowanceDiaryNavigationRoute.CategoryDetailRoute(
+                                year,
+                                month,
+                                category,
+                                type
+                            )
+                        )
                     }
                 )
             }
 
             composable<AllowanceDiaryNavigationRoute.CategoryDetailRoute> {
-                CategoryDetail()
+                val targetRoute = it.toRoute<AllowanceDiaryNavigationRoute.CategoryDetailRoute>()
+                val year = targetRoute.year
+                val month = targetRoute.month
+                val category = targetRoute.category
+                val type = targetRoute.type
+
+                val viewModel: CategoryDetailViewModel = viewModel(
+                    viewModelStoreOwner = it,
+                    factory = CategoryDetailViewModelFactory(
+                        getExpenseMonthCategoryUseCase,
+                        getIncomeMonthCategoryUseCase,
+                        saveExpenseUseCase,
+                        saveIncomeUseCase,
+                        replaceExpenseUseCase,
+                        replaceIncomeUseCase,
+                        deleteExpenseUseCase,
+                        deleteIncomeUseCase
+                    )
+                )
+
+                CategoryDetail(year, month, category, type, viewModel)
             }
         }
     }

@@ -19,7 +19,7 @@ class ExpenseAllowanceRepositoryImpl(
     private val expenseApiService: ExpenseAllowanceApiService
 ) : ExpenseAllowanceRepository {
 
-    override suspend fun deleteExpense(id: Int): DataResourceResult<Boolean> {
+    override suspend fun deleteExpense(id: Long): DataResourceResult<Boolean> {
         return runCatching {
             expenseApiService.deleteExpense(id)
         }.fold(

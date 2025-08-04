@@ -97,6 +97,50 @@ fun PopupDialog(
                 Spacer(modifier = Modifier.height(PopupDialogSpacer20))
 
                 when (popupType) {
+                    PopupType.TRANSACTION_DELETE -> {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(IntrinsicSize.Min)
+                        ) {
+                            Button(
+                                onClick = onConfirmClick,
+                                shape = RoundedCornerShape(PopupDialogButtonShape),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight(),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Red, // 버튼 배경색상
+                                    contentColor = White, // 버튼 텍스트 색상
+                                )
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.text_delete),
+                                    style = PopupDialogButtonTextStyle
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.width(PopupDialogSpacer6))
+
+                            Button(
+                                onClick = onCancelClick,
+                                shape = RoundedCornerShape(PopupDialogButtonShape),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight(),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Gray6, // 버튼 배경색상
+                                    contentColor = Black, // 버튼 텍스트 색상
+                                )
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.dialog_cancel),
+                                    style = PopupDialogButtonTextStyle
+                                )
+                            }
+                        }
+                    }
+
                     PopupType.ERROR -> {
                         Button(
                             onClick = onConfirmClick,
