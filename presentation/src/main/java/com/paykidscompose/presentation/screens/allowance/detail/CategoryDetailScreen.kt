@@ -1,7 +1,9 @@
 package com.paykidscompose.presentation.screens.allowance.detail
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,20 +18,30 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.paykidscompose.common.enums.AllowanceType
+import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.presentation.R
+import com.paykidscompose.presentation.base.UIEvent
+import com.paykidscompose.presentation.model.allowance.AllowanceChartUIModel
+import com.paykidscompose.presentation.ui.components.AllowanceInputDialog
+import com.paykidscompose.presentation.ui.components.PopupDialog
+import com.paykidscompose.presentation.ui.components.ScreenLoading
+import com.paykidscompose.presentation.ui.components.util.PopupType
+import com.paykidscompose.presentation.ui.theme.AllowanceDiaryHeadMonthTextStyle
 import com.paykidscompose.presentation.ui.theme.Black
 import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.CategoryDetailItemAddTextStyle
@@ -39,6 +51,7 @@ import com.paykidscompose.presentation.ui.theme.CategoryDetailItemMemoTextStyle
 import com.paykidscompose.presentation.ui.theme.CategoryDetailScreenItemStartEndPadding
 import com.paykidscompose.presentation.ui.theme.CategoryDetailScreenItemTopBottomPadding
 import com.paykidscompose.presentation.ui.theme.CategoryDetailScreenSpacer24
+import com.paykidscompose.presentation.ui.theme.CategoryDetailScreenSpacer53
 import com.paykidscompose.presentation.ui.theme.CategoryDetailScreenSpacer6
 import com.paykidscompose.presentation.ui.theme.CategoryDetailScreenSpacer8
 import com.paykidscompose.presentation.ui.theme.CategoryDetailScreenStartEndPadding
@@ -53,60 +66,121 @@ import com.paykidscompose.presentation.ui.theme.Shape10
 import com.paykidscompose.presentation.ui.theme.White
 import com.paykidscompose.presentation.ui.theme.White2
 import com.paykidscompose.presentation.util.formatAmount
-
-data class DetailTestModel(
-    val category: String,
-    val amount: Int,
-    val memo: String
-)
+import kotlinx.coroutines.flow.collectLatest
+import java.time.LocalDate
 
 @Composable
 fun CategoryDetail(
+    year: Int,
+    month: Int,
+    category: String,
+    type: AllowanceType,
+    viewModel: CategoryDetailViewModel = viewModel(),
 ) {
-    val category = "편의점" // uimodel로 다 바꿀겁니다. 지금은 정적인 화면 구현 중입니다.
-    val amount = 150000
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val details = listOf(
-        DetailTestModel("편의점", 1800, "불닭 사먹음 ㅎㅎ"),
-        DetailTestModel("편의점", 4000, "도시락 사먹음 ㅎㅎ"),
-        DetailTestModel("편의점", 2000, "음료수 사먹음 ㅎㅎ")
-    )
+    val context = LocalContext.current
 
-    var showDialog by remember { mutableStateOf(false) }
-
-    val onDialog = { value: Boolean ->
-        showDialog = value
+    if (uiState.showAddTransactionDialog) {
+        AllowanceInputDialog(
+            chartUIModel = AllowanceChartUIModel(
+                id = 0,
+                date = LocalDate.of(year, month, 1),
+                type = type,
+                category = category,
+                amountFormatted = "",
+                amount = 0,
+                memo = ""
+            ),
+            isTypeLock = true,
+            onCancelClick = { viewModel.onDismissAddTransactionDialog() }
+        ) { viewModel.onConfirmAddTransactionDialog(it) }
     }
 
-    CategoryDetailScreen(
-        category = category,
-        amount = amount,
-        details = details,
-        showDialog = showDialog,
-        onDialog = onDialog
-    )
+    if (uiState.showReplaceTransactionDialog && uiState.uiModel.selectedTransaction != null) {
+        AllowanceInputDialog(
+            chartUIModel = uiState.uiModel.selectedTransaction!!,
+            isTypeLock = true,
+            onCancelClick = { viewModel.onDismissReplaceDialog() }
+        ) { viewModel.onConfirmReplaceDialog(it) }
+    }
+
+    if (uiState.showDeleteTransactionDialog && uiState.uiModel.selectedTransaction != null) {
+        PopupDialog(
+            title = "${uiState.uiModel.selectedTransaction!!.id}",
+            description = stringResource(R.string.selected_transaction_delete),
+            popupType = PopupType.TRANSACTION_DELETE,
+            onCancelClick = { viewModel.onDismissDeleteDialog() },
+            onConfirmClick = { viewModel.onConfirmDeleteDialog() }
+        )
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.applyInitialArgs(year, month, category, type)
+        viewModel.load()
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collectLatest { event ->
+            when (event) {
+                is UIEvent.SuccessShowToast -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let {
+            when (it) {
+                is PayKidsException.DialogException -> {
+
+                }
+
+                is PayKidsException.SnackBarException -> {
+
+                }
+
+                is PayKidsException.ToastException -> {
+                    Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            viewModel.clearError()
+        }
+    }
+
+    when {
+        uiState.isLoading -> {
+            ScreenLoading()
+        }
+
+        else -> {
+            CategoryDetailScreen(
+                month = month,
+                category = uiState.uiModel.category,
+                totalAmount = uiState.uiModel.totalAmount,
+                type = uiState.uiModel.allowanceType,
+                details = uiState.uiModel.detailCategories,
+                onAddDialog = { viewModel.onAddClickDialog() },
+                onReplaceDialog = { viewModel.onReplaceTransactionDialog(it) },
+                onDeleteDialog = { viewModel.onDeleteTransactionDialog(it) }
+            )
+        }
+    }
 }
 
 @Composable
 fun CategoryDetailScreen(
+    month: Int,
     category: String,
-    amount: Int,
-    showDialog: Boolean,
-    onDialog: (Boolean) -> Unit,
-    details: List<DetailTestModel>
+    totalAmount: Int,
+    type: AllowanceType,
+    details: List<AllowanceChartUIModel>,
+    onAddDialog: () -> Unit,
+    onReplaceDialog: (AllowanceChartUIModel) -> Unit,
+    onDeleteDialog: (AllowanceChartUIModel) -> Unit
 ) {
-    if (showDialog) {
-//        AllowanceInputDialog(
-//            onSelect = {},
-//            onCancelClick = {
-//                onDialog(!showDialog)
-//            },
-//            onConfirmClick = {
-//                onDialog(!showDialog)
-//            }
-//        )
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -119,15 +193,25 @@ fun CategoryDetailScreen(
             )
     ) {
         Text(
+            text = "${month}월", style = AllowanceDiaryHeadMonthTextStyle
+        )
+
+        Spacer(Modifier.height(CategoryDetailScreenSpacer53))
+
+        Text(
             buildAnnotatedString {
                 withStyle(SpanStyle(color = Blue1)) {
                     append(category)
                 }
                 withStyle(SpanStyle(color = Black)) {
                     append(
-                        stringResource(
-                            R.string.text_category_consume,
-                            formatAmount(amount)
+                        if (type == AllowanceType.EXPENSE) stringResource(
+                            R.string.text_category_detail_expense,
+                            formatAmount(totalAmount)
+                        )
+                        else stringResource(
+                            R.string.text_category_detail_income,
+                            formatAmount(totalAmount)
                         )
                     )
                 }
@@ -140,21 +224,20 @@ fun CategoryDetailScreen(
         LazyColumn(
             modifier = Modifier.fillMaxWidth()
         ) {
-            items(details) {
-                DetailItem(it, showDialog, onDialog)
+            items(details, key = { it.id }) {
+                DetailItem(it, type, onReplaceDialog, onDeleteDialog)
 
                 Spacer(Modifier.height(CategoryDetailScreenSpacer8))
             }
 
             item {
-                // 나중에 재사용할 수 있게 만들어야 할 거 같습니다.
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(Shape10)
                         .clickable(
                             onClick = {
-                                // 추가하기 로직 추가 예정
+                                onAddDialog()
                             }
                         )
                         .background(color = White2)
@@ -182,18 +265,21 @@ fun CategoryDetailScreen(
 
 @Composable
 fun DetailItem(
-    data: DetailTestModel,
-    showDialog: Boolean,
-    onDialog: (Boolean) -> Unit
+    data: AllowanceChartUIModel,
+    type: AllowanceType,
+    onReplaceDialog: (AllowanceChartUIModel) -> Unit,
+    onDeleteDialog: (AllowanceChartUIModel) -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .clip(Shape10)
-            .clickable(
+            .combinedClickable(
                 onClick = {
-                    // 수정하는 화면으로 이동 로직 추가 예정
-                    onDialog(!showDialog)
+                    onReplaceDialog(data)
+                },
+                onLongClick = {
+                    onDeleteDialog(data)
                 }
             )
             .background(color = White)
@@ -222,7 +308,8 @@ fun DetailItem(
                 Spacer(Modifier.height(CategoryDetailScreenSpacer6))
 
                 Text(
-                    "-${formatAmount(data.amount)}",
+                    if (type == AllowanceType.EXPENSE) "-${formatAmount(data.amount)}"
+                    else "+${formatAmount(data.amount)}",
                     style = CategoryDetailItemAmountTextStyle.copy(color = Black)
                 )
             }
@@ -238,5 +325,4 @@ fun DetailItem(
 @Preview
 @Composable
 fun CategoryDetailScreenPreview() {
-    CategoryDetail()
 }

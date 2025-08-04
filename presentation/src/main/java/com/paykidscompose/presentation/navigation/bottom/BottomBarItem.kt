@@ -1,5 +1,6 @@
 package com.paykidscompose.presentation.navigation.bottom
 
+import com.paykidscompose.common.enums.AllowanceType
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.navigation.route.AllowanceDiaryNavigationRoute
 import com.paykidscompose.presentation.navigation.route.NavigationRoute
@@ -39,7 +40,7 @@ data class BottomBarItem(
                 relatedRoutes = listOf(
                     TabNavigationRoute.AllowanceDiaryRoute,
                     AllowanceDiaryNavigationRoute.ExpenseAnalysisRoute,
-                    AllowanceDiaryNavigationRoute.CategoryDetailRoute
+                    AllowanceDiaryNavigationRoute.CategoryDetailRoute()
                 )
             ),
             BottomBarItem(

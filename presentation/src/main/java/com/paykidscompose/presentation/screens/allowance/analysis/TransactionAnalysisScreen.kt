@@ -112,7 +112,7 @@ import java.time.LocalDate
 @Composable
 fun TransactionAnalysis(
     viewModel: TransactionAnalysisViewModel = viewModel(),
-    onCategoryCard: () -> Unit = {}
+    onCategoryCard: (Int, Int, String, AllowanceType) -> Unit = { _, _, _, _ -> }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -196,7 +196,7 @@ fun TransactionAnalysisScreen(
     inputCategory: (String) -> Unit,
     onToggleCategorySelection: (String) -> Unit,
     onAddClick: () -> Unit,
-    onCategoryCard: () -> Unit,
+    onCategoryCard: (Int, Int, String, AllowanceType) -> Unit,
     onPrevMonth: () -> Unit,
     onNextMonth: () -> Unit,
     onSelect: (AllowanceType) -> Unit,
@@ -395,7 +395,7 @@ fun TransactionAnalysisScreen(
                     if (isDeleteMode) {
                         onToggleCategorySelection(it.category)
                     } else {
-                        onCategoryCard()
+                        onCategoryCard(month.year, month.monthValue, it.category, it.type)
                     }
                 }
 

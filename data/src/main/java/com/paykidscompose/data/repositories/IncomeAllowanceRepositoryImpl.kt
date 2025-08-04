@@ -19,7 +19,7 @@ class IncomeAllowanceRepositoryImpl(
     private val incomeAllowanceApiService: IncomeAllowanceApiService
 ) : IncomeAllowanceRepository {
 
-    override suspend fun deleteIncome(id: Int): DataResourceResult<Boolean> {
+    override suspend fun deleteIncome(id: Long): DataResourceResult<Boolean> {
         return runCatching {
             incomeAllowanceApiService.deleteIncome(id)
         }.fold(

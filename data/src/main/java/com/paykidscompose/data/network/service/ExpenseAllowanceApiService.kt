@@ -12,7 +12,7 @@ import retrofit2.http.Query
 
 interface ExpenseAllowanceApiService {
     @DELETE("/expense/allowance/delete")
-    suspend fun deleteExpense(@Query("id") id: Int): BaseResponse<Boolean>
+    suspend fun deleteExpense(@Query("id") id: Long): BaseResponse<Boolean>
 
     @GET("/expense/allowance/month-total-amount")
     suspend fun getExpenseMonthTotalAmount(

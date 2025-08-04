@@ -3,9 +3,11 @@ package com.paykidscompose.app.di
 import android.content.Context
 import com.paykidscompose.common.di.ApplicationContainer
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseCategoryUseCase
+import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseDayUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthAllCategoryUseCase
+import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthDailyAmountUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthMostCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthTotalAmountUseCase
@@ -13,9 +15,11 @@ import com.paykidscompose.common.usecase.allowance.expense.ReplaceExpenseUseCase
 import com.paykidscompose.common.usecase.allowance.expense.SaveExpenseCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.SaveExpenseUseCase
 import com.paykidscompose.common.usecase.allowance.income.DeleteIncomeCategoryUseCase
+import com.paykidscompose.common.usecase.allowance.income.DeleteIncomeUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeDayUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthAllCategoryUseCase
+import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthDailyAmountUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthTotalAmountUseCase
 import com.paykidscompose.common.usecase.allowance.income.ReplaceIncomeUseCase
@@ -137,4 +141,11 @@ class ApplicationContainerImpl(
         ReplaceExpenseUseCase(expenseAllowanceRepository)
     override val replaceIncomeUseCase: ReplaceIncomeUseCase =
         ReplaceIncomeUseCase(incomeAllowanceRepository)
+
+    override val getExpenseMonthCategoryUseCase: GetExpenseMonthCategoryUseCase =
+        GetExpenseMonthCategoryUseCase(expenseAllowanceRepository)
+    override val getIncomeMonthCategoryUseCase: GetIncomeMonthCategoryUseCase =
+        GetIncomeMonthCategoryUseCase(incomeAllowanceRepository)
+    override val deleteExpenseUseCase: DeleteExpenseUseCase = DeleteExpenseUseCase(expenseAllowanceRepository)
+    override val deleteIncomeUseCase: DeleteIncomeUseCase = DeleteIncomeUseCase(incomeAllowanceRepository)
 }

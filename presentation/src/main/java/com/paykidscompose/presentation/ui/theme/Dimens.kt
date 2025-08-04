@@ -309,9 +309,10 @@ val AnalysisScreenProgressBarSize = 8.dp
 
 // 카테고리 상세내역 화면
 val CategoryDetailScreenStartEndPadding = 17.dp
-val CategoryDetailScreenTopPadding = 70.dp
+val CategoryDetailScreenTopPadding = 20.dp
 val CategoryDetailScreenItemTopBottomPadding = 14.dp
 val CategoryDetailScreenItemStartEndPadding = 18.dp
 val CategoryDetailScreenSpacer6 = 6.dp
 val CategoryDetailScreenSpacer8 = 8.dp
 val CategoryDetailScreenSpacer24 = 24.dp
+val CategoryDetailScreenSpacer53 = 53.dp
