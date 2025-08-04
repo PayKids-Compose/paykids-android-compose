@@ -1,4 +1,4 @@
-package com.paykidscompose.presentation.screens.quiz
+package com.paykidscompose.presentation.screens.quiz.clear
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,8 +13,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import coil3.compose.AsyncImage
 import com.paykidscompose.presentation.R
-import com.paykidscompose.presentation.model.QuizClearConfigUIModel
-import com.paykidscompose.presentation.model.toConfig
+import com.paykidscompose.presentation.model.quiz.QuizClearConfigUIModel
+import com.paykidscompose.presentation.model.quiz.toConfig
 import com.paykidscompose.common.enums.QuizClearType
 import com.paykidscompose.presentation.ui.components.DashedCard
 import com.paykidscompose.presentation.ui.components.DecisionButton

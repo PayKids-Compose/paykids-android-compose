@@ -3,7 +3,7 @@ package com.paykidscompose.presentation.factory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.paykidscompose.common.usecase.quiz.GetWrongAnswerStatusUseCase
-import com.paykidscompose.presentation.screens.quiz.QuizEntryViewModel
+import com.paykidscompose.presentation.screens.quiz.entry.QuizEntryViewModel
 
 class QuizEntryViewModelFactory(
     private val getWrongAnswerStatusUseCase: GetWrongAnswerStatusUseCase

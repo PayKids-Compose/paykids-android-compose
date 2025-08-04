@@ -2,7 +2,7 @@ package com.paykidscompose.presentation.mapper.study
 
 import com.paykidscompose.common.mapper.ModelMapper
 import com.paykidscompose.common.model.study.ChatResponseModel
-import com.paykidscompose.presentation.model.ChatMessageUIModel
+import com.paykidscompose.presentation.model.study.ChatMessageUIModel
 
 object ChatMessageUIModelMapper: ModelMapper<ChatResponseModel, ChatMessageUIModel> {
     override fun mapToModel(layerModel: ChatMessageUIModel): ChatResponseModel {
