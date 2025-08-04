@@ -288,7 +288,8 @@ fun PayKidsApp(
                 val viewModel: StudyViewModel = viewModel(
                     viewModelStoreOwner = backStack,
                     factory = StudyViewModelFactory(
-                        getChatResponseUseCase
+                        getChatResponseUseCase,
+                        getUserUseCase
                     )
                 )
 
