@@ -1,5 +1,6 @@
 package com.paykidscompose.presentation.screens.quest
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -18,15 +19,24 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.paykidscompose.common.exception.PayKidsException
+import com.paykidscompose.presentation.model.achievement.AchievementUIModel
+import com.paykidscompose.presentation.model.quest.QuestUIModel
 import com.paykidscompose.presentation.screens.quest.page.AchievementPage
 import com.paykidscompose.presentation.screens.quest.page.QuestPage
+import com.paykidscompose.presentation.ui.components.ScreenLoading
 import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.Gray2
 import com.paykidscompose.presentation.ui.theme.PayKidsComposeTheme
@@ -38,20 +48,57 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun QuestAndAchievement() {
+fun QuestAndAchievement(
+    questAndAchievementViewModel: QuestAndAchievementViewModel = viewModel()
+) {
+    val uiState by questAndAchievementViewModel.uiState.collectAsStateWithLifecycle()
+
+    val context = LocalContext.current
+
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { QuestAndAchievementTab.entries.size })
     val selectedTabIndex = remember { derivedStateOf { pagerState.currentPage } }
 
-    QuestAndAchievementScreen(
-        scope = scope,
-        pagerState = pagerState,
-        selectedTabIndex = selectedTabIndex
-    )
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let {
+            when (it) {
+                is PayKidsException.SnackBarException -> {
+                }
+
+                is PayKidsException.DialogException -> {
+                }
+
+                is PayKidsException.ToastException -> {
+                    Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            questAndAchievementViewModel.clearError()
+        }
+    }
+
+    when {
+        uiState.isLoading -> {
+            ScreenLoading()
+        }
+        else -> {
+            QuestAndAchievementScreen(
+                quests = uiState.quests,
+                achievements = uiState.achievements,
+                onQuestRemove = { questAndAchievementViewModel.removeQuest(it) },
+                scope = scope,
+                pagerState = pagerState,
+                selectedTabIndex = selectedTabIndex
+            )
+        }
+    }
 }
 
 @Composable
 fun QuestAndAchievementScreen(
+    quests: List<QuestUIModel>,
+    achievements: List<AchievementUIModel>,
+    onQuestRemove: (String) -> Unit,
     scope: CoroutineScope,
     pagerState: PagerState,
     selectedTabIndex: State<Int>
@@ -108,8 +155,11 @@ fun QuestAndAchievementScreen(
 
         ) { index ->
             when (index) {
-                0 -> QuestPage()
-                1 -> AchievementPage()
+                0 -> QuestPage(
+                    quests = quests,
+                    onQuestRemove = onQuestRemove
+                )
+                1 -> AchievementPage(achievements)
             }
         }
     }
