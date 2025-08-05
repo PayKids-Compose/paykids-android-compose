@@ -17,6 +17,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.paykidscompose.common.enums.EntryPoint
+import com.paykidscompose.common.usecase.achievement.GetAchievementsUseCase
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseCategoryListUseCase
@@ -42,6 +43,7 @@ import com.paykidscompose.common.usecase.allowance.income.SaveIncomeCategoryUseC
 import com.paykidscompose.common.usecase.allowance.income.SaveIncomeUseCase
 import com.paykidscompose.common.usecase.authentication.LoginUseCase
 import com.paykidscompose.common.usecase.authentication.LogoutUseCase
+import com.paykidscompose.common.usecase.quest.GetQuestsUseCase
 import com.paykidscompose.common.usecase.quiz.GetAllQuizzesUseCase
 import com.paykidscompose.common.usecase.quiz.GetCheckAnswerUseCase
 import com.paykidscompose.common.usecase.quiz.GetCheckStageUseCase
@@ -61,6 +63,7 @@ import com.paykidscompose.presentation.factory.LoginNicknameViewModelFactory
 import com.paykidscompose.presentation.factory.LoginViewModelFactory
 import com.paykidscompose.presentation.factory.MyInfoViewModelFactory
 import com.paykidscompose.presentation.factory.MyPageViewModelFactory
+import com.paykidscompose.presentation.factory.QuestAndAchievementViewModelFactory
 import com.paykidscompose.presentation.factory.QuizEntryViewModelFactory
 import com.paykidscompose.presentation.factory.QuizViewModelFactory
 import com.paykidscompose.presentation.factory.TransactionAnalysisViewModelFactory
@@ -88,6 +91,7 @@ import com.paykidscompose.presentation.screens.mypage.info.MyInfo
 import com.paykidscompose.presentation.screens.mypage.info.MyInfoViewModel
 import com.paykidscompose.presentation.screens.mypage.terms.TermsPolicyScreen
 import com.paykidscompose.presentation.screens.quest.QuestAndAchievement
+import com.paykidscompose.presentation.screens.quest.QuestAndAchievementViewModel
 import com.paykidscompose.presentation.screens.quiz.Quiz
 import com.paykidscompose.presentation.screens.quiz.QuizViewModel
 import com.paykidscompose.presentation.screens.quiz.clear.QuizClear
@@ -114,6 +118,8 @@ fun PayKidsApp(
     getWrongAnswerStatusUseCase: GetWrongAnswerStatusUseCase,
     getCheckAnswerUseCase: GetCheckAnswerUseCase,
     getCheckStageUseCase: GetCheckStageUseCase,
+    getAchievementsUseCase: GetAchievementsUseCase,
+    getQuestsUseCase: GetQuestsUseCase,
     getExpenseMonthTotalAmountUseCase: GetExpenseMonthTotalAmountUseCase,
     getExpenseMonthMostCategoryUseCase: GetExpenseMonthMostCategoryUseCase,
     getExpenseMonthDailyAmountUseCase: GetExpenseMonthDailyAmountUseCase,
@@ -300,7 +306,17 @@ fun PayKidsApp(
             }
 
             composable<TabNavigationRoute.QuestAndAchievementRoute> {
-                QuestAndAchievement()
+                val viewModel: QuestAndAchievementViewModel = viewModel(
+                    viewModelStoreOwner = it,
+                    factory = QuestAndAchievementViewModelFactory(
+                        getAchievementsUseCase,
+                        getQuestsUseCase
+                    )
+                )
+
+                QuestAndAchievement(
+                    questAndAchievementViewModel = viewModel
+                )
             }
 
             composable<TabNavigationRoute.MyPageRoute> {
