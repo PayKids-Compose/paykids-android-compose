@@ -1,4 +1,4 @@
-package com.paykidscompose.data.model.quest_achivement
+package com.paykidscompose.data.model.achievement
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

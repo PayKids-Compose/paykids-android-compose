@@ -28,7 +28,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import coil3.compose.AsyncImage
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.dummyQuests
+import com.paykidscompose.presentation.model.quest.QuestUIModel
 import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.Blue2
 import com.paykidscompose.presentation.ui.theme.Gray5
@@ -67,9 +67,10 @@ import com.paykidscompose.presentation.ui.theme.White
 import kotlinx.coroutines.delay
 
 @Composable
-fun QuestPage() {
-    var quests by rememberSaveable { mutableStateOf(dummyQuests) }
-
+fun QuestPage(
+    quests: List<QuestUIModel> = emptyList(),
+    onQuestRemove: (String) -> Unit = {}
+) {
     if (quests.isEmpty()) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -112,14 +113,12 @@ fun QuestPage() {
                     modifier = Modifier.padding(bottom = QuestPageDailyQuestDescriptionTextBottomPadding)
                 )
             }
-            items(quests, key = { it.title }) { quest ->
+            items(quests, key = { it.name }) { quest ->
                 QuestCardWithSlideOut(
-                    questTitle = quest.title,
-                    progress = quest.progress,
-                    maxProgress = quest.maxProgress,
+                    quest = quest,
                     modifier = Modifier.padding(bottom = QuestCardBottomPadding),
                     onRemove = {
-                        quests = quests.filterNot { it.title == quest.title }
+                        onQuestRemove(quest.name)
                     }
                 )
             }
@@ -129,9 +128,7 @@ fun QuestPage() {
 
 @Composable
 fun QuestCardWithSlideOut(
-    questTitle: String,
-    progress: Int,
-    maxProgress: Int,
+    quest: QuestUIModel,
     modifier: Modifier = Modifier,
     onRemove: () -> Unit = {}
 ) {
@@ -145,12 +142,10 @@ fun QuestCardWithSlideOut(
         ) + fadeOut(animationSpec = tween(durationMillis = 500))
     ) {
         QuestCard(
-            questTitle = questTitle,
-            progress = progress,
-            maxProgress = maxProgress,
+            quest = quest,
             modifier = modifier,
             onClickIfCompleted = {
-                if (progress >= maxProgress) {
+                if (quest.isComplete) {
                     visible = false // 애니메이션 시작
                 }
             }
@@ -168,19 +163,15 @@ fun QuestCardWithSlideOut(
 
 @Composable
 fun QuestCard(
-    questTitle: String,
-    progress: Int,
-    maxProgress: Int,
+    quest: QuestUIModel,
     modifier: Modifier = Modifier,
     onClickIfCompleted: () -> Unit = {}
 ) {
-    val isCompleted = progress >= maxProgress
-
-    val cardBackgroundColor = if (isCompleted) Blue2 else White
-    val questTitleColor = if (isCompleted) White else Blue1
-    val progressBorderColor = if (isCompleted) White else Gray6
-    val progressTextColor = if (isCompleted) White else Gray6
-    val progressRatio = progress.toFloat() / maxProgress
+    val cardBackgroundColor = if (quest.isComplete) Blue2 else White
+    val questTitleColor = if (quest.isComplete) White else Blue1
+    val progressBorderColor = if (quest.isComplete) White else Gray6
+    val progressTextColor = if (quest.isComplete) White else Gray6
+    val progressRatio = quest.count.toFloat() / quest.maxCount
 
     Card(
         modifier = modifier
@@ -192,7 +183,7 @@ fun QuestCard(
                 ambientColor = Blue2,
                 spotColor = Blue2
             )
-            .clickable(enabled = isCompleted) {
+            .clickable(enabled = quest.isComplete) {
                 onClickIfCompleted()
             },
         shape = RoundedCornerShape(QuestCardRound),
@@ -211,7 +202,7 @@ fun QuestCard(
             ) {
                 // 퀘스트 제목
                 Text(
-                    text = questTitle,
+                    text = quest.name,
                     style = QuestPageQuestCardTitleTextStyle,
                     color = questTitleColor,
                 )
@@ -245,7 +236,7 @@ fun QuestCard(
                 )
                 // 진행도 텍스트
                 Text(
-                    text = "$progress/$maxProgress",
+                    text = "${quest.count}/${quest.maxCount}",
                     style = QuestPageQuestCardProgressTextStyle,
                     color = progressTextColor,
                     modifier = Modifier.align(Alignment.Center)
@@ -259,7 +250,9 @@ fun QuestCard(
 @Composable
 fun QuestPagePreview() {
     PayKidsComposeTheme {
-        QuestPage()
+        QuestPage(
+            quests = dummyQuests
+        )
     }
 }
 
@@ -268,7 +261,13 @@ fun QuestPagePreview() {
 fun QuestCardPreview() {
     PayKidsComposeTheme {
         QuestCard(
-            "오답노트 2회 풀기", progress = 1, maxProgress = 2, modifier = Modifier
+            QuestUIModel(
+                name = "오답노트 2회 풀기",
+                count = 1,
+                maxCount = 2,
+                isComplete = false
+            ),
+            modifier = Modifier
         )
     }
 }
@@ -278,7 +277,13 @@ fun QuestCardPreview() {
 fun QuestCardCompletedPreview() {
     PayKidsComposeTheme {
         QuestCard(
-            "오답노트 2회 풀기", progress = 2, maxProgress = 2, modifier = Modifier
+            QuestUIModel(
+                name = "오답노트 2회 풀기",
+                count = 2,
+                maxCount = 2,
+                isComplete = true
+            ),
+            modifier = Modifier
         )
     }
 }

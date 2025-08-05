@@ -38,6 +38,7 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.dummy.dummyAchievements
+import com.paykidscompose.presentation.model.achievement.AchievementUIModel
 import com.paykidscompose.presentation.ui.theme.AchievementCardDescriptionTextStyle
 import com.paykidscompose.presentation.ui.theme.AchievementCardFirstTextSpacerHeight
 import com.paykidscompose.presentation.ui.theme.AchievementCardHeight
@@ -65,9 +66,12 @@ import com.paykidscompose.presentation.ui.theme.PayKidsComposeTheme
 import com.paykidscompose.presentation.ui.theme.White
 
 @Composable
-fun AchievementPage() {
-    val achievements = dummyAchievements
-    if (achievements.isEmpty()) {
+fun AchievementPage(
+    achievements: List<AchievementUIModel> = emptyList()
+) {
+    val completedAchievements = achievements.filter { it.isCompleted }
+
+    if (completedAchievements.isEmpty()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -99,11 +103,11 @@ fun AchievementPage() {
             items(2) {
                 Spacer(modifier = Modifier.height(AchievementGridTopSpacerHeight))
             }
-            items(achievements.size) { index ->
-                val item = achievements[index]
+            items(completedAchievements.size) { index ->
+                val item = completedAchievements[index]
                 AchievementCard(
-                    imageUrl = item.imageUrl,
-                    title = item.title,
+                    imageUrl = item.imageURL,
+                    title = item.name,
                     description = item.description
                 )
             }
@@ -205,6 +209,8 @@ fun AchievementCardPreview() {
 @Composable
 fun AchievementPagePreview() {
     PayKidsComposeTheme {
-        AchievementPage()
+        AchievementPage(
+            achievements = dummyAchievements
+        )
     }
 }
