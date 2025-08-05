@@ -2,6 +2,7 @@ package com.paykidscompose.app.di
 
 import android.content.Context
 import com.paykidscompose.common.di.ApplicationContainer
+import com.paykidscompose.common.usecase.achievement.GetAchievementsUseCase
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseCategoryListUseCase
@@ -27,6 +28,7 @@ import com.paykidscompose.common.usecase.allowance.income.SaveIncomeCategoryUseC
 import com.paykidscompose.common.usecase.allowance.income.SaveIncomeUseCase
 import com.paykidscompose.common.usecase.authentication.LoginUseCase
 import com.paykidscompose.common.usecase.authentication.LogoutUseCase
+import com.paykidscompose.common.usecase.quest.GetQuestsUseCase
 import com.paykidscompose.common.usecase.quiz.GetAllQuizzesUseCase
 import com.paykidscompose.common.usecase.quiz.GetCheckAnswerUseCase
 import com.paykidscompose.common.usecase.quiz.GetCheckStageUseCase
@@ -42,11 +44,13 @@ import com.paykidscompose.common.usecase.user.ReplaceNicknameUseCase
 import com.paykidscompose.common.usecase.user.SaveNicknameUseCase
 import com.paykidscompose.data.network.NetworkModule
 import com.paykidscompose.data.network.service.authentication.KakaoLoginService
+import com.paykidscompose.data.repositories.AchievementRepositoryImpl
 import com.paykidscompose.data.repositories.AuthRepositoryImpl
 import com.paykidscompose.data.repositories.ExpenseAllowanceRepositoryImpl
 import com.paykidscompose.data.repositories.ExpenseCategoryRepositoryImpl
 import com.paykidscompose.data.repositories.IncomeAllowanceRepositoryImpl
 import com.paykidscompose.data.repositories.IncomeCategoryRepositoryImpl
+import com.paykidscompose.data.repositories.QuestRepositoryImpl
 import com.paykidscompose.data.repositories.QuizRepositoryImpl
 import com.paykidscompose.data.repositories.UserRepositoryImpl
 
@@ -65,6 +69,14 @@ class ApplicationContainerImpl(
 
     private val quizRepository = QuizRepositoryImpl(
         NetworkModule.provideQuizApiService()
+    )
+
+    private val achievementRepository = AchievementRepositoryImpl(
+        NetworkModule.provideAchievementApiService()
+    )
+
+    private val questRepository = QuestRepositoryImpl(
+        NetworkModule.provideQuestApiService()
     )
 
     private val expenseAllowanceRepository = ExpenseAllowanceRepositoryImpl(
@@ -102,6 +114,9 @@ class ApplicationContainerImpl(
         GetWrongAnswerStatusUseCase(quizRepository)
     override val getCheckAnswerUseCase: GetCheckAnswerUseCase = GetCheckAnswerUseCase(quizRepository)
     override val getCheckStageUseCase: GetCheckStageUseCase = GetCheckStageUseCase(quizRepository)
+
+    override val getAchievementsUseCase: GetAchievementsUseCase = GetAchievementsUseCase(achievementRepository)
+    override val getQuestsUseCase: GetQuestsUseCase = GetQuestsUseCase(questRepository)
 
     override val getIncomeMonthTotalAmountUseCase: GetIncomeMonthTotalAmountUseCase =
         GetIncomeMonthTotalAmountUseCase(incomeAllowanceRepository)
