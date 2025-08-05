@@ -36,6 +36,8 @@ import com.paykidscompose.common.usecase.quiz.GetStageNameUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageToGoUseCase
 import com.paykidscompose.common.usecase.quiz.GetWrongAnswerQuizzesUseCase
 import com.paykidscompose.common.usecase.quiz.GetWrongAnswerStatusUseCase
+import com.paykidscompose.common.usecase.study.GetChatCountUseCase
+import com.paykidscompose.common.usecase.study.GetChatResponseUseCase
 import com.paykidscompose.common.usecase.user.DeleteUserUseCase
 import com.paykidscompose.common.usecase.user.GetUserUseCase
 import com.paykidscompose.common.usecase.user.ReplaceNicknameUseCase
@@ -59,6 +61,8 @@ interface ApplicationContainer {
     val getCheckStageUseCase: GetCheckStageUseCase
     val getAchievementsUseCase: GetAchievementsUseCase
     val getQuestsUseCase: GetQuestsUseCase
+    val getChatResponseUseCase: GetChatResponseUseCase
+    val getChatCountUseCase: GetChatCountUseCase
     val getExpenseMonthTotalAmountUseCase: GetExpenseMonthTotalAmountUseCase
     val getIncomeMonthTotalAmountUseCase: GetIncomeMonthTotalAmountUseCase
     val getExpenseMonthAllCategoryUseCase: GetExpenseMonthAllCategoryUseCase

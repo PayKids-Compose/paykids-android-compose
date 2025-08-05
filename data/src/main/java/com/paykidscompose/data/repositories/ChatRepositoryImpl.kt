@@ -5,7 +5,6 @@ import com.paykidscompose.common.model.study.ChatResponseModel
 import com.paykidscompose.common.repositories.ChatRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.data.mapper.study.ChatResponseMapper
-import com.paykidscompose.data.network.NetworkModule
 import com.paykidscompose.data.network.service.ChatApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

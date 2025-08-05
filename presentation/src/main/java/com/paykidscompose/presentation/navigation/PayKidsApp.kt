@@ -52,6 +52,7 @@ import com.paykidscompose.common.usecase.quiz.GetStageNameUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageToGoUseCase
 import com.paykidscompose.common.usecase.quiz.GetWrongAnswerQuizzesUseCase
 import com.paykidscompose.common.usecase.quiz.GetWrongAnswerStatusUseCase
+import com.paykidscompose.common.usecase.study.GetChatResponseUseCase
 import com.paykidscompose.common.usecase.user.DeleteUserUseCase
 import com.paykidscompose.common.usecase.user.GetUserUseCase
 import com.paykidscompose.common.usecase.user.ReplaceNicknameUseCase
@@ -66,6 +67,7 @@ import com.paykidscompose.presentation.factory.MyPageViewModelFactory
 import com.paykidscompose.presentation.factory.QuestAndAchievementViewModelFactory
 import com.paykidscompose.presentation.factory.QuizEntryViewModelFactory
 import com.paykidscompose.presentation.factory.QuizViewModelFactory
+import com.paykidscompose.presentation.factory.StudyViewModelFactory
 import com.paykidscompose.presentation.factory.TransactionAnalysisViewModelFactory
 import com.paykidscompose.presentation.navigation.route.AllowanceDiaryNavigationRoute
 import com.paykidscompose.presentation.navigation.route.EntryNavigationRoute
@@ -98,6 +100,7 @@ import com.paykidscompose.presentation.screens.quiz.clear.QuizClear
 import com.paykidscompose.presentation.screens.quiz.entry.QuizEntry
 import com.paykidscompose.presentation.screens.quiz.entry.QuizEntryViewModel
 import com.paykidscompose.presentation.screens.study.Study
+import com.paykidscompose.presentation.screens.study.StudyViewModel
 import com.paykidscompose.presentation.ui.components.AppBottomBar
 
 
@@ -120,6 +123,7 @@ fun PayKidsApp(
     getCheckStageUseCase: GetCheckStageUseCase,
     getAchievementsUseCase: GetAchievementsUseCase,
     getQuestsUseCase: GetQuestsUseCase,
+    getChatResponseUseCase: GetChatResponseUseCase,
     getExpenseMonthTotalAmountUseCase: GetExpenseMonthTotalAmountUseCase,
     getExpenseMonthMostCategoryUseCase: GetExpenseMonthMostCategoryUseCase,
     getExpenseMonthDailyAmountUseCase: GetExpenseMonthDailyAmountUseCase,
@@ -297,8 +301,17 @@ fun PayKidsApp(
                 val targetRoute = backStack.toRoute<QuizNavigationRoute.StudyRoute>()
                 val stageNumber = targetRoute.stageNumber
 
+                val viewModel: StudyViewModel = viewModel(
+                    viewModelStoreOwner = backStack,
+                    factory = StudyViewModelFactory(
+                        getChatResponseUseCase,
+                        getUserUseCase
+                    )
+                )
+
                 Study(
                     stageNumber = stageNumber,
+                    studyViewModel = viewModel,
                     onBackClick = {
                         navController.navigateUp()
                     }

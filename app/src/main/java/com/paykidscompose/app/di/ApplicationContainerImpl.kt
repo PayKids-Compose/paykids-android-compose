@@ -38,6 +38,8 @@ import com.paykidscompose.common.usecase.quiz.GetStageNameUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageToGoUseCase
 import com.paykidscompose.common.usecase.quiz.GetWrongAnswerQuizzesUseCase
 import com.paykidscompose.common.usecase.quiz.GetWrongAnswerStatusUseCase
+import com.paykidscompose.common.usecase.study.GetChatCountUseCase
+import com.paykidscompose.common.usecase.study.GetChatResponseUseCase
 import com.paykidscompose.common.usecase.user.DeleteUserUseCase
 import com.paykidscompose.common.usecase.user.GetUserUseCase
 import com.paykidscompose.common.usecase.user.ReplaceNicknameUseCase
@@ -46,6 +48,7 @@ import com.paykidscompose.data.network.NetworkModule
 import com.paykidscompose.data.network.service.authentication.KakaoLoginService
 import com.paykidscompose.data.repositories.AchievementRepositoryImpl
 import com.paykidscompose.data.repositories.AuthRepositoryImpl
+import com.paykidscompose.data.repositories.ChatRepositoryImpl
 import com.paykidscompose.data.repositories.ExpenseAllowanceRepositoryImpl
 import com.paykidscompose.data.repositories.ExpenseCategoryRepositoryImpl
 import com.paykidscompose.data.repositories.IncomeAllowanceRepositoryImpl
@@ -77,6 +80,10 @@ class ApplicationContainerImpl(
 
     private val questRepository = QuestRepositoryImpl(
         NetworkModule.provideQuestApiService()
+    )
+
+    private val chatRepository = ChatRepositoryImpl(
+        NetworkModule.provideChatApiService()
     )
 
     private val expenseAllowanceRepository = ExpenseAllowanceRepositoryImpl(
@@ -117,6 +124,9 @@ class ApplicationContainerImpl(
 
     override val getAchievementsUseCase: GetAchievementsUseCase = GetAchievementsUseCase(achievementRepository)
     override val getQuestsUseCase: GetQuestsUseCase = GetQuestsUseCase(questRepository)
+
+    override val getChatResponseUseCase: GetChatResponseUseCase = GetChatResponseUseCase(chatRepository)
+    override val getChatCountUseCase: GetChatCountUseCase = GetChatCountUseCase(chatRepository)
 
     override val getIncomeMonthTotalAmountUseCase: GetIncomeMonthTotalAmountUseCase =
         GetIncomeMonthTotalAmountUseCase(incomeAllowanceRepository)

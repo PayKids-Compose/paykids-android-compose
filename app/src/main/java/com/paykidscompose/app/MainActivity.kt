@@ -51,6 +51,7 @@ class MainActivity : ComponentActivity() {
                     provider.getCheckStageUseCase,
                     provider.getAchievementsUseCase,
                     provider.getQuestsUseCase,
+                    provider.getChatResponseUseCase,
                     provider.getExpenseMonthTotalAmountUseCase,
                     provider.getExpenseMonthMostCategoryUseCase,
                     provider.getExpenseMonthDailyAmountUseCase,
