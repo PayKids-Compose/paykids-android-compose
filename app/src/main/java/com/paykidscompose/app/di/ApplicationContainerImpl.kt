@@ -36,6 +36,8 @@ import com.paykidscompose.common.usecase.quiz.GetStageNameUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageToGoUseCase
 import com.paykidscompose.common.usecase.quiz.GetWrongAnswerQuizzesUseCase
 import com.paykidscompose.common.usecase.quiz.GetWrongAnswerStatusUseCase
+import com.paykidscompose.common.usecase.study.GetChatCountUseCase
+import com.paykidscompose.common.usecase.study.GetChatResponseUseCase
 import com.paykidscompose.common.usecase.user.DeleteUserUseCase
 import com.paykidscompose.common.usecase.user.GetUserUseCase
 import com.paykidscompose.common.usecase.user.ReplaceNicknameUseCase
@@ -43,6 +45,7 @@ import com.paykidscompose.common.usecase.user.SaveNicknameUseCase
 import com.paykidscompose.data.network.NetworkModule
 import com.paykidscompose.data.network.service.authentication.KakaoLoginService
 import com.paykidscompose.data.repositories.AuthRepositoryImpl
+import com.paykidscompose.data.repositories.ChatRepositoryImpl
 import com.paykidscompose.data.repositories.ExpenseAllowanceRepositoryImpl
 import com.paykidscompose.data.repositories.ExpenseCategoryRepositoryImpl
 import com.paykidscompose.data.repositories.IncomeAllowanceRepositoryImpl
@@ -67,6 +70,9 @@ class ApplicationContainerImpl(
         NetworkModule.provideQuizApiService()
     )
 
+    private val chatRepository = ChatRepositoryImpl(
+        NetworkModule.provideChatApiService()
+    )
     private val expenseAllowanceRepository = ExpenseAllowanceRepositoryImpl(
         NetworkModule.provideExpenseApiService()
     )
@@ -102,6 +108,9 @@ class ApplicationContainerImpl(
         GetWrongAnswerStatusUseCase(quizRepository)
     override val getCheckAnswerUseCase: GetCheckAnswerUseCase = GetCheckAnswerUseCase(quizRepository)
     override val getCheckStageUseCase: GetCheckStageUseCase = GetCheckStageUseCase(quizRepository)
+
+    override val getChatResponseUseCase: GetChatResponseUseCase = GetChatResponseUseCase(chatRepository)
+    override val getChatCountUseCase: GetChatCountUseCase = GetChatCountUseCase(chatRepository)
 
     override val getIncomeMonthTotalAmountUseCase: GetIncomeMonthTotalAmountUseCase =
         GetIncomeMonthTotalAmountUseCase(incomeAllowanceRepository)
