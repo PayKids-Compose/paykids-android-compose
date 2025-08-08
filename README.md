@@ -1,12 +1,12 @@
 # Paykids - 학습용 금융 퀴즈 앱
-<img width="3840" height="2160" alt="Image" src="https://github.com/user-attachments/assets/8a274114-770e-4900-b432-95caa029d022" />
+<img width=100% src="https://github.com/user-attachments/assets/8a274114-770e-4900-b432-95caa029d022" />
 
 <br>
 
 ## 📱 Project Overview
 
-- **앱 이름**: PayKids(페이키즈)
-- **작업 기간**: 2025.06 ~ 2025.08 (마켓 등록 준비 중)
+- **앱 이름**: PayKids
+- **작업 기간**: 2025.06 ~ 2025.08 (마켓 등록 중)
 - **인력 구성**:
   - 기획 2명 / 디자인 1명 / Android 2명 / BE 2명
 - **핵심 기능**:
@@ -22,13 +22,12 @@
 | **분류** | **내용** |
 | --- | --- |
 | **Language** | Kotlin |
-| **UI/UX** | Jetpack Compose |
+| **Jetpack** | Compose, Navigation, ViewModel |
 | **Architecture** | Clean Architecture, MVVM |
-| **Asynchronous** | Kotlin Coroutines, Flow(cold, hot) |
-| **Navigation** | Jetpack Navigation |
-| **State Management** | ViewModel |
+| **Asynchronous** | Coroutine, Flow(cold, hot) |
 | **Local Storage** | EncryptedSharedPreference |
-| **Networking** | Retrofit2, OkHttp3, Moshi |
+| **Network** | Retrofit2, OkHttp3, PayKidsAPI |
+| **Serialization** | Moshi |
 | **Image Loading** | Coil3 |
 | **Authentication** | Kakao Login API |
 | **DI** | 수동 주입(Hilt 예정) |
@@ -37,17 +36,17 @@
 <br>
 
 ## 🗂️ Package Structure & Module Dependencies
-<img width="1826" height="1026" alt="Image" src="https://github.com/user-attachments/assets/42b8f0c7-0e88-4201-a18a-aef9bf6de09a" />
+<img width=100% src="https://github.com/user-attachments/assets/42b8f0c7-0e88-4201-a18a-aef9bf6de09a" />
 
 <br>
 
 ## ❌ Error Flow
-<img width="1196" height="672" alt="Image" src="https://github.com/user-attachments/assets/b8166222-f162-4dbd-8103-2aef88e3bc49" />
+<img width=100% src="https://github.com/user-attachments/assets/b8166222-f162-4dbd-8103-2aef88e3bc49" />
 
 <br>
 
 
-## Feature
+## ✨ Feature
 #### 1. 스플래시
 | 스플래시 화면 |
 |:--:|
