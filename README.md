@@ -1,8 +1,6 @@
 # Paykids - 학습용 금융 퀴즈 앱
 <img width=100% src="https://github.com/user-attachments/assets/8a274114-770e-4900-b432-95caa029d022" />
 
-<br>
-
 ## 📱 Project Overview
 
 - **앱 이름**: PayKids
@@ -15,8 +13,6 @@
   - 퀘스트를 달성하며 업적을 쌓아 올릴 수 있음
   - 소비와 수입을 기록하여 올바른 소비 습관을 기르도록 도와줌
 - **개발 언어 및 환경**: Kotlin, Android Studio, API 35, Jetpack Compose
-
-<br>
 
 ## 🛠️ Tech Stack
 | **분류** | **내용** |
@@ -33,18 +29,11 @@
 | **DI** | 수동 주입(Hilt 예정) |
 | **Tools** | Git, Figma, Notion, Discord |
 
-<br>
-
 ## 🗂️ Package Structure & Module Dependencies
 <img width=100% src="https://github.com/user-attachments/assets/42b8f0c7-0e88-4201-a18a-aef9bf6de09a" />
 
-<br>
-
 ## ❌ Error Flow
 <img width=100% src="https://github.com/user-attachments/assets/b8166222-f162-4dbd-8103-2aef88e3bc49" />
-
-<br>
-
 
 ## ✨ Feature
 #### 1. 스플래시
