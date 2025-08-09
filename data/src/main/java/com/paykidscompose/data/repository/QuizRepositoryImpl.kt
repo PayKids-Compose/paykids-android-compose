@@ -1,4 +1,4 @@
-package com.paykidscompose.data.repositories
+package com.paykidscompose.data.repository
 
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.quiz.QuizClearedModel

@@ -46,16 +46,16 @@ import com.paykidscompose.common.usecase.user.ReplaceNicknameUseCase
 import com.paykidscompose.common.usecase.user.SaveNicknameUseCase
 import com.paykidscompose.data.network.NetworkModule
 import com.paykidscompose.data.network.service.authentication.KakaoLoginService
-import com.paykidscompose.data.repositories.AchievementRepositoryImpl
-import com.paykidscompose.data.repositories.AuthRepositoryImpl
-import com.paykidscompose.data.repositories.ChatRepositoryImpl
-import com.paykidscompose.data.repositories.ExpenseAllowanceRepositoryImpl
-import com.paykidscompose.data.repositories.ExpenseCategoryRepositoryImpl
-import com.paykidscompose.data.repositories.IncomeAllowanceRepositoryImpl
-import com.paykidscompose.data.repositories.IncomeCategoryRepositoryImpl
-import com.paykidscompose.data.repositories.QuestRepositoryImpl
-import com.paykidscompose.data.repositories.QuizRepositoryImpl
-import com.paykidscompose.data.repositories.UserRepositoryImpl
+import com.paykidscompose.data.repository.AchievementRepositoryImpl
+import com.paykidscompose.data.repository.AuthRepositoryImpl
+import com.paykidscompose.data.repository.ChatRepositoryImpl
+import com.paykidscompose.data.repository.ExpenseAllowanceRepositoryImpl
+import com.paykidscompose.data.repository.ExpenseCategoryRepositoryImpl
+import com.paykidscompose.data.repository.IncomeAllowanceRepositoryImpl
+import com.paykidscompose.data.repository.IncomeCategoryRepositoryImpl
+import com.paykidscompose.data.repository.QuestRepositoryImpl
+import com.paykidscompose.data.repository.QuizRepositoryImpl
+import com.paykidscompose.data.repository.UserRepositoryImpl
 
 class ApplicationContainerImpl(
     context: Context

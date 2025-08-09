@@ -1,41 +1,40 @@
-package com.paykidscompose.data.repositories
+package com.paykidscompose.data.repository
 
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.allowance.CategoryModel
-import com.paykidscompose.common.repositories.IncomeCategoryRepository
+import com.paykidscompose.common.repositories.ExpenseCategoryRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.data.mapper.allowance.CategoryMapper
-import com.paykidscompose.data.network.NetworkModule
-import com.paykidscompose.data.network.service.IncomeCategoryApiService
+import com.paykidscompose.data.network.service.ExpenseCategoryApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class IncomeCategoryRepositoryImpl(
-    private val incomeCategoryApiService: IncomeCategoryApiService
-) : IncomeCategoryRepository {
+class ExpenseCategoryRepositoryImpl(
+    private val categoryApiService: ExpenseCategoryApiService
+) : ExpenseCategoryRepository {
 
-    override suspend fun deleteIncomeCategory(category: String): DataResourceResult<Boolean> {
+    override suspend fun deleteExpenseCategory(category: String): DataResourceResult<Boolean> {
         return runCatching {
-            incomeCategoryApiService.deleteIncomeCategory(category)
+            categoryApiService.deleteExpenseCategory(category)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
             onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
         )
     }
 
-    override suspend fun saveIncomeCategory(category: String): DataResourceResult<Boolean> {
+    override suspend fun saveExpenseCategory(category: String): DataResourceResult<Boolean> {
         return runCatching {
-            incomeCategoryApiService.saveIncomeCategory(category)
+            categoryApiService.saveExpenseCategory(category)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
             onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
         )
     }
 
-    override fun getIncomeCategoryList(): Flow<DataResourceResult<List<CategoryModel>>> = flow {
+    override fun getExpenseCategoryList(): Flow<DataResourceResult<List<CategoryModel>>> = flow {
         emit(DataResourceResult.Loading)
         runCatching {
-            incomeCategoryApiService.getIncomeCategoryList()
+            categoryApiService.getExpenseCategoryList()
         }.fold(
             onSuccess = {
                 val models = it.data.map { dto ->

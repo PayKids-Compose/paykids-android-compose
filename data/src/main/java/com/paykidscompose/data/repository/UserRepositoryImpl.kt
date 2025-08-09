@@ -1,4 +1,4 @@
-package com.paykidscompose.data.repositories
+package com.paykidscompose.data.repository
 
 import androidx.core.content.edit
 import com.paykidscompose.common.exception.PayKidsException

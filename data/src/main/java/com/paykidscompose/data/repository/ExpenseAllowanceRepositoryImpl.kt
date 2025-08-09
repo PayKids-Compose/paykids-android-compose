@@ -1,106 +1,71 @@
-package com.paykidscompose.data.repositories
+package com.paykidscompose.data.repository
 
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.allowance.AllowanceChartAmountModel
 import com.paykidscompose.common.model.allowance.AllowanceChartCategoryModel
 import com.paykidscompose.common.model.allowance.AllowanceChartModel
-import com.paykidscompose.common.repositories.IncomeAllowanceRepository
+import com.paykidscompose.common.repositories.ExpenseAllowanceRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.data.mapper.allowance.AllowanceChartAmountMapper
 import com.paykidscompose.data.mapper.allowance.AllowanceChartCategoryMapper
 import com.paykidscompose.data.mapper.allowance.AllowanceChartMapper
-import com.paykidscompose.data.network.NetworkModule
-import com.paykidscompose.data.network.service.IncomeAllowanceApiService
+import com.paykidscompose.data.network.service.ExpenseAllowanceApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.time.LocalDate
 
-class IncomeAllowanceRepositoryImpl(
-    private val incomeAllowanceApiService: IncomeAllowanceApiService
-) : IncomeAllowanceRepository {
+class ExpenseAllowanceRepositoryImpl(
+    private val expenseApiService: ExpenseAllowanceApiService
+) : ExpenseAllowanceRepository {
 
-    override suspend fun deleteIncome(id: Long): DataResourceResult<Boolean> {
+    override suspend fun deleteExpense(id: Long): DataResourceResult<Boolean> {
         return runCatching {
-            incomeAllowanceApiService.deleteIncome(id)
+            expenseApiService.deleteExpense(id)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
             onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
         )
     }
 
-    override suspend fun saveIncome(request: AllowanceChartModel): DataResourceResult<Boolean> {
-        return runCatching {
-            val dto = AllowanceChartMapper.mapToLayerModel(request)
-            incomeAllowanceApiService.saveIncome(dto)
-        }.fold(
-            onSuccess = { DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
-        )
-    }
-
-    override suspend fun replaceIncome(request: AllowanceChartModel): DataResourceResult<Boolean> {
+    override suspend fun saveExpense(request: AllowanceChartModel): DataResourceResult<Boolean> {
         return runCatching {
             val dto = AllowanceChartMapper.mapToLayerModel(request)
-            incomeAllowanceApiService.replaceIncome(dto)
+            expenseApiService.saveExpense(dto)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
             onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
         )
     }
 
-    override suspend fun getIncomeMonthTotalAmount(year: Int, month: Int): DataResourceResult<Int> {
+    override suspend fun replaceExpense(request: AllowanceChartModel): DataResourceResult<Boolean> {
         return runCatching {
-            incomeAllowanceApiService.getIncomeMonthTotalAmount(year, month)
+            val dto = AllowanceChartMapper.mapToLayerModel(request)
+            expenseApiService.replaceExpense(dto)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
             onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
         )
     }
 
-    override fun getIncomeMonthDailyAmount(
+    override suspend fun getExpenseMonthTotalAmount(
         year: Int,
         month: Int
-    ): Flow<DataResourceResult<List<AllowanceChartAmountModel>>> = flow {
-        emit(DataResourceResult.Loading)
-        runCatching {
-            incomeAllowanceApiService.getIncomeMonthDailyAmount(year, month)
+    ): DataResourceResult<Int> {
+        return runCatching {
+            expenseApiService.getExpenseMonthTotalAmount(year, month)
         }.fold(
-            onSuccess = {
-                val models = it.data.map { dto ->
-                    AllowanceChartAmountMapper.mapToModel(dto)
-                }
-                emit(DataResourceResult.Success(models))
-            },
-            onFailure = { emit(DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: ""))) }
+            onSuccess = { DataResourceResult.Success(it.data) },
+            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
         )
     }
 
-    override fun getIncomeMonthCategory(
-        year: Int,
-        month: Int,
-        category: String
-    ): Flow<DataResourceResult<List<AllowanceChartModel>>> = flow {
-        emit(DataResourceResult.Loading)
-        runCatching {
-            incomeAllowanceApiService.getIncomeMonthCategory(year, month, category)
-        }.fold(
-            onSuccess = {
-                val models = it.data.map { dto ->
-                    AllowanceChartMapper.mapToModel(dto)
-                }
-                emit(DataResourceResult.Success(models))
-            },
-            onFailure = { emit(DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: ""))) }
-        )
-    }
-
-    override fun getIncomeMonthAllCategory(
+    override fun getExpenseMonthMostCategory(
         year: Int,
         month: Int
     ): Flow<DataResourceResult<List<AllowanceChartCategoryModel>>> = flow {
         emit(DataResourceResult.Loading)
         runCatching {
-            incomeAllowanceApiService.getIncomeMonthAllCategory(year, month)
+            expenseApiService.getExpenseMonthMostCategory(year, month)
         }.fold(
             onSuccess = {
                 val models = it.data.map { dto ->
@@ -112,12 +77,67 @@ class IncomeAllowanceRepositoryImpl(
         )
     }
 
-    override fun getIncomeDay(
+    override fun getExpenseMonthDailyAmount(
+        year: Int,
+        month: Int
+    ): Flow<DataResourceResult<List<AllowanceChartAmountModel>>> = flow {
+        emit(DataResourceResult.Loading)
+        runCatching {
+            expenseApiService.getExpenseMonthDailyAmount(year, month)
+        }.fold(
+            onSuccess = {
+                val models = it.data.map { dto ->
+                    AllowanceChartAmountMapper.mapToModel(dto)
+                }
+                emit(DataResourceResult.Success(models))
+            },
+            onFailure = { emit(DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: ""))) }
+        )
+    }
+
+    override fun getExpenseMonthCategory(
+        year: Int,
+        month: Int,
+        category: String
+    ): Flow<DataResourceResult<List<AllowanceChartModel>>> = flow {
+        emit(DataResourceResult.Loading)
+        runCatching {
+            expenseApiService.getExpenseMonthCategory(year, month, category)
+        }.fold(
+            onSuccess = {
+                val models = it.data.map { dto ->
+                    AllowanceChartMapper.mapToModel(dto)
+                }
+                emit(DataResourceResult.Success(models))
+            },
+            onFailure = { emit(DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: ""))) }
+        )
+    }
+
+    override fun getExpenseMonthAllCategory(
+        year: Int,
+        month: Int
+    ): Flow<DataResourceResult<List<AllowanceChartCategoryModel>>> = flow {
+        emit(DataResourceResult.Loading)
+        runCatching {
+            expenseApiService.getExpenseMonthAllCategory(year, month)
+        }.fold(
+            onSuccess = {
+                val models = it.data.map { dto ->
+                    AllowanceChartCategoryMapper.mapToModel(dto)
+                }
+                emit(DataResourceResult.Success(models))
+            },
+            onFailure = { emit(DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: ""))) }
+        )
+    }
+
+    override fun getExpenseDay(
         localDate: LocalDate
     ): Flow<DataResourceResult<List<AllowanceChartModel>>> = flow {
         emit(DataResourceResult.Loading)
         runCatching {
-            incomeAllowanceApiService.getIncomeDay(localDate.toString())
+            expenseApiService.getExpenseDay(localDate.toString())
         }.fold(
             onSuccess = {
                 val models = it.data.map { dto ->
