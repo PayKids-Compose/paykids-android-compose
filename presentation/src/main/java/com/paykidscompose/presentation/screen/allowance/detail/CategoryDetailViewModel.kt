@@ -223,7 +223,7 @@ class CategoryDetailViewModel(
 
         when (result) {
             is DataResourceResult.Success -> {
-                _uiEvent.emit(UIEvent.SuccessShowToast("수입 내역이 저장되었습니다!"))
+                _uiEvent.emit(UIEvent.SuccessShowToast("소비 내역이 저장되었습니다!"))
             }
 
             is DataResourceResult.Failure -> {
@@ -247,7 +247,7 @@ class CategoryDetailViewModel(
 
         when (result) {
             is DataResourceResult.Success -> {
-                _uiEvent.emit(UIEvent.SuccessShowToast("소비 내역이 저장되었습니다!"))
+                _uiEvent.emit(UIEvent.SuccessShowToast("수입 내역이 저장되었습니다!"))
             }
 
             is DataResourceResult.Failure -> {

@@ -67,7 +67,7 @@
 #### 5. 용돈일기
 | 용돈일기 화면 | 지출분석 화면 | 카테고리 상세내역 화면 |  
 |:--:|:--:|:--:|
-| <img width="200" src="https://github.com/user-attachments/assets/1f50f81c-9d9a-4cd5-8745-cedfd8d27c56" /> | <img width="200" src="https://github.com/user-attachments/assets/a5cb42d0-1e60-496a-949c-106de0582f43" /> | <img width="200" src="https://github.com/user-attachments/assets/62231c57-3d38-40be-ac45-66bed137d899" /> |
+| <img width="200" src="https://github.com/user-attachments/assets/1f50f81c-9d9a-4cd5-8745-cedfd8d27c56" /> | <img width="200" src="https://github.com/user-attachments/assets/a5cb42d0-1e60-496a-949c-106de0582f43" /> | <img width="200" src="https://github.com/user-attachments/assets/764b1dfa-1f45-448d-8197-a7cb0851dd2e" /> |
 
 ---
 
