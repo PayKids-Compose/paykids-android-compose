@@ -12,7 +12,7 @@ import com.paykidscompose.common.usecase.allowance.income.GetIncomeCategoryListU
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthAllCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthTotalAmountUseCase
 import com.paykidscompose.common.usecase.allowance.income.SaveIncomeCategoryUseCase
-import com.paykidscompose.presentation.screens.allowance.analysis.TransactionAnalysisViewModel
+import com.paykidscompose.presentation.screen.allowance.analysis.TransactionAnalysisViewModel
 
 class TransactionAnalysisViewModelFactory(
     private val getExpenseMonthTotalAmountUseCase: GetExpenseMonthTotalAmountUseCase,

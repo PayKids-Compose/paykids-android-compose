@@ -14,7 +14,7 @@ import com.paykidscompose.common.usecase.allowance.income.GetIncomeDayUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthDailyAmountUseCase
 import com.paykidscompose.common.usecase.allowance.income.ReplaceIncomeUseCase
 import com.paykidscompose.common.usecase.allowance.income.SaveIncomeUseCase
-import com.paykidscompose.presentation.screens.allowance.AllowanceDiaryViewModel
+import com.paykidscompose.presentation.screen.allowance.AllowanceDiaryViewModel
 
 class AllowanceDiaryViewModelFactory(
     private val getExpenseMonthTotalAmountUseCase: GetExpenseMonthTotalAmountUseCase,

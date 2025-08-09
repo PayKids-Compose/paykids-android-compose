@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.paykidscompose.common.usecase.quiz.GetStageCountUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageNameUseCase
 import com.paykidscompose.common.usecase.quiz.GetStageToGoUseCase
-import com.paykidscompose.presentation.screens.home.HomeViewModel
+import com.paykidscompose.presentation.screen.home.HomeViewModel
 
 class HomeViewModelFactory(
     private val getStageCountUseCase: GetStageCountUseCase,

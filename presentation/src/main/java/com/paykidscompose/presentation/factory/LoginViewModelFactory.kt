@@ -3,7 +3,7 @@ package com.paykidscompose.presentation.factory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.paykidscompose.common.usecase.authentication.LoginUseCase
-import com.paykidscompose.presentation.screens.login.LoginViewModel
+import com.paykidscompose.presentation.screen.login.LoginViewModel
 
 class LoginViewModelFactory(
     private val loginUseCase: LoginUseCase
