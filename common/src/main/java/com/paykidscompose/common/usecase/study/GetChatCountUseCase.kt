@@ -1,6 +1,6 @@
 package com.paykidscompose.common.usecase.study
 
-import com.paykidscompose.common.repositories.ChatRepository
+import com.paykidscompose.common.repository.ChatRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.SuspendUseCase
 

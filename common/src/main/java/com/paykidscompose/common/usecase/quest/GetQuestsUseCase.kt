@@ -1,7 +1,7 @@
 package com.paykidscompose.common.usecase.quest
 
 import com.paykidscompose.common.model.quest.QuestModel
-import com.paykidscompose.common.repositories.QuestRepository
+import com.paykidscompose.common.repository.QuestRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.SuspendUseCase
 

@@ -2,7 +2,7 @@ package com.paykidscompose.common.usecase.allowance.expense
 
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.allowance.AllowanceChartCategoryModel
-import com.paykidscompose.common.repositories.ExpenseAllowanceRepository
+import com.paykidscompose.common.repository.ExpenseAllowanceRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.FlowUseCase
 import kotlinx.coroutines.flow.Flow

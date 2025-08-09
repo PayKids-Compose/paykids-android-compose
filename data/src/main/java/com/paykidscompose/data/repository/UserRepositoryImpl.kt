@@ -3,7 +3,7 @@ package com.paykidscompose.data.repository
 import androidx.core.content.edit
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.user.UserModel
-import com.paykidscompose.common.repositories.UserRepository
+import com.paykidscompose.common.repository.UserRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.data.database.PayKidsPreference
 import com.paykidscompose.data.mapper.user.UserMapper

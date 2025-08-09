@@ -3,7 +3,7 @@ package com.paykidscompose.data.repository
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.quiz.QuizClearedModel
 import com.paykidscompose.common.model.quiz.QuizModel
-import com.paykidscompose.common.repositories.QuizRepository
+import com.paykidscompose.common.repository.QuizRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.data.mapper.quiz.QuizClearedMapper
 import com.paykidscompose.data.mapper.quiz.QuizMapper

@@ -1,4 +1,4 @@
-package com.paykidscompose.common.repositories
+package com.paykidscompose.common.repository
 
 import com.paykidscompose.common.model.allowance.AllowanceChartAmountModel
 import com.paykidscompose.common.model.allowance.AllowanceChartCategoryModel

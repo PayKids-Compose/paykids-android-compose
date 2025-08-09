@@ -2,7 +2,7 @@ package com.paykidscompose.data.repository
 
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.allowance.CategoryModel
-import com.paykidscompose.common.repositories.ExpenseCategoryRepository
+import com.paykidscompose.common.repository.ExpenseCategoryRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.data.mapper.allowance.CategoryMapper
 import com.paykidscompose.data.network.service.ExpenseCategoryApiService

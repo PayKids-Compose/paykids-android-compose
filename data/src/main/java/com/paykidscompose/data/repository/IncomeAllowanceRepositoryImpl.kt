@@ -4,7 +4,7 @@ import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.allowance.AllowanceChartAmountModel
 import com.paykidscompose.common.model.allowance.AllowanceChartCategoryModel
 import com.paykidscompose.common.model.allowance.AllowanceChartModel
-import com.paykidscompose.common.repositories.IncomeAllowanceRepository
+import com.paykidscompose.common.repository.IncomeAllowanceRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.data.mapper.allowance.AllowanceChartAmountMapper
 import com.paykidscompose.data.mapper.allowance.AllowanceChartCategoryMapper

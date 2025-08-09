@@ -2,7 +2,7 @@ package com.paykidscompose.data.repository
 
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.quest.QuestModel
-import com.paykidscompose.common.repositories.QuestRepository
+import com.paykidscompose.common.repository.QuestRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.data.mapper.quest.QuestMapper
 import com.paykidscompose.data.network.service.QuestApiService

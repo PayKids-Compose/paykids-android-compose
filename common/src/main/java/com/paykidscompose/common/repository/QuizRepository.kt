@@ -1,4 +1,4 @@
-package com.paykidscompose.common.repositories
+package com.paykidscompose.common.repository
 
 import com.paykidscompose.common.model.quiz.QuizClearedModel
 import com.paykidscompose.common.model.quiz.QuizModel

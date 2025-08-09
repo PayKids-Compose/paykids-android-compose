@@ -1,6 +1,6 @@
 package com.paykidscompose.common.usecase.user
 
-import com.paykidscompose.common.repositories.UserRepository
+import com.paykidscompose.common.repository.UserRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.SuspendUseCase
 

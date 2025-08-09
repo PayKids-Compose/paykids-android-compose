@@ -2,7 +2,7 @@ package com.paykidscompose.data.repository
 
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.achievement.AchievementModel
-import com.paykidscompose.common.repositories.AchievementRepository
+import com.paykidscompose.common.repository.AchievementRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.data.mapper.achievement.AchievementMapper
 import com.paykidscompose.data.network.service.AchievementApiService

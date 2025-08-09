@@ -1,4 +1,4 @@
-package com.paykidscompose.common.repositories
+package com.paykidscompose.common.repository
 
 import com.paykidscompose.common.model.allowance.CategoryModel
 import com.paykidscompose.common.result.DataResourceResult

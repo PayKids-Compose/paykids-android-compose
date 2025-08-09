@@ -2,7 +2,7 @@ package com.paykidscompose.data.repository
 
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.study.ChatResponseModel
-import com.paykidscompose.common.repositories.ChatRepository
+import com.paykidscompose.common.repository.ChatRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.data.mapper.study.ChatResponseMapper
 import com.paykidscompose.data.network.service.ChatApiService
