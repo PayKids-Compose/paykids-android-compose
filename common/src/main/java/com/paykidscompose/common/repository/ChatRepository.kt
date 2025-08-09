@@ -1,0 +1,10 @@
+package com.paykidscompose.common.repository
+
+import com.paykidscompose.common.model.study.ChatResponseModel
+import com.paykidscompose.common.result.DataResourceResult
+import kotlinx.coroutines.flow.Flow
+
+interface ChatRepository {
+    suspend fun getChatCount(): DataResourceResult<Int>
+    fun getChatResponse(prompt: String): Flow<DataResourceResult<ChatResponseModel>>
+}

@@ -3,7 +3,7 @@ package com.paykidscompose.presentation.factory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.paykidscompose.common.usecase.user.SaveNicknameUseCase
-import com.paykidscompose.presentation.screens.login.nickname.LoginNicknameViewModel
+import com.paykidscompose.presentation.screen.login.nickname.LoginNicknameViewModel
 
 class LoginNicknameViewModelFactory(
     private val saveNicknameUseCase: SaveNicknameUseCase

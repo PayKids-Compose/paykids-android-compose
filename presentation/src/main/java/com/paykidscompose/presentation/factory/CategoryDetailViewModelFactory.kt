@@ -10,7 +10,7 @@ import com.paykidscompose.common.usecase.allowance.income.DeleteIncomeUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.income.ReplaceIncomeUseCase
 import com.paykidscompose.common.usecase.allowance.income.SaveIncomeUseCase
-import com.paykidscompose.presentation.screens.allowance.detail.CategoryDetailViewModel
+import com.paykidscompose.presentation.screen.allowance.detail.CategoryDetailViewModel
 
 class CategoryDetailViewModelFactory(
     private val getExpenseMonthCategoryUseCase: GetExpenseMonthCategoryUseCase,

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.paykidscompose.common.usecase.achievement.GetAchievementsUseCase
 import com.paykidscompose.common.usecase.quest.GetQuestsUseCase
-import com.paykidscompose.presentation.screens.quest.QuestAndAchievementViewModel
+import com.paykidscompose.presentation.screen.quest.QuestAndAchievementViewModel
 
 class QuestAndAchievementViewModelFactory(
     private val getAchievementsUseCase: GetAchievementsUseCase,

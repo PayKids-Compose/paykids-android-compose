@@ -1,7 +1,7 @@
 package com.paykidscompose.common.usecase.allowance.expense
 
 import com.paykidscompose.common.exception.PayKidsException
-import com.paykidscompose.common.repositories.ExpenseCategoryRepository
+import com.paykidscompose.common.repository.ExpenseCategoryRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.SuspendUseCase
 

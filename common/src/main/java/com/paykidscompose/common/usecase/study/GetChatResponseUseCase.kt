@@ -2,7 +2,7 @@ package com.paykidscompose.common.usecase.study
 
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.study.ChatResponseModel
-import com.paykidscompose.common.repositories.ChatRepository
+import com.paykidscompose.common.repository.ChatRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.FlowUseCase
 import kotlinx.coroutines.flow.Flow

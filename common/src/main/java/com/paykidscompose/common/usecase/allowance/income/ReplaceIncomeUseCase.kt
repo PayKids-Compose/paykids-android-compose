@@ -2,7 +2,7 @@ package com.paykidscompose.common.usecase.allowance.income
 
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.allowance.AllowanceChartModel
-import com.paykidscompose.common.repositories.IncomeAllowanceRepository
+import com.paykidscompose.common.repository.IncomeAllowanceRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.SuspendUseCase
 

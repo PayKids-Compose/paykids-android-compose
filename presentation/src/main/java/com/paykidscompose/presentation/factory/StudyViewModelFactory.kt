@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.paykidscompose.common.usecase.study.GetChatResponseUseCase
 import com.paykidscompose.common.usecase.user.GetUserUseCase
-import com.paykidscompose.presentation.screens.study.StudyViewModel
+import com.paykidscompose.presentation.screen.study.StudyViewModel
 
 class StudyViewModelFactory(
     private val getChatResponseUseCase: GetChatResponseUseCase,

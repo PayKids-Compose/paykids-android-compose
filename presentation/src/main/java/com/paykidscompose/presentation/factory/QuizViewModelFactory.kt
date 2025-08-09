@@ -6,7 +6,7 @@ import com.paykidscompose.common.usecase.quiz.GetAllQuizzesUseCase
 import com.paykidscompose.common.usecase.quiz.GetCheckAnswerUseCase
 import com.paykidscompose.common.usecase.quiz.GetCheckStageUseCase
 import com.paykidscompose.common.usecase.quiz.GetWrongAnswerQuizzesUseCase
-import com.paykidscompose.presentation.screens.quiz.QuizViewModel
+import com.paykidscompose.presentation.screen.quiz.QuizViewModel
 
 class QuizViewModelFactory(
     private val getAllQuizzesUseCase: GetAllQuizzesUseCase,

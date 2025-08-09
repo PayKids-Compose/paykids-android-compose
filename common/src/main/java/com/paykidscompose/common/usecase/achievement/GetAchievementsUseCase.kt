@@ -1,7 +1,7 @@
 package com.paykidscompose.common.usecase.achievement
 
 import com.paykidscompose.common.model.achievement.AchievementModel
-import com.paykidscompose.common.repositories.AchievementRepository
+import com.paykidscompose.common.repository.AchievementRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.SuspendUseCase
 

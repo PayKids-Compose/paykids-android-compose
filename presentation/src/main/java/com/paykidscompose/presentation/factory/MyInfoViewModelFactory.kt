@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.paykidscompose.common.usecase.user.DeleteUserUseCase
 import com.paykidscompose.common.usecase.user.GetUserUseCase
 import com.paykidscompose.common.usecase.user.ReplaceNicknameUseCase
-import com.paykidscompose.presentation.screens.mypage.info.MyInfoViewModel
+import com.paykidscompose.presentation.screen.mypage.info.MyInfoViewModel
 
 class MyInfoViewModelFactory(
     private val getUserUseCase: GetUserUseCase,

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.paykidscompose.common.usecase.authentication.LogoutUseCase
 import com.paykidscompose.common.usecase.user.GetUserUseCase
-import com.paykidscompose.presentation.screens.mypage.MyPageViewModel
+import com.paykidscompose.presentation.screen.mypage.MyPageViewModel
 
 class MyPageViewModelFactory(
     private val getUserUseCase: GetUserUseCase,
