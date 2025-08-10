@@ -227,7 +227,9 @@ fun HomeScreen(
                                 interactionSource = remember { MutableInteractionSource() }
                             ) {
                                 onStageSelected(index)
-                                onTooltipOffsetChange(stageCenterBottomOffset.value)
+                                if (index + 1 <= unlockedStageCount) {
+                                    onTooltipOffsetChange(stageCenterBottomOffset.value)
+                                }
                             },
                         contentAlignment = Alignment.Center
                     ) {
