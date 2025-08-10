@@ -126,7 +126,7 @@ fun Home(
         else -> {
             HomeScreen(
                 selectedStageIndex = uiState.selectedStageIndex,
-                onStageSelected = { homeViewModel.onStageSelected(it) }, // 참조 지우기
+                onStageSelected = { homeViewModel.onStageSelected(it) },
                 tooltipOffset = tooltipOffset.value,
                 onTooltipOffsetChange = { tooltipOffset.value = it },
                 onNavigateToQuiz = onNavigateToQuiz,
