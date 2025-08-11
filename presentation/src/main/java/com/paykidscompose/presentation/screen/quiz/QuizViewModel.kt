@@ -17,6 +17,7 @@ import com.paykidscompose.presentation.model.quiz.QuizUIModel
 import com.paykidscompose.presentation.model.type.QuizResultType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -34,7 +35,7 @@ class QuizViewModel(
             _uiState.update { it.copy(isLoading = true, error = null) }
 
             getAllQuizzesUseCase(GetAllQuizzesUseCase.Params(stageNumber))
-                .collect { result ->
+                .collectLatest { result ->
                     when (result) {
                         is DataResourceResult.Success -> {
                             val quizzes =
@@ -72,7 +73,7 @@ class QuizViewModel(
             _uiState.update { it.copy(isLoading = true, error = null) }
 
             getWrongAnswerQuizzesUseCase(GetWrongAnswerQuizzesUseCase.Params(stageNumber))
-                .collect { result ->
+                .collectLatest { result ->
                     when (result) {
                         is DataResourceResult.Success -> {
                             val quizzes = result.data.map { QuizUIModelMapper.mapToLayerModel(it) }.toMutableList()
