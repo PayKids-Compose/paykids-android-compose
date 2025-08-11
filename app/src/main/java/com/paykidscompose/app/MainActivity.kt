@@ -60,6 +60,8 @@ class MainActivity : ComponentActivity() {
                     provider.getIncomeDayUseCase,
                     provider.getExpenseCategoryListUseCase,
                     provider.getIncomeCategoryListUseCase,
+                    provider.getMonthDailyAmountsUseCase,
+                    provider.getSelectDayTransactionsUseCase,
                     provider.saveExpenseUseCase,
                     provider.saveIncomeUseCase,
                     provider.replaceExpenseUseCase,

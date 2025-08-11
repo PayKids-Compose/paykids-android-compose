@@ -1,6 +1,8 @@
 package com.paykidscompose.common.di
 
 import com.paykidscompose.common.usecase.achievement.GetAchievementsUseCase
+import com.paykidscompose.common.usecase.allowance.GetMonthDailyAmountsUseCase
+import com.paykidscompose.common.usecase.allowance.GetSelectDayTransactionsUseCase
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseCategoryListUseCase
@@ -76,6 +78,8 @@ interface ApplicationContainer {
     val getIncomeCategoryListUseCase: GetIncomeCategoryListUseCase
     val getExpenseMonthCategoryUseCase: GetExpenseMonthCategoryUseCase
     val getIncomeMonthCategoryUseCase: GetIncomeMonthCategoryUseCase
+    val getMonthDailyAmountsUseCase: GetMonthDailyAmountsUseCase
+    val getSelectDayTransactionsUseCase: GetSelectDayTransactionsUseCase
     val saveExpenseUseCase: SaveExpenseUseCase
     val saveIncomeUseCase: SaveIncomeUseCase
     val saveExpenseCategoryUseCase: SaveExpenseCategoryUseCase
