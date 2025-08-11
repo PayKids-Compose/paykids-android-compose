@@ -126,7 +126,7 @@ fun Home(
         else -> {
             HomeScreen(
                 selectedStageIndex = uiState.selectedStageIndex,
-                onStageSelected = homeViewModel::onStageSelected, // 참조 지우기
+                onStageSelected = { homeViewModel.onStageSelected(it) },
                 tooltipOffset = tooltipOffset.value,
                 onTooltipOffsetChange = { tooltipOffset.value = it },
                 onNavigateToQuiz = onNavigateToQuiz,
@@ -227,7 +227,9 @@ fun HomeScreen(
                                 interactionSource = remember { MutableInteractionSource() }
                             ) {
                                 onStageSelected(index)
-                                onTooltipOffsetChange(stageCenterBottomOffset.value)
+                                if (index + 1 <= unlockedStageCount) {
+                                    onTooltipOffsetChange(stageCenterBottomOffset.value)
+                                }
                             },
                         contentAlignment = Alignment.Center
                     ) {
