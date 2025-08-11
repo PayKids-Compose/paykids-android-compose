@@ -284,6 +284,12 @@ val AllowanceInputDialogIconWidth = 9.dp
 val AllowanceInputDialogIconHeight = 6.dp
 val AllowanceInputDialogDateItemStartEndPadding = 8.dp
 val AllowanceInputDialogDateItemTopBottomPadding = 4.dp
+val AllowanceInputCategoryDialogCardShape = 10.dp
+val AllowanceInputCategoryDialogPickerWidth = 280.dp
+val AllowanceInputCategoryDialogPickerItemHeight = 50.dp
+val AllowanceInputCategoryDialogBottomPadding = 10.dp
+val AllowanceInputCategoryDialogPickerFocusDividerSize = 1.dp
+val AllowanceInputCategoryDialogSpacer = 10.dp
 
 // 용돈일기 분석 화면
 val AnalysisScreenCheckImageSize = 20.dp

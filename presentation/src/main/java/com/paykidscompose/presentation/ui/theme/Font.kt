@@ -356,6 +356,13 @@ val AllowanceInputDateAndConfirmButtonTextStyle = TextStyle(
     lineHeight = 16.sp
 )
 
+val AllowanceInputCategoryConfirmButtonTextStyle = TextStyle(
+    fontFamily = NanumSquare,
+    fontWeight = FontWeight.Bold,
+    fontSize = 14.sp,
+    lineHeight = 16.sp
+)
+
 val AllowanceInputItemTextStyle = TextStyle(
     fontFamily = NanumSquare,
     fontWeight = FontWeight.Bold,

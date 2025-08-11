@@ -27,6 +27,7 @@ loggingInterceptor = "4.12.0"
 securityCrypto = "1.0.0"
 coilNetworkOkhttp = "3.2.0"
 kotlinxCoroutinesCore = "1.10.2"
+composeWheelPicker = "1.0.0-rc02"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -61,6 +62,7 @@ logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-intercep
 androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "securityCrypto" }
 coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coilNetworkOkhttp" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
+compose-wheel-picker = { group = "com.github.zj565061763", name = "compose-wheel-picker", version.ref = "composeWheelPicker" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
