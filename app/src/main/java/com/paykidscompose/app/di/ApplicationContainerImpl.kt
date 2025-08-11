@@ -3,6 +3,8 @@ package com.paykidscompose.app.di
 import android.content.Context
 import com.paykidscompose.common.di.ApplicationContainer
 import com.paykidscompose.common.usecase.achievement.GetAchievementsUseCase
+import com.paykidscompose.common.usecase.allowance.GetMonthDailyAmountsUseCase
+import com.paykidscompose.common.usecase.allowance.GetSelectDayTransactionsUseCase
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseCategoryListUseCase
@@ -122,7 +124,8 @@ class ApplicationContainerImpl(
     override val getCheckAnswerUseCase: GetCheckAnswerUseCase = GetCheckAnswerUseCase(quizRepository)
     override val getCheckStageUseCase: GetCheckStageUseCase = GetCheckStageUseCase(quizRepository)
 
-    override val getAchievementsUseCase: GetAchievementsUseCase = GetAchievementsUseCase(achievementRepository)
+    override val getAchievementsUseCase: GetAchievementsUseCase =
+        GetAchievementsUseCase(achievementRepository)
     override val getQuestsUseCase: GetQuestsUseCase = GetQuestsUseCase(questRepository)
 
     override val getChatResponseUseCase: GetChatResponseUseCase = GetChatResponseUseCase(chatRepository)
@@ -160,6 +163,10 @@ class ApplicationContainerImpl(
         GetExpenseCategoryListUseCase(expenseCategoryRepository)
     override val getIncomeCategoryListUseCase: GetIncomeCategoryListUseCase =
         GetIncomeCategoryListUseCase(incomeCategoryRepository)
+    override val getMonthDailyAmountsUseCase: GetMonthDailyAmountsUseCase =
+        GetMonthDailyAmountsUseCase(expenseAllowanceRepository, incomeAllowanceRepository)
+    override val getSelectDayTransactionsUseCase: GetSelectDayTransactionsUseCase =
+        GetSelectDayTransactionsUseCase(expenseAllowanceRepository, incomeAllowanceRepository)
     override val saveExpenseUseCase: SaveExpenseUseCase = SaveExpenseUseCase(expenseAllowanceRepository)
     override val saveIncomeUseCase: SaveIncomeUseCase = SaveIncomeUseCase(incomeAllowanceRepository)
     override val replaceExpenseUseCase: ReplaceExpenseUseCase =

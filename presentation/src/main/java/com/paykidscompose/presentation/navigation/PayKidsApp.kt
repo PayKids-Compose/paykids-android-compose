@@ -18,6 +18,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.paykidscompose.common.enums.EntryPoint
 import com.paykidscompose.common.usecase.achievement.GetAchievementsUseCase
+import com.paykidscompose.common.usecase.allowance.GetMonthDailyAmountsUseCase
+import com.paykidscompose.common.usecase.allowance.GetSelectDayTransactionsUseCase
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseCategoryListUseCase
@@ -132,6 +134,8 @@ fun PayKidsApp(
     getIncomeDayUseCase: GetIncomeDayUseCase,
     getExpenseCategoryListUseCase: GetExpenseCategoryListUseCase,
     getIncomeCategoryListUseCase: GetIncomeCategoryListUseCase,
+    getMonthDailyAmountsUseCase: GetMonthDailyAmountsUseCase,
+    getSelectDayTransactionsUseCase: GetSelectDayTransactionsUseCase,
     saveExpenseUseCase: SaveExpenseUseCase,
     saveIncomeUseCase: SaveIncomeUseCase,
     replaceExpenseUseCase: ReplaceExpenseUseCase,
@@ -376,12 +380,10 @@ fun PayKidsApp(
                     factory = AllowanceDiaryViewModelFactory(
                         getExpenseMonthTotalAmountUseCase,
                         getExpenseMonthMostCategoryUseCase,
-                        getExpenseMonthDailyAmountUseCase,
-                        getIncomeMonthDailyAmountUseCase,
-                        getExpenseDayUseCase,
-                        getIncomeDayUseCase,
                         getExpenseCategoryListUseCase,
                         getIncomeCategoryListUseCase,
+                        getMonthDailyAmountsUseCase,
+                        getSelectDayTransactionsUseCase,
                         saveExpenseUseCase,
                         saveIncomeUseCase,
                         replaceExpenseUseCase,
