@@ -60,6 +60,8 @@ class MainActivity : ComponentActivity() {
                     provider.getIncomeDayUseCase,
                     provider.getExpenseCategoryListUseCase,
                     provider.getIncomeCategoryListUseCase,
+                    provider.getMonthDailyAmountsUseCase,
+                    provider.getSelectDayTransactionsUseCase,
                     provider.saveExpenseUseCase,
                     provider.saveIncomeUseCase,
                     provider.replaceExpenseUseCase,
@@ -74,7 +76,9 @@ class MainActivity : ComponentActivity() {
                     provider.getExpenseMonthCategoryUseCase,
                     provider.getIncomeMonthCategoryUseCase,
                     provider.deleteExpenseUseCase,
-                    provider.deleteIncomeUseCase
+                    provider.deleteIncomeUseCase,
+                    provider.getExpenseAllCategoryForMonthUseCase,
+                    provider.getIncomeAllCategoryForMonthUseCase
                 )
             }
         }

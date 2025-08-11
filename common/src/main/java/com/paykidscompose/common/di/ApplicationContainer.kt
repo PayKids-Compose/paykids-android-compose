@@ -1,8 +1,11 @@
 package com.paykidscompose.common.di
 
 import com.paykidscompose.common.usecase.achievement.GetAchievementsUseCase
+import com.paykidscompose.common.usecase.allowance.GetMonthDailyAmountsUseCase
+import com.paykidscompose.common.usecase.allowance.GetSelectDayTransactionsUseCase
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseUseCase
+import com.paykidscompose.common.usecase.allowance.expense.GetExpenseAllCategoryForMonthUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseDayUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthAllCategoryUseCase
@@ -15,6 +18,7 @@ import com.paykidscompose.common.usecase.allowance.expense.SaveExpenseCategoryUs
 import com.paykidscompose.common.usecase.allowance.expense.SaveExpenseUseCase
 import com.paykidscompose.common.usecase.allowance.income.DeleteIncomeCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.income.DeleteIncomeUseCase
+import com.paykidscompose.common.usecase.allowance.income.GetIncomeAllCategoryForMonthUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeDayUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthAllCategoryUseCase
@@ -76,6 +80,10 @@ interface ApplicationContainer {
     val getIncomeCategoryListUseCase: GetIncomeCategoryListUseCase
     val getExpenseMonthCategoryUseCase: GetExpenseMonthCategoryUseCase
     val getIncomeMonthCategoryUseCase: GetIncomeMonthCategoryUseCase
+    val getMonthDailyAmountsUseCase: GetMonthDailyAmountsUseCase
+    val getSelectDayTransactionsUseCase: GetSelectDayTransactionsUseCase
+    val getExpenseAllCategoryForMonthUseCase: GetExpenseAllCategoryForMonthUseCase
+    val getIncomeAllCategoryForMonthUseCase: GetIncomeAllCategoryForMonthUseCase
     val saveExpenseUseCase: SaveExpenseUseCase
     val saveIncomeUseCase: SaveIncomeUseCase
     val saveExpenseCategoryUseCase: SaveExpenseCategoryUseCase

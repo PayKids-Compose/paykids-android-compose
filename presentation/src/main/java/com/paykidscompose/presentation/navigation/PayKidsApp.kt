@@ -18,8 +18,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.paykidscompose.common.enums.EntryPoint
 import com.paykidscompose.common.usecase.achievement.GetAchievementsUseCase
+import com.paykidscompose.common.usecase.allowance.GetMonthDailyAmountsUseCase
+import com.paykidscompose.common.usecase.allowance.GetSelectDayTransactionsUseCase
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseUseCase
+import com.paykidscompose.common.usecase.allowance.expense.GetExpenseAllCategoryForMonthUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseDayUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthAllCategoryUseCase
@@ -32,6 +35,7 @@ import com.paykidscompose.common.usecase.allowance.expense.SaveExpenseCategoryUs
 import com.paykidscompose.common.usecase.allowance.expense.SaveExpenseUseCase
 import com.paykidscompose.common.usecase.allowance.income.DeleteIncomeCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.income.DeleteIncomeUseCase
+import com.paykidscompose.common.usecase.allowance.income.GetIncomeAllCategoryForMonthUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeDayUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthAllCategoryUseCase
@@ -132,6 +136,8 @@ fun PayKidsApp(
     getIncomeDayUseCase: GetIncomeDayUseCase,
     getExpenseCategoryListUseCase: GetExpenseCategoryListUseCase,
     getIncomeCategoryListUseCase: GetIncomeCategoryListUseCase,
+    getMonthDailyAmountsUseCase: GetMonthDailyAmountsUseCase,
+    getSelectDayTransactionsUseCase: GetSelectDayTransactionsUseCase,
     saveExpenseUseCase: SaveExpenseUseCase,
     saveIncomeUseCase: SaveIncomeUseCase,
     replaceExpenseUseCase: ReplaceExpenseUseCase,
@@ -146,7 +152,9 @@ fun PayKidsApp(
     getExpenseMonthCategoryUseCase: GetExpenseMonthCategoryUseCase,
     getIncomeMonthCategoryUseCase: GetIncomeMonthCategoryUseCase,
     deleteExpenseUseCase: DeleteExpenseUseCase,
-    deleteIncomeUseCase: DeleteIncomeUseCase
+    deleteIncomeUseCase: DeleteIncomeUseCase,
+    getExpenseAllCategoryForMonthUseCase: GetExpenseAllCategoryForMonthUseCase,
+    getIncomeAllCategoryForMonthUseCase: GetIncomeAllCategoryForMonthUseCase
 ) {
     val navController: NavHostController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -376,12 +384,10 @@ fun PayKidsApp(
                     factory = AllowanceDiaryViewModelFactory(
                         getExpenseMonthTotalAmountUseCase,
                         getExpenseMonthMostCategoryUseCase,
-                        getExpenseMonthDailyAmountUseCase,
-                        getIncomeMonthDailyAmountUseCase,
-                        getExpenseDayUseCase,
-                        getIncomeDayUseCase,
                         getExpenseCategoryListUseCase,
                         getIncomeCategoryListUseCase,
+                        getMonthDailyAmountsUseCase,
+                        getSelectDayTransactionsUseCase,
                         saveExpenseUseCase,
                         saveIncomeUseCase,
                         replaceExpenseUseCase,
@@ -402,10 +408,8 @@ fun PayKidsApp(
                     factory = TransactionAnalysisViewModelFactory(
                         getExpenseMonthTotalAmountUseCase,
                         getIncomeMonthTotalAmountUseCase,
-                        getExpenseMonthAllCategoryUseCase,
-                        getIncomeMonthAllCategoryUseCase,
-                        getExpenseCategoryListUseCase,
-                        getIncomeCategoryListUseCase,
+                        getExpenseAllCategoryForMonthUseCase,
+                        getIncomeAllCategoryForMonthUseCase,
                         deleteExpenseCategoryUseCase,
                         deleteIncomeCategoryUseCase,
                         saveExpenseCategoryUseCase,

@@ -3,8 +3,11 @@ package com.paykidscompose.app.di
 import android.content.Context
 import com.paykidscompose.common.di.ApplicationContainer
 import com.paykidscompose.common.usecase.achievement.GetAchievementsUseCase
+import com.paykidscompose.common.usecase.allowance.GetMonthDailyAmountsUseCase
+import com.paykidscompose.common.usecase.allowance.GetSelectDayTransactionsUseCase
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseUseCase
+import com.paykidscompose.common.usecase.allowance.expense.GetExpenseAllCategoryForMonthUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseDayUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthAllCategoryUseCase
@@ -17,6 +20,7 @@ import com.paykidscompose.common.usecase.allowance.expense.SaveExpenseCategoryUs
 import com.paykidscompose.common.usecase.allowance.expense.SaveExpenseUseCase
 import com.paykidscompose.common.usecase.allowance.income.DeleteIncomeCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.income.DeleteIncomeUseCase
+import com.paykidscompose.common.usecase.allowance.income.GetIncomeAllCategoryForMonthUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeDayUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthAllCategoryUseCase
@@ -122,7 +126,8 @@ class ApplicationContainerImpl(
     override val getCheckAnswerUseCase: GetCheckAnswerUseCase = GetCheckAnswerUseCase(quizRepository)
     override val getCheckStageUseCase: GetCheckStageUseCase = GetCheckStageUseCase(quizRepository)
 
-    override val getAchievementsUseCase: GetAchievementsUseCase = GetAchievementsUseCase(achievementRepository)
+    override val getAchievementsUseCase: GetAchievementsUseCase =
+        GetAchievementsUseCase(achievementRepository)
     override val getQuestsUseCase: GetQuestsUseCase = GetQuestsUseCase(questRepository)
 
     override val getChatResponseUseCase: GetChatResponseUseCase = GetChatResponseUseCase(chatRepository)
@@ -160,12 +165,21 @@ class ApplicationContainerImpl(
         GetExpenseCategoryListUseCase(expenseCategoryRepository)
     override val getIncomeCategoryListUseCase: GetIncomeCategoryListUseCase =
         GetIncomeCategoryListUseCase(incomeCategoryRepository)
+    override val getMonthDailyAmountsUseCase: GetMonthDailyAmountsUseCase =
+        GetMonthDailyAmountsUseCase(expenseAllowanceRepository, incomeAllowanceRepository)
+    override val getSelectDayTransactionsUseCase: GetSelectDayTransactionsUseCase =
+        GetSelectDayTransactionsUseCase(expenseAllowanceRepository, incomeAllowanceRepository)
     override val saveExpenseUseCase: SaveExpenseUseCase = SaveExpenseUseCase(expenseAllowanceRepository)
     override val saveIncomeUseCase: SaveIncomeUseCase = SaveIncomeUseCase(incomeAllowanceRepository)
     override val replaceExpenseUseCase: ReplaceExpenseUseCase =
         ReplaceExpenseUseCase(expenseAllowanceRepository)
     override val replaceIncomeUseCase: ReplaceIncomeUseCase =
         ReplaceIncomeUseCase(incomeAllowanceRepository)
+
+    override val getExpenseAllCategoryForMonthUseCase: GetExpenseAllCategoryForMonthUseCase =
+        GetExpenseAllCategoryForMonthUseCase(expenseAllowanceRepository, expenseCategoryRepository)
+    override val getIncomeAllCategoryForMonthUseCase: GetIncomeAllCategoryForMonthUseCase =
+        GetIncomeAllCategoryForMonthUseCase(incomeAllowanceRepository, incomeCategoryRepository)
 
     override val getExpenseMonthCategoryUseCase: GetExpenseMonthCategoryUseCase =
         GetExpenseMonthCategoryUseCase(expenseAllowanceRepository)

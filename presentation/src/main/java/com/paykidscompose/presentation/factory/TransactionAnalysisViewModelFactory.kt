@@ -3,13 +3,11 @@ package com.paykidscompose.presentation.factory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseCategoryUseCase
-import com.paykidscompose.common.usecase.allowance.expense.GetExpenseCategoryListUseCase
-import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthAllCategoryUseCase
+import com.paykidscompose.common.usecase.allowance.expense.GetExpenseAllCategoryForMonthUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthTotalAmountUseCase
 import com.paykidscompose.common.usecase.allowance.expense.SaveExpenseCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.income.DeleteIncomeCategoryUseCase
-import com.paykidscompose.common.usecase.allowance.income.GetIncomeCategoryListUseCase
-import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthAllCategoryUseCase
+import com.paykidscompose.common.usecase.allowance.income.GetIncomeAllCategoryForMonthUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthTotalAmountUseCase
 import com.paykidscompose.common.usecase.allowance.income.SaveIncomeCategoryUseCase
 import com.paykidscompose.presentation.screen.allowance.analysis.TransactionAnalysisViewModel
@@ -17,10 +15,8 @@ import com.paykidscompose.presentation.screen.allowance.analysis.TransactionAnal
 class TransactionAnalysisViewModelFactory(
     private val getExpenseMonthTotalAmountUseCase: GetExpenseMonthTotalAmountUseCase,
     private val getIncomeMonthTotalAmountUseCase: GetIncomeMonthTotalAmountUseCase,
-    private val getExpenseMonthAllCategoryUseCase: GetExpenseMonthAllCategoryUseCase,
-    private val getIncomeMonthAllCategoryUseCase: GetIncomeMonthAllCategoryUseCase,
-    private val getExpenseCategoryListUseCase: GetExpenseCategoryListUseCase,
-    private val getIncomeCategoryListUseCase: GetIncomeCategoryListUseCase,
+    private val getExpenseAllCategoryForMonthUseCase: GetExpenseAllCategoryForMonthUseCase,
+    private val getIncomeAllCategoryForMonthUseCase: GetIncomeAllCategoryForMonthUseCase,
     private val deleteExpenseCategoryUseCase: DeleteExpenseCategoryUseCase,
     private val deleteIncomeCategoryUseCase: DeleteIncomeCategoryUseCase,
     private val saveExpenseCategoryUseCase: SaveExpenseCategoryUseCase,
@@ -32,10 +28,8 @@ class TransactionAnalysisViewModelFactory(
             return TransactionAnalysisViewModel(
                 getExpenseMonthTotalAmountUseCase,
                 getIncomeMonthTotalAmountUseCase,
-                getExpenseMonthAllCategoryUseCase,
-                getIncomeMonthAllCategoryUseCase,
-                getExpenseCategoryListUseCase,
-                getIncomeCategoryListUseCase,
+                getExpenseAllCategoryForMonthUseCase,
+                getIncomeAllCategoryForMonthUseCase,
                 deleteExpenseCategoryUseCase,
                 deleteIncomeCategoryUseCase,
                 saveExpenseCategoryUseCase,
