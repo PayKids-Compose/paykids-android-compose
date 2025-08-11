@@ -7,6 +7,7 @@ import com.paykidscompose.common.usecase.allowance.GetMonthDailyAmountsUseCase
 import com.paykidscompose.common.usecase.allowance.GetSelectDayTransactionsUseCase
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseUseCase
+import com.paykidscompose.common.usecase.allowance.expense.GetExpenseAllCategoryForMonthUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseDayUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthAllCategoryUseCase
@@ -19,6 +20,7 @@ import com.paykidscompose.common.usecase.allowance.expense.SaveExpenseCategoryUs
 import com.paykidscompose.common.usecase.allowance.expense.SaveExpenseUseCase
 import com.paykidscompose.common.usecase.allowance.income.DeleteIncomeCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.income.DeleteIncomeUseCase
+import com.paykidscompose.common.usecase.allowance.income.GetIncomeAllCategoryForMonthUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeCategoryListUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeDayUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthAllCategoryUseCase
@@ -173,6 +175,11 @@ class ApplicationContainerImpl(
         ReplaceExpenseUseCase(expenseAllowanceRepository)
     override val replaceIncomeUseCase: ReplaceIncomeUseCase =
         ReplaceIncomeUseCase(incomeAllowanceRepository)
+
+    override val getExpenseAllCategoryForMonthUseCase: GetExpenseAllCategoryForMonthUseCase =
+        GetExpenseAllCategoryForMonthUseCase(expenseAllowanceRepository, expenseCategoryRepository)
+    override val getIncomeAllCategoryForMonthUseCase: GetIncomeAllCategoryForMonthUseCase =
+        GetIncomeAllCategoryForMonthUseCase(incomeAllowanceRepository, incomeCategoryRepository)
 
     override val getExpenseMonthCategoryUseCase: GetExpenseMonthCategoryUseCase =
         GetExpenseMonthCategoryUseCase(expenseAllowanceRepository)

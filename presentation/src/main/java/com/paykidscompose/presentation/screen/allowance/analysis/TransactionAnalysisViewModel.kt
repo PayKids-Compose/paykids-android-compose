@@ -6,28 +6,23 @@ import com.paykidscompose.common.enums.AllowanceType
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.allowance.expense.DeleteExpenseCategoryUseCase
-import com.paykidscompose.common.usecase.allowance.expense.GetExpenseCategoryListUseCase
-import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthAllCategoryUseCase
+import com.paykidscompose.common.usecase.allowance.expense.GetExpenseAllCategoryForMonthUseCase
 import com.paykidscompose.common.usecase.allowance.expense.GetExpenseMonthTotalAmountUseCase
 import com.paykidscompose.common.usecase.allowance.expense.SaveExpenseCategoryUseCase
 import com.paykidscompose.common.usecase.allowance.income.DeleteIncomeCategoryUseCase
-import com.paykidscompose.common.usecase.allowance.income.GetIncomeCategoryListUseCase
-import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthAllCategoryUseCase
+import com.paykidscompose.common.usecase.allowance.income.GetIncomeAllCategoryForMonthUseCase
 import com.paykidscompose.common.usecase.allowance.income.GetIncomeMonthTotalAmountUseCase
 import com.paykidscompose.common.usecase.allowance.income.SaveIncomeCategoryUseCase
 import com.paykidscompose.common.util.today
 import com.paykidscompose.presentation.base.UIEvent
 import com.paykidscompose.presentation.base.UIState
 import com.paykidscompose.presentation.mapper.allowance.AllowanceChartCategoryUIModelMapper
-import com.paykidscompose.presentation.mapper.allowance.CategoryUIModelMapper
-import com.paykidscompose.presentation.model.allowance.AllowanceChartCategoryUIModel
 import com.paykidscompose.presentation.model.allowance.TransactionAnalysisUIModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -35,10 +30,8 @@ import java.time.LocalDate
 class TransactionAnalysisViewModel(
     private val getExpenseMonthTotalAmountUseCase: GetExpenseMonthTotalAmountUseCase,
     private val getIncomeMonthTotalAmountUseCase: GetIncomeMonthTotalAmountUseCase,
-    private val getExpenseMonthAllCategoryUseCase: GetExpenseMonthAllCategoryUseCase,
-    private val getIncomeMonthAllCategoryUseCase: GetIncomeMonthAllCategoryUseCase,
-    private val getExpenseCategoryListUseCase: GetExpenseCategoryListUseCase,
-    private val getIncomeCategoryListUseCase: GetIncomeCategoryListUseCase,
+    private val getExpenseAllCategoryForMonthUseCase: GetExpenseAllCategoryForMonthUseCase,
+    private val getIncomeAllCategoryForMonthUseCase: GetIncomeAllCategoryForMonthUseCase,
     private val deleteExpenseCategoryUseCase: DeleteExpenseCategoryUseCase,
     private val deleteIncomeCategoryUseCase: DeleteIncomeCategoryUseCase,
     private val saveExpenseCategoryUseCase: SaveExpenseCategoryUseCase,
@@ -102,7 +95,7 @@ class TransactionAnalysisViewModel(
     }
 
     fun exitDeleteMode() {
-        if(_uiState.value.selectedCategoryForDelete.isNotEmpty()) {
+        if (_uiState.value.selectedCategoryForDelete.isNotEmpty()) {
             viewModelScope.launch {
                 when (_uiState.value.selectedType) {
                     AllowanceType.INCOME -> {
@@ -167,17 +160,17 @@ class TransactionAnalysisViewModel(
     }
 
     fun confirmAddCategory() {
-        when (_uiState.value.selectedType) {
-            AllowanceType.INCOME -> {
-                saveIncomeCategory()
-            }
+        viewModelScope.launch {
+            when (_uiState.value.selectedType) {
+                AllowanceType.INCOME -> {
+                    saveIncomeCategory()
+                }
 
-            AllowanceType.EXPENSE -> {
-                saveExpenseCategory()
+                AllowanceType.EXPENSE -> {
+                    saveExpenseCategory()
+                }
             }
         }
-
-        load()
     }
 
     private suspend fun deleteExpenseCategory() {
@@ -256,80 +249,82 @@ class TransactionAnalysisViewModel(
         }
     }
 
-    private fun saveExpenseCategory() {
+    private suspend fun saveExpenseCategory() {
         if (!_uiState.value.isAddCategory) return
 
-        viewModelScope.launch {
-            val result = saveExpenseCategoryUseCase(
-                SaveExpenseCategoryUseCase.Params(
-                    _uiState.value.category
-                )
+        val result = saveExpenseCategoryUseCase(
+            SaveExpenseCategoryUseCase.Params(
+                _uiState.value.category
             )
+        )
 
-            when (result) {
-                is DataResourceResult.Success -> {
-                    _uiState.update {
-                        it.copy(
-                            isAddCategory = false,
-                            category = ""
-                        )
-                    }
-
-                    _uiEvent.emit(UIEvent.SuccessShowToast("소비 카테고리를 저장했습니다!"))
+        when (result) {
+            is DataResourceResult.Success -> {
+                _uiState.update {
+                    it.copy(
+                        isAddCategory = false,
+                        category = ""
+                    )
                 }
 
-                is DataResourceResult.Failure -> {
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            error = result.exception,
-                            category = "",
-                            isAddCategory = false
-                        )
-                    }
-                }
+                _uiEvent.emit(UIEvent.SuccessShowToast("소비 카테고리를 저장했습니다!"))
 
-                DataResourceResult.DummyConstructor, DataResourceResult.Loading -> {}
+                load()
             }
+
+            is DataResourceResult.Failure -> {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        error = result.exception,
+                        category = "",
+                        isAddCategory = false
+                    )
+                }
+            }
+
+            DataResourceResult.DummyConstructor, DataResourceResult.Loading -> {}
         }
+
     }
 
-    private fun saveIncomeCategory() {
+    private suspend fun saveIncomeCategory() {
         if (!_uiState.value.isAddCategory) return
 
-        viewModelScope.launch {
-            val result = saveIncomeCategoryUseCase(
-                SaveIncomeCategoryUseCase.Params(
-                    _uiState.value.category
-                )
+        val result = saveIncomeCategoryUseCase(
+            SaveIncomeCategoryUseCase.Params(
+                _uiState.value.category
             )
+        )
 
-            when (result) {
-                is DataResourceResult.Success -> {
-                    _uiState.update {
-                        it.copy(
-                            isAddCategory = false,
-                            category = ""
-                        )
-                    }
-
-                    _uiEvent.emit(UIEvent.SuccessShowToast("수입 카테고리를 저장했습니다!"))
+        when (result) {
+            is DataResourceResult.Success -> {
+                _uiState.update {
+                    it.copy(
+                        isAddCategory = false,
+                        category = ""
+                    )
                 }
 
-                is DataResourceResult.Failure -> {
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            error = result.exception,
-                            category = "",
-                            isAddCategory = false
-                        )
-                    }
-                }
+                _uiEvent.emit(UIEvent.SuccessShowToast("수입 카테고리를 저장했습니다!"))
 
-                DataResourceResult.DummyConstructor, DataResourceResult.Loading -> {}
+                load()
             }
+
+            is DataResourceResult.Failure -> {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        error = result.exception,
+                        category = "",
+                        isAddCategory = false
+                    )
+                }
+            }
+
+            DataResourceResult.DummyConstructor, DataResourceResult.Loading -> {}
         }
+
     }
 
     private suspend fun getExpenseMonthTotalAmount() {
@@ -407,147 +402,67 @@ class TransactionAnalysisViewModel(
     }
 
     private suspend fun getExpenseAllCategoryForMonth() {
-        _uiState.update {
-            it.copy(
-                isLoading = true
+        getExpenseAllCategoryForMonthUseCase(
+            GetExpenseAllCategoryForMonthUseCase.Params(
+                _uiState.value.currentMonth.year,
+                _uiState.value.currentMonth.monthValue,
             )
-        }
-
-        combine(
-            getExpenseCategoryListUseCase(),
-            getExpenseMonthAllCategoryUseCase(
-                GetExpenseMonthAllCategoryUseCase.Params(
-                    _uiState.value.currentMonth.year,
-                    _uiState.value.currentMonth.monthValue,
-                )
-            )
-        ) { categoryResult, monthResult ->
-            Pair(categoryResult, monthResult)
-        }.collectLatest { (categoryResult, monthResult) ->
-            when {
-                categoryResult is DataResourceResult.Success && monthResult is DataResourceResult.Success -> {
-                    val allCategories = categoryResult.data.map { CategoryUIModelMapper.mapToLayerModel(it) }
-                    val monthCategory =
-                        monthResult.data.map { AllowanceChartCategoryUIModelMapper.mapToLayerModel(it) }
-
-                    val merge = allCategories.map { category ->
-                        val match = monthCategory.find { it.category == category.title }
-                        AllowanceChartCategoryUIModel(
-                            category = category.title,
-                            type = category.type,
-                            amount = match?.amount ?: 0,
-                            percent = match?.percent ?: 0
-                        )
-                    }
-
+        ).collectLatest { result ->
+            when (result) {
+                is DataResourceResult.Success -> {
+                    val chartCategoryUIModels =
+                        result.data.map { AllowanceChartCategoryUIModelMapper.mapToLayerModel(it) }
                     _uiState.update {
                         it.copy(
-                            isLoading = false,
                             uiModel = it.uiModel.copy(
-                                transactionList = merge
+                                transactionList = chartCategoryUIModels
                             )
                         )
                     }
                 }
 
-                categoryResult is DataResourceResult.Failure -> {
+                is DataResourceResult.Failure -> {
                     _uiState.update {
                         it.copy(
-                            isLoading = false,
-                            error = categoryResult.exception
+                            error = result.exception
                         )
                     }
                 }
 
-                monthResult is DataResourceResult.Failure -> {
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            error = monthResult.exception
-                        )
-                    }
-                }
-
-                else -> {
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false
-                        )
-                    }
-                }
+                else -> {}
             }
         }
     }
 
     private suspend fun getIncomeAllCategoryForMonth() {
-        _uiState.update {
-            it.copy(
-                isLoading = true
+        getIncomeAllCategoryForMonthUseCase(
+            GetIncomeAllCategoryForMonthUseCase.Params(
+                _uiState.value.currentMonth.year,
+                _uiState.value.currentMonth.monthValue,
             )
-        }
-
-        combine(
-            getIncomeCategoryListUseCase(),
-            getIncomeMonthAllCategoryUseCase(
-                GetIncomeMonthAllCategoryUseCase.Params(
-                    _uiState.value.currentMonth.year,
-                    _uiState.value.currentMonth.monthValue,
-                )
-            )
-        ) { categoryResult, monthResult ->
-            Pair(categoryResult, monthResult)
-        }.collectLatest { (categoryResult, monthResult) ->
-            when {
-                categoryResult is DataResourceResult.Success && monthResult is DataResourceResult.Success -> {
-                    val allCategories = categoryResult.data.map { CategoryUIModelMapper.mapToLayerModel(it) }
-                    val monthCategory =
-                        monthResult.data.map { AllowanceChartCategoryUIModelMapper.mapToLayerModel(it) }
-
-                    val merge = allCategories.map { category ->
-                        val match = monthCategory.find { it.category == category.title }
-                        AllowanceChartCategoryUIModel(
-                            category = category.title,
-                            type = category.type,
-                            amount = match?.amount ?: 0,
-                            percent = match?.percent ?: 0
-                        )
-                    }
-
+        ).collectLatest { result ->
+            when (result) {
+                is DataResourceResult.Success -> {
+                    val chartCategoryUIModels =
+                        result.data.map { AllowanceChartCategoryUIModelMapper.mapToLayerModel(it) }
                     _uiState.update {
                         it.copy(
-                            isLoading = false,
                             uiModel = it.uiModel.copy(
-                                transactionList = merge
+                                transactionList = chartCategoryUIModels
                             )
                         )
                     }
                 }
 
-                categoryResult is DataResourceResult.Failure -> {
+                is DataResourceResult.Failure -> {
                     _uiState.update {
                         it.copy(
-                            isLoading = false,
-                            error = categoryResult.exception
+                            error = result.exception
                         )
                     }
                 }
 
-                monthResult is DataResourceResult.Failure -> {
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            error = monthResult.exception
-                        )
-                    }
-                }
-
-                else -> {
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false
-                        )
-                    }
-                }
+                else -> {}
             }
         }
     }

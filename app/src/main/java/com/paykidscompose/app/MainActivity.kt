@@ -76,7 +76,9 @@ class MainActivity : ComponentActivity() {
                     provider.getExpenseMonthCategoryUseCase,
                     provider.getIncomeMonthCategoryUseCase,
                     provider.deleteExpenseUseCase,
-                    provider.deleteIncomeUseCase
+                    provider.deleteIncomeUseCase,
+                    provider.getExpenseAllCategoryForMonthUseCase,
+                    provider.getIncomeAllCategoryForMonthUseCase
                 )
             }
         }
