@@ -37,6 +37,14 @@ class GetSelectDayTransactionsUseCase(
                         DataResourceResult.Failure(incomeResult.exception)
                     }
 
+                    expenseResult is DataResourceResult.Loading || incomeResult is DataResourceResult.Loading -> {
+                        DataResourceResult.Loading
+                    }
+
+                    expenseResult is DataResourceResult.DummyConstructor || incomeResult is DataResourceResult.DummyConstructor -> {
+                        DataResourceResult.DummyConstructor
+                    }
+
                     else -> {
                         DataResourceResult.Success(emptyList())
                     }

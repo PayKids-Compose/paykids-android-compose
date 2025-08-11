@@ -52,7 +52,20 @@ class GetMonthDailyAmountsUseCase(
                         DataResourceResult.Failure(incomeResult.exception)
                     }
 
-                    else -> DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = "알 수 없는 에러 발생"))
+                    expenseResult is DataResourceResult.Loading || incomeResult is DataResourceResult.Loading -> {
+                        DataResourceResult.Loading
+                    }
+
+                    expenseResult is DataResourceResult.DummyConstructor || incomeResult is DataResourceResult.DummyConstructor -> {
+                        DataResourceResult.DummyConstructor
+                    }
+
+                    else -> DataResourceResult.Failure(
+                        PayKidsException.ToastException(
+                            code = -1,
+                            message = "알 수 없는 에러 발생"
+                        )
+                    )
                 }
             }
         } else {
