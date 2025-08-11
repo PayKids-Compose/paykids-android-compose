@@ -1,6 +1,5 @@
 package com.paykidscompose.presentation.ui.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,8 +18,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -30,8 +26,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -39,15 +35,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.paykidscompose.common.enums.AllowanceType
@@ -55,6 +48,13 @@ import com.paykidscompose.common.util.today
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.model.allowance.AllowanceChartUIModel
 import com.paykidscompose.presentation.model.allowance.CategoryUIModel
+import com.paykidscompose.presentation.ui.theme.AllowanceInputCategoryConfirmButtonTextStyle
+import com.paykidscompose.presentation.ui.theme.AllowanceInputCategoryDialogBottomPadding
+import com.paykidscompose.presentation.ui.theme.AllowanceInputCategoryDialogCardShape
+import com.paykidscompose.presentation.ui.theme.AllowanceInputCategoryDialogPickerFocusDividerSize
+import com.paykidscompose.presentation.ui.theme.AllowanceInputCategoryDialogPickerItemHeight
+import com.paykidscompose.presentation.ui.theme.AllowanceInputCategoryDialogPickerWidth
+import com.paykidscompose.presentation.ui.theme.AllowanceInputCategoryDialogSpacer
 import com.paykidscompose.presentation.ui.theme.AllowanceInputDateAndConfirmButtonTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceInputDialogAmountFieldTopBottomPadding
 import com.paykidscompose.presentation.ui.theme.AllowanceInputDialogCardDateBorderWidth
@@ -90,6 +90,7 @@ import com.paykidscompose.presentation.ui.theme.AllowanceInputItemTitleTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceInputTitleTextStyle
 import com.paykidscompose.presentation.ui.theme.AllowanceInputToggleTextStyle
 import com.paykidscompose.presentation.ui.theme.Black
+import com.paykidscompose.presentation.ui.theme.Blue3
 import com.paykidscompose.presentation.ui.theme.Gray1
 import com.paykidscompose.presentation.ui.theme.Gray5
 import com.paykidscompose.presentation.ui.theme.Gray6
@@ -97,6 +98,9 @@ import com.paykidscompose.presentation.ui.theme.Gray7
 import com.paykidscompose.presentation.ui.theme.PopupDialogCardColumnSize
 import com.paykidscompose.presentation.ui.theme.White
 import com.paykidscompose.presentation.util.formatAmount
+import com.sd.lib.compose.wheel_picker.FVerticalWheelPicker
+import com.sd.lib.compose.wheel_picker.FWheelPickerFocusVertical
+import com.sd.lib.compose.wheel_picker.rememberFWheelPickerState
 import java.time.LocalDate
 
 
@@ -121,7 +125,7 @@ fun AllowanceInputDialog(
     var selectedCategory by remember { mutableStateOf(chartUIModel.category) }
 
     val onSelectType = { type: AllowanceType ->
-        if(!isTypeLock) {
+        if (!isTypeLock) {
             selectType = type
         }
     }
@@ -344,7 +348,7 @@ fun AllowanceInputDialog(
                     Spacer(Modifier.height(AllowanceInputDialogSpacer8))
 
                     OutlineInputField(
-                        inputMemo, // 호출한 곳에서 memo를 보내줄거임
+                        inputMemo,
                         { inputMemo = it },
                         startPadding = AllowanceInputDialogInputFieldStartEndPadding,
                         backgroundColor = Gray5,
@@ -440,7 +444,7 @@ fun AllowanceInputDialog(
                 )
             ) {
                 Card(
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(AllowanceInputCategoryDialogCardShape),
                     colors = CardDefaults.cardColors(containerColor = White),
                     modifier = Modifier.wrapContentSize()
                 ) {
@@ -459,93 +463,61 @@ fun AllowanceInputDialog(
     }
 }
 
-// 완성된 함수가 아닙니다. 계속 수정 해야합니다.
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CategoryWheelPicker(
     categories: List<String>,
     initialSelectedCategory: String?,
     onCategorySelected: (String) -> Unit
 ) {
-    val listState = rememberLazyListState()
+    val initialIndex = categories.indexOf(initialSelectedCategory).coerceAtLeast(0)
+    val pickerState = rememberFWheelPickerState(initialIndex)
 
-    var selectedCategory by remember {
-        mutableStateOf(
-            initialSelectedCategory ?: categories.firstOrNull()
-        )
-    }
-
-    LaunchedEffect(listState, categories) {
-        initialSelectedCategory?.let { initial ->
-            val initialIndex = categories.indexOf(initial)
-            if (initialIndex != -1) {
-                val offset =
-                    (listState.layoutInfo.visibleItemsInfo.firstOrNull()?.size?.div(2) ?: 0)
-                listState.scrollToItem(initialIndex, -offset)
-            }
-        }
-
-//        snapshotFlow { listState.firstVisibleItemIndex }
-//            .map { firstIndex ->
-//                val centerItemOffset = (listState.layoutInfo.visibleItemsInfo.size / 2)
-//                categories.getOrNull(firstIndex + centerItemOffset)
-//            }
-//            .distinctUntilChanged()
-//            .collect { category ->
-//                category?.let {
-//                    selectedCategory = it
-//                    onCategorySelected(it)
-//                }
-//            }
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp)
-            .background(Color.Transparent),
-        contentAlignment = Alignment.Center
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(bottom = AllowanceInputCategoryDialogBottomPadding)
     ) {
-
-        Box(
+        FVerticalWheelPicker(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-                .align(Alignment.Center)
-                .background(Color.LightGray.copy(alpha = 0.3f), RoundedCornerShape(8.dp))
-        )
-
-        LazyColumn(
-            state = listState,
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-
-            contentPadding = PaddingValues(vertical = 75.dp)
-        ) {
-            items(categories.size) { index ->
-                val category = categories[index]
-                val isSelected = category == selectedCategory
-
-                val alpha = if (isSelected) 1f else 0.4f
-                val fontSize = if (isSelected) 24.sp else 18.sp
-
-                Text(
-                    text = category,
-                    fontSize = fontSize,
-                    color = Black,
-                    modifier = Modifier
-                        .height(50.dp)
-                        .wrapContentHeight(align = Alignment.CenterVertically)
-                        .alpha(alpha)
+                .width(AllowanceInputCategoryDialogPickerWidth),
+            count = categories.size,
+            itemHeight = AllowanceInputCategoryDialogPickerItemHeight,
+            unfocusedCount = 2,
+            state = pickerState,
+            focus = {
+                FWheelPickerFocusVertical(
+                    dividerColor = Blue3,
+                    dividerSize = AllowanceInputCategoryDialogPickerFocusDividerSize
                 )
             }
+        ) { index ->
+            Text(
+                text = categories[index]
+            )
+        }
+
+        Spacer(modifier = Modifier.height(AllowanceInputCategoryDialogSpacer))
+
+
+        TextButton(
+            onClick = {
+                val selected = categories[pickerState.currentIndex]
+                onCategorySelected(selected)
+            },
+            colors = ButtonDefaults.textButtonColors(
+                contentColor = Black
+            )
+        ) {
+            Text(
+                stringResource(R.string.category_dialog_confirm),
+                style = AllowanceInputCategoryConfirmButtonTextStyle
+            )
         }
     }
 }
 
 
 @Composable
-private fun DateInputItem( // 여기도 문자열 말고 LocalDate로 수정 예정
+private fun DateInputItem(
     date: Int,
     unit: String,
     onPrev: () -> Unit,

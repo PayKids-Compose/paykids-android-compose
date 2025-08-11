@@ -124,6 +124,7 @@ z   <string name="text_quiz_number">%1$d/%2$d</string>
     <string name="dialog_hint_memo">메모를 입력하세요</string>
     <string name="dialog_hint_category">카테고리를 선택하세요</string>
     <string name="dialog_text_submit">완료</string>
+    <string name="category_dialog_confirm">선택</string>
 
     <!-- 소비 상세 내역 페이지 -->
     <string name="text_delete_category">카테고리 삭제</string>
