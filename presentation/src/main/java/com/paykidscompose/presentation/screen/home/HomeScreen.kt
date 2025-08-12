@@ -30,6 +30,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +41,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
@@ -96,7 +98,7 @@ fun Home(
 
     val tooltipOffset = remember { mutableStateOf<Offset?>(null) }
 
-    LaunchedEffect(Unit) {
+    SideEffect {
         homeViewModel.loadAllData()
     }
 
@@ -161,7 +163,7 @@ fun HomeScreen(
         derivedStateOf {
             val totalOffsetPx = scrollState.firstVisibleItemIndex * itemHeightPx +
                     scrollState.firstVisibleItemScrollOffset
-            with(density) { -totalOffsetPx.toDp() }
+            with(density) { -totalOffsetPx }
         }
     }
 
@@ -181,7 +183,9 @@ fun HomeScreen(
             alignment = Alignment.TopStart,
             modifier = Modifier
                 .fillMaxWidth()
-                .offset(y = backgroundOffset)
+                .graphicsLayer {
+                    translationY = backgroundOffset
+                }
         )
 
         LazyColumn(
