@@ -48,7 +48,7 @@ import com.paykidscompose.common.usecase.user.DeleteUserUseCase
 import com.paykidscompose.common.usecase.user.GetUserUseCase
 import com.paykidscompose.common.usecase.user.ReplaceNicknameUseCase
 import com.paykidscompose.common.usecase.user.SaveNicknameUseCase
-import com.paykidscompose.data.network.NetworkModule
+import com.paykidscompose.data.di.NetworkModule
 import com.paykidscompose.data.network.service.authentication.KakaoLoginService
 import com.paykidscompose.data.repository.AchievementRepositoryImpl
 import com.paykidscompose.data.repository.AuthRepositoryImpl

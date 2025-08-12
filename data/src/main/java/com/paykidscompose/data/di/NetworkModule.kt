@@ -1,6 +1,7 @@
-package com.paykidscompose.data.network
+package com.paykidscompose.data.di
 
 import com.paykidscompose.data.BuildConfig
+import com.paykidscompose.data.network.NetworkInterceptor
 import com.paykidscompose.data.network.service.AchievementApiService
 import com.paykidscompose.data.network.service.AuthApiService
 import com.paykidscompose.data.network.service.ChatApiService
@@ -17,7 +18,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import kotlin.getValue
 
 object NetworkModule {
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
