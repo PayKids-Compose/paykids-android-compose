@@ -283,13 +283,14 @@ fun PayKidsApp(
                         navController.popBackStack()
                     },
                     onConfirmClick = { clear ->
-                        navController.navigate(QuizNavigationRoute.QuizClearRoute(clear))
+                        navController.navigate(QuizNavigationRoute.QuizClearRoute(stageNumber, clear))
                     }
                 )
             }
 
             composable<QuizNavigationRoute.QuizClearRoute> { backStack ->
                 val targetRoute = backStack.toRoute<QuizNavigationRoute.QuizClearRoute>()
+                val stageNumber = targetRoute.stageNumber
                 val clearType = targetRoute.clear
 
                 QuizClear(
@@ -301,6 +302,9 @@ fun PayKidsApp(
 //                            // 백스택 맨 위에가 홈이라면 기존 화면을 재사용하기 위해서 넣음.
 //                        }
                         navController.popBackStack(TabNavigationRoute.HomeRoute, inclusive = false)
+                    },
+                    onWrongNoteClick = {
+                        navController.navigate(QuizNavigationRoute.QuizRoute(stageNumber, true))
                     }
                 )
             }
