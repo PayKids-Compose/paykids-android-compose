@@ -31,18 +31,21 @@ import com.paykidscompose.presentation.ui.theme.White
 @Composable
 fun QuizClear(
     clearType: QuizClearType,
-    onExitClick: () -> Unit = {}
+    onExitClick: () -> Unit = {},
+    onWrongNoteClick: () -> Unit = {}
 ) {
     QuizClearScreen(
         config = clearType.toConfig(),
-        onExitClick = onExitClick
+        onExitClick = onExitClick,
+        onWrongNoteClick = onWrongNoteClick
     )
 }
 
 @Composable
 fun QuizClearScreen(
     config: QuizClearConfigUIModel,
-    onExitClick: () -> Unit = {}
+    onExitClick: () -> Unit = {},
+    onWrongNoteClick: () -> Unit = {}
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         AsyncImage(
@@ -77,7 +80,7 @@ fun QuizClearScreen(
                 Spacer(modifier = Modifier.height(QuizClearButtonSpacer))
                 DecisionButton(
                     text = stringResource(R.string.text_btn_review),
-                    onClick = {},
+                    onClick = onWrongNoteClick,
                     backgroundColor = Blue2,
                     textStyle = QuizClearButtonTextStyle.copy(color = White)
                 )
