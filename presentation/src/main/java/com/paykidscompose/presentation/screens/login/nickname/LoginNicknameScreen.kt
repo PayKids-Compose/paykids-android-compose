@@ -77,9 +77,9 @@ fun Nickname(
             ScreenLoading()
         }
 
-        uiState.uiModel != null -> {
+        else -> {
             NicknameScreen(
-                uiModel = uiState.uiModel!!,
+                uiModel = uiState.uiModel,
                 onSaveNickname = { viewModel.saveNickname() },
                 onNicknameChange = { viewModel.updateNicknameInput(it) }
             )

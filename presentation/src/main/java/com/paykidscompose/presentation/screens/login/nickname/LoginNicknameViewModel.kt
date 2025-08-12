@@ -35,13 +35,13 @@ class LoginNicknameViewModel(
 
     fun updateNicknameInput(nickname: String) {
         _uiState.update {
-            it.copy(uiModel = it.uiModel?.copy(nickname))
+            it.copy(uiModel = it.uiModel.copy(nickname))
         }
     }
 
     fun saveNickname() {
         if (_uiState.value.isLoading) return
-        val nickname = _uiState.value.uiModel?.nickname ?: ""
+        val nickname = _uiState.value.uiModel.nickname
 
         _uiState.update {
             it.copy(isLoading = true, error = null)
@@ -84,5 +84,5 @@ class LoginNicknameViewModel(
 data class LoginNicknameUIState(
     override val isLoading: Boolean = false,
     override val error: PayKidsException? = null,
-    val uiModel: LoginNicknameUIModel? = null
+    val uiModel: LoginNicknameUIModel = LoginNicknameUIModel()
 ) : UIState()
