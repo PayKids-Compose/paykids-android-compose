@@ -21,7 +21,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.paykidscompose.common.exception.PayKidsException
@@ -55,7 +57,7 @@ fun MyPage(
     onClickAppVersion: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
+    val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
 
     if (uiState.showLogoutDialog) {
@@ -73,7 +75,7 @@ fun MyPage(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.uiEvent.collectLatest { event ->
+        viewModel.uiEvent.flowWithLifecycle(lifecycleOwner.lifecycle).collectLatest { event ->
             when (event) {
                 is UIEvent.SuccessShowToast -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()

@@ -17,7 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.presentation.R
@@ -41,15 +43,14 @@ import kotlinx.coroutines.flow.collectLatest
 // 스플래시 이후 로그인 화면입니다.
 @Composable
 fun Nickname(
-    viewModel: LoginNicknameViewModel = viewModel(),
-    onConfirmClick: () -> Unit = {}
+    viewModel: LoginNicknameViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
+    val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        viewModel.uiEvent.collectLatest { event ->
+        viewModel.uiEvent.flowWithLifecycle(lifecycleOwner.lifecycle).collectLatest { event ->
             when (event) {
                 is UIEvent.SuccessShowToast -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
@@ -152,6 +153,6 @@ private fun NicknameInput(nickname: String, onNicknameChange: (String) -> Unit) 
 @Composable
 fun NicknameScreenPreview() {
     PayKidsComposeTheme {
-        Nickname { }
+        Nickname()
     }
 }
