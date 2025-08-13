@@ -23,7 +23,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.presentation.R
@@ -46,16 +48,14 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun Login(
-    viewModel: LoginViewModel = viewModel(),
-    onNavigateHome: () -> Unit = {},
-    onLoginSuccess: () -> Unit = {} // 뷰 모델에서 이벤트 처리하기
+    viewModel: LoginViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
+    val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        viewModel.uiEvent.collectLatest { event ->
+        viewModel.uiEvent.flowWithLifecycle(lifecycleOwner.lifecycle).collectLatest { event ->
             when (event) {
                 is UIEvent.SuccessShowToast -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()

@@ -201,9 +201,7 @@ fun PayKidsApp(
                     viewModelStoreOwner = it,
                     factory = LoginViewModelFactory(loginUseCase)
                 )
-                Login(viewModel) {
-                    navController.navigate(EntryNavigationRoute.LoginNicknameRoute)
-                }
+                Login(viewModel)
             }
 
             composable<EntryNavigationRoute.LoginNicknameRoute> {
@@ -211,8 +209,7 @@ fun PayKidsApp(
                     viewModelStoreOwner = it,
                     factory = LoginNicknameViewModelFactory(saveNicknameUseCase)
                 )
-                Nickname(viewModel) {
-                }
+                Nickname(viewModel)
             }
 
             composable<TabNavigationRoute.HomeRoute> {
