@@ -98,7 +98,7 @@ fun Home(
 
     val tooltipOffset = remember { mutableStateOf<Offset?>(null) }
 
-    SideEffect {
+    LaunchedEffect(Unit) {
         homeViewModel.loadAllData()
     }
 
