@@ -1,6 +1,11 @@
 package com.paykidscompose.presentation.screen.study
 
 import android.widget.Toast
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -8,6 +13,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,6 +34,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -41,7 +48,6 @@ import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.model.study.ChatMessageUIModel
 import com.paykidscompose.presentation.screen.study.section.StudyTopBar
 import com.paykidscompose.presentation.ui.components.OutlineInputField
-import com.paykidscompose.presentation.ui.components.ScreenLoading
 import com.paykidscompose.presentation.ui.theme.Blue1
 import com.paykidscompose.presentation.ui.theme.Gray1
 import com.paykidscompose.presentation.ui.theme.Gray5
@@ -115,29 +121,23 @@ fun Study(
         }
     }
 
-    when {
-        uiState.isLoading -> {
-            ScreenLoading()
-        }
-        else -> {
-            StudyScreen(
-                modifier = Modifier
-                    .fillMaxSize(),
-                stageNumberText = stageNumberText,
-                userNickname = userNickname,
-                messages = uiState.messages,
-                userInput = uiState.userInput,
-                onBackClick = onBackClick,
-                onUserInputChange = { text -> studyViewModel.onUserInputChange(text) },
-                onSendClick = {
-                    studyViewModel.sendUserInput()
-                },
-                listState = listState
-            )
-        }
-    }
-}
+    StudyScreen(
+        modifier = Modifier
+            .fillMaxSize(),
+        stageNumberText = stageNumberText,
+        userNickname = userNickname,
+        messages = uiState.messages,
+        userInput = uiState.userInput,
+        isLoading = uiState.isLoading,
+        onBackClick = onBackClick,
+        onUserInputChange = { text -> studyViewModel.onUserInputChange(text) },
+        onSendClick = {
+            studyViewModel.sendUserInput()
+        },
+        listState = listState
+    )
 
+}
 
 @Composable
 fun StudyScreen(
@@ -146,11 +146,19 @@ fun StudyScreen(
     userNickname: String,
     messages: List<ChatMessageUIModel>,
     userInput: String,
+    isLoading: Boolean,
     onBackClick: () -> Unit,
     onUserInputChange: (String) -> Unit,
     onSendClick: () -> Unit,
     listState: LazyListState
 ) {
+    // 메시지가 추가될 때 자동으로 맨 아래로 스크롤
+    LaunchedEffect(messages.size) {
+        if (messages.isNotEmpty()) {
+            listState.animateScrollToItem(messages.lastIndex)
+        }
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -175,7 +183,7 @@ fun StudyScreen(
 
             items(messages) { message ->
                 if (message.isFromGpt) {
-                    GptBubble(message.text)
+                    GptBubble(message.text, isLoading)
                 } else {
                     UserBubble(userNickname, message.text)
                 }
@@ -212,7 +220,7 @@ fun StageInfoBox(stage: String) {
 }
 
 @Composable
-fun GptBubble(text: String) {
+fun GptBubble(text: String, isLoading: Boolean) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = stringResource(R.string.text_chatgpt),
@@ -235,7 +243,11 @@ fun GptBubble(text: String) {
                 )
                 .align(Alignment.Start)
         ) {
-            Text(text, style = StudyChatBubbleTextStyle.copy(color = White))
+            if (isLoading && text.isBlank()) {
+                TypingDots()
+            } else {
+                Text(text, style = StudyChatBubbleTextStyle.copy(color = White))
+            }
         }
     }
 }
@@ -327,11 +339,46 @@ fun ChatInput(
     }
 }
 
+@Composable
+fun TypingDots() {
+    val dotCount = 3
+    val transition = rememberInfiniteTransition()
+
+    val alphaValues = List(dotCount) { index ->
+        transition.animateFloat(
+            initialValue = 0.3f,
+            targetValue = 1f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(durationMillis = 500, delayMillis = index * 200),
+                repeatMode = RepeatMode.Reverse
+            )
+        )
+    }
+
+    Row {
+        repeat(dotCount) { index ->
+            Text(
+                text = stringResource(R.string.typing_dot),
+                style = StudyChatBubbleTextStyle.copy(color = White),
+                modifier = Modifier.alpha(alphaValues[index].value)
+            )
+        }
+    }
+}
+
 @Preview
 @Composable
 fun GptBubblePreview() {
     PayKidsComposeTheme {
-        GptBubble("안녕하세요")
+        GptBubble("안녕하세요", false)
+    }
+}
+
+@Preview
+@Composable
+fun GptBubbleLoadingPreview() {
+    PayKidsComposeTheme {
+        GptBubble("", true)
     }
 }
 
