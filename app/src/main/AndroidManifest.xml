@@ -16,6 +16,7 @@
         android:theme="@style/Theme.PayKidsCompose"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <profileable android:shell="true" />
         <activity
             android:name=".SplashActivity"
             android:exported="true"
