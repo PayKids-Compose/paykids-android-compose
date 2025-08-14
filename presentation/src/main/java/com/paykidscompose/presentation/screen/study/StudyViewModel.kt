@@ -8,12 +8,14 @@ import com.paykidscompose.common.usecase.study.GetChatResponseUseCase
 import com.paykidscompose.common.usecase.user.GetUserUseCase
 import com.paykidscompose.presentation.base.UIState
 import com.paykidscompose.presentation.mapper.my.MyInfoUIModelMapper
+import com.paykidscompose.presentation.mapper.study.ChatMessageUIModelMapper
 import com.paykidscompose.presentation.model.study.ChatMessageUIModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class StudyViewModel(
     private val getChatResponseUseCase: GetChatResponseUseCase,
@@ -35,13 +37,19 @@ class StudyViewModel(
         if (inputText.isBlank()) return
 
         val userMessage = ChatMessageUIModel(
+            id = UUID.randomUUID().toString(),
             text = inputText,
             isFromGpt = false
         )
 
+        val gptMessageId = UUID.randomUUID().toString()
         _uiState.update {
             it.copy(
-                messages = it.messages + userMessage,
+                messages = it.messages + userMessage + ChatMessageUIModel(
+                    id = gptMessageId,
+                    text = "",
+                    isFromGpt = true
+                ), // 타이핑 애니메이션 위해 GPT 버블 미리 생성,
                 userInput = "", // 입력창 비움
                 isLoading = true, error = null
             )
@@ -52,20 +60,27 @@ class StudyViewModel(
                 .collectLatest { result ->
                     when (result) {
                         is DataResourceResult.Success -> {
-                            val gptMessage = ChatMessageUIModel(
-                                text = result.data.response,
-                                isFromGpt = true
-                            )
+                            val uiModel = ChatMessageUIModelMapper.mapToLayerModel(result.data)
                             _uiState.update {
                                 it.copy(
-                                    messages = it.messages + gptMessage,
+                                    messages = it.messages.map { message ->
+                                        if (message.id == gptMessageId) {
+                                            message.copy(text = uiModel.text)
+                                        } else message
+                                    },
                                     isLoading = false
                                 )
                             }
                         }
 
                         is DataResourceResult.Failure -> {
-                            _uiState.update { it.copy(error = result.exception, isLoading = false) }
+                            _uiState.update {
+                                it.copy(
+                                    messages = it.messages.filter { it.id != gptMessageId }, // 타임아웃 등 응답 실패 시 해당 GPT 버블 삭제
+                                    error = result.exception,
+                                    isLoading = false
+                                )
+                            }
                         }
 
                         DataResourceResult.Loading -> {}
