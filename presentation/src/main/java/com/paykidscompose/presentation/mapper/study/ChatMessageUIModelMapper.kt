@@ -11,6 +11,7 @@ object ChatMessageUIModelMapper: ModelMapper<ChatResponseModel, ChatMessageUIMod
 
     override fun mapToLayerModel(model: ChatResponseModel): ChatMessageUIModel {
         return ChatMessageUIModel(
+            id = "",
             text = model.response,
             isFromGpt = true
         )
