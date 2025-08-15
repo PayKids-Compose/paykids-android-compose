@@ -42,6 +42,7 @@ z   <string name="text_quiz_number">%1$d/%2$d</string>
     <string name="text_study_title">학습하기</string>
     <string name="hint_chat">내용을 입력하세요</string>
     <string name="text_chatgpt">ChatGPT</string>
+    <string name="typing_dot">•</string>
 
     <!-- 마이 페이지 -->
     <string name="content_description_profile">프로필 이미지</string>
