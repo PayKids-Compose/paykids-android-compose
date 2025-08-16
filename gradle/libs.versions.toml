@@ -27,6 +27,9 @@ securityCrypto = "1.0.0"
 coilNetworkOkhttp = "3.2.0"
 kotlinxCoroutinesCore = "1.10.2"
 composeWheelPicker = "1.0.0-rc02"
+hiltVersion = "2.57"
+hiltCore = "2.57"
+hiltNavigationCompose = "1.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -61,6 +64,10 @@ androidx-security-crypto = { group = "androidx.security", name = "security-crypt
 coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coilNetworkOkhttp" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 compose-wheel-picker = { group = "com.github.zj565061763", name = "compose-wheel-picker", version.ref = "composeWheelPicker" }
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hiltVersion" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltVersion" }
+hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "hiltCore" }
+androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -70,3 +77,5 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin"}
+kotlin-kapt = { id = "kotlin-kapt" }
+hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hiltVersion" }
