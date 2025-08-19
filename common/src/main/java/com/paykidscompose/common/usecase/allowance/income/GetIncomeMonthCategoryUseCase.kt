@@ -7,8 +7,11 @@ import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.FlowUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GetIncomeMonthCategoryUseCase(
+@Singleton
+class GetIncomeMonthCategoryUseCase @Inject constructor(
     private val repository: IncomeAllowanceRepository
 ) : FlowUseCase<GetIncomeMonthCategoryUseCase.Params, DataResourceResult<List<AllowanceChartModel>>>() {
 

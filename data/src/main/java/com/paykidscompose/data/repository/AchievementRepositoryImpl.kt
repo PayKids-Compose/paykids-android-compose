@@ -6,8 +6,11 @@ import com.paykidscompose.common.repository.AchievementRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.data.mapper.achievement.AchievementMapper
 import com.paykidscompose.data.network.service.AchievementApiService
+import javax.inject.Inject
 
-class AchievementRepositoryImpl(private val achievementApiService: AchievementApiService) :
+class AchievementRepositoryImpl @Inject constructor(
+    private val achievementApiService: AchievementApiService
+) :
     AchievementRepository {
     override suspend fun getAchievements(): DataResourceResult<List<AchievementModel>> {
         return runCatching {

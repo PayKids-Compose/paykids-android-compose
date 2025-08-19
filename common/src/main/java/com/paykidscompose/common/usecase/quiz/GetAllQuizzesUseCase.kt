@@ -13,8 +13,11 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GetAllQuizzesUseCase(
+@Singleton
+class GetAllQuizzesUseCase @Inject constructor(
     private val quizRepository: QuizRepository
 ) : FlowUseCase<GetAllQuizzesUseCase.Params, DataResourceResult<List<QuizModel>>>() {
     override fun execute(params: Params?): Flow<DataResourceResult<List<QuizModel>>> {

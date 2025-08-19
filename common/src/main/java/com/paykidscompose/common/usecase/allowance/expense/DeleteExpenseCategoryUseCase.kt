@@ -4,8 +4,11 @@ import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.repository.ExpenseCategoryRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.SuspendUseCase
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DeleteExpenseCategoryUseCase(
+@Singleton
+class DeleteExpenseCategoryUseCase @Inject constructor(
     private val repository: ExpenseCategoryRepository
 ) : SuspendUseCase<DeleteExpenseCategoryUseCase.Params, DataResourceResult<Boolean>>() {
 

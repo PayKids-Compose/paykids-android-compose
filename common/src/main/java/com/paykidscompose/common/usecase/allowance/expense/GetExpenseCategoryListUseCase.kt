@@ -5,8 +5,11 @@ import com.paykidscompose.common.repository.ExpenseCategoryRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.FlowUseCase
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GetExpenseCategoryListUseCase(
+@Singleton
+class GetExpenseCategoryListUseCase @Inject constructor(
     private val repository: ExpenseCategoryRepository
 ) : FlowUseCase<Unit, DataResourceResult<List<CategoryModel>>>() {
 

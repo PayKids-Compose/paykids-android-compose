@@ -10,8 +10,11 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GetWrongAnswerStatusUseCase(
+@Singleton
+class GetWrongAnswerStatusUseCase @Inject constructor(
     private val quizRepository: QuizRepository
 ) : FlowUseCase<GetWrongAnswerStatusUseCase.Params, DataResourceResult<WrongAnswerNoteStatus>>() {
     override fun execute(params: Params?): Flow<DataResourceResult<WrongAnswerNoteStatus>> {

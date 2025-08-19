@@ -11,6 +11,7 @@ import com.paykidscompose.presentation.base.UIEvent
 import com.paykidscompose.presentation.base.UIState
 import com.paykidscompose.presentation.mapper.my.MyInfoUIModelMapper
 import com.paykidscompose.presentation.model.MyInfoUIModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -18,8 +19,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MyInfoViewModel(
+@HiltViewModel
+class MyInfoViewModel @Inject constructor(
     private val getUserUseCase: GetUserUseCase,
     private val replaceNicknameUseCase: ReplaceNicknameUseCase,
     private val deleteUserUseCase: DeleteUserUseCase

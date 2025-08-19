@@ -24,6 +24,7 @@ import com.paykidscompose.presentation.mapper.allowance.CategoryUIModelMapper
 import com.paykidscompose.presentation.model.allowance.AllowanceChartUIModel
 import com.paykidscompose.presentation.model.allowance.AllowanceDiaryUIModel
 import com.paykidscompose.presentation.util.formatAmount
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -32,8 +33,10 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import javax.inject.Inject
 
-class AllowanceDiaryViewModel(
+@HiltViewModel
+class AllowanceDiaryViewModel @Inject constructor(
     private val getExpenseMonthTotalAmountUseCase: GetExpenseMonthTotalAmountUseCase,
     private val getExpenseMonthMostCategoryUseCase: GetExpenseMonthMostCategoryUseCase,
     private val getExpenseCategoryListUseCase: GetExpenseCategoryListUseCase,

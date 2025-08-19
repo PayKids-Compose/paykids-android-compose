@@ -4,8 +4,11 @@ import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.repository.UserRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.SuspendUseCase
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ReplaceNicknameUseCase(
+@Singleton
+class ReplaceNicknameUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) : SuspendUseCase<ReplaceNicknameUseCase.Params, DataResourceResult<String>>() {
 

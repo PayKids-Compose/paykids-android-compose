@@ -11,12 +11,15 @@ import com.paykidscompose.presentation.mapper.achievement.AchievementUIModelMapp
 import com.paykidscompose.presentation.mapper.quest.QuestUIModelMapper
 import com.paykidscompose.presentation.model.achievement.AchievementUIModel
 import com.paykidscompose.presentation.model.quest.QuestUIModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class QuestAndAchievementViewModel(
+@HiltViewModel
+class QuestAndAchievementViewModel @Inject constructor(
     private val getAchievementsUseCase: GetAchievementsUseCase,
     private val getQuestsUseCase: GetQuestsUseCase
 ) : ViewModel() {

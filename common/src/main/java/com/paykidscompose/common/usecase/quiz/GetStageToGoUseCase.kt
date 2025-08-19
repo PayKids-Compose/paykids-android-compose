@@ -3,8 +3,11 @@ package com.paykidscompose.common.usecase.quiz
 import com.paykidscompose.common.repository.QuizRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.SuspendUseCase
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GetStageToGoUseCase(
+@Singleton
+class GetStageToGoUseCase @Inject constructor(
     private val quizRepository: QuizRepository
 ) : SuspendUseCase<Unit, DataResourceResult<Int>>() {
     override suspend fun execute(params: Unit?): DataResourceResult<Int> {

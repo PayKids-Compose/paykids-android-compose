@@ -6,11 +6,14 @@ import android.util.Log
 import com.kakao.sdk.user.UserApiClient
 import com.paykidscompose.data.model.Token
 import com.paykidscompose.data.util.getCustomParcelableExtra
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.suspendCancellableCoroutine
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-class KakaoLoginService(
+class KakaoLoginService @Inject constructor(
+    @ApplicationContext
     private val appContext: Context
 ) : SocialLoginService {
     override suspend fun login(): Token = suspendCancellableCoroutine { continuation ->

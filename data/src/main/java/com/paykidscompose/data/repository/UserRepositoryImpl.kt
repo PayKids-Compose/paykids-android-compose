@@ -1,11 +1,11 @@
 package com.paykidscompose.data.repository
 
+import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.user.UserModel
 import com.paykidscompose.common.repository.UserRepository
 import com.paykidscompose.common.result.DataResourceResult
-import com.paykidscompose.data.database.PayKidsPreference
 import com.paykidscompose.data.mapper.user.UserMapper
 import com.paykidscompose.data.model.AuthStatusManagerImpl
 import com.paykidscompose.data.network.service.UserApiService
@@ -14,9 +14,12 @@ import com.paykidscompose.data.util.REFRESH_TOKEN
 import com.paykidscompose.data.util.USER_REGISTERED
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class UserRepositoryImpl(
-    private val userApiService: UserApiService
+class UserRepositoryImpl @Inject constructor(
+    private val userApiService: UserApiService,
+    private val authStatusManager: AuthStatusManagerImpl,
+    private val preference: SharedPreferences
 ) : UserRepository {
 
     override suspend fun deleteUser(): DataResourceResult<String> {
@@ -24,12 +27,12 @@ class UserRepositoryImpl(
             userApiService.deleteUser()
         }.fold(
             onSuccess = {
-                PayKidsPreference.getInstance().edit {
+                preference.edit {
                     remove(ACCESS_TOKEN)
                     remove(REFRESH_TOKEN)
                     remove(USER_REGISTERED)
                 }
-                AuthStatusManagerImpl.notifyLoginScreenNav()
+                authStatusManager.notifyLoginScreenNav()
                 DataResourceResult.Success(it.data)
             },
             onFailure = {
@@ -48,7 +51,7 @@ class UserRepositoryImpl(
             userApiService.saveNickname(nickname)
         }.fold(
             onSuccess = {
-                PayKidsPreference.getInstance().edit {
+                preference.edit {
                     putBoolean(USER_REGISTERED, true)
                 }
                 DataResourceResult.Success(it.data)

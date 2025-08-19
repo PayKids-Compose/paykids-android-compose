@@ -18,6 +18,7 @@ import com.paykidscompose.presentation.base.UIEvent
 import com.paykidscompose.presentation.base.UIState
 import com.paykidscompose.presentation.mapper.allowance.AllowanceChartCategoryUIModelMapper
 import com.paykidscompose.presentation.model.allowance.TransactionAnalysisUIModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -26,8 +27,10 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import javax.inject.Inject
 
-class TransactionAnalysisViewModel(
+@HiltViewModel
+class TransactionAnalysisViewModel @Inject constructor(
     private val getExpenseMonthTotalAmountUseCase: GetExpenseMonthTotalAmountUseCase,
     private val getIncomeMonthTotalAmountUseCase: GetIncomeMonthTotalAmountUseCase,
     private val getExpenseAllCategoryForMonthUseCase: GetExpenseAllCategoryForMonthUseCase,
