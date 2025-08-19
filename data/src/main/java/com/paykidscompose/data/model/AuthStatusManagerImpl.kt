@@ -1,8 +1,8 @@
 package com.paykidscompose.data.model
 
+import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import com.paykidscompose.common.model.AuthStatusManager
-import com.paykidscompose.data.database.PayKidsPreference
 import com.paykidscompose.data.util.ACCESS_TOKEN
 import com.paykidscompose.data.util.USER_REGISTERED
 import kotlinx.coroutines.channels.awaitClose
@@ -11,9 +11,13 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object AuthStatusManagerImpl : AuthStatusManager {
-    private val preference = PayKidsPreference.getInstance()
+@Singleton
+class AuthStatusManagerImpl @Inject constructor(
+    private val preference: SharedPreferences
+) : AuthStatusManager {
     private val registeredFlow = MutableSharedFlow<Boolean>(replay = 1)
     private val tokenFlow = MutableSharedFlow<String>(replay = 1)
 

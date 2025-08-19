@@ -4,8 +4,11 @@ import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.repository.IncomeCategoryRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.SuspendUseCase
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class SaveIncomeCategoryUseCase(
+@Singleton
+class SaveIncomeCategoryUseCase @Inject constructor(
     private val repository: IncomeCategoryRepository
 ) : SuspendUseCase<SaveIncomeCategoryUseCase.Params, DataResourceResult<Boolean>>() {
 

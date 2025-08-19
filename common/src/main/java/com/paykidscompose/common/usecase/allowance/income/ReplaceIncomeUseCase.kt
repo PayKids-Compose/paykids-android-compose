@@ -5,8 +5,11 @@ import com.paykidscompose.common.model.allowance.AllowanceChartModel
 import com.paykidscompose.common.repository.IncomeAllowanceRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.SuspendUseCase
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ReplaceIncomeUseCase(
+@Singleton
+class ReplaceIncomeUseCase @Inject constructor(
     private val repository: IncomeAllowanceRepository
 ) : SuspendUseCase<ReplaceIncomeUseCase.Params, DataResourceResult<Boolean>>() {
 

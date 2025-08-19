@@ -5,8 +5,11 @@ import com.paykidscompose.common.model.quiz.QuizClearedModel
 import com.paykidscompose.common.repository.QuizRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.SuspendUseCase
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GetCheckStageUseCase(
+@Singleton
+class GetCheckStageUseCase @Inject constructor(
     private val quizRepository: QuizRepository
 ) : SuspendUseCase<GetCheckStageUseCase.Params, DataResourceResult<QuizClearedModel>>() {
     override suspend fun execute(params: Params?): DataResourceResult<QuizClearedModel> {

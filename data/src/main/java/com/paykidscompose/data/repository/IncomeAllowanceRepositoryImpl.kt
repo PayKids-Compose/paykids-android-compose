@@ -13,8 +13,9 @@ import com.paykidscompose.data.network.service.IncomeAllowanceApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.time.LocalDate
+import javax.inject.Inject
 
-class IncomeAllowanceRepositoryImpl(
+class IncomeAllowanceRepositoryImpl @Inject constructor(
     private val incomeAllowanceApiService: IncomeAllowanceApiService
 ) : IncomeAllowanceRepository {
 
@@ -23,7 +24,14 @@ class IncomeAllowanceRepositoryImpl(
             incomeAllowanceApiService.deleteIncome(id)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
+            onFailure = {
+                DataResourceResult.Failure(
+                    PayKidsException.ToastException(
+                        code = -1,
+                        message = it.message ?: ""
+                    )
+                )
+            }
         )
     }
 
@@ -33,7 +41,14 @@ class IncomeAllowanceRepositoryImpl(
             incomeAllowanceApiService.saveIncome(dto)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
+            onFailure = {
+                DataResourceResult.Failure(
+                    PayKidsException.ToastException(
+                        code = -1,
+                        message = it.message ?: ""
+                    )
+                )
+            }
         )
     }
 
@@ -43,7 +58,14 @@ class IncomeAllowanceRepositoryImpl(
             incomeAllowanceApiService.replaceIncome(dto)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
+            onFailure = {
+                DataResourceResult.Failure(
+                    PayKidsException.ToastException(
+                        code = -1,
+                        message = it.message ?: ""
+                    )
+                )
+            }
         )
     }
 
@@ -52,7 +74,14 @@ class IncomeAllowanceRepositoryImpl(
             incomeAllowanceApiService.getIncomeMonthTotalAmount(year, month)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
+            onFailure = {
+                DataResourceResult.Failure(
+                    PayKidsException.ToastException(
+                        code = -1,
+                        message = it.message ?: ""
+                    )
+                )
+            }
         )
     }
 
@@ -70,7 +99,16 @@ class IncomeAllowanceRepositoryImpl(
                 }
                 emit(DataResourceResult.Success(models))
             },
-            onFailure = { emit(DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: ""))) }
+            onFailure = {
+                emit(
+                    DataResourceResult.Failure(
+                        PayKidsException.ToastException(
+                            code = -1,
+                            message = it.message ?: ""
+                        )
+                    )
+                )
+            }
         )
     }
 
@@ -89,7 +127,16 @@ class IncomeAllowanceRepositoryImpl(
                 }
                 emit(DataResourceResult.Success(models))
             },
-            onFailure = { emit(DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: ""))) }
+            onFailure = {
+                emit(
+                    DataResourceResult.Failure(
+                        PayKidsException.ToastException(
+                            code = -1,
+                            message = it.message ?: ""
+                        )
+                    )
+                )
+            }
         )
     }
 
@@ -107,7 +154,16 @@ class IncomeAllowanceRepositoryImpl(
                 }
                 emit(DataResourceResult.Success(models))
             },
-            onFailure = { emit(DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: ""))) }
+            onFailure = {
+                emit(
+                    DataResourceResult.Failure(
+                        PayKidsException.ToastException(
+                            code = -1,
+                            message = it.message ?: ""
+                        )
+                    )
+                )
+            }
         )
     }
 
@@ -124,7 +180,16 @@ class IncomeAllowanceRepositoryImpl(
                 }
                 emit(DataResourceResult.Success(models))
             },
-            onFailure = { emit(DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: ""))) }
+            onFailure = {
+                emit(
+                    DataResourceResult.Failure(
+                        PayKidsException.ToastException(
+                            code = -1,
+                            message = it.message ?: ""
+                        )
+                    )
+                )
+            }
         )
     }
 }

@@ -9,8 +9,11 @@ import com.paykidscompose.common.usecase.base.FlowUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GetExpenseAllCategoryForMonthUseCase(
+@Singleton
+class GetExpenseAllCategoryForMonthUseCase @Inject constructor(
     private val allowanceRepository: ExpenseAllowanceRepository,
     private val categoryRepository: ExpenseCategoryRepository
 ) : FlowUseCase<GetExpenseAllCategoryForMonthUseCase.Params, DataResourceResult<List<AllowanceChartCategoryModel>>>() {

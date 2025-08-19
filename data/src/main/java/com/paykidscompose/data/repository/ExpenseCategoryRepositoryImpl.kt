@@ -8,8 +8,9 @@ import com.paykidscompose.data.mapper.allowance.CategoryMapper
 import com.paykidscompose.data.network.service.ExpenseCategoryApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class ExpenseCategoryRepositoryImpl(
+class ExpenseCategoryRepositoryImpl @Inject constructor(
     private val categoryApiService: ExpenseCategoryApiService
 ) : ExpenseCategoryRepository {
 
@@ -18,7 +19,14 @@ class ExpenseCategoryRepositoryImpl(
             categoryApiService.deleteExpenseCategory(category)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
+            onFailure = {
+                DataResourceResult.Failure(
+                    PayKidsException.ToastException(
+                        code = -1,
+                        message = it.message ?: ""
+                    )
+                )
+            }
         )
     }
 
@@ -27,7 +35,14 @@ class ExpenseCategoryRepositoryImpl(
             categoryApiService.saveExpenseCategory(category)
         }.fold(
             onSuccess = { DataResourceResult.Success(it.data) },
-            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
+            onFailure = {
+                DataResourceResult.Failure(
+                    PayKidsException.ToastException(
+                        code = -1,
+                        message = it.message ?: ""
+                    )
+                )
+            }
         )
     }
 
@@ -42,7 +57,16 @@ class ExpenseCategoryRepositoryImpl(
                 }
                 emit(DataResourceResult.Success(models))
             },
-            onFailure = { emit(DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: ""))) }
+            onFailure = {
+                emit(
+                    DataResourceResult.Failure(
+                        PayKidsException.ToastException(
+                            code = -1,
+                            message = it.message ?: ""
+                        )
+                    )
+                )
+            }
         )
     }
 }

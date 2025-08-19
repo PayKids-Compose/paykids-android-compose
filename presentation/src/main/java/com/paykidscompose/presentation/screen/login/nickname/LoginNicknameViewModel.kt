@@ -8,14 +8,17 @@ import com.paykidscompose.common.usecase.user.SaveNicknameUseCase
 import com.paykidscompose.presentation.base.UIEvent
 import com.paykidscompose.presentation.base.UIState
 import com.paykidscompose.presentation.model.LoginNicknameUIModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginNicknameViewModel(
+@HiltViewModel
+class LoginNicknameViewModel @Inject constructor(
     private val saveNicknameUseCase: SaveNicknameUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(LoginNicknameUIState())

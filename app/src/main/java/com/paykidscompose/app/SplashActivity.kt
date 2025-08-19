@@ -7,16 +7,20 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import com.paykidscompose.app.databinding.ActivitySplashBinding
 import com.paykidscompose.common.usecase.authentication.CheckUserCompletionStatusUseCase
-import com.paykidscompose.data.model.AuthStatusManagerImpl
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SplashActivity : ComponentActivity() {
 
     private lateinit var binding: ActivitySplashBinding
-    private val userCompletionStatusUseCase = CheckUserCompletionStatusUseCase(AuthStatusManagerImpl)
+
+    @Inject
+    lateinit var userCompletionStatusUseCase : CheckUserCompletionStatusUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

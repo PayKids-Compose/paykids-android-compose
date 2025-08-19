@@ -5,8 +5,11 @@ import com.paykidscompose.common.repository.UserRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.FlowUseCase
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GetUserUseCase(
+@Singleton
+class GetUserUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) : FlowUseCase<Unit, DataResourceResult<UserModel>>() {
     override fun execute(params: Unit?): Flow<DataResourceResult<UserModel>> = userRepository.getUser()

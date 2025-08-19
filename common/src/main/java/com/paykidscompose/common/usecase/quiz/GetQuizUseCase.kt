@@ -7,8 +7,11 @@ import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.FlowUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GetQuizUseCase(
+@Singleton
+class GetQuizUseCase @Inject constructor(
     private val quizRepository: QuizRepository
 ) : FlowUseCase<GetQuizUseCase.Params, DataResourceResult<QuizModel>>() {
     override fun execute(params: Params?): Flow<DataResourceResult<QuizModel>> {

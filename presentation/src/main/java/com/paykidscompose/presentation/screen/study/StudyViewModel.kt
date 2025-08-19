@@ -10,14 +10,17 @@ import com.paykidscompose.presentation.base.UIState
 import com.paykidscompose.presentation.mapper.my.MyInfoUIModelMapper
 import com.paykidscompose.presentation.mapper.study.ChatMessageUIModelMapper
 import com.paykidscompose.presentation.model.study.ChatMessageUIModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.UUID
+import javax.inject.Inject
 
-class StudyViewModel(
+@HiltViewModel
+class StudyViewModel @Inject constructor(
     private val getChatResponseUseCase: GetChatResponseUseCase,
     private val getUserUseCase: GetUserUseCase
 ) : ViewModel() {

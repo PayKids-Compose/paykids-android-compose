@@ -7,12 +7,15 @@ import com.paykidscompose.common.model.quiz.WrongAnswerNoteStatus
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.quiz.GetWrongAnswerStatusUseCase
 import com.paykidscompose.presentation.base.UIState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class QuizEntryViewModel(
+@HiltViewModel
+class QuizEntryViewModel @Inject constructor(
     private val getWrongAnswerStatusUseCase: GetWrongAnswerStatusUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(QuizEntryUIState())

@@ -8,15 +8,24 @@ import com.paykidscompose.data.mapper.study.ChatResponseMapper
 import com.paykidscompose.data.network.service.ChatApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class ChatRepositoryImpl(private val chatApiService: ChatApiService) :
-    ChatRepository {
+class ChatRepositoryImpl @Inject constructor(
+    private val chatApiService: ChatApiService
+) : ChatRepository {
     override suspend fun getChatCount(): DataResourceResult<Int> {
         return runCatching {
             chatApiService.getChatCount()
         }.fold(
             onSuccess = { DataResourceResult.Success(it) },
-            onFailure = { DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: "")) }
+            onFailure = {
+                DataResourceResult.Failure(
+                    PayKidsException.ToastException(
+                        code = -1,
+                        message = it.message ?: ""
+                    )
+                )
+            }
         )
     }
 
@@ -27,7 +36,16 @@ class ChatRepositoryImpl(private val chatApiService: ChatApiService) :
                 chatApiService.getChatResponse(prompt)
             }.fold(
                 onSuccess = { emit(DataResourceResult.Success(ChatResponseMapper.mapToModel(it))) },
-                onFailure = { emit(DataResourceResult.Failure(PayKidsException.ToastException(code = -1, message = it.message ?: ""))) }
+                onFailure = {
+                    emit(
+                        DataResourceResult.Failure(
+                            PayKidsException.ToastException(
+                                code = -1,
+                                message = it.message ?: ""
+                            )
+                        )
+                    )
+                }
             )
         }
 }

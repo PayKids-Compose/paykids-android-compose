@@ -4,8 +4,11 @@ import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.repository.QuizRepository
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.base.SuspendUseCase
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GetStageNameUseCase(
+@Singleton
+class GetStageNameUseCase @Inject constructor(
     private val quizRepository: QuizRepository
 ) : SuspendUseCase<GetStageNameUseCase.Params, DataResourceResult<String>>() {
     override suspend fun execute(params: Params?): DataResourceResult<String> {

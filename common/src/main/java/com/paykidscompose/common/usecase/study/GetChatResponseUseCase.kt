@@ -8,8 +8,11 @@ import com.paykidscompose.common.usecase.base.FlowUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GetChatResponseUseCase(
+@Singleton
+class GetChatResponseUseCase @Inject constructor(
     private val chatRepository: ChatRepository
 ) : FlowUseCase<GetChatResponseUseCase.Params, DataResourceResult<ChatResponseModel>>() {
     override fun execute(params: Params?): Flow<DataResourceResult<ChatResponseModel>> = flow {

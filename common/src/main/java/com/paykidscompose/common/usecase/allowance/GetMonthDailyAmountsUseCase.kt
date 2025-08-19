@@ -9,8 +9,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDate
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GetMonthDailyAmountsUseCase(
+@Singleton
+class GetMonthDailyAmountsUseCase @Inject constructor(
     private val expenseRepository: ExpenseAllowanceRepository,
     private val incomeRepository: IncomeAllowanceRepository
 ) : FlowUseCase<GetMonthDailyAmountsUseCase.Params, DataResourceResult<Map<LocalDate, Pair<Int, Int>>>>() {

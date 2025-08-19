@@ -15,13 +15,16 @@ import com.paykidscompose.presentation.mapper.quiz.QuizClearedUIModelMapper
 import com.paykidscompose.presentation.mapper.quiz.QuizUIModelMapper
 import com.paykidscompose.presentation.model.quiz.QuizUIModel
 import com.paykidscompose.presentation.model.type.QuizResultType
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class QuizViewModel(
+@HiltViewModel
+class QuizViewModel @Inject constructor(
     private val getAllQuizzesUseCase: GetAllQuizzesUseCase,
     private val getWrongAnswerQuizzesUseCase: GetWrongAnswerQuizzesUseCase,
     private val getCheckAnswerUseCase: GetCheckAnswerUseCase,

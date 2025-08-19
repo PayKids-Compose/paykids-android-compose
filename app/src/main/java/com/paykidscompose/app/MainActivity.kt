@@ -8,17 +8,16 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.paykidscompose.app.SplashActivity.Companion.LOGIN_STATUS
 import com.paykidscompose.app.ui.theme.PayKidsComposeTheme
-import com.paykidscompose.common.di.ApplicationContainerProvider
 import com.paykidscompose.common.enums.EntryPoint
 import com.paykidscompose.common.usecase.authentication.CheckUserCompletionStatusUseCase
-import com.paykidscompose.data.model.AuthStatusManagerImpl
 import com.paykidscompose.presentation.navigation.PayKidsApp
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val provider by lazy {
-        (applicationContext as ApplicationContainerProvider).provideAppContainer()
-    }
-    private val userCompletionStatusUseCase = CheckUserCompletionStatusUseCase(AuthStatusManagerImpl)
+    @Inject
+    lateinit var userCompletionStatusUseCase : CheckUserCompletionStatusUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,51 +33,7 @@ class MainActivity : ComponentActivity() {
 
             PayKidsComposeTheme {
                 PayKidsApp(
-                    loginStatus,
-                    provider.loginUseCase,
-                    provider.saveNicknameUseCase,
-                    provider.getUserUseCase,
-                    provider.deleteUserUseCase,
-                    provider.logoutUseCase,
-                    provider.replaceNicknameUseCase,
-                    provider.getStageCountUseCase,
-                    provider.getStageToGoUseCase,
-                    provider.getStageNameUseCase,
-                    provider.getAllQuizzesUseCase,
-                    provider.getWrongAnswerQuizzesUseCase,
-                    provider.getWrongAnswerStatusUseCase,
-                    provider.getCheckAnswerUseCase,
-                    provider.getCheckStageUseCase,
-                    provider.getAchievementsUseCase,
-                    provider.getQuestsUseCase,
-                    provider.getChatResponseUseCase,
-                    provider.getExpenseMonthTotalAmountUseCase,
-                    provider.getExpenseMonthMostCategoryUseCase,
-                    provider.getExpenseMonthDailyAmountUseCase,
-                    provider.getIncomeMonthDailyAmountUseCase,
-                    provider.getExpenseDayUseCase,
-                    provider.getIncomeDayUseCase,
-                    provider.getExpenseCategoryListUseCase,
-                    provider.getIncomeCategoryListUseCase,
-                    provider.getMonthDailyAmountsUseCase,
-                    provider.getSelectDayTransactionsUseCase,
-                    provider.saveExpenseUseCase,
-                    provider.saveIncomeUseCase,
-                    provider.replaceExpenseUseCase,
-                    provider.replaceIncomeUseCase,
-                    provider.getIncomeMonthTotalAmountUseCase,
-                    provider.getExpenseMonthAllCategoryUseCase,
-                    provider.getIncomeMonthAllCategoryUseCase,
-                    provider.deleteExpenseCategoryUseCase,
-                    provider.deleteIncomeCategoryUseCase,
-                    provider.saveExpenseCategoryUseCase,
-                    provider.saveIncomeCategoryUseCase,
-                    provider.getExpenseMonthCategoryUseCase,
-                    provider.getIncomeMonthCategoryUseCase,
-                    provider.deleteExpenseUseCase,
-                    provider.deleteIncomeUseCase,
-                    provider.getExpenseAllCategoryForMonthUseCase,
-                    provider.getIncomeAllCategoryForMonthUseCase
+                    loginStatus
                 )
             }
         }

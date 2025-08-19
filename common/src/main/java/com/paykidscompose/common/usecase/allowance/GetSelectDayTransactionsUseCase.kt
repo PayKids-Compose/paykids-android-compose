@@ -10,8 +10,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDate
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GetSelectDayTransactionsUseCase(
+@Singleton
+class GetSelectDayTransactionsUseCase @Inject constructor(
     private val expenseRepository: ExpenseAllowanceRepository,
     private val incomeRepository: IncomeAllowanceRepository
 ) : FlowUseCase<GetSelectDayTransactionsUseCase.Params, DataResourceResult<List<AllowanceChartModel>>>() {
