@@ -41,8 +41,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.model.study.ChatMessageUIModel
@@ -91,7 +91,7 @@ import com.paykidscompose.presentation.ui.theme.White4
 @Composable
 fun Study(
     stageNumber: Int,
-    studyViewModel: StudyViewModel = viewModel(),
+    studyViewModel: StudyViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {}
 ) {
     val uiState by studyViewModel.uiState.collectAsStateWithLifecycle()

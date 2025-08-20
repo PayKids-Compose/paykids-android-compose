@@ -28,7 +28,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import com.paykidscompose.common.model.quiz.WrongAnswerNoteStatus
 import com.paykidscompose.presentation.R
@@ -60,7 +60,7 @@ import com.paykidscompose.presentation.ui.theme.White
 fun QuizEntry(
     stageNumber: Int,
     stageTitle: String,
-    quizEntryViewModel: QuizEntryViewModel = viewModel(),
+    quizEntryViewModel: QuizEntryViewModel = hiltViewModel(),
     onQuiz: (Int) -> Unit = {},
     onWrongNote: (Int) -> Unit = {},
     onStudyClick: () -> Unit = {},

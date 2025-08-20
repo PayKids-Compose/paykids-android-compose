@@ -25,8 +25,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.paykidscompose.common.enums.QuizClearType
 import com.paykidscompose.common.enums.QuizType
@@ -57,7 +57,7 @@ import kotlinx.coroutines.delay
 fun Quiz(
     stageNumber: Int,
     isWrongAnswerNote: Boolean,
-    quizViewModel: QuizViewModel = viewModel(),
+    quizViewModel: QuizViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     onConfirmClick: (QuizClearType) -> Unit
 ) {
