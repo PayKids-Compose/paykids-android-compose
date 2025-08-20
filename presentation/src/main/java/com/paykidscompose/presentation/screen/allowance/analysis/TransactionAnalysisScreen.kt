@@ -45,10 +45,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paykidscompose.common.enums.AllowanceType
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.util.MonthFormatter
@@ -113,7 +113,7 @@ import java.time.LocalDate
 
 @Composable
 fun TransactionAnalysis(
-    viewModel: TransactionAnalysisViewModel = viewModel(),
+    viewModel: TransactionAnalysisViewModel = hiltViewModel(),
     onCategoryCard: (Int, Int, String, AllowanceType) -> Unit = { _, _, _, _ -> }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

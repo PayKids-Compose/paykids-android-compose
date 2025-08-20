@@ -42,10 +42,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paykidscompose.common.enums.AllowanceType
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.util.MonthFormatter
@@ -104,7 +104,7 @@ import kotlin.math.ceil
 
 @Composable
 fun AllowanceDiary(
-    viewModel: AllowanceDiaryViewModel = viewModel(),
+    viewModel: AllowanceDiaryViewModel = hiltViewModel(),
     onCategoryExpense: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
