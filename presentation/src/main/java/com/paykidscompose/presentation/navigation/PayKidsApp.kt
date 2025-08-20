@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -85,11 +84,11 @@ fun PayKidsApp(
         ) {
 
             composable<EntryNavigationRoute.LoginRoute> {
-                Login(hiltViewModel())
+                Login()
             }
 
             composable<EntryNavigationRoute.LoginNicknameRoute> {
-                Nickname(hiltViewModel())
+                Nickname()
             }
 
             composable<TabNavigationRoute.HomeRoute> {
@@ -179,7 +178,6 @@ fun PayKidsApp(
 
             composable<TabNavigationRoute.MyPageRoute> {
                 MyPage(
-                    hiltViewModel(),
                     onClickMyInfo = {
                         navController.navigate(MyPageNavigationRoute.MyInfoRoute)
                     },
@@ -190,7 +188,6 @@ fun PayKidsApp(
 
             composable<MyPageNavigationRoute.MyInfoRoute> {
                 MyInfo(
-                    hiltViewModel(),
                     onBackClick = {
                         navController.popBackStack()
                     }
@@ -207,7 +204,6 @@ fun PayKidsApp(
 
             composable<TabNavigationRoute.AllowanceDiaryRoute> {
                 AllowanceDiary(
-                    viewModel = hiltViewModel(),
                     onCategoryExpense = {
                         navController.navigate(AllowanceDiaryNavigationRoute.ExpenseAnalysisRoute)
                     }
@@ -216,7 +212,6 @@ fun PayKidsApp(
 
             composable<AllowanceDiaryNavigationRoute.ExpenseAnalysisRoute> {
                 TransactionAnalysis(
-                    viewModel = hiltViewModel(),
                     onCategoryCard = { year, month, category, type ->
                         navController.navigate(
                             AllowanceDiaryNavigationRoute.CategoryDetailRoute(
@@ -237,7 +232,7 @@ fun PayKidsApp(
                 val category = targetRoute.category
                 val type = targetRoute.type
 
-                CategoryDetail(year, month, category, type, hiltViewModel())
+                CategoryDetail(year, month, category, type)
             }
         }
     }
