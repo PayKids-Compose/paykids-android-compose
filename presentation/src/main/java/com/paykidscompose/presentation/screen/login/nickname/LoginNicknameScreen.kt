@@ -17,10 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.base.UIEvent
@@ -43,7 +43,7 @@ import kotlinx.coroutines.flow.collectLatest
 // 스플래시 이후 로그인 화면입니다.
 @Composable
 fun Nickname(
-    viewModel: LoginNicknameViewModel = viewModel()
+    viewModel: LoginNicknameViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
