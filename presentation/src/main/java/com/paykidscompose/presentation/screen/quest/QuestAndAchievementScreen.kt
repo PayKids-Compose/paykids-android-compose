@@ -29,8 +29,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.presentation.model.achievement.AchievementUIModel
 import com.paykidscompose.presentation.model.quest.QuestUIModel
@@ -49,7 +49,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun QuestAndAchievement(
-    questAndAchievementViewModel: QuestAndAchievementViewModel = viewModel()
+    questAndAchievementViewModel: QuestAndAchievementViewModel = hiltViewModel()
 ) {
     val uiState by questAndAchievementViewModel.uiState.collectAsStateWithLifecycle()
 
