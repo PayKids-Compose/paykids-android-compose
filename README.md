@@ -26,7 +26,7 @@
 | **Serialization** | Moshi |
 | **Image Loading** | Coil3 |
 | **Authentication** | Kakao Login API |
-| **DI** | 수동 주입(Hilt 예정) |
+| **DI** | Hilt |
 | **Tools** | Git, Figma, Notion, Discord |
 
 ## 🗂️ Package Structure & Module Dependencies
