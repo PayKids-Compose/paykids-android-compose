@@ -93,7 +93,7 @@ fun PayKidsApp(
             }
 
             composable<TabNavigationRoute.HomeRoute> {
-                Home(hiltViewModel()) { stageNumber, stageTitle ->
+                Home { stageNumber, stageTitle ->
                     navController.navigate(
                         QuizNavigationRoute.QuizEntryRoute(stageNumber, stageTitle)
                     )
@@ -108,7 +108,6 @@ fun PayKidsApp(
                 QuizEntry(
                     stageNumber = stageNumber,
                     stageTitle = stageTitle,
-                    quizEntryViewModel = hiltViewModel(),
                     onQuiz = {
                         navController.navigate(QuizNavigationRoute.QuizRoute(stageNumber, false))
                     },
@@ -132,7 +131,6 @@ fun PayKidsApp(
                 Quiz(
                     stageNumber = stageNumber,
                     isWrongAnswerNote = isWrongAnswerNote,
-                    quizViewModel = hiltViewModel(),
                     onBackClick = {
                         navController.popBackStack()
                     },
@@ -169,7 +167,6 @@ fun PayKidsApp(
 
                 Study(
                     stageNumber = stageNumber,
-                    studyViewModel = hiltViewModel(),
                     onBackClick = {
                         navController.navigateUp()
                     }
@@ -177,9 +174,7 @@ fun PayKidsApp(
             }
 
             composable<TabNavigationRoute.QuestAndAchievementRoute> {
-                QuestAndAchievement(
-                    questAndAchievementViewModel = hiltViewModel()
-                )
+                QuestAndAchievement()
             }
 
             composable<TabNavigationRoute.MyPageRoute> {
