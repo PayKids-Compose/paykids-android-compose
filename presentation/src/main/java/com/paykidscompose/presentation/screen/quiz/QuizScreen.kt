@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +33,8 @@ import com.paykidscompose.common.enums.QuizClearType
 import com.paykidscompose.common.enums.QuizType
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.presentation.R
+import com.paykidscompose.presentation.audio.AudioManager
+import com.paykidscompose.presentation.audio.SoundEffect
 import com.paykidscompose.presentation.model.quiz.QuizUIModel
 import com.paykidscompose.presentation.model.type.QuizResultType
 import com.paykidscompose.presentation.screen.quiz.section.ImageQuizContent
@@ -61,19 +64,36 @@ fun Quiz(
     onBackClick: () -> Unit,
     onConfirmClick: (QuizClearType) -> Unit
 ) {
+    val context = LocalContext.current
+
+    // AudioManager 초기화
+    val audioManager = remember { AudioManager(context) }
+    DisposableEffect(Unit) {
+        audioManager.loadQuizSounds()
+        audioManager.playQuizBgm()
+        onDispose { audioManager.release() }
+    }
+
     var showDialog by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableStateOf<Int?>(null) }
     var userInput by remember { mutableStateOf("") }
 
     val uiState by quizViewModel.uiState.collectAsStateWithLifecycle()
 
-    val context = LocalContext.current
-
     LaunchedEffect(stageNumber, isWrongAnswerNote) {
         if (!isWrongAnswerNote) {
             quizViewModel.loadQuizzes(stageNumber)
         } else {
             quizViewModel.loadWrongAnswerQuizzes(stageNumber)
+        }
+    }
+
+    // 정답/오답 효과음
+    LaunchedEffect(uiState.quizResultType) {
+        when (uiState.quizResultType) {
+            QuizResultType.CORRECT -> audioManager.play(SoundEffect.CORRECT)
+            QuizResultType.WRONG -> audioManager.play(SoundEffect.WRONG)
+            else -> {}
         }
     }
 
