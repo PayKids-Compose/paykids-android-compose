@@ -7,15 +7,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import coil3.compose.AsyncImage
+import com.paykidscompose.common.enums.QuizClearType
 import com.paykidscompose.presentation.R
+import com.paykidscompose.presentation.audio.AudioManager
+import com.paykidscompose.presentation.audio.SoundEffect
 import com.paykidscompose.presentation.model.quiz.QuizClearConfigUIModel
 import com.paykidscompose.presentation.model.quiz.toConfig
-import com.paykidscompose.common.enums.QuizClearType
 import com.paykidscompose.presentation.ui.components.DashedCard
 import com.paykidscompose.presentation.ui.components.DecisionButton
 import com.paykidscompose.presentation.ui.theme.Black
@@ -34,6 +40,29 @@ fun QuizClear(
     onExitClick: () -> Unit = {},
     onWrongNoteClick: () -> Unit = {}
 ) {
+    val context = LocalContext.current
+
+    val audioManager = remember { AudioManager(context) }
+
+    DisposableEffect(Unit) {
+        audioManager.loadQuizClearSounds()
+        onDispose { audioManager.release() }
+    }
+
+    // 화면 진입 시 클리어/실패 효과음 재생
+    LaunchedEffect(clearType) {
+        val effect = when (clearType) {
+            QuizClearType.ALL_CLEAR,
+            QuizClearType.CLEAR_SUCCESS,
+            QuizClearType.WRONG_ANSWER_QUIZ_CLEAR,
+            QuizClearType.REVIEW_COMPLETED -> SoundEffect.CLEAR
+            QuizClearType.CLEAR_FAILED,
+            QuizClearType.WRONG_ANSWER_QUIZ_FAILED -> SoundEffect.FAIL
+        }
+
+        audioManager.awaitLoadAndPlay(effect)
+    }
+
     QuizClearScreen(
         config = clearType.toConfig(),
         onExitClick = onExitClick,
