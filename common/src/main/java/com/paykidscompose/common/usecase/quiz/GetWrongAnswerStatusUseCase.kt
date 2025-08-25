@@ -1,5 +1,6 @@
 package com.paykidscompose.common.usecase.quiz
 
+import com.paykidscompose.common.enums.StageStatus
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.model.quiz.WrongAnswerNoteStatus
 import com.paykidscompose.common.repository.QuizRepository
@@ -43,10 +44,10 @@ class GetWrongAnswerStatusUseCase @Inject constructor(
                 ?: throw PayKidsException.ToastException(-1, "오답 번호를 불러올 수 없습니다.")
 
             val status = when {
-                checkStage.message == "복습" && wrongNumbers.isEmpty() ->
+                checkStage.message == StageStatus.REVIEW.message && wrongNumbers.isEmpty() ->
                     WrongAnswerNoteStatus.AllCorrect
 
-                checkStage.message == "First" && wrongNumbers.isEmpty() ->
+                checkStage.message == StageStatus.FIRST.message && wrongNumbers.isEmpty() ->
                     WrongAnswerNoteStatus.NoAttempt
 
                 else -> WrongAnswerNoteStatus.HasWrongAnswerNote(wrongNumbers)

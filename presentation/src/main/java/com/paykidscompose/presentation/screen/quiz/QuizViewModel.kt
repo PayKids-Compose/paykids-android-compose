@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.paykidscompose.common.enums.QuizClearType
+import com.paykidscompose.common.enums.StageStatus
 import com.paykidscompose.common.exception.PayKidsException
 import com.paykidscompose.common.result.DataResourceResult
 import com.paykidscompose.common.usecase.quiz.GetAllQuizzesUseCase
@@ -156,12 +157,12 @@ class QuizViewModel @Inject constructor(
                 is DataResourceResult.Success -> {
                     val clearedModel = QuizClearedUIModelMapper.mapToLayerModel(result.data)
                     val clearType = when {
-                        clearedModel.message == "All Clear" && clearedModel.isCleared -> QuizClearType.ALL_CLEAR
-                        clearedModel.message == "First" && clearedModel.isCleared -> QuizClearType.CLEAR_SUCCESS
-                        clearedModel.message == "First" && !clearedModel.isCleared -> QuizClearType.CLEAR_FAILED
-                        clearedModel.message == "오답 노트" && clearedModel.isCleared -> QuizClearType.WRONG_ANSWER_QUIZ_CLEAR
-                        clearedModel.message == "오답 노트" && !clearedModel.isCleared -> QuizClearType.WRONG_ANSWER_QUIZ_FAILED
-                        clearedModel.message == "복습" && clearedModel.isCleared -> QuizClearType.REVIEW_COMPLETED
+                        clearedModel.message == StageStatus.ALL_CLEAR.message && clearedModel.isCleared -> QuizClearType.ALL_CLEAR
+                        clearedModel.message == StageStatus.FIRST.message && clearedModel.isCleared -> QuizClearType.CLEAR_SUCCESS
+                        clearedModel.message == StageStatus.FIRST.message && !clearedModel.isCleared -> QuizClearType.CLEAR_FAILED
+                        clearedModel.message == StageStatus.WRONG_ANSWER_NOTE.message && clearedModel.isCleared -> QuizClearType.WRONG_ANSWER_QUIZ_CLEAR
+                        clearedModel.message == StageStatus.WRONG_ANSWER_NOTE.message && !clearedModel.isCleared -> QuizClearType.WRONG_ANSWER_QUIZ_FAILED
+                        clearedModel.message == StageStatus.REVIEW.message && clearedModel.isCleared -> QuizClearType.REVIEW_COMPLETED
                         else -> QuizClearType.CLEAR_FAILED
                     }
                     onResult(clearType)
