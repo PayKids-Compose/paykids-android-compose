@@ -392,6 +392,14 @@ fun UserBubblePreview() {
 
 @Preview
 @Composable
+fun ChatInputPreview() {
+    PayKidsComposeTheme {
+        ChatInput("", {}) { }
+    }
+}
+
+@Preview
+@Composable
 fun StudyScreenPreview() {
     PayKidsComposeTheme {
         Study(stageNumber = 3)
