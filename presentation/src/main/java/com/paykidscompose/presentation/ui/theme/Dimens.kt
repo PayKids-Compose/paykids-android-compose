@@ -218,8 +218,8 @@ val OutlineShape = 10.dp
 val OutlineHeight = 40.dp
 val OutlineDefaultShadowElevation = 0.dp
 val ShortAnswerQuizOutlineHeight = 86.dp
-val ShortAnswerQuizOutlineStartPadding = 91.dp
 val ShortAnswerQuizOutlineShape = 20.dp
+val OutlineDefaultTextStartPadding = 0.dp
 
 // 팝업 다이얼로그
 val PopupDialogCardShape = 20.dp
