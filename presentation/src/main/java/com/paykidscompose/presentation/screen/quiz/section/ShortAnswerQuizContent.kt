@@ -10,8 +10,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.paykidscompose.common.enums.QuizType
 import com.paykidscompose.presentation.R
@@ -26,7 +28,6 @@ import com.paykidscompose.presentation.ui.theme.ShortAnswerImageQuizContentSpace
 import com.paykidscompose.presentation.ui.theme.ShortAnswerQuizContentSpacer
 import com.paykidscompose.presentation.ui.theme.ShortAnswerQuizOutlineHeight
 import com.paykidscompose.presentation.ui.theme.ShortAnswerQuizOutlineShape
-import com.paykidscompose.presentation.ui.theme.ShortAnswerQuizOutlineStartPadding
 import com.paykidscompose.presentation.ui.theme.White
 
 @Composable
@@ -45,7 +46,6 @@ fun ShortAnswerQuizContent(
             if (isSubmitted) isSubmitted = false
             onUserInputChange(it)
         },
-        startPadding = ShortAnswerQuizOutlineStartPadding,
         modifier = Modifier
             .height(ShortAnswerQuizOutlineHeight),
         backgroundColor = White,
@@ -53,6 +53,8 @@ fun ShortAnswerQuizContent(
         hint = stringResource(R.string.hint_input_answer),
         hintColor = Gray2,
         style = QuizShortAnswerTextStyle,
+        textAlign = TextAlign.Center,
+        contentAlignment = Alignment.Center,
         shape = RoundedCornerShape(ShortAnswerQuizOutlineShape),
         enabled = !isSubmitted,
         shadowElevation = CardShadowElevation,
