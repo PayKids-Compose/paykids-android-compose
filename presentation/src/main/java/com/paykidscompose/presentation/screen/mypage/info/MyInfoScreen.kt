@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -60,10 +61,8 @@ import com.paykidscompose.presentation.ui.theme.MyInfoScreenBoxSize
 import com.paykidscompose.presentation.ui.theme.MyInfoScreenButtonHorizontalPadding
 import com.paykidscompose.presentation.ui.theme.MyInfoScreenButtonShape
 import com.paykidscompose.presentation.ui.theme.MyInfoScreenButtonVerticalPadding
-import com.paykidscompose.presentation.ui.theme.MyInfoScreenEmailStartPadding
 import com.paykidscompose.presentation.ui.theme.MyInfoScreenMyInfoStartEndPadding
 import com.paykidscompose.presentation.ui.theme.MyInfoScreenMyInfoTopBottomPadding
-import com.paykidscompose.presentation.ui.theme.MyInfoScreenNicknameStartPadding
 import com.paykidscompose.presentation.ui.theme.MyInfoScreenProfileSize
 import com.paykidscompose.presentation.ui.theme.MyInfoScreenShapeBottom
 import com.paykidscompose.presentation.ui.theme.MyInfoScreenShapeTop
@@ -290,7 +289,8 @@ fun NicknameEdit(
             modifier = Modifier
                 .height(OutlineHeight)
                 .weight(1f),
-            startPadding = MyInfoScreenNicknameStartPadding
+            textAlign = TextAlign.Center,
+            contentAlignment = Alignment.Center
         )
 
         Spacer(modifier = Modifier.width(MyInfoScreenSpacer4))
@@ -338,7 +338,8 @@ fun EmailEdit(
             readOnly = true,
             modifier = Modifier.height(OutlineHeight),
             hint = stringResource(R.string.text_email_hint),
-            startPadding = MyInfoScreenEmailStartPadding
+            textAlign = TextAlign.Center,
+            contentAlignment = Alignment.Center
         )
 
     }
