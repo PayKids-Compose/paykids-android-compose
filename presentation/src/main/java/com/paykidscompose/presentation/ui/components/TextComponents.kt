@@ -18,11 +18,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import com.paykidscompose.presentation.R
 import com.paykidscompose.presentation.ui.theme.Black
+import com.paykidscompose.presentation.ui.theme.CardShadowElevation
 import com.paykidscompose.presentation.ui.theme.FieldAndInfoSpacer
 import com.paykidscompose.presentation.ui.theme.Gray2
 import com.paykidscompose.presentation.ui.theme.Gray6
@@ -34,7 +38,11 @@ import com.paykidscompose.presentation.ui.theme.NicknameScreenFieldBoxHeight
 import com.paykidscompose.presentation.ui.theme.NicknameTitleTextStyle
 import com.paykidscompose.presentation.ui.theme.OutlineBorder
 import com.paykidscompose.presentation.ui.theme.OutlineDefaultShadowElevation
+import com.paykidscompose.presentation.ui.theme.OutlineDefaultTextStartPadding
 import com.paykidscompose.presentation.ui.theme.OutlineShape
+import com.paykidscompose.presentation.ui.theme.QuizShortAnswerTextStyle
+import com.paykidscompose.presentation.ui.theme.ShortAnswerQuizOutlineHeight
+import com.paykidscompose.presentation.ui.theme.ShortAnswerQuizOutlineShape
 import com.paykidscompose.presentation.ui.theme.TitleColor
 import com.paykidscompose.presentation.ui.theme.White
 
@@ -120,8 +128,8 @@ fun UnderlineInputField(
 fun OutlineInputField(
     text: String,
     onTextChange: (String) -> Unit,
-    startPadding: Dp,
     modifier: Modifier = Modifier,
+    startPadding: Dp = OutlineDefaultTextStartPadding,
     readOnly: Boolean = false,
     outlineColor: Color = Gray6,
     backgroundColor: Color = Color.Unspecified,
@@ -129,6 +137,8 @@ fun OutlineInputField(
     hintColor: Color = Gray7,
     textColor: Color = Black,
     style: TextStyle = MyInfoCardNicknameTextStyle.copy(color = Black),
+    textAlign: TextAlign = TextAlign.Start,
+    contentAlignment: Alignment = Alignment.CenterStart,
     shape: Shape = RoundedCornerShape(OutlineShape),
     singleLine: Boolean = true,
     enabled: Boolean = true,
@@ -140,18 +150,27 @@ fun OutlineInputField(
         onValueChange = onTextChange,
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(elevation = shadowElevation, shape = shape, ambientColor = shadowColor, spotColor = shadowColor)
+            .shadow(
+                elevation = shadowElevation,
+                shape = shape,
+                ambientColor = shadowColor,
+                spotColor = shadowColor
+            )
             .clip(shape)
             .background(color = backgroundColor)
             .border(OutlineBorder, outlineColor, shape)
-            .padding(start = startPadding).then(modifier),
-        textStyle = style.copy(color = textColor),
+            .padding(start = startPadding)
+            .then(modifier),
+        textStyle = style.copy(
+            color = textColor,
+            textAlign = textAlign
+        ),
         singleLine = singleLine,
         readOnly = readOnly,
         enabled = enabled,
         decorationBox = { innerTextField ->
             Box(
-                contentAlignment = Alignment.CenterStart,
+                contentAlignment = contentAlignment,
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
@@ -167,4 +186,21 @@ fun OutlineInputField(
 @Preview(showBackground = true)
 @Composable
 fun TextPreview() {
+    OutlineInputField(
+        text = "user Input",
+        onTextChange = {
+
+        },
+        startPadding = 0.dp,
+        modifier = Modifier
+            .height(ShortAnswerQuizOutlineHeight),
+        backgroundColor = White,
+        outlineColor = Gray2,
+        hint = stringResource(R.string.hint_input_answer),
+        hintColor = Gray2,
+        style = QuizShortAnswerTextStyle,
+        shape = RoundedCornerShape(ShortAnswerQuizOutlineShape),
+        shadowElevation = CardShadowElevation,
+        shadowColor = Gray2
+    )
 }
