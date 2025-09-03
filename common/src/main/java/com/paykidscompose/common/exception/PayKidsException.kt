@@ -15,7 +15,7 @@ sealed class PayKidsException(
     ) : PayKidsException(code, ExceptionType.Snack, message)
 
     data class ToastException(
-        override val code: Int,
+        override val code: Int = -1,
         override val message: String
     ) : PayKidsException(code, ExceptionType.Toast, message)
 
