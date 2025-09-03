@@ -43,12 +43,16 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideMoshiConverterFactory(): MoshiConverterFactory {
-        return MoshiConverterFactory.create(
-            Moshi.Builder()
-                .add(KotlinJsonAdapterFactory())
-                .build()
-        )
+    fun provideMoshi(): Moshi {
+        return Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideMoshiConverterFactory(moshi: Moshi): MoshiConverterFactory {
+        return MoshiConverterFactory.create(moshi)
     }
 
     @Provides
